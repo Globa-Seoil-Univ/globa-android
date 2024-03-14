@@ -1,3 +1,48 @@
 <resources>
     <string name="app_name">Globa</string>
+
+    <string name="loading_title">음성 변환은 글로바</string>
+    <string name="loading_subtitle">모든 음성을 글로 변환하고, 요약하여 사용자가 보기 쉽게 제공해줍니다.</string>
+
+    <string name="loading_start">시작하기</string>
+
+    <string name="login_description">원활한 서비스 이용을 위해 로그인을 해주세요.</string>
+
+    <string name="main_docs_type_1">최근 추가된 문서</string>
+    <string name="main_docs_type_2">자주 사용하는 문서</string>
+    <string name="main_docs_type_3">공유된 문서</string>
+    <string name="main_docs_empty">문서를 찾을 수 없습니다.</string>
+
+
+    <string name="main_docs_model_rename">이름 변경</string>
+    <string name="main_docs_model_">이름 변경</string>
+    <string name="main_docs_model_delete">문서 삭제</string>
+    <string name="docs_modal_delete_title">정말 삭제하시겠습니까?</string>
+    <string name="docs_modal_delete_description">한 번 삭제한 문서는 되돌릴 수 없습니다.</string>
+
+    <string name="folder_add_title">추가할 폴더 이름을 입력해주세요.</string>
+    <string name="folder_add_share_title">공유 방법을 선택해주세요.</string>
+    <string name="folder_add_share_description_1">링크 공유는 링크를 가진 누구나 볼 수 있고,</string>
+    <string name="folder_add_share_description_2">멤버 공유는 초대받은 사람만 볼 수 있으며 권한 수정이 가능합니다.</string>
+
+    <string name="folder_add_share_select_link">링크 공유</string>
+    <string name="folder_add_share_select_member">멤버 공유</string>
+
+
+
+    <string name="notice_folder_add_1">님이</string>
+    <string name="notice_folder_add_2">폴더에 추가되었습니다.</string>
+
+    <string name="main_home">메인</string>
+    <string name="main_folder">폴더</string>
+    <string name="main_analytics">통계</string>
+    <string name="main_my_info">내 정보</string>
+    <string name="all_info">전체</string>
+    <string name="notice">공지사항</string>
+    <string name="share">공유</string>
+    <string name="docs">문서</string>
+    <string name="cancel">취소</string>
+    <string name="delete">삭제</string>
+
+
 </resources>

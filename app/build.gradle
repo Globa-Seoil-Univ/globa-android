@@ -6,6 +6,10 @@ android {
     namespace 'team.y2k2.globa'
     compileSdk 34
 
+    dataBinding {
+        enable = true
+    }
+
     defaultConfig {
         applicationId "team.y2k2.globa"
         minSdk 34
