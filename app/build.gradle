@@ -1,10 +1,16 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id 'com.google.gms.google-services'
+
 }
 
 android {
     namespace 'team.y2k2.globa'
     compileSdk 34
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     dataBinding {
         enable = true
@@ -33,6 +39,17 @@ android {
 }
 
 dependencies {
+    implementation 'com.airbnb.android:lottie:6.4.0'
+
+    implementation platform('com.google.firebase:firebase-bom:32.7.4')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+//    implementation 'com.navercorp.nid:oauth:5.9.0' // jdk 11
+//    implementation 'com.navercorp.nid:oauth-jdk8:5.9.0' // jdk 8
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     implementation libs.appcompat
     implementation libs.material

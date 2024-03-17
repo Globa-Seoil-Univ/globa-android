@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#222222">
+
+    <TextView
+        android:id="@+id/textview_intro_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:fontFamily="@font/koho_bold"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="38dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageview_intro_background"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:src="@drawable/intro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_intro_dot"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/relativelayout_intro_select"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading"
+        app:lottie_repeatCount="20" />
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_intro_select"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/textview_intro_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/notosans_regular"
+            android:text="@string/loading_title"
+            android:textColor="@color/white"
+            android:textSize="26dp" />
+
+        <TextView
+            android:id="@+id/textview_intro_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textview_intro_title"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/notosans_regular"
+            android:layout_marginTop="15dp"
+            android:text="@string/loading_subtitle"
+            android:textAlignment="center"
+            android:textColor="@color/lightGray" />
+
+        <Button
+            android:id="@+id/button_intro_start"
+            android:layout_width="320dp"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary"
+            android:text="@string/loading_start"
+            android:textSize="18dp"
+            app:cornerRadius="8dp" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

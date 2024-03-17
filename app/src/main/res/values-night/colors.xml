@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#C67C4E</color>
+    <color name="primaryDark">#C67C4E</color>
+    <color name="secondary">#ED7E3B</color>
+    <color name="lightGray">#DDE2E5</color>
+    <color name="gray">#ACB5BD</color>
+    <color name="darkGray">#858585</color>
+    <color name="black">#FFFFFF</color>
+    <color name="red">#FF6D70</color>
+
+
+    <color name="kakao">#FFE500</color>
+    <color name="kakao_label">#CC000000</color>
+    <color name="naver">#03C75A</color>
+    <color name="twitter">#00ACEE</color>
+    <color name="google">#FFFFFF</color>
+    <color name="google_label">#CC000000</color>
+
+
+    <color name="primary_1">#F4E5DC</color>
+    <color name="primary_2">#E8CBB8</color>
+    <color name="primary_3">#DDB095</color>
+    <color name="primary_4">#D19671</color>
+    <color name="primary_5">#C67C4E</color>
+    <color name="primary_6">#9E633E</color>
+    <color name="primary_7">#774A2F</color>
+    <color name="primary_8">#4F321F</color>
+    <color name="primary_9">#281910</color>
+
+    <color name="white">#FFFFFF</color>
+</resources>
