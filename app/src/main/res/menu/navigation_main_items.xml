@@ -17,7 +17,7 @@
         android:title="통계" />
 
     <item
-        android:id="@+id/item_main_info"
+        android:id="@+id/item_main_profile"
         android:icon="@drawable/info"
         android:title="내 정보" />
 

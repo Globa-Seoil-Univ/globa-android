@@ -34,6 +34,17 @@
     <string name="delete">삭제</string>
 
 
+    <string name="profile_title">내 정보</string>
+    <string name="profile_account_title">계정</string>
+    <string name="profile_setting_title">설정</string>
+    <string name="profile_account_code">계정 코드</string>
+    <string name="profile_alert_setting">알림 설정</string>
+    <string name="profile_help">문의하기</string>
+    <string name="profile_clean_data">임시 공간 삭제</string>
+    <string name="profile_tos">약관 정보</string>
+    <string name="profile_theme">테마 모드</string>
+
+
     <string name="twitter_consumer_key">289VE8u31zKqPX9tJGSTbR9ce</string>
     <string name="twitter_consumer_secret">H2zuCbYUOkNDkxX0cCoP0bZ4NPFpVPp3i6Smgp78cp31VdDxeJ</string>
     <!-- TODO: Remove or change this placeholder text -->

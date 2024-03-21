@@ -24,6 +24,10 @@
 
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".main.MainActivity"/>
+        <activity android:name=".tos.ToSActivity"/>
+        <activity android:name=".help.HelpActivity"/>
+        <activity android:name=".alert.AlertActivity"/>
+        <activity android:name=".theme.ThemeActivity"/>
     </application>
 
 </manifest>
