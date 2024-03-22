@@ -1,4 +1,4 @@
-package team.y2k2.globa.theme;
+package team.y2k2.globa.profile.theme;
 
 import android.os.Bundle;
 

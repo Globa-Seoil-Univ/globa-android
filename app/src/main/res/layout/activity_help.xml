@@ -1,6 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+ <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_profile_title"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/profile_help"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="접수"
+            android:textSize="@dimen/normal"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_profile_help_title"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:padding="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_profile_title">
+
+        <TextView
+            android:id="@+id/textview_profile_help_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_help_title"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/large" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/profile_help_title_hint"
+            android:layout_below="@+id/textview_profile_help_title"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:padding="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_profile_help_title">
+
+        <TextView
+            android:id="@+id/textview_profile_help_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_help_description"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/large" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:layout_marginTop="10dp"
+            android:gravity="top"
+            android:hint="@string/profile_help_description_hint"
+            android:layout_below="@+id/textview_profile_help_description"
+            android:background="@null"/>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
 
 public class ProfileFragment extends Fragment {
-
     ProfileModel model;
     FragmentProfileBinding binding;
 

@@ -41,8 +41,44 @@
     <string name="profile_alert_setting">알림 설정</string>
     <string name="profile_help">문의하기</string>
     <string name="profile_clean_data">임시 공간 삭제</string>
-    <string name="profile_tos">약관 정보</string>
+    <string name="profile_service_info">서비스 정보</string>
     <string name="profile_theme">테마 모드</string>
+
+    <string name="profile_help_send">접수</string>
+    <string name="profile_help_title">제목</string>
+    <string name="profile_help_title_hint">제목</string>
+    <string name="profile_help_description">내용</string>
+    <string name="profile_help_description_hint">내용을 입력해주세요.</string>
+
+    <string name="profile_service_info_1_title">Globa 서비스 약관</string>
+    <string name="profile_service_info_1_description">Globa 서비스 약관 읽기</string>
+
+    <string name="profile_service_info_2_title">개인정보처리방침</string>
+    <string name="profile_service_info_2_description">모바일 개인정보처리방침 읽기</string>
+
+    <string name="profile_service_info_3_title">앱 버전</string>
+    <string name="profile_service_info_3_description">0.0.1</string>
+
+    <string name="profile_service_info_4_title">오픈소스 라이선스</string>
+    <string name="profile_service_info_4_description">오픈소스 소프트웨어에 대한 라이선스 세부정보</string>
+
+
+    <string name="profile_alert">알림</string>
+    <string name="profile_alert_1_title">업로드 알림</string>
+    <string name="profile_alert_1_description">업로드 진행 또는 완료 상태에 대해 알림이 발생합니다.</string>
+
+    <string name="profile_alert_2_title">공유 알림</string>
+    <string name="profile_alert_2_description">공유 참가, 탈퇴, 내부 수정에 관한 정보에 대해 알림이 발생합니다.</string>
+
+    <string name="profile_alert_3_title">이벤트 알림</string>
+    <string name="profile_alert_3_description">각종 이벤트, 혜택 등 마케팅 관련 알림이 발생합니다.</string>
+
+
+
+
+
+    <string name="profile_clean_data_modal_title">정말 삭제하시겠습니까?</string>
+    <string name="profile_clean_data_modal_description">Globa를 녹음하기를 통해 저장되었던 모든 음성을 지웁니다. \n삭제된 녹음 파일은 다시 되돌릴 수 없게 됩니다.</string>
 
 
     <string name="twitter_consumer_key">289VE8u31zKqPX9tJGSTbR9ce</string>

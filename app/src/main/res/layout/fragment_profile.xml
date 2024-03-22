@@ -83,6 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/normal"
+                        android:text="성빈클론(꼭 지우기)"
                         android:textColor="@color/black"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@+id/linearlayout_profile_background"
@@ -118,7 +119,8 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="25dp"
-                    android:layout_below="@+id/relativelayout_profile_account_user" />
+                    android:layout_below="@+id/relativelayout_profile_account_user"
+                    android:orientation="horizontal" />
 
 
                 <RelativeLayout

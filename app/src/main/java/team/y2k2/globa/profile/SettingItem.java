@@ -13,13 +13,11 @@ public class SettingItem {
         this.name = name;
         this.icon = icon;
     }
-
     SettingItem(int name, int icon, Activity activity) {
         this.name = name;
         this.icon = icon;
         this.activity = activity;
     }
-
     public int getIcon() {
         return icon;
     }

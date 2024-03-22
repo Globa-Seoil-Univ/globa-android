@@ -9,5 +9,14 @@
     </style>
 
 
+    <style name="RoundCornerBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundCornerModalStyle</item>
+    </style>
+
+    <style name="RoundCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/modal_24</item>
+    </style>
+
+
     <style name="Theme.Globa" parent="Base.Theme.Globa" />
 </resources>
