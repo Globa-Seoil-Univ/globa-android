@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp">
-
+    android:layout_height="wrap_content"
+    android:background="@drawable/modal_24">
 
     <RelativeLayout
+        android:id="@+id/relativelayout_setting_clean_data_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
@@ -28,14 +28,54 @@
             android:id="@+id/textview_setting_clean_data_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/darkGray"
             android:layout_below="@+id/textview_setting_clean_data_title"
             android:layout_marginTop="5dp"
             android:text="@string/profile_clean_data_modal_description"
             android:textSize="@dimen/small"
-
             />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/constraintlayout_setting_clean_data_2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:columnCount="3"
+        android:rowCount="1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_setting_clean_data_1">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/darkGray"
+            android:layout_weight="9"
+            android:text="취소" />
+
+        <LinearLayout
+            android:id="@+id/linearlayout_setting_clean_data_split"
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:background="@color/gray"
+            android:gravity="center"
+            android:orientation="horizontal" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/red"
+            android:gravity="center"
+            android:layout_weight="9"
+            android:text="삭제" />
+
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

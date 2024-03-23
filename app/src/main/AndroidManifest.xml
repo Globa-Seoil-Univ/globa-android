@@ -24,7 +24,7 @@
 
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".main.MainActivity"/>
-        <activity android:name=".profile.serviceinfo.ServiceInfoActivity"/>
+        <activity android:name=".profile.service_info.ServiceInfoActivity"/>
         <activity android:name=".profile.help.HelpActivity"/>
         <activity android:name=".profile.alert.AlertActivity"/>
         <activity android:name=".profile.theme.ThemeActivity"/>

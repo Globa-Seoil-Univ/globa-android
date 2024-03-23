@@ -1,4 +1,4 @@
-package team.y2k2.globa.profile.serviceinfo;
+package team.y2k2.globa.profile.service_info;
 
 import android.app.Activity;
 

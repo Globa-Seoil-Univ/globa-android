@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
@@ -36,8 +38,15 @@ public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.
         holder.icon.setImageResource(items.get(position).getIcon());
         holder.title.setText(items.get(position).getName());
 
-        if(items.get(position).getActivity() == null)
+        if(items.get(position).getActivity() == null) {
+            final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(holder.layout.getContext());
+            bottomSheetDialog.setContentView(R.layout.fragment_setting_clean_data);
+
+            holder.layout.setOnClickListener(view -> {
+                bottomSheetDialog.show();
+            });
             return;
+        }
 
         holder.layout.setOnClickListener(view -> {
             Intent intent = new Intent(holder.itemView.getContext(), items.get(position).getActivity().getClass());

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 import team.y2k2.globa.profile.alert.AlertActivity;
 import team.y2k2.globa.profile.help.HelpActivity;
-import team.y2k2.globa.profile.serviceinfo.ServiceInfoActivity;
+import team.y2k2.globa.profile.service_info.ServiceInfoActivity;
 import team.y2k2.globa.profile.theme.ThemeActivity;
 
 public class ProfileModel {

@@ -6,9 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityAlertBinding;
-import team.y2k2.globa.profile.serviceinfo.ServiceInfoItemAdapter;
 
 public class AlertActivity extends AppCompatActivity {
 
