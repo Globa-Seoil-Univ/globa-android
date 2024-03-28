@@ -12,6 +12,10 @@
         android:title="폴더" />
 
     <item
+        android:id="@+id/item_main_upload"
+        android:title="+" />
+
+    <item
         android:id="@+id/item_main_statistics"
         android:icon="@drawable/statistics"
         android:title="통계" />

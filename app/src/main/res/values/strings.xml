@@ -33,6 +33,10 @@
     <string name="cancel">취소</string>
     <string name="delete">삭제</string>
 
+    <string name="upload_title">새로 만들기</string>
+    <string name="upload_cloud">업로드</string>
+    <string name="upload_record">녹음</string>
+
 
     <string name="profile_title">내 정보</string>
     <string name="profile_account_title">계정</string>
@@ -73,9 +77,11 @@
     <string name="profile_alert_3_title">이벤트 알림</string>
     <string name="profile_alert_3_description">각종 이벤트, 혜택 등 마케팅 관련 알림이 발생합니다.</string>
 
-
-
-
+    
+    <string name="folder_share_type_title">공유 방법을 선택해주세요.</string>
+    <string name="folder_share_type_description">링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 수정이 가능합니다.</string>
+    <string name="folder_share_type_1">링크 공유</string>
+    <string name="folder_share_type_2">멤버 공유</string>
 
     <string name="profile_clean_data_modal_title">정말 삭제하시겠습니까?</string>
     <string name="profile_clean_data_modal_description">Globa를 녹음하기를 통해 저장되었던 모든 음성을 지웁니다. \n삭제된 녹음 파일은 다시 되돌릴 수 없게 됩니다.</string>

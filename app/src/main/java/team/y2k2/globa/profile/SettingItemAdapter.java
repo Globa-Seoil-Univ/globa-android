@@ -40,7 +40,7 @@ public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.
 
         if(items.get(position).getActivity() == null) {
             final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(holder.layout.getContext());
-            bottomSheetDialog.setContentView(R.layout.fragment_setting_clean_data);
+            bottomSheetDialog.setContentView(R.layout.dialog_setting_clean_data);
 
             holder.layout.setOnClickListener(view -> {
                 bottomSheetDialog.show();

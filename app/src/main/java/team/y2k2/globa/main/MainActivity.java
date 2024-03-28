@@ -34,7 +34,13 @@ public class MainActivity extends AppCompatActivity {
                             .setReorderingAllowed(true)
                             .replace(R.id.fcv_main, MainFragment.class, bundle)
                             .commit();
-                } else if(item.getItemId() == R.id.item_main_profile) {
+                }
+                else if(item.getItemId() == R.id.item_main_upload) {
+
+                }
+
+
+                else if(item.getItemId() == R.id.item_main_profile) {
                     getSupportFragmentManager().beginTransaction()
                             .setReorderingAllowed(true)
                             .replace(R.id.fcv_main, ProfileFragment.class, bundle)
