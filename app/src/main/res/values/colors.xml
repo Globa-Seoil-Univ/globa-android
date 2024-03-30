@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#C67C4E</color>
-    <color name="primaryDark">#C67C4E</color>
+    <color name="primaryDark">#B4622F</color>
     <color name="secondary">#ED7E3B</color>
     <color name="lightGray">#DDE2E5</color>
     <color name="gray">#ACB5BD</color>
@@ -18,6 +18,7 @@
     <color name="google_label">#CC000000</color>
 
 
+    <color name="primary_0">#F6F6F6</color>
     <color name="primary_1">#F4E5DC</color>
     <color name="primary_2">#E8CBB8</color>
     <color name="primary_3">#DDB095</color>

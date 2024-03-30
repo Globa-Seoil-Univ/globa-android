@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/modal_24">
+    android:background="@drawable/modal_rounded_24">
 
     <RelativeLayout
         android:id="@+id/relativelayout_setting_clean_data_1"
@@ -68,7 +68,7 @@
             android:layout_weight="9">
 
             <RelativeLayout
-                android:id="@+id/linearlayout_dialog_upload_cloud"
+                android:id="@+id/relativelayout_dialog_upload_cloud"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerHorizontal="true">
@@ -85,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linearlayout_dialog_upload_cloud"
+                android:layout_below="@+id/relativelayout_dialog_upload_cloud"
                 android:layout_centerHorizontal="true"
                 android:text="@string/upload_cloud"/>
 
@@ -105,7 +105,7 @@
             android:layout_weight="9">
 
             <RelativeLayout
-                android:id="@+id/linearlayout_dialog_upload_cloud"
+                android:id="@+id/relativelayout_dialog_upload_record"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerHorizontal="true">
@@ -122,9 +122,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linearlayout_dialog_upload_cloud"
+                android:layout_below="@+id/relativelayout_dialog_upload_record"
                 android:layout_centerHorizontal="true"
-                android:text="@string/upload_cloud"/>
+                android:text="@string/upload_record"/>
 
 
         </RelativeLayout>

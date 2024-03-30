@@ -37,6 +37,20 @@
     <string name="upload_cloud">업로드</string>
     <string name="upload_record">녹음</string>
 
+    <string name="keyword_title">단어 검색</string>
+
+    <string name="docs_title_sample_1">ICT 4주차</string>
+    <string name="docs_title_datetime_1">2023-03-28 오전 09:10</string>
+
+    <string name="docs_more_title">폴더 삭제 타이틀입니다. 이 값 쓰지 마세요</string>
+    <string name="docs_more_datetime">2001-04-24 오후 14:10</string>
+    <string name="docs_more_rename_docs">이름 변경</string>
+    <string name="docs_more_move_docs">폴더 이동</string>
+    <string name="docs_more_delete_docs">폴더 삭제</string>
+
+
+    <string name="docs_title_sample_2">백엔드는 내가 이거야~</string>
+    <string name="docs_title_datetime_2">2023-03-28 오후 01:27</string>
 
     <string name="profile_title">내 정보</string>
     <string name="profile_account_title">계정</string>
@@ -65,6 +79,9 @@
 
     <string name="profile_service_info_4_title">오픈소스 라이선스</string>
     <string name="profile_service_info_4_description">오픈소스 소프트웨어에 대한 라이선스 세부정보</string>
+
+    <string name="main_delete_docs_modal_title">정말 삭제하시겠습니까?</string>
+    <string name="main_delete_docs_modal_description">한 번 삭제한 문서는 되돌릴 수 없습니다.</string>
 
 
     <string name="profile_alert">알림</string>

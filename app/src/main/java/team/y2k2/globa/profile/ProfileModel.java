@@ -10,8 +10,6 @@ import team.y2k2.globa.profile.theme.ThemeActivity;
 
 public class ProfileModel {
     private final ArrayList<SettingItem> items;
-
-
     public ProfileModel() {
         items = new ArrayList<>();
 

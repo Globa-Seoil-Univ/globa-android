@@ -28,6 +28,7 @@
         <activity android:name=".profile.help.HelpActivity"/>
         <activity android:name=".profile.alert.AlertActivity"/>
         <activity android:name=".profile.theme.ThemeActivity"/>
+        <activity android:name=".keyword.detail.KeywordDetailActivity"/>
     </application>
 
 </manifest>

@@ -1,242 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/fragment_main"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/linearlayout_main_select_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-20dp"
+                android:translationZ="5dp"
+                android:background="@drawable/main_bottom"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/relativelayout_main_title">
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontal_main_docs_sort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:scrollbars="none">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/button_main_docs_type_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:background="@drawable/main_button_selected"
+                            android:backgroundTint="@color/primary"
+                            android:stateListAnimator="@null"
+                            android:textColor="@color/white"
+                            android:text="@string/main_docs_type_1"
+                            android:textSize="14dp"
+                            app:cornerRadius="12dp" />
+
+                        <Button
+                            android:id="@+id/button_main_docs_type_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/main_button"
+                            android:stateListAnimator="@null"
+                            android:text="@string/main_docs_type_2"
+                            android:textColor="@color/black"
+                            android:textSize="14dp"
+                            app:cornerRadius="12dp" />
+
+                        <Button
+                            android:id="@+id/button_main_docs_type_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/main_button"
+                            android:stateListAnimator="@null"
+                            android:text="@string/main_docs_type_3"
+                            android:textColor="@color/black"
+                            android:textSize="14dp"
+                            app:cornerRadius="12dp" />
+
+                        <Button
+                            android:id="@+id/button_main_docs_type_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/main_button"
+                            android:stateListAnimator="@null"
+                            android:text="@string/main_docs_type_3"
+                            android:textColor="@color/black"
+                            android:textSize="14dp"
+                            app:cornerRadius="12dp" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id='@+id/refresh_layout'
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_below="@+id/horizontal_main_docs_sort">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview_main_document"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
+                        android:clipToPadding="true"
+                        android:scrollbarFadeDuration="0"
+                        android:scrollbars="vertical" />
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativelayout_main_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <RelativeLayout
+                    android:id="@+id/relativelayout_main_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/imageview_main_top"
                         android:layout_width="match_parent"
-                        android:layout_height="165dp"
+                        android:layout_height="60dp"
                         android:background="@drawable/gradient_main" />
 
-                    <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/tablayout_main_carousel"
+                    <RelativeLayout
+                        android:id="@+id/relativelayout_main_carousel"
                         android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:layout_marginTop="84dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:background="@drawable/card"
-                        android:layout_centerHorizontal="true" />
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imageview_main_top"
+                        android:background="#DBF5FF">
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tablayout_main_carousel"
+                            android:layout_width="320dp"
+                            android:layout_height="160dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/card" />
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/textview_main_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
                         android:layout_marginLeft="20dp"
+                        android:layout_marginTop="16dp"
                         android:fontFamily="@font/koho_bold"
                         android:text="@string/app_name"
                         android:textColor="@color/white"
-                        android:textSize="28dp"/>
-
-
+                        android:textSize="28dp" />
                 </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="15dp"
-                    android:layout="@id/tablayout_main_carousel">
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:backgroundTint="@color/primary"
-                        android:text="@string/main_docs_type_1"
-                        android:textSize="14dp"
-                        app:cornerRadius="12dp" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:backgroundTint="@color/white"
-                        android:textColor="@color/black"
-                        android:text="@string/main_docs_type_2"
-                        android:textSize="14dp"
-                        app:cornerRadius="12dp" />
-
-                </LinearLayout>
-
-
-
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id='@+id/refresh_layout'>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <androidx.core.widget.NestedScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:background="@drawable/item_docs_frame"
-                                android:padding="10dp"
-                                android:layout_marginTop="16dp"
-                                android:layout_marginStart="20dp"
-                                android:layout_marginEnd="20dp"
-                                android:layout_height="115dp">
-
-                                <TextView
-                                    android:id="@+id/textview_main_docs_1_name"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
-                                    android:layout_marginTop="5dp"
-                                    android:textSize="16dp"
-                                    android:textStyle="bold"
-                                    android:text="2024-03-11 ICT 기술 융합 강의 녹음..." />
-
-                                <TextView
-                                    android:id="@+id/textview_main_docs_1_time"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/textview_main_docs_1_name"
-                                    android:layout_marginTop="4dp"
-                                    android:textColor="@color/gray"
-                                    android:textSize="14dp"
-                                    android:text="2024-03-10 오전 09:00" />
-                            </RelativeLayout>
-
-                        </androidx.core.widget.NestedScrollView>
-
-
-
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="115dp"
-                            android:background="@drawable/item_docs_frame"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:padding="10dp">
-
-                                <TextView
-                                    android:id="@+id/textview_main_docs_2_name"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
-                                    android:layout_marginTop="5dp"
-                                    android:textSize="16dp"
-                                    android:textStyle="bold"
-                                    android:text="2024-03-11 ICT 기술 융합 강의 녹음..." />
-
-                                <TextView
-                                    android:id="@+id/textview_main_docs_2_time"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/textview_main_docs_2_name"
-                                    android:layout_marginTop="4dp"
-                                    android:textColor="@color/gray"
-                                    android:textSize="14dp"
-                                    android:text="2024-03-10 오전 09:00" />
-                            </RelativeLayout>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="115dp"
-                            android:background="@drawable/item_docs_frame"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:padding="10dp">
-
-                                <TextView
-                                    android:id="@+id/textview_main_docs_3_name"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
-                                    android:layout_marginTop="5dp"
-                                    android:textSize="16dp"
-                                    android:textStyle="bold"
-                                    android:text="2024-03-11 ICT 기술 융합 강의 녹음..." />
-
-                                <TextView
-                                    android:id="@+id/textview_main_docs_3_time"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/textview_main_docs_3_name"
-                                    android:layout_marginTop="4dp"
-                                    android:textColor="@color/gray"
-                                    android:textSize="14dp"
-                                    android:text="2024-03-10 오전 09:00" />
-                            </RelativeLayout>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="115dp"
-                            android:background="@drawable/item_docs_frame"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:padding="10dp">
-
-                                <TextView
-                                    android:id="@+id/textview_main_docs_4_name"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
-                                    android:layout_marginTop="5dp"
-                                    android:textSize="16dp"
-                                    android:textStyle="bold"
-                                    android:text="2024-03-11 ICT 기술 융합 강의 녹음..." />
-
-                                <TextView
-                                    android:id="@+id/textview_main_docs_4_time"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/textview_main_docs_4_name"
-                                    android:layout_marginTop="4dp"
-                                    android:textColor="@color/gray"
-                                    android:textSize="14dp"
-                                    android:text="2024-03-10 오전 09:00" />
-                            </RelativeLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-            </LinearLayout>
-
-
-
-
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,15 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 하얀 배경색 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+            <corners android:topLeftRadius="24dp" android:topRightRadius="24dp" />
+        </shape>
+    </item>
+    <!-- 투명한 바깥 부분 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,5 +1,7 @@
 package team.y2k2.globa.main;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -10,6 +12,9 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityMainBinding;
+import team.y2k2.globa.folder.FolderInsideFragment;
+import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
+import team.y2k2.globa.login.LoginActivity;
 import team.y2k2.globa.profile.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
                             .replace(R.id.fcv_main, MainFragment.class, bundle)
                             .commit();
                 }
+
+                else if(item.getItemId() == R.id.item_main_statistics) {
+                    Intent intent = new Intent(getApplicationContext(), KeywordDetailActivity.class);
+                    startActivity(intent);
+                }
+
                 else if(item.getItemId() == R.id.item_main_upload) {
 
                 }
@@ -45,13 +56,19 @@ public class MainActivity extends AppCompatActivity {
                             .setReorderingAllowed(true)
                             .replace(R.id.fcv_main, ProfileFragment.class, bundle)
                             .commit();
-                } else {
+                }
+                else if(item.getItemId() == R.id.item_main_folder) {
+                    getSupportFragmentManager().beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.fcv_main, FolderInsideFragment.class, bundle)
+                            .commit();
+                }
+                else {
 
                 }
                 return false;
             }
         });
-
 
 
     }
