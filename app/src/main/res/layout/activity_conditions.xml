@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".conditions.ConditionsActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_conditions_header"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" >
+
+            <Button
+                android:id="@+id/button_conditions_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/header_back"
+                android:layout_marginLeft="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textview_conditions_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="개인정보처리방침"
+                android:fontFamily="@font/notosans_regular"
+                android:textSize="18sp"
+                android:textColor="#222222"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <WebView
+            android:id="@+id/webview_conditions_details"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_conditions_header"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!--
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conditions_title_no1"
+            android:textSize="18dp"
+            android:textColor="#222222"
+            android:fontFamily="@font/notosans_bold"
+            android:layout_marginLeft="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conditions_details_no1"
+            android:textColor="@color/black"
+            android:fontFamily="@font/notosans_regular"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conditions_title_no2"
+            android:textSize="18dp"
+            android:textColor="#222222"
+            android:fontFamily="@font/notosans_bold"
+            android:layout_marginLeft="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conditions_details_no2"
+            android:textColor="@color/black"
+            android:fontFamily="@font/notosans_regular"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conditions_title_no3"
+            android:textSize="18dp"
+            android:textColor="#222222"
+            android:fontFamily="@font/notosans_bold"
+            android:layout_marginLeft="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no3_1"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no3_2"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conditions_title_no4"
+            android:textSize="18dp"
+            android:textColor="#222222"
+            android:fontFamily="@font/notosans_bold"
+            android:layout_marginLeft="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no4_1"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no4_2"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="a."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="40dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no4_2_a"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="40dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no4_2_b"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no4_3"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="a."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="40dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no4_3_a"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b."
+                android:textColor="#222222"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="40dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conditions_details_no4_3_b"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp" />
+
+        </LinearLayout>
+        -->
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".theme.ThemeActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_theme_header"
+        android:layout_width="match_parent"
+        android:layout_height="71dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button_theme_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="24dp"
+            android:background="@drawable/header_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textview_theme_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_bold"
+            android:text="테마 모드"
+            android:textColor="#222222"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textview_theme_lightmode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="라이트모드"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="#222222"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_theme_header"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"/>
+
+    <Button
+        android:id="@+id/button_theme_lightcheck"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/theme_check"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_theme_header"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:id="@+id/textview_theme_darkmode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다크모드"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="#222222"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_theme_lightmode"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"/>
+
+    <Button
+        android:id="@+id/button_theme_darkcheck"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/theme_check"
+        android:backgroundTint="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_theme_lightcheck"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"/>
+
+    <TextView
+        android:id="@+id/textview_theme_systemmode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="시스템 설정과 동일하게"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="#222222"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_theme_darkmode"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"/>
+
+    <Button
+        android:id="@+id/button_theme_systemcheck"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/theme_check"
+        android:backgroundTint="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_theme_darkcheck"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

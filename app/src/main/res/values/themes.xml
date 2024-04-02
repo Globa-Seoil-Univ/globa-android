@@ -10,4 +10,13 @@
 
 
     <style name="Theme.Globa" parent="Base.Theme.Globa" />
+
+    <style name="Theme.Globa.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Globa.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Globa.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

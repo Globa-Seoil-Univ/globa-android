@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,9 +13,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Globa"
-        tools:targetApi="31">
+        tools:targetApi="34">
         <activity
-            android:name=".loading.LoadingActivity"
+            android:name=".Quiz.QuizActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".theme.ThemeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".withdraw.WithdrawActivity"
+            android:exported="false" />
+        <activity
+            android:name=".nicknameedit.NicknameEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".myinfo.MyinfoActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +37,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".login.LoginActivity"/>
-        <activity android:name=".main.MainActivity"/>
+        <activity
+            android:name=".conditions.ConditionsActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>
