@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,17 +33,6 @@
             android:textSize="@dimen/normal"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textview_setting_clean_data_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/darkGray"
-            android:layout_below="@+id/textview_setting_clean_data_title"
-            android:layout_marginTop="5dp"
-            android:text="@string/profile_clean_data_modal_description"
-            android:textSize="@dimen/small"
-            />
-
     </RelativeLayout>
 
     <LinearLayout
@@ -52,7 +42,6 @@
         android:columnCount="3"
         android:rowCount="1"
         android:orientation="horizontal"
-        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/relativelayout_setting_clean_data_1">
 
 
@@ -63,7 +52,8 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="76dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:layout_weight="9">
 
@@ -71,6 +61,7 @@
                 android:id="@+id/relativelayout_dialog_upload_cloud"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:background="@drawable/document_icon_background"
                 android:layout_centerHorizontal="true">
 
                 <ImageView
@@ -87,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relativelayout_dialog_upload_cloud"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
                 android:text="@string/upload_cloud"/>
 
 
@@ -100,12 +92,14 @@
         <RelativeLayout
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:layout_weight="9">
 
             <RelativeLayout
                 android:id="@+id/relativelayout_dialog_upload_record"
+                android:background="@drawable/document_icon_background"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerHorizontal="true">
@@ -113,7 +107,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/upload_cloud"
+                    android:src="@drawable/upload_record"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true" />
 
@@ -124,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relativelayout_dialog_upload_record"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
                 android:text="@string/upload_record"/>
 
 

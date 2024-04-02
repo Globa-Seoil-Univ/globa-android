@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/item_main_folder"
-        android:icon="@drawable/folder"
+        android:icon="@drawable/folder_detail"
         android:title="폴더" />
 
     <item

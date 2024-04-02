@@ -1,9 +1,10 @@
-package team.y2k2.globa.folder;
+package team.y2k2.globa.folder.inside;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +31,11 @@ public class FolderInsideFragment extends Fragment {
 
         binding.recyclerviewFolderInsideDocs.setAdapter(adapter);
         binding.recyclerviewFolderInsideDocs.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+
+
+        binding.imageviewFolderInsideBack.setOnClickListener(v -> {
+
+        });
 
         return binding.getRoot();
     }

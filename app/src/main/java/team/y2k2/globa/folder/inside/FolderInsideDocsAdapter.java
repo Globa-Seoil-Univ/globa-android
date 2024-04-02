@@ -1,6 +1,6 @@
-package team.y2k2.globa.folder;
+package team.y2k2.globa.folder.inside;
 
-import android.content.Intent;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.profile.ProfileFragment;
 
 public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDocsAdapter.AdapterViewHolder> {
     ArrayList<FolderInsideDocsItem> items;
@@ -43,7 +48,6 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView datetime;
-
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

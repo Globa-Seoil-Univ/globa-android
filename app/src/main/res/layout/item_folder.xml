@@ -1,32 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintlayout_folder_item"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/document_background">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:id="@+id/linearlayout_folder_item_icon_bg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/document_icon_background"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textview_item_service_info_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal"
-            tools:text="@string/profile_service_info_1_title" />
+        <ImageView
+            android:id="@+id/imageview_folder_item_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/folder" />
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/textview_item_service_info_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/small"
-            tools:text="@string/profile_service_info_1_description" />
+
+    <TextView
+        android:id="@+id/textview_folder_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2024 회의록"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/linearlayout_folder_item_icon_bg"
+        app:layout_constraintTop_toTopOf="@+id/linearlayout_folder_item_icon_bg" />
+
+    <TextView
+        android:id="@+id/textview_folder_item_datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2024-03-12 오후 11:07"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/darkGray"
+        app:layout_constraintStart_toStartOf="@+id/textview_folder_item_title"
+        app:layout_constraintTop_toBottomOf="@+id/textview_folder_item_title"
+        />
+
+    <LinearLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearlayout_folder_item_icon_bg">
+        
+        
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/more"
+            android:rotation="90"/>
+
     </LinearLayout>
 
 

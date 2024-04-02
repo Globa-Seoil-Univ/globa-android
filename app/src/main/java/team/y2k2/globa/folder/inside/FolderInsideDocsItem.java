@@ -1,4 +1,4 @@
-package team.y2k2.globa.folder;
+package team.y2k2.globa.folder.inside;
 
 public class FolderInsideDocsItem {
     private final String title;
