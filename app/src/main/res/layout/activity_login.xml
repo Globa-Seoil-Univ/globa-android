@@ -150,9 +150,5 @@
                 android:textSize="16dp"
                 android:outlineProvider="none" />
         </LinearLayout>
-
-
-
     </RelativeLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

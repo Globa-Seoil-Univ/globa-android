@@ -1,5 +1,6 @@
 package team.y2k2.globa.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.jetbrains.annotations.NotNull;
 
 import team.y2k2.globa.databinding.FragmentProfileBinding;
+import team.y2k2.globa.main.MainActivity;
+import team.y2k2.globa.profile.info.MyinfoActivity;
 
 public class ProfileFragment extends Fragment {
     ProfileModel model;
@@ -26,6 +29,12 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(getLayoutInflater());
 
         SettingItemAdapter adapter = new SettingItemAdapter(model.getItems());
+
+        binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
+
+            Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
+            startActivity(intent);
+        });
 
         binding.recyclerviewProfileSetting.setAdapter(adapter);
         binding.recyclerviewProfileSetting.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));

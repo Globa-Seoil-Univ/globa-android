@@ -6,9 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 
 public class LoginViewModel extends ViewModel {
-
-
-
     Activity activity;
 
     public void setActivity(Activity activity) {
@@ -17,8 +14,4 @@ public class LoginViewModel extends ViewModel {
 
     private int RC_SIGN_IN=123;
 
-
-
-
-//
 }
