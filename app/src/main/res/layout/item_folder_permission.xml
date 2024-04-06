@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintlayout_folder_permission"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/document_background">
+
+    <LinearLayout
+        android:id="@+id/linearlayout_folder_permission_profile"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/document_icon_background"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageview_folder_permission_profile_image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/profile_image_1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textview_folder_permission_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="성빈클론"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/linearlayout_folder_permission_profile"
+        app:layout_constraintTop_toTopOf="@+id/linearlayout_folder_permission_profile"
+        app:layout_constraintBottom_toBottomOf="@+id/linearlayout_folder_permission_profile"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:gravity="right|center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Spinner
+            android:id="@+id/spinner_folder_permission"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="-10dp"
+            style="@style/FolderPermissionSpinnerStyle"
+            android:gravity="right" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,11 +49,9 @@ public class MainFragment extends Fragment {
         return binding.getRoot();
     }
 
-    // Function to calculate the number of columns based on screen size
     private int calculateNoOfColumns(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-
 
         if (dpWidth >= 600) { // 화면 사이즈가 600dp 이상이면
             return 2; // 테블릿의 경우 2 컬럼

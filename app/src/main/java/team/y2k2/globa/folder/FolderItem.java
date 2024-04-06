@@ -8,7 +8,6 @@ public class FolderItem {
         this.title = title;
         this.datetime = datetime;
     }
-
     public String getTitle() {
         return title;
     }

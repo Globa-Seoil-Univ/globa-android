@@ -15,5 +15,11 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+
+    <style name="FolderPermissionSpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:dropDownVerticalOffset">5dp</item> <!-- 아이템 간격 조절 -->
+        <item name="android:popupBackground">@android:color/white</item> <!-- 드롭다운 배경색 지정 -->
+    </style>
+
     <style name="Theme.Globa" parent="Base.Theme.Globa" />
 </resources>

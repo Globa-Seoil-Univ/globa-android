@@ -19,8 +19,7 @@ public class FolderFragment extends Fragment {
     FolderCurrentlyModel currentlyModel;
     FolderModel model;
 
-    public FolderFragment() {
-    }
+    public FolderFragment() { }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,14 +30,11 @@ public class FolderFragment extends Fragment {
 
         FolderCurrentlyAdapter currentlyAdapter = new FolderCurrentlyAdapter(currentlyModel.getItems());
 
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(binding.getRoot().getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         binding.recyclerviewFolderCurrently.setAdapter(currentlyAdapter);
         binding.recyclerviewFolderCurrently.setLayoutManager(layoutManager);
-
-
 
         FolderAdapter adapter = new FolderAdapter(model.getItems());
 

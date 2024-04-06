@@ -95,6 +95,7 @@
     <string name="profile_alert_3_description">각종 이벤트, 혜택 등 마케팅 관련 알림이 발생합니다.</string>
 
     <string name="folder_title">폴더</string>
+    <string name="folder_permission_title">권한 변경</string>
 
     <string name="folder_share_type_title">공유 방법을 선택해주세요.</string>
     <string name="folder_share_type_description">링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 수정이 가능합니다.</string>
