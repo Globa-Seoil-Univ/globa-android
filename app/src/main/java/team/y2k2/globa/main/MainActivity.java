@@ -6,17 +6,15 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityMainBinding;
-import team.y2k2.globa.folder.FolderFragment;
-import team.y2k2.globa.folder.permission.FolderPermissionActivity;
-import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
-import team.y2k2.globa.profile.ProfileFragment;
+import team.y2k2.globa.main.folder.FolderFragment;
+import team.y2k2.globa.main.folder.permission.FolderPermissionActivity;
+import team.y2k2.globa.main.profile.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -31,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putInt("some_int", 0);
-
         binding.navigationMainBottom.setOnItemReselectedListener(new NavigationBarView.OnItemReselectedListener() {
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
@@ -52,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 if(index == R.id.item_main_main)
                     replaceFragment(MainFragment.class);
                 else if(index == R.id.item_main_statistics) {
-//                    Intent intent = new Intent(getApplicationContext(), KeywordDetailActivity.class);
-//                    startActivity(intent);
-
                     Intent intent = new Intent(getApplicationContext(), FolderPermissionActivity.class);
                     startActivity(intent);
                 }
@@ -71,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void uploadAudio() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(binding.activityMain.getContext());
         bottomSheetDialog.setContentView(R.layout.dialog_upload);
@@ -82,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("audio/*"); // 탐색할 파일 MIME 타입 설정
         startActivity(intent);
-
     }
 
     private void replaceFragment(Class fragment) {

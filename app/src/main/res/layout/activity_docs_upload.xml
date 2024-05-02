@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraintlayout_docs"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_docs_upload_tab"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/imagebutton_docs_upload_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:layout_marginLeft="24dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/textview_docs_upload_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_toEndOf="@id/imagebutton_docs_upload_back"
+            android:layout_centerVertical="true"
+            tools:text="세부정보 추가"
+            />
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout_document_icon_bg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/document_icon_background"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_upload_tab">
+
+        <ImageView
+            android:id="@+id/imageview_document_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/document" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
+        app:layout_constraintTop_toTopOf="@+id/linearlayout_document_icon_bg">
+
+        <TextView
+            android:id="@+id/textview_document_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2024-03-12 회의록"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/notosans_regular"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_document_datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2024-03-12 오후 11:07"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/notosans_regular"
+            android:textColor="@color/darkGray"
+            app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
+            app:layout_constraintTop_toBottomOf="@id/textview_document_title" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

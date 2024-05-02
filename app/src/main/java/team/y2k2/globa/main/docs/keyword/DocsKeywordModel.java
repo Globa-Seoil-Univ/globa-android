@@ -5,7 +5,7 @@ import java.util.List;
 
 
 public class DocsKeywordModel {
-    private ArrayList<DocsKeywordItem> items = new ArrayList<>();
+    private final ArrayList<DocsKeywordItem> items = new ArrayList<>();
 
 
     public DocsKeywordModel(List<String> itemsString) {

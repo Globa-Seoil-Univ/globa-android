@@ -26,8 +26,6 @@ import team.y2k2.globa.main.docs.list.DocsListItemModel;
 public class MainFragment extends Fragment {
     FragmentMainBinding binding;
     DocsListItemModel docsListItemModel = new DocsListItemModel();
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

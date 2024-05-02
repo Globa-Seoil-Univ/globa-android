@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/constraintlayout_conditions"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".conditions.ConditionsActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_conditions_header"
+            android:id="@+id/constraintlayout_conditions_top"
             android:layout_width="match_parent"
             android:layout_height="71dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,12 +42,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <WebView
-            android:id="@+id/webview_conditions_details"
+            android:id="@+id/webview_conditions"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_conditions_header"
+            app:layout_constraintTop_toBottomOf="@+id/constraintlayout_conditions_top"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <!--

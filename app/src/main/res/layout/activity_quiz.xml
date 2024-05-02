@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".quiz.QuizActivity">
+    tools:context=".docs.quiz.QuizActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_quiz_header"

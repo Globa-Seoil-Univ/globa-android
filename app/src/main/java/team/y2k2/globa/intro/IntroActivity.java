@@ -25,11 +25,11 @@ public class IntroActivity extends AppCompatActivity {
 
         binding = ActivityIntroBinding.inflate(getLayoutInflater());
 
-        Button introStartButton = (Button) findViewById(R.id.button_intro_start);
+        Button introStartButton = (Button) findViewById(R.id.button_intro_bottom_start);
 
-        SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewIntroName.getText());
+        SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewIntroLogo.getText());
         spanTitle.setSpan(new ForegroundColorSpan(getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        binding.textviewIntroName.setText(spanTitle);
+        binding.textviewIntroLogo.setText(spanTitle);
 
         introStartButton.setOnClickListener(view -> loginView());
     }

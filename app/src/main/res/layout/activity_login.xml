@@ -39,7 +39,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="210dp"
-        android:id="@+id/relativelayout_intro_select"
+        android:id="@+id/relativelayout_intro_bottom"
         android:layout_margin="20dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">

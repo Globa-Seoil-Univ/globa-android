@@ -22,7 +22,7 @@
                 android:background="@drawable/main_bottom"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/relativelayout_main_title">
+                app:layout_constraintTop_toBottomOf="@id/relativelayout_keyword_detail_title">
 
                 <HorizontalScrollView
                     android:id="@+id/horizontal_main_docs_sort"
@@ -111,7 +111,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/relativelayout_main_title"
+                android:id="@+id/relativelayout_keyword_detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

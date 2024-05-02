@@ -23,16 +23,6 @@ public class DocsListItem {
         this.keywords = keywords;
     }
 
-    public void setImage(int image_1) {
-        this.image_1 = image_1;
-    }
-
-    public void setImage(int image_1, int image_2) {
-        this.image_1 = image_1;
-        this.image_2 = image_2;
-
-    }
-
     public void setImage(int image_1, int image_2, int image_3) {
         this.image_1 = image_1;
         this.image_2 = image_2;

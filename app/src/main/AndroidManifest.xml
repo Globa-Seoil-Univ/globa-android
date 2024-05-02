@@ -28,10 +28,10 @@
             android:name=".withdraw.WithdrawActivity"
             android:exported="false" />
         <activity
-            android:name=".profile.edit.NicknameEditActivity"
+            android:name=".main.profile.edit.NicknameEditActivity"
             android:exported="false" />
 
-        <activity android:name=".profile.info.MyinfoActivity"/>
+        <activity android:name=".main.profile.info.MyinfoActivity"/>
 
         <activity
             android:name=".intro.IntroActivity"
@@ -45,16 +45,17 @@
 
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".main.MainActivity"/>
-        <activity android:name=".profile.service_info.ServiceInfoActivity"/>
-        <activity android:name=".profile.help.HelpActivity"/>
-        <activity android:name=".profile.alert.AlertActivity"/>
-        <activity android:name=".profile.theme.ThemeActivity"/>
+        <activity android:name=".main.profile.service_info.ServiceInfoActivity"/>
+        <activity android:name=".main.profile.help.HelpActivity"/>
+        <activity android:name=".main.profile.alert.AlertActivity"/>
+        <activity android:name=".main.profile.theme.ThemeActivity"/>
         <activity android:name=".keyword.detail.KeywordDetailActivity"/>
-        <activity android:name=".folder.permission.FolderPermissionActivity"/>
+        <activity android:name=".main.folder.permission.FolderPermissionActivity"/>
         <activity
             android:name=".conditions.ConditionsActivity"
             android:exported="false">
         </activity>
+        <activity android:name=".docs.DocsActivity"/>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraintlayout_item_folder_permission"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -13,6 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:id="@+id/imagebutton_folder_permission_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@null"
@@ -21,7 +23,7 @@
             android:src="@drawable/arrow_back" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textview_folder_permission_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
