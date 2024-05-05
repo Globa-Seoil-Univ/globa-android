@@ -50,6 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:textColor="@color/black"
                     android:text="@string/profile_account_title"
                     android:textStyle="bold"
                     android:textSize="@dimen/large" />
@@ -133,6 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
+                        android:textColor="@color/black"
                         android:text="@string/profile_setting_title"
                         android:textStyle="bold"
                         android:textSize="@dimen/large" />

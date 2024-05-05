@@ -97,7 +97,7 @@
         app:layout_constraintBottom_toBottomOf="@id/textview_docs_audio_datetime">
 
         <ImageButton
-            android:id="@+id/imageview_document_play"
+            android:id="@+id/imagebutton_document_play"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"

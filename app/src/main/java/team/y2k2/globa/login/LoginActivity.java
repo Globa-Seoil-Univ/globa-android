@@ -22,15 +22,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.OAuthProvider;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityLoginBinding;
@@ -79,62 +78,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signInWithKakao() {
-
     }
 
     public void signInWithTwitter() {
-        OAuthProvider.Builder provider = OAuthProvider.newBuilder("twitter.com");
-        Task<AuthResult> pendingResultTask = mAuth.getPendingAuthResult();
-        if (pendingResultTask != null) {
-            // There's something already here! Finish the sign-in for your user.
-            pendingResultTask
-                    .addOnSuccessListener(
-                            new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    // User is signed in.
-                                    // IdP data available in
-                                    // authResult.getAdditionalUserInfo().getProfile().
-                                    // The OAuth access token can also be retrieved:
-                                    // ((OAuthCredential)authResult.getCredential()).getAccessToken().
-                                    // The OAuth secret can be retrieved by calling:
-                                    // ((OAuthCredential)authResult.getCredential()).getSecret().
-                                }
-                            })
-                    .addOnFailureListener(
-                            new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Handle failure.
-                                }
-                            });
-        } else {
-            // There's no pending result so you need to start the sign-in flow.
-            // See below.
-        }
-
-        mAuth.startActivityForSignInWithProvider(/* activity= */ this, provider.build())
-                .addOnSuccessListener(
-                        new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-                                // User is signed in.
-                                // IdP data available in
-                                // authResult.getAdditionalUserInfo().getProfile().
-                                // The OAuth access token can also be retrieved:
-                                // ((OAuthCredential)authResult.getCredential()).getAccessToken().
-                                // The OAuth secret can be retrieved by calling:
-                                // ((OAuthCredential)authResult.getCredential()).getSecret().
-                            }
-                        })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Handle failure.
-                            }
-                        });
-
     }
 
 
@@ -143,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         //활동을 초기화할때 최근에 사용된 계정이 있는지 확인한다.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        //존재한다면 최근 사용한 유저 계정을 가지고 온다.
     }
 
     @Override

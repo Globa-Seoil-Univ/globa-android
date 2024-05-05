@@ -40,10 +40,9 @@
                             android:id="@+id/button_main_docs_type_1"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:background="@drawable/main_button_selected"
-                            android:backgroundTint="@color/primary"
+                            android:background="@drawable/main_button"
                             android:stateListAnimator="@null"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:text="@string/main_docs_type_1"
                             android:textSize="14dp"
                             app:cornerRadius="12dp" />
@@ -79,7 +78,7 @@
                             android:layout_marginLeft="8dp"
                             android:background="@drawable/main_button"
                             android:stateListAnimator="@null"
-                            android:text="@string/main_docs_type_3"
+                            android:text="@string/main_docs_type_4"
                             android:textColor="@color/black"
                             android:textSize="14dp"
                             app:cornerRadius="12dp" />
@@ -127,7 +126,7 @@
                     <ImageView
                         android:id="@+id/imageview_main_top"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="50dp"
                         android:background="@drawable/gradient_main" />
 
                     <RelativeLayout
@@ -150,8 +149,8 @@
                         android:id="@+id/textview_main_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginTop="16dp"
                         android:fontFamily="@font/koho_bold"
                         android:text="@string/app_name"
                         android:textColor="@color/white"

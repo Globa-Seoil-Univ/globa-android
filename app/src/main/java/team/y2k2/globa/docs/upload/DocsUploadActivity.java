@@ -59,15 +59,15 @@ public class DocsUploadActivity extends AppCompatActivity {
         binding.textviewDocsAudioTitle.setText(recordName);
         binding.edittextDocsUploadTitle.setHint(recordName);
 
-        binding.imageviewDocumentPlay.setOnClickListener(v -> {
+        binding.imagebuttonDocumentPlay.setOnClickListener(v -> {
             if(isAudioPlayed) {
                 releaseMediaPlayer();
-                binding.imageviewDocumentPlay.setImageResource(R.drawable.docs_play);
+                binding.imagebuttonDocumentPlay.setImageResource(R.drawable.docs_play);
                 isAudioPlayed = false;
                 return;
             }
 
-            binding.imageviewDocumentPlay.setImageResource(R.drawable.docs_pause);
+            binding.imagebuttonDocumentPlay.setImageResource(R.drawable.docs_pause);
             isAudioPlayed = true;
             playAudio(recordPath);
         });

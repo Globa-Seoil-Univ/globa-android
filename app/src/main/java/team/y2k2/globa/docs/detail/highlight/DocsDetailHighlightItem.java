@@ -5,8 +5,6 @@ public class DocsDetailHighlightItem {
     private final int endIndex;
     private final int highlightColor;
 
-
-
     public DocsDetailHighlightItem(int startIndex, int endIndex, int highlightColor) {
         this.startIndex = startIndex;
         this.endIndex = endIndex;

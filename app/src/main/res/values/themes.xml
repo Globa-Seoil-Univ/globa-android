@@ -6,7 +6,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowLightStatusBar">@color/black</item>
         <item name="android:statusBarColor">@color/black</item>
-
+        <item name="android:windowFullscreen">true</item>
         <item name="bottomSheetDialogTheme">@style/Theme.Design.BottomSheetDialog</item>
 
     </style>
@@ -31,4 +31,13 @@
     <style name="Theme.Globa.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Globa.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    
+    
+    <style name="GlobaButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/main_button</item>
+    </style>
+
+    <style name="GlobaSelectedButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/main_button_selected</item>
+    </style>
 </resources>

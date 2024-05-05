@@ -3,6 +3,7 @@ package team.y2k2.globa.main;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -11,21 +12,52 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.FragmentMainBinding;
 import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements View.OnClickListener {
     FragmentMainBinding binding;
     DocsListItemModel docsListItemModel = new DocsListItemModel();
+
+    @Override
+    public void onClick(View v) {
+        if(v == binding.buttonMainDocsType1) {
+            changeButtonDisplay(binding.buttonMainDocsType1);
+        }
+        else if(v == binding.buttonMainDocsType2) {
+            changeButtonDisplay(binding.buttonMainDocsType2);
+        }
+        else if(v == binding.buttonMainDocsType3) {
+            changeButtonDisplay(binding.buttonMainDocsType3);
+        }
+        else if(v == binding.buttonMainDocsType4) {
+            changeButtonDisplay(binding.buttonMainDocsType4);
+        }
+    }
+
+    public void changeButtonDisplay(Button button) {
+        binding.buttonMainDocsType1.setBackgroundResource(R.drawable.main_button);
+        binding.buttonMainDocsType2.setBackgroundResource(R.drawable.main_button);
+        binding.buttonMainDocsType3.setBackgroundResource(R.drawable.main_button);
+        binding.buttonMainDocsType4.setBackgroundResource(R.drawable.main_button);
+
+        binding.buttonMainDocsType1.setTextColor(Color.BLACK);
+        binding.buttonMainDocsType2.setTextColor(Color.BLACK);
+        binding.buttonMainDocsType3.setTextColor(Color.BLACK);
+        binding.buttonMainDocsType4.setTextColor(Color.BLACK);
+
+        button.setBackgroundResource(R.drawable.main_button_selected);
+        button.setTextColor(Color.WHITE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +69,13 @@ public class MainFragment extends Fragment {
 
         DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
         adapter.notifyDataSetChanged();
+
+        binding.buttonMainDocsType1.setOnClickListener(this);
+        binding.buttonMainDocsType2.setOnClickListener(this);
+        binding.buttonMainDocsType3.setOnClickListener(this);
+        binding.buttonMainDocsType4.setOnClickListener(this);
+
+        changeButtonDisplay(binding.buttonMainDocsType1);
 
         int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);

@@ -1,10 +1,11 @@
 package team.y2k2.globa.main.docs.list;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,7 +15,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -48,19 +53,57 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         holder.user_3.setImageResource(items.get(position).getImage_3());
 
         BottomSheetDialog moreBottomSheet = new BottomSheetDialog(holder.more.getContext());
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
+
         moreBottomSheet.setContentView(R.layout.dialog_more_docs);
 
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
         bottomSheetDialog.setContentView(R.layout.dialog_delete_docs);
 
         TextView confirm = bottomSheetDialog.findViewById(R.id.textview_delete_docs_confirm);
         TextView cancel = bottomSheetDialog.findViewById(R.id.textview_delete_docs_cancel);
 
-
         holder.layout.setOnClickListener(v -> {
             // 여기에 문서 상세로 이동
-            Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
-            holder.itemView.getContext().startActivity(intent);
+
+            // 임시로 MP3 파일 경로 여기서 던져줌
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            // 저장소 참조
+            StorageReference storageRef = storage.getReference();
+
+            // 저장된 음악 파일 경로
+            String filePath = "users/eRWlCdKT2lfhlBbScYZqskIOILw1/test_folder/2024-05-03T14:44:28.905707Z.mp3";
+
+            // 해당 파일의 참조
+            StorageReference audioRef = storageRef.child(filePath);
+
+            // Firebase Storage에서 MP3 파일 다운로드 및 준비
+            // 다운로드 URL 가져오기
+            audioRef.getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            // 다운로드 URL을 성공적으로 가져왔을 때의 처리
+                            String audioUrl = uri.toString();
+                            // 이제 downloadUrl을 사용하여 음악 파일을 재생하거나 처리할 수 있습니다.
+                            Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
+
+                            intent.putExtra("title", holder.title.getText().toString());
+                            intent.putExtra("audioUrl", audioUrl);
+                            holder.itemView.getContext().startActivity(intent);
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // 다운로드 URL을 가져오는 데 실패했을 때의 처리
+                            Log.e("FirebaseStorage", "다운로드 URL 가져오기 실패", exception);
+                        }
+                    });
+
+
+
         });
 
         // 버튼 클릭 리스너를 별도의 메서드로 분리
@@ -73,6 +116,8 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         });
 
         holder.more.setOnClickListener(view -> {
+
+
             moreBottomSheet.show();
 
 //            RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
@@ -103,16 +148,11 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         TextView title;
         TextView datetime;
         RecyclerView keywordRecyclerView;
-
         ConstraintLayout layout;
-
         ImageView more;
-
         ImageView user_1;
         ImageView user_2;
         ImageView user_3;
-
-//        ConstraintLayout layout;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
