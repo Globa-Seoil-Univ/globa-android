@@ -31,7 +31,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.ActivityLoginBinding;
 import team.y2k2.globa.main.MainActivity;
 
@@ -122,13 +128,56 @@ public class LoginActivity extends AppCompatActivity {
                                 // Firebase 로그인 성공
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 String uid = user.getUid();
+                                String name = user.getDisplayName();
+                                String profile = user.getPhotoUrl().getPath().toString();
                                 userPreferences(idToken, uid);
+
+                                LoginRequest model = new LoginRequest("1004", uid, name, profile, true);
 
                                 Toast.makeText(getApplicationContext(), "Logged in as " + uid, Toast.LENGTH_SHORT).show();
                                 // 여기에 선택된 계정 정보를 다음 화면으로 넘기는 코드를 추가하세요.
-                                // 예: Intent를 사용하여 다음 화면으로 넘기기
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
+
+                                // Retrofit 인스턴스 생성
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(ApiService.API_BASE_URL_LOCAL) // 외부 접근 시 API_BASE_URL 로 변경
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+
+                                ApiService apiService = retrofit.create(ApiService.class);
+
+                                Call<LoginResponse> call = apiService.sendLogin(model);
+                                call.enqueue(new Callback<LoginResponse>() {
+                                    @Override
+                                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                                        if (response.isSuccessful() && response.body() != null) {
+                                            LoginResponse loginResponse = response.body();
+                                            // 로그인 성공 처리
+
+                                            // 예: Intent를 사용하여 다음 화면으로 넘기기
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            startActivity(intent);
+
+                                            Log.d("로그인 결과", "성공: "
+                                                    + "\n AccessToken : " + loginResponse.getAccessToken()
+                                                    + "\n RefreshToken : " + loginResponse.getRefreshToken());
+                                        } else {
+                                            // 서버로부터 실패 응답을 받았을 때 처리
+                                            Log.d("로그인 결과", "실패");
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+                                        // 네트워크 요청 실패 시 처리
+                                        Toast.makeText(getApplicationContext(), "로그인 실패 " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Log.d("로그인 결과", "실패 : " + t.getMessage());
+
+                                    }
+                                });
+
+
+
                             } else {
                                 // Firebase 로그인 실패
                                 Toast.makeText(getApplicationContext(), "Firebase Authentication Failed", Toast.LENGTH_SHORT).show();

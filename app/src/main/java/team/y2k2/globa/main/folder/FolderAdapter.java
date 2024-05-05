@@ -3,6 +3,7 @@ package team.y2k2.globa.main.folder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,7 +41,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
                     .replace(R.id.fcv_main, FolderInsideFragment.class, null)
                     .addToBackStack(null)
                     .commit();
-
         });
     }
 

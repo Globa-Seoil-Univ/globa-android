@@ -35,6 +35,7 @@ import java.util.TimerTask;
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
+import team.y2k2.globa.docs.more.DocsMoreActivity;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
@@ -70,6 +71,11 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
             mediaPlayer.pause();
             timer.cancel();
             finish();
+        });
+
+        binding.imageviewDocsMore.setOnClickListener(v -> {
+            Intent intent1 = new Intent(this, DocsMoreActivity.class);
+            startActivity(intent1);
         });
 
         binding.buttonDocsDescription.setOnClickListener(v -> {
