@@ -20,5 +20,13 @@ public class NicknameEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityNicknameEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.buttonNicknameeditBack.setOnClickListener(v -> {
+            finish();
+        });
+
+        binding.buttonNicknameeditCancel.setOnClickListener(v -> {
+            binding.edittextNicknameeditInputname.setText("");
+        });
     }
 }

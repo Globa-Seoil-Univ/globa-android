@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     private List<MyinfoItem> itemList;
     private Context context;
 
+
     public MyinfoAdapter(List<MyinfoItem> itemList) {
         this.itemList = itemList;
     }
@@ -28,7 +30,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     @Override
     public MyinfoAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.myinfo_itemlist, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_myinfo, parent, false);
 
         return new MyViewHolder(view);
     }

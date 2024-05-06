@@ -16,5 +16,9 @@ public class ConditionsActivity extends AppCompatActivity {
         binding = ActivityConditionsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.buttonConditionsBack.setOnClickListener(v -> {
+            finish();
+        });
+
     }
 }

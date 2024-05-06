@@ -2,6 +2,7 @@ package team.y2k2.globa.main.folder.share;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -40,8 +41,18 @@ public class FolderShareActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_foldershare_authority, null);
         builder.setView(dialogView);
 
+        RelativeLayout readButton = dialogView.findViewById(R.id.relativelayout_foldershare_read);
+        RelativeLayout wirteButton = dialogView.findViewById(R.id.relativelayout_foldershare_write);
+
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        readButton.setOnClickListener(v -> {
+            // 읽기 권한 클릭 시 작동
+        });
+        wirteButton.setOnClickListener(v -> {
+            // 편집 권한 클릭 시 작동
+        });
     }
 
 }

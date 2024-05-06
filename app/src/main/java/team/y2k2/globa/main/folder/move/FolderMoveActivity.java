@@ -1,6 +1,8 @@
 package team.y2k2.globa.main.folder.move;
 
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -36,6 +38,8 @@ public class FolderMoveActivity extends AppCompatActivity {
         for(String item : itemList) {
             RadioButton radioButton = new RadioButton(FolderMoveActivity.this);
             radioButton.setText(item);
+            radioButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            radioButton.setBackgroundResource(R.drawable.folder_move_radio_button);
             binding.groupFoldermoveRediogroup.addView(radioButton);
         }
 
