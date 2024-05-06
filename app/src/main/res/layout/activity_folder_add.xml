@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.folder.add.FolderAddActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_folderadd_header"
+        android:layout_width="match_parent"
+        android:layout_height="71dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button_folderadd_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="24dp"
+            android:background="@drawable/header_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textview_folderadd_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="추가"
+            android:fontFamily="@font/notosans_regular"
+            android:textColor="@color/gray"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginRight="20dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textview_folderadd_announce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="추가할 폴더의 이름을 입력해주세요"
+        android:textSize="20sp"
+        android:fontFamily="@font/notosans_bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_folderadd_header"
+        android:layout_marginLeft="20dp" />
+
+    <EditText
+        android:id="@+id/edittext_folderadd_inputname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="폴더명 입력"
+        android:textColorHint="@color/gray"
+        android:textSize="18sp"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_folderadd_announce"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/button_folderadd_cancel"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:background="@drawable/cancel"
+        android:backgroundTint="@color/gray"
+        app:layout_constraintTop_toTopOf="@+id/edittext_folderadd_inputname"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="320dp" />
+
+    <TextView
+        android:id="@+id/textview_folderadd_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/32"
+        android:fontFamily="@font/notosans_regular"
+        android:textSize="13sp"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="@+id/edittext_folderadd_inputname"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
+        app:layout_constraintStart_toStartOf="@+id/edittext_folderadd_inputname"
+        android:layout_marginLeft="330dp" />
+
+    <TextView
+        android:id="@+id/textview_folderadd_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="공유"
+        android:fontFamily="@font/notosans_bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/edittext_folderadd_inputname"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_folderadd_addlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/textview_folderadd_share"
+        app:layout_constraintTop_toBottomOf="@+id/textview_folderadd_share" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,34 @@
+package team.y2k2.globa.main.folder.add;
+
+import android.os.Bundle;
+import android.widget.LinearLayout;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import team.y2k2.globa.R;
+import team.y2k2.globa.databinding.ActivityFolderAddBinding;
+
+public class FolderAddActivity extends AppCompatActivity {
+
+    ActivityFolderAddBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityFolderAddBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.recyclerviewFolderaddAddlist.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        int[] images = {R.mipmap.ic_launcher, R.mipmap.ic_launcher};
+
+        FolderAddAdapter adapter = new FolderAddAdapter(this, images);
+        binding.recyclerviewFolderaddAddlist.setAdapter(adapter);
+
+    }
+}

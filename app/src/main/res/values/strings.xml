@@ -151,6 +151,17 @@
     <string name="conditions_details_no4_3_b">
         선택 수집 정보 : 프로필 사진
     </string>
+
+    <string name="folderadd_dialog_title">
+        공유 방법을 선택해주세요.
+    </string>
+    <string name="folderadd_dialog_detail">
+        링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 수정이 가능합니다.
+    </string>
+    <string name="foldershare_dialog_title">
+        권한을 선택해주세요.
+    </string>
+
     <string name="title_activity_test">TestActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
