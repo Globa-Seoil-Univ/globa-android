@@ -49,11 +49,11 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginBottom="10dp"
-
             android:layout_above="@+id/button_sign_in_naver"
             android:background="@drawable/login_button_kakao"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:onClick="onSignInClick">
 
             <ImageView
                 android:layout_width="18dp"
@@ -81,7 +81,8 @@
             android:layout_above="@+id/button_sign_in_twitter"
             android:background="@drawable/login_button_naver"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:onClick="onSignInClick">
 
             <ImageView
                 android:layout_width="18dp"
@@ -108,7 +109,8 @@
             android:background="@drawable/login_button_twitter"
             android:gravity="center"
             android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:onClick="onSignInClick">
 
             <ImageView
                 android:layout_width="18dp"
@@ -132,7 +134,8 @@
             android:layout_height="44dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/login_button_google"
-            android:gravity="center">
+            android:gravity="center"
+            android:onClick="onSignInClick">
 
             <ImageView
                 android:layout_width="18dp"

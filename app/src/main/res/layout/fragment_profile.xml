@@ -75,6 +75,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
+                            android:id="@+id/imageview_profile_account_image"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
                     </LinearLayout>

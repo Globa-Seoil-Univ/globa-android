@@ -23,4 +23,7 @@ public class ProfileModel {
     public ArrayList<SettingItem> getItems() {
         return items;
     }
+
+
+
 }

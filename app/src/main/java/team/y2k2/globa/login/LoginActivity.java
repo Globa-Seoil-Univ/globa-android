@@ -8,6 +8,8 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,16 +44,21 @@ import team.y2k2.globa.databinding.ActivityLoginBinding;
 import team.y2k2.globa.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
-
     // 구글
     private GoogleSignInClient mGoogleSignInClient;
-    private String TAG="mainTag";
     private FirebaseAuth mAuth;
-    private int RC_SIGN_IN=123;
 
-    // 네이버
+    private final int RC_KAKAO = 1001;
+    private final int RC_NAVER = 1002;
+    private final int RC_TWITTER = 1003;
+    private final int RC_GOOGLE = 1004;
 
-    //
+    public int GOOGLE = R.id.button_sign_in_google;
+    /*
+    public int NAVER = R.id.button_sign_in_naver;
+    public int TWITTER = R.id.button_sign_in_twitter;
+    public int KAKAO = R.id.button_sign_in_kakao;
+     */
     private ActivityLoginBinding binding;
     LoginViewModel viewModel;
 
@@ -61,145 +68,102 @@ public class LoginActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
 
-        SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewLoginTitle.getText());
-        spanTitle.setSpan(new ForegroundColorSpan(getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        binding.textviewLoginTitle.setText(spanTitle);
-
+        setFirstCharColorPrimary();
         googleServiceLoading();
 
         setContentView(binding.getRoot());
-
-        binding.buttonSignInNaver.setOnClickListener(view -> signInWithNaver());
-        binding.buttonSignInGoogle.setOnClickListener(view -> signInWithGoogle());
-        binding.buttonSignInKakao.setOnClickListener(view -> signInWithKakao());
-        binding.buttonSignInTwitter.setOnClickListener(view -> signInWithTwitter());
     }
 
-    public void signInWithGoogle() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+    /**
+     * 첫 글자의 색상을 Primary Color로 지정합니다.
+     */
+    private void setFirstCharColorPrimary() {
+        SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewLoginTitle.getText());
+        spanTitle.setSpan(new ForegroundColorSpan(getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        binding.textviewLoginTitle.setText(spanTitle);
     }
 
-    public void signInWithNaver() {
+    /**
+     * SNS 로그인 종류에 따라 실행될 메서드를 지정합니다.
+     */
+    public void onSignInClick(View v) {
+        final int SIGN_IN_TYPE = v.getId();
+
+        if(SIGN_IN_TYPE == GOOGLE) {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, 1004);
+        }
+        /*
+        else if(SIGN_IN_TYPE == TWITTER) {
+
+        }
+
+        else if(SIGN_IN_TYPE == KAKAO) {
+
+        }
+
+        else if(SIGN_IN_TYPE == NAVER) {
+
+        }
+         */
     }
 
-    public void signInWithKakao() {
-    }
+    /**
+     * SNS 계정 선택 후 해당 엑티비티로 돌아왔을 때 결과값을 가져옵니다.
+     * 가져온 SNS 계정 정보와 requestCode를 구분해 Spring에 정보를 전달합니다.
 
-    public void signInWithTwitter() {
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        //활동을 초기화할때 최근에 사용된 계정이 있는지 확인한다.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-    }
-
+     *
+     * @param requestCode SNS Type
+     * @param resultCode SNS 계정 정보 요청 성공 여부
+     * @param data SNS 계정 정보
+     *
+     * @KAKAO = 1001
+     * @NAVER = 1002
+     * @TWITTER = 1003
+     * @GOOGLE = 1004
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // 구글 로그인 실패 처리
-                Toast.makeText(getApplicationContext(), "Google Sign-In Failed", Toast.LENGTH_SHORT).show();
-                Log.d("ERRLogin", e.toString());
-            }
+        if(resultCode == RESULT_CANCELED) {
+            return;
+        }
+        switch (requestCode) {
+            case RC_KAKAO:
+            case RC_NAVER:
+            case RC_TWITTER:
+            case RC_GOOGLE:
+                signInGoogle(data);
         }
     }
 
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        // 구글 로그인에서 받은 idToken을 사용하여 Firebase 인증 정보를 생성
-        String idToken = acct.getIdToken();
-        if (idToken != null) {
-            AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-            mAuth.signInWithCredential(credential)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Firebase 로그인 성공
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                String uid = user.getUid();
-                                String name = user.getDisplayName();
-                                String profile = user.getPhotoUrl().getPath().toString();
-                                userPreferences(idToken, uid);
-
-                                LoginRequest model = new LoginRequest("1004", uid, name, profile, true);
-
-                                Toast.makeText(getApplicationContext(), "Logged in as " + uid, Toast.LENGTH_SHORT).show();
-                                // 여기에 선택된 계정 정보를 다음 화면으로 넘기는 코드를 추가하세요.
-
-                                // Retrofit 인스턴스 생성
-                                Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(ApiService.API_BASE_URL_LOCAL) // 외부 접근 시 API_BASE_URL 로 변경
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-
-                                ApiService apiService = retrofit.create(ApiService.class);
-
-                                Call<LoginResponse> call = apiService.sendLogin(model);
-                                call.enqueue(new Callback<LoginResponse>() {
-                                    @Override
-                                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                                        if (response.isSuccessful() && response.body() != null) {
-                                            LoginResponse loginResponse = response.body();
-                                            // 로그인 성공 처리
-
-                                            // 예: Intent를 사용하여 다음 화면으로 넘기기
-                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                            startActivity(intent);
-
-                                            Log.d("로그인 결과", "성공: "
-                                                    + "\n AccessToken : " + loginResponse.getAccessToken()
-                                                    + "\n RefreshToken : " + loginResponse.getRefreshToken());
-                                        } else {
-                                            // 서버로부터 실패 응답을 받았을 때 처리
-                                            Log.d("로그인 결과", "실패");
-
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<LoginResponse> call, Throwable t) {
-                                        // 네트워크 요청 실패 시 처리
-                                        Toast.makeText(getApplicationContext(), "로그인 실패 " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                        Log.d("로그인 결과", "실패 : " + t.getMessage());
-
-                                    }
-                                });
-
-
-
-                            } else {
-                                // Firebase 로그인 실패
-                                Toast.makeText(getApplicationContext(), "Firebase Authentication Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        } else {
-            // idToken이 null인 경우 처리
-            Toast.makeText(getApplicationContext(), "Google Sign-In Failed: idToken is null", Toast.LENGTH_SHORT).show();
-            Log.d("ERRLogin", "idToken is null");
+    private void signInGoogle(Intent data) {
+        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+        try {
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            firebaseAuth(account);
+        } catch (ApiException e) {
+            // 로그인 실패
+            Toast.makeText(getApplicationContext(), "Sign-In Failed |" + e.getMessage() , Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void userPreferences(String accessToken, String uid) {
-        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("accessToken", accessToken);
-        editor.putString("uid", uid);
-        editor.commit();
+    private void firebaseAuth(GoogleSignInAccount acct) {
+        String accessToken = acct.getIdToken();
+
+        if (accessToken == null) {
+            Toast.makeText(getApplicationContext(), "로그인 실패 : NULL of AccessToken", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        AuthCredential credential = GoogleAuthProvider.getCredential(accessToken, null);
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new LoginViewModel.LoginListener(this, mAuth, accessToken));
     }
 
-    public void googleServiceLoading() {
+    private void googleServiceLoading() {
         //Google의 로그인 구성을 설정해준다.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(this.getString(R.string.default_web_client_id))

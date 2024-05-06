@@ -2,13 +2,18 @@ package team.y2k2.globa.main;
 
 
 
+import static team.y2k2.globa.api.ApiService.API_BASE_URL;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +23,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.FragmentMainBinding;
 import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
@@ -82,6 +97,53 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         binding.recyclerviewMainDocument.setAdapter(adapter);
         binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+
+
+        SharedPreferences preferences = inflater.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+        String accessToken = "Bearer " + preferences.getString("accessToken", "");
+
+        Call<List<NoticeResponse>> call = apiService.getPromotions("application/json",accessToken, 1);
+        call.enqueue(new Callback<List<NoticeResponse>>() {
+            @Override
+            public void onResponse(Call<List<NoticeResponse>> call, Response<List<NoticeResponse>> response) {
+                if (response.isSuccessful()) {
+                    List<NoticeResponse> noticeResponse = response.body();
+                    // 성공적으로 응답을 받았을 때 처리
+                    Log.d("IMAGETEST", "성공");
+
+                    for(int i = 0; i < noticeResponse.size(); i++) {
+                        NoticeResponse index = noticeResponse.get(i);
+
+                        Glide.with(inflater.getContext())
+                                .load(index.getThumbnail()) // 임시로 로드
+                                .into(binding.imageviewMainCarousel);
+
+
+//                        int color = Color.parseColor(index.getBgColor());
+//                        binding.relativelayoutMainCarousel.setBackgroundColor(color);
+                    }
+
+                } else {
+                    // 서버로부터 실패 응답을 받았을 때 처리
+                    Log.d("IMAGETEST", "오류");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NoticeResponse>> call, Throwable t) {
+                // 네트워크 요청 실패 시 처리
+                Log.d("IMAGETEST", "오류" + t.getMessage());
+
+            }
+        });
 
         return binding.getRoot();
     }

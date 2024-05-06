@@ -2,13 +2,13 @@ package team.y2k2.globa.login;
 
 public class LoginRequest {
 
-    private String snsKind;
+    private int snsKind;
     private String snsId;
     private String name;
     private String profile;
     private boolean notification;
 
-    public LoginRequest(String snsKind, String snsId, String name, String profile, boolean notification) {
+    public LoginRequest(int snsKind, String snsId, String name, String profile, boolean notification) {
         this.snsKind = snsKind;
         this.snsId = snsId;
         this.name = name;
@@ -20,7 +20,7 @@ public class LoginRequest {
         return profile;
     }
 
-    public String getSnsKind() {
+    public int getSnsKind() {
         return snsKind;
     }
 

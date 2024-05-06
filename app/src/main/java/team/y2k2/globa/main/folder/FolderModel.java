@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class FolderModel {
 
-    private final ArrayList<FolderItem> items;
+    private ArrayList<FolderItem> items;
     public FolderModel() {
         items = new ArrayList<>();
 
