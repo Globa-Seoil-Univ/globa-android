@@ -36,6 +36,7 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.FragmentMainBinding;
 import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
+import team.y2k2.globa.main.notice.NoticeAutoScrollHandler;
 import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
@@ -109,15 +110,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         SharedPreferences preferences = inflater.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String accessToken = "Bearer " + preferences.getString("accessToken", "");
 
-        Call<List<NoticeResponse>> call = apiService.requestPromotion("application/json",accessToken, 1);
+        Call<List<NoticeResponse>> call = apiService.requestPromotion("application/json",accessToken, 3);
         call.enqueue(new Callback<List<NoticeResponse>>() {
             @Override
             public void onResponse(Call<List<NoticeResponse>> call, Response<List<NoticeResponse>> response) {
                 if (response.isSuccessful()) {
                     List<NoticeResponse> noticeResponse = response.body();
                     // 성공적으로 응답을 받았을 때 처리
-                    Log.d("IMAGETEST", "성공");
-
                     ViewPager viewPager = binding.viewpagerMainCarousel;
 
                     String[] images = new String[noticeResponse.size()];
@@ -128,8 +127,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     }
 
                     NoticeFragmentAdapter noticeAdapter = new NoticeFragmentAdapter(getChildFragmentManager(), images);
+                    NoticeAutoScrollHandler autoScrollHandler = new NoticeAutoScrollHandler(viewPager);
                     viewPager.setAdapter(noticeAdapter);
-
+                    autoScrollHandler.startAutoScroll();
                 } else {
                     // 서버로부터 실패 응답을 받았을 때 처리
                     Log.d("IMAGETEST", "오류");

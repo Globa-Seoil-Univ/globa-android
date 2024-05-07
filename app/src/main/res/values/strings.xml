@@ -40,8 +40,6 @@
 
     <string name="keyword_title">단어 검색</string>
 
-    <string name="docs_title_sample_1">ICT 4주차</string>
-    <string name="docs_title_datetime_1">2023-03-28 오전 09:10</string>
 
     <string name="docs_more_title">폴더 삭제 타이틀입니다. 이 값 쓰지 마세요</string>
     <string name="docs_more_datetime">2001-04-24 오후 14:10</string>
@@ -49,9 +47,15 @@
     <string name="docs_more_move_docs">폴더 이동</string>
     <string name="docs_more_delete_docs">폴더 삭제</string>
 
+    <string name="docs_title_sample_1">프로젝트관리캡스톤디자인 10주차</string>
+    <string name="docs_title_datetime_1">2024-05-08 오전 10:20</string>
 
-    <string name="docs_title_sample_2">백엔드는 내가 이거야~</string>
-    <string name="docs_title_datetime_2">2023-03-28 오후 01:27</string>
+    <string name="docs_title_sample_2">자바프로그래밍심화</string>
+    <string name="docs_title_datetime_2">2024-05-08 오후 01:42</string>
+
+    <string name="docs_title_sample_3">2024-05-03 프로젝트 회의</string>
+    <string name="docs_title_datetime_3">2024-05-03 오후 04:32</string>
+
 
     <string name="profile_title">내 정보</string>
     <string name="profile_account_title">계정</string>
