@@ -21,6 +21,7 @@ import team.y2k2.globa.docs.upload.DocsUploadActivity;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.permission.FolderPermissionActivity;
 import team.y2k2.globa.main.profile.ProfileFragment;
+import team.y2k2.globa.main.statistics.StatisticsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private final int REQUEST_CODE_PICK_RECORD = 101;
@@ -56,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 if(index == R.id.item_main_main)
                     replaceFragment(MainFragment.class);
                 else if(index == R.id.item_main_statistics) {
-                    Intent intent = new Intent(getApplicationContext(), FolderPermissionActivity.class);
-                    startActivity(intent);
+                    replaceFragment(StatisticsFragment.class);
+
                 }
                 else if(index == R.id.item_main_upload)
                     uploadAudio();

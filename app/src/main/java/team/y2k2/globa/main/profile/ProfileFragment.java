@@ -73,6 +73,8 @@ public class ProfileFragment extends Fragment {
                     // API 호출 성공
                     UserInfoResponse userInfo = response.body();
                     // userInfo를 사용하여 필요한 작업 수행
+                    Log.d("IMAGETEST", userInfo.getProfile());
+                    Log.d("IMAGETEST", userInfo.getName());
 
                     binding.textviewProfileAccountUsername.setText(userInfo.getName());
                     binding.textviewProfileAccountUsercode.setText(userInfo.getCode());

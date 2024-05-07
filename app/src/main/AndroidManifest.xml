@@ -60,7 +60,9 @@
         <activity android:name=".main.profile.info.MyinfoActivity" />
 
         <activity android:name=".login.LoginActivity" />
-        <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.MainActivity"
+            android:enableOnBackInvokedCallback="true"/>
+
         <activity android:name=".main.profile.service_info.ServiceInfoActivity" />
         <activity android:name=".main.profile.help.HelpActivity" />
         <activity android:name=".main.profile.alert.AlertActivity" />
