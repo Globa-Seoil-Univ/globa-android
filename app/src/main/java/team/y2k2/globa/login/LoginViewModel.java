@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -70,7 +69,7 @@ public class LoginViewModel extends ViewModel {
 
                 ApiService apiService = retrofit.create(ApiService.class);
 
-                Call<LoginResponse> call = apiService.sendLogin(loginRequest);
+                Call<LoginResponse> call = apiService.requestSignIn(loginRequest);
                 call.enqueue(new Callback<LoginResponse>() {
                     @Override
                     public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {

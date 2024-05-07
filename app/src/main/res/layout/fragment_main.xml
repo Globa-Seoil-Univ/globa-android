@@ -129,22 +129,13 @@
                         android:layout_height="50dp"
                         android:background="@drawable/gradient_main" />
 
-                    <RelativeLayout
-                        android:id="@+id/relativelayout_main_carousel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewpager_main_carousel"
+                        android:layout_width="320dp"
+                        android:layout_height="160dp"
+                        android:layout_marginBottom="20dp"
                         android:layout_below="@+id/imageview_main_top"
-                        android:background="#DBF5FF">
-
-
-                        <ImageView
-                            android:id="@+id/imageview_main_carousel"
-                            android:layout_width="320dp"
-                            android:layout_height="160dp"
-                            android:layout_marginBottom="20dp"
-                            android:layout_centerHorizontal="true"
-                            android:background="@drawable/card" />
-                    </RelativeLayout>
+                        android:layout_centerHorizontal="true"/>
 
                     <TextView
                         android:id="@+id/textview_main_title"

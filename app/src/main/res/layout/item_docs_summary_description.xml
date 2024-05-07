@@ -22,7 +22,6 @@
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
         android:layout_marginLeft="5dp"
-        android:ems="15"
         android:textSize="@dimen/normal"
         app:layout_constraintStart_toEndOf="@id/imageview_item_docs_summary_description"
         app:layout_constraintTop_toTopOf="parent"

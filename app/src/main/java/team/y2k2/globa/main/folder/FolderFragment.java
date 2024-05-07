@@ -51,7 +51,7 @@ public class FolderFragment extends Fragment {
         SharedPreferences preferences = inflater.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String accessToken = "Bearer " + preferences.getString("accessToken", "");
 
-        Call<FolderResponse> call = apiService.getFolders("application/json",accessToken, 1, 10);
+        Call<FolderResponse> call = apiService.requestGetFolders("application/json",accessToken, 1, 10);
         call.enqueue(new Callback<FolderResponse>() {
             @Override
             public void onResponse(Call<FolderResponse> call, Response<FolderResponse> response) {

@@ -126,15 +126,17 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_CANCELED) {
-            return;
-        }
+//        if(resultCode == RESULT_CANCELED) {
+//            Log.d("LoginActivityLog", "resultCode: CANCELED");
+//            return;
+//        }
         switch (requestCode) {
             case RC_KAKAO:
             case RC_NAVER:
             case RC_TWITTER:
             case RC_GOOGLE:
                 signInGoogle(data);
+                break;
         }
     }
 
@@ -146,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
             firebaseAuth(account);
         } catch (ApiException e) {
             // 로그인 실패
-            Toast.makeText(getApplicationContext(), "Sign-In Failed |" + e.getMessage() , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "로그인 실패 :" + e.getMessage() , Toast.LENGTH_SHORT).show();
         }
     }
 

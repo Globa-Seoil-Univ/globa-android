@@ -11,15 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.fido.fido2.api.common.RequestOptions;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,7 +65,7 @@ public class ProfileFragment extends Fragment {
         SharedPreferences preferences = inflater.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String accessToken = "Bearer " + preferences.getString("accessToken", "");
 
-        Call<UserInfoResponse> call = apiService.requestMyInfo("application/json", accessToken);
+        Call<UserInfoResponse> call = apiService.requestUserInfo("application/json", accessToken);
         call.enqueue(new Callback<UserInfoResponse>() {
             @Override
             public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {

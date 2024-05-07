@@ -22,8 +22,7 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-
-import com.bumptech.glide.Glide;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.List;
 
@@ -37,6 +36,7 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.FragmentMainBinding;
 import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
+import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     FragmentMainBinding binding;
@@ -109,7 +109,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         SharedPreferences preferences = inflater.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String accessToken = "Bearer " + preferences.getString("accessToken", "");
 
-        Call<List<NoticeResponse>> call = apiService.getPromotions("application/json",accessToken, 1);
+        Call<List<NoticeResponse>> call = apiService.requestPromotion("application/json",accessToken, 1);
         call.enqueue(new Callback<List<NoticeResponse>>() {
             @Override
             public void onResponse(Call<List<NoticeResponse>> call, Response<List<NoticeResponse>> response) {
@@ -118,17 +118,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     // 성공적으로 응답을 받았을 때 처리
                     Log.d("IMAGETEST", "성공");
 
+                    ViewPager viewPager = binding.viewpagerMainCarousel;
+
+                    String[] images = new String[noticeResponse.size()];
+
                     for(int i = 0; i < noticeResponse.size(); i++) {
                         NoticeResponse index = noticeResponse.get(i);
-
-                        Glide.with(inflater.getContext())
-                                .load(index.getThumbnail()) // 임시로 로드
-                                .into(binding.imageviewMainCarousel);
-
-
-//                        int color = Color.parseColor(index.getBgColor());
-//                        binding.relativelayoutMainCarousel.setBackgroundColor(color);
+                        images[i] = index.getThumbnail();
                     }
+
+                    NoticeFragmentAdapter noticeAdapter = new NoticeFragmentAdapter(getChildFragmentManager(), images);
+                    viewPager.setAdapter(noticeAdapter);
 
                 } else {
                     // 서버로부터 실패 응답을 받았을 때 처리
