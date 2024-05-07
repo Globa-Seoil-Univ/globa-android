@@ -32,8 +32,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosans_bold"
             android:text="테마 모드"
-            android:textColor="#222222"
-            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,21 +47,11 @@
         android:layout_height="wrap_content"
         android:text="라이트모드"
         android:fontFamily="@font/notosans_regular"
-        android:textColor="#222222"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_theme_header"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"/>
-
-    <Button
-        android:id="@+id/button_theme_lightcheck"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/theme_check"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_theme_header"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"/>
 
     <TextView
@@ -70,22 +60,11 @@
         android:layout_height="wrap_content"
         android:text="다크모드"
         android:fontFamily="@font/notosans_regular"
-        android:textColor="#222222"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_theme_lightmode"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"/>
-
-    <Button
-        android:id="@+id/button_theme_darkcheck"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/theme_check"
-        android:backgroundTint="@color/gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_theme_lightcheck"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="40dp"/>
 
     <TextView
@@ -94,21 +73,43 @@
         android:layout_height="wrap_content"
         android:text="시스템 설정과 동일하게"
         android:fontFamily="@font/notosans_regular"
-        android:textColor="#222222"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_theme_darkmode"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"/>
 
-    <Button
-        android:id="@+id/button_theme_systemcheck"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/theme_check"
-        android:backgroundTint="@color/gray"
+    <RadioGroup
+        android:id="@+id/radiogroup_theme_buttongroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_theme_darkcheck"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="40dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/layout_theme_header"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp">
+
+        <RadioButton
+            android:id="@+id/radiobutton_theme_lightmode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/theme_radio_button" />
+
+        <RadioButton
+            android:id="@+id/radiobutton_theme_darkmode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/theme_radio_button"
+            android:layout_marginTop="45dp"/>
+
+        <RadioButton
+            android:id="@+id/radiobutton_theme_system"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/theme_radio_button"
+            android:layout_marginTop="45dp"/>
+
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

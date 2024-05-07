@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:text="이름"
         android:fontFamily="@font/notosans_regular"
-        android:textColor="#222222"
-        android:textSize="22sp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/big"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -24,7 +24,7 @@
         android:id="@+id/imageview_myinfoItemlist_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/arrow_forward"
+        android:src="@drawable/arrow_right"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -36,7 +36,7 @@
         android:text="윤영진"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/gray"
-        android:textSize="22sp"
+        android:textSize="@dimen/big"
         app:layout_constraintEnd_toStartOf="@+id/imageview_myinfoItemlist_next"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -71,6 +71,8 @@ dependencies {
     implementation libs.lifecycle.viewmodel.ktx
     implementation libs.recyclerview.v7
     implementation libs.annotation.jvm
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

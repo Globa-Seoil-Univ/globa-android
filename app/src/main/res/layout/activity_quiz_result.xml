@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/primary"
+    tools:context=".docs.quiz.quizresult.QuizResultActivity">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/layout_quizresult_header"
+      android:layout_width="match_parent"
+      android:layout_height="71dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      android:background="@color/primary">
+
+    <Button
+        android:id="@+id/button_quizresult_back"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="24dp"
+        android:background="@drawable/header_back"
+        android:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textview_quizresult_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosans_regular"
+        android:text="퀴즈"
+        android:textColor="@color/white"
+        android:textSize="@dimen/large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <TextView
+      android:id="@+id/textview_quizresult_clear"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="모든 문제를 다 풀었습니다 !"
+      android:fontFamily="@font/notosans_bold"
+      android:textSize="@dimen/big"
+      android:textColor="@color/white"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/layout_quizresult_header"
+      android:layout_marginLeft="35dp" />
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/layout_quizresult_details"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:background="@drawable/quiz_details"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textview_quizresult_clear"
+      app:layout_constraintBottom_toBottomOf="parent"
+      android:layout_marginTop="30dp"
+      android:padding="20dp" >
+
+    <ImageView
+        android:id="@+id/imageview_quizresult_clear"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_quizresult_totalscore"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@drawable/item_docs_frame"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/layout_quizresult_count"
+        android:layout_marginBottom="15dp"
+        android:elevation="2dp" >
+
+      <View
+          android:id="@+id/view_quizresult_score"
+          android:layout_width="35dp"
+          android:layout_height="35dp"
+          android:background="@drawable/quiz_score"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginLeft="20dp" />
+
+      <TextView
+          android:id="@+id/textview_quizresult_scoretitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="최종 점수"
+          android:fontFamily="@font/notosans_bold"
+          android:textColor="@color/black"
+          android:textSize="@dimen/large"
+          app:layout_constraintStart_toEndOf="@+id/view_quizresult_score"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginLeft="20dp" />
+
+      <TextView
+          android:id="@+id/textview_quizresult_score"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="80 점"
+          android:fontFamily="@font/notosans_bold"
+          android:textColor="@color/black"
+          android:textSize="@dimen/large"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginRight="13dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_quizresult_count"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@drawable/item_docs_frame"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/layout_quizresult_percent"
+        android:layout_marginBottom="15dp"
+        android:elevation="2dp" >
+
+      <View
+          android:id="@+id/view_quizresult_count"
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:background="@drawable/check"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginLeft="20dp" />
+
+      <TextView
+          android:id="@+id/textview_quizresult_counttitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="맞힌 정답 수"
+          android:fontFamily="@font/notosans_bold"
+          android:textColor="@color/black"
+          android:textSize="@dimen/large"
+          app:layout_constraintStart_toEndOf="@+id/view_quizresult_count"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginLeft="20dp" />
+
+      <TextView
+          android:id="@+id/textview_quizresult_correct"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="80 개"
+          android:fontFamily="@font/notosans_bold"
+          android:textColor="@color/black"
+          android:textSize="@dimen/large"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginRight="13dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_quizresult_percent"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@drawable/item_docs_frame"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        android:elevation="2dp" >
+
+      <View
+          android:id="@+id/view_quizresult_thumb"
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:background="@drawable/quiz_thumb"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginLeft="20dp" />
+
+      <TextView
+          android:id="@+id/textview_quizresult_percent"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:text="지난번 성적보다 82% 상승했습니다!"
+          android:fontFamily="@font/notosans_bold"
+          android:textColor="@color/black"
+          android:textSize="@dimen/large"
+          android:ellipsize="end"
+          android:maxLines="1"
+          app:layout_constraintStart_toEndOf="@+id/view_quizresult_thumb"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginLeft="20dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+  </androidx.constraintlayout.widget.ConstraintLayout>

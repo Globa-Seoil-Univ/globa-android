@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.profile.edit.NicknameEditActivity">
+    tools:context=".main.folder.share.FolderShareActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_nicknameedit_header"
+        android:id="@+id/layout_foldershare_header"
         android:layout_width="match_parent"
         android:layout_height="71dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/button_nicknameedit_back"
+            android:id="@+id/button_foldershare_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="24dp"
@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textview_nicknameedit_change"
+            android:id="@+id/textview_foldershare_change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="변경"
@@ -42,55 +42,75 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textview_nicknameedit_announce"
+        android:id="@+id/textview_foldershare_announce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="변경할 이름을 입력해주세요."
+        android:text="공유할 멤버를 선택해주세요"
         android:textSize="@dimen/big"
         android:fontFamily="@font/notosans_bold"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_nicknameedit_header"
+        app:layout_constraintTop_toBottomOf="@+id/layout_foldershare_header"
         android:layout_marginLeft="20dp" />
 
     <EditText
-        android:id="@+id/edittext_nicknameedit_inputname"
+        android:id="@+id/edittext_foldershare_inputname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="윤영진"
+        android:hint="유저 코드 입력"
+        android:textColorHint="@color/gray"
         android:textSize="@dimen/large"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_nicknameedit_announce"
+        app:layout_constraintTop_toBottomOf="@id/textview_foldershare_announce"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"/>
 
     <Button
-        android:id="@+id/button_nicknameedit_cancel"
+        android:id="@+id/button_foldershare_cancel"
         android:layout_width="17dp"
         android:layout_height="17dp"
         android:background="@drawable/cancel"
         android:backgroundTint="@color/gray"
-        app:layout_constraintTop_toTopOf="@+id/edittext_nicknameedit_inputname"
-        app:layout_constraintStart_toStartOf="@+id/edittext_nicknameedit_inputname"
-        app:layout_constraintEnd_toEndOf="@+id/edittext_nicknameedit_inputname"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="320dp" />
-
-    <TextView
-        android:id="@+id/textview_nicknameedit_count"
+        app:layout_constraintTop_toTopOf="@+id/edittext_foldershare_inputname"
+        app:layout_constraintBottom_toBottomOf="@+id/edittext_foldershare_inputname"
+        app:layout_constraintEnd_toEndOf="@+id/edittext_foldershare_inputname"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="10dp" />
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_foldershare_dropbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="3/32"
-        android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/small"
-        android:textColor="@color/gray"
-        app:layout_constraintEnd_toEndOf="@+id/edittext_nicknameedit_inputname"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_nicknameedit_inputname"
-        app:layout_constraintStart_toStartOf="@+id/edittext_nicknameedit_inputname"
-        android:layout_marginLeft="330dp" />
+        app:layout_constraintEnd_toStartOf="@+id/button_foldershare_cancel"
+        app:layout_constraintTop_toTopOf="@+id/button_foldershare_cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/button_foldershare_cancel"
+        android:layout_marginEnd="5dp">
+        
+        <TextView
+            android:id="@+id/textview_foldershare_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수정"
+            android:fontFamily="@font/notosans_regular"
+            android:textSize="@dimen/small"
+            android:textColor="@color/gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+        
+        <View
+            android:id="@+id/view_foldershare_arrow"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:background="@drawable/arrow_down"
+            app:layout_constraintStart_toEndOf="@+id/textview_foldershare_status"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
