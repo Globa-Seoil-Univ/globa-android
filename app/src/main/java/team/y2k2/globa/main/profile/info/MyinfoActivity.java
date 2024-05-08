@@ -1,8 +1,10 @@
 package team.y2k2.globa.main.profile.info;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private ActivityMyinfoBinding binding;
     private ArrayList<MyinfoItem> arrayList;
     private MyinfoAdapter myinfoAdapter;
+    private MyinfoViewModel myInfoViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +27,55 @@ public class MyinfoActivity extends AppCompatActivity {
         binding = ActivityMyinfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // 리사이클러뷰 레이아웃 매니저 설정
         binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(this));
-
+        // 리사이클러 뷰에 넣을 아이템 리스트
         List<MyinfoItem> itemList = new ArrayList<>();
+
+        // 뷰 모델 갖고오기
+        myInfoViewModel = new ViewModelProvider(this).get(MyinfoViewModel.class);
+
+        // 헤더 파라미터 2개
+        String contentType = "application/json";
+        String authorization = "Bearer [사용자 토큰]";
+
+        // getter를 통해 값 가져오기
+        myInfoViewModel.getUserInfoResponseLiveData().observe(this, userInfoResponse -> {
+            if (userInfoResponse != null) {
+                /*
+                String profile = userInfoResponse.getProfile();
+                String name = userInfoResponse.getName();
+                String code = userInfoResponse.getCode();
+                int pulbicFolderId = Integer.parseInt(userInfoResponse.getPublicFolderId());
+                 */
+                itemList.add(new MyinfoItem("이름", userInfoResponse.getName(), R.drawable.arrow_forward, new NicknameEditActivity()));
+                itemList.add(new MyinfoItem("계정 코드", userInfoResponse.getCode(), R.drawable.item_docs_frame, null));
+                itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
+                itemList.add(new MyinfoItem("회월탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
+            }
+        });
+
+        // 에러 발생
+        myInfoViewModel.getErrorLiveData().observe(this, errorMessge -> {
+            Toast.makeText(getApplicationContext(), errorMessge, Toast.LENGTH_SHORT).show();
+        });
+
+        // API 호출 실행
+        myInfoViewModel.fetchMyInfo(contentType, authorization);
+
+        /*
         itemList.add(new MyinfoItem("이름", "윤영진", R.drawable.arrow_forward, new NicknameEditActivity()));
         itemList.add(new MyinfoItem("계정 코드", "someCode", R.drawable.item_docs_frame, null));
         itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
         itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
+         */
 
+        // 어뎁터에 아이템 리스트 추가
         myinfoAdapter = new MyinfoAdapter(itemList);
+        // 라시아클러 뷰에 어뎁터 설정
         binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
+
+
+
     }
 }
