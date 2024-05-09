@@ -1,8 +1,12 @@
 package team.y2k2.globa.main.profile.info;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,9 +21,9 @@ import team.y2k2.globa.withdraw.WithdrawActivity;
 
 public class MyinfoActivity extends AppCompatActivity {
     private ActivityMyinfoBinding binding;
-    private ArrayList<MyinfoItem> arrayList;
     private MyinfoAdapter myinfoAdapter;
     private MyinfoViewModel myInfoViewModel;
+    private ActivityResultLauncher<Intent> nicknameEditLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,18 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
+        // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
+        nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if(result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+                if(data != null && data.hasExtra("updated_name")) {
+                    String updatedName = data.getStringExtra("updated_name");
+                    itemList.get(0).setName(updatedName);
+                    myinfoAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
         // 에러 발생
         myInfoViewModel.getErrorLiveData().observe(this, errorMessge -> {
             Toast.makeText(getApplicationContext(), errorMessge, Toast.LENGTH_SHORT).show();
@@ -71,11 +87,9 @@ public class MyinfoActivity extends AppCompatActivity {
          */
 
         // 어뎁터에 아이템 리스트 추가
-        myinfoAdapter = new MyinfoAdapter(itemList);
+        myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher);
         // 라시아클러 뷰에 어뎁터 설정
         binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
-
-
 
     }
 }

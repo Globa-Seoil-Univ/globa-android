@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +12,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.intro.IntroActivity;
+import team.y2k2.globa.login.LoginResponse;
+import team.y2k2.globa.main.profile.edit.NicknameEditActivity;
 
 public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHolder>{
 
     private List<MyinfoItem> itemList;
     private Context context;
+    private ActivityResultLauncher<Intent> nicknameEditLauncher;
 
-    public MyinfoAdapter(List<MyinfoItem> itemList) {
+    public MyinfoAdapter(List<MyinfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher) {
         this.itemList = itemList;
+        this.nicknameEditLauncher = nicknameEditLauncher;
     }
 
     @Override
@@ -51,20 +59,33 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
          */
 
         holder.layout.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.itemView.getContext(), item.getActivity().getClass());
             if(item.getActivity() != null) {
+
                 if(item.getTitle().toString().equals("이름")) {
-                    // 임시 코드
-                    intent.putExtra("name", item.getName().toString());
+                    Intent intent = new Intent(holder.itemView.getContext(), item.getActivity().getClass());
+                    intent.putExtra("current_name", item.getName().toString());
+                    nicknameEditLauncher.launch(intent);
+                } else if(item.getTitle().toString().equals("회원탈퇴")) {
+                    Intent intent = new Intent(holder.itemView.getContext(), item.getActivity().getClass());
+                    holder.itemView.getContext().startActivity(intent);
                 }
-                holder.itemView.getContext().startActivity(intent);
+
             } else {
+
                 if(item.getTitle().toString().equals("계정코드")) {
+                    // 계정코드 클립보드 복사
                     copyToClipboard(holder.itemView.getContext(), item.getName().toString());
                     Toast.makeText(holder.itemView.getContext(), "복사완료!", Toast.LENGTH_SHORT).show();
                 } else if(item.getTitle().toString().equals("로그아웃")) {
                     // 로그아웃 로직
+                    SharedPreferences preferences = context.getSharedPreferences("account", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.clear();
+                    editor.apply();
+                    Intent logoutIntent = new Intent(holder.itemView.getContext(), IntroActivity.class);
+                    holder.itemView.getContext().startActivity(logoutIntent);
                 }
+
             }
 
         });
@@ -100,5 +121,6 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
             clipboard.setPrimaryClip(clip);
         }
     }
+
 
 }

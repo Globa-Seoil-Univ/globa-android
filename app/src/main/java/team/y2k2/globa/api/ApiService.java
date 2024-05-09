@@ -21,8 +21,8 @@ import team.y2k2.globa.login.LoginRequest;
 
 public interface ApiService {
     String API_BASE_URL_LOCAL = "http://192.168.219.111:8080";
-//    String API_BASE_URL = "http://globa.tetraplace.com";
-    String API_BASE_URL = "http://1.209.165.82:8080";
+    String API_BASE_URL = "https://globa.tetraplace.com";
+//    String API_BASE_URL = "http://1.209.165.82:8080";
 
 //    String API_BASE_URL = "http://192.168.219.111:8080";
     @POST("/auth")
