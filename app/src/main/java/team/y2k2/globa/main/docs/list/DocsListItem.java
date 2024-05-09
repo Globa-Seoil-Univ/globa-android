@@ -3,8 +3,8 @@ package team.y2k2.globa.main.docs.list;
 import java.util.List;
 
 public class DocsListItem {
-    private final int title;
-    private final int datetime;
+    private final String title;
+    private final String datetime;
 
     private List<String> keywords;
 
@@ -14,7 +14,7 @@ public class DocsListItem {
     private int image_3;
 
 
-    DocsListItem(int title, int datetime) {
+    DocsListItem(String title, String datetime) {
         this.title = title;
         this.datetime = datetime;
     }
@@ -45,11 +45,11 @@ public class DocsListItem {
         return keywords;
     }
 
-    public int getDatetime() {
+    public String getDatetime() {
         return datetime;
     }
 
-    public int getTitle() {
+    public String getTitle() {
         return title;
     }
 

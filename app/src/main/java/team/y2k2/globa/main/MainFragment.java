@@ -6,6 +6,7 @@ import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import java.util.List;
@@ -38,6 +40,7 @@ import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
 import team.y2k2.globa.main.notice.NoticeAutoScrollHandler;
 import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
+import team.y2k2.globa.notification.NotificationActivity;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     FragmentMainBinding binding;
@@ -83,9 +86,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         spanTitle.setSpan(new ForegroundColorSpan(inflater.getContext().getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.textviewMainTitle.setText(spanTitle);
 
-        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
-        adapter.notifyDataSetChanged();
-
         binding.buttonMainDocsType1.setOnClickListener(this);
         binding.buttonMainDocsType2.setOnClickListener(this);
         binding.buttonMainDocsType3.setOnClickListener(this);
@@ -93,12 +93,32 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         changeButtonDisplay(binding.buttonMainDocsType1);
 
-        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
 
-        binding.recyclerviewMainDocument.setAdapter(adapter);
-        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
+        binding.imagebuttonMainNotification.setOnClickListener(v -> {
+            Intent intent = new Intent(this.getActivity(), NotificationActivity.class);
+            startActivity(intent);
+        });
 
+
+        binding.swiperefreshlayoutMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showRecords();
+
+                binding.swiperefreshlayoutMain.setRefreshing(false);
+            }
+        });
+
+
+        showPromotions();
+        showRecords();
+
+
+        return binding.getRoot();
+    }
+
+
+    public void showRecords() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -107,7 +127,66 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         ApiService apiService = retrofit.create(ApiService.class);
 
 
-        SharedPreferences preferences = inflater.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+        String accessToken = "Bearer " + preferences.getString("accessToken", "");
+
+        Call<RecordResponse> call = apiService.requestGetRecords("application/json",accessToken, 5);
+        call.enqueue(new Callback<RecordResponse>() {
+            @Override
+            public void onResponse(Call<RecordResponse> call, Response<RecordResponse> response) {
+                if (response.isSuccessful()) {
+                    RecordResponse recordResponse = response.body();
+                    // 성공적으로 응답을 받았을 때 처리
+
+                    docsListItemModel = new DocsListItemModel();
+
+                    List<Record> records = recordResponse.getRecords();
+
+                    for(int i = 0; i < records.size(); i++) {
+                        Record record = response.body().getRecords().get(i);
+
+                        String title = record.getTitle();
+                        String datetime = record.getCreatedTime();
+                        List<String> keywords = record.getKeywords();
+
+                        docsListItemModel.addItem(title, datetime, keywords);
+                    }
+
+                    DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
+                    adapter.notifyDataSetChanged();
+
+                    int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
+
+                    binding.recyclerviewMainDocument.setAdapter(adapter);
+                    binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
+                } else {
+                    // 서버로부터 실패 응답을 받았을 때 처리
+                    Log.d("RecordTest", "오류");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RecordResponse> call, Throwable t) {
+                // 네트워크 요청 실패 시 처리
+                Log.d("RecordTest", "오류" + t.getMessage());
+
+            }
+        });
+
+    }
+
+    private void showPromotions() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+
+
+        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String accessToken = "Bearer " + preferences.getString("accessToken", "");
 
         Call<List<NoticeResponse>> call = apiService.requestPromotion("application/json",accessToken, 3);
@@ -144,8 +223,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-
-        return binding.getRoot();
     }
 
     private int calculateNoOfColumns(Context context) {

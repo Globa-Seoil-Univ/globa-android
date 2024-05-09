@@ -14,8 +14,10 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.docs.upload.DocsUploadRequestModel;
 import team.y2k2.globa.docs.upload.DocsUploadResponseModel;
+import team.y2k2.globa.docs.upload.RecordCreateRequest;
 import team.y2k2.globa.login.LoginResponse;
 import team.y2k2.globa.main.NoticeResponse;
+import team.y2k2.globa.main.RecordResponse;
 import team.y2k2.globa.main.folder.FolderResponse;
 import team.y2k2.globa.main.folder.add.FolderAddRequest;
 import team.y2k2.globa.main.profile.UserInfoResponse;
@@ -23,6 +25,7 @@ import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 import team.y2k2.globa.network.jwt.TokenRequestModel;
 import team.y2k2.globa.network.jwt.TokenResponseModel;
 import team.y2k2.globa.login.LoginRequest;
+import team.y2k2.globa.notification.inquiry.NotificationInquiryResponse;
 
 public interface ApiService {
 //    String API_BASE_URL = "https://globa.tetraplace.com/";
@@ -105,6 +108,18 @@ public interface ApiService {
     Call<DocsUploadResponseModel> createRecord(
             @Path("folder_id") String folderId,
             @Body DocsUploadRequestModel requestBody
+    );
+
+
+    /**
+     * 문서 추가
+     */
+    @POST("/folder/{folder_id}/record")
+    Call<Void> requestCreateRecord(
+            @Path("folder_id") String folderId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body RecordCreateRequest insertDocumentRequest
     );
 
     /**
@@ -258,16 +273,17 @@ public interface ApiService {
 //            @Body
     );
 
+
+
+
     /**
      * 모든 문서 가져오기
      */
     @GET("/record")
-    Objects requestGetAllDocument(
+    Call<RecordResponse> requestGetRecords(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
-            @Query("count") int number,
-            @Query("sort") String string
-//            @Body
+            @Query("count") int number
     );
 
     /**
@@ -291,7 +307,19 @@ public interface ApiService {
             @Header("Authorization") String authorization,
             @Body InquiryRequest inquiryRequest
     );
-
+    /**
+     * 문의내역 목록 조회
+     *
+     * @return
+     */
+    @GET("/inquiry")
+    Call<NotificationInquiryResponse> requestGetInquires(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("page") int page,
+            @Query("count") int count,
+            @Query("sort") String sort
+    );
 
 
 }

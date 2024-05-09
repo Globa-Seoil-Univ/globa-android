@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +34,7 @@ public class DocsUploadActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private StorageReference storageReference;
 
+    private final static int REQUEST_CODE_UPLOAD_RECORD = 102;
     String recordName;
     String recordExtension;
     String recordPath;
@@ -74,9 +76,9 @@ public class DocsUploadActivity extends AppCompatActivity {
 
 
         binding.linearlayoutDocsUploadConfirm.setOnClickListener(v -> {
-            String title = binding.edittextDocsUploadTitle.getText().toString();
-            if(title.length() == 0) {
-                title = binding.edittextDocsUploadTitle.getHint().toString();
+            recordName = binding.edittextDocsUploadTitle.getText().toString();
+            if(recordName.length() == 0) {
+                recordName = binding.edittextDocsUploadTitle.getHint().toString();
             }
 
             SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
@@ -89,7 +91,6 @@ public class DocsUploadActivity extends AppCompatActivity {
             }
 
             uploadRecordFile(recordPath, userId, folderId, recordExtension);
-//            requestRecordAPI(title, firebasePath);
 
             finish();
         });
@@ -97,33 +98,43 @@ public class DocsUploadActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
     }
 
-    private void requestRecordAPI(String title, String path) {
+    private void requestCreateRecord(String title, String path) {
         // Retrofit 인스턴스 생성
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiService.API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+        SharedPreferences preferences = this.getSharedPreferences("account", Activity.MODE_PRIVATE);
+        String accessToken = "Bearer " + preferences.getString("accessToken", "");
+
         ApiService apiService = retrofit.create(ApiService.class);
 
         // 네트워크 요청 보내기
-        DocsUploadRequestModel requestModel = new DocsUploadRequestModel(title, path);
+        RecordCreateRequest request = new RecordCreateRequest(title, path, "0");
+        Log.d("Record UPLOAD", "업로드: " + title + " | " + path);
 
-        Call<DocsUploadResponseModel> call = apiService.createRecord(folderId,requestModel);
-        call.enqueue(new Callback<DocsUploadResponseModel>() {
+        Call<Void> call = apiService.requestCreateRecord("5","application/json",accessToken, request);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<DocsUploadResponseModel> call, Response<DocsUploadResponseModel> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // 성공적으로 응답을 받았을 때 처리할 내용
-                    DocsUploadResponseModel apiResponse = response.body();
+                    response.body();
+
+                    Log.d("Record UPLOAD", "업로드 완료 : " + response.code());
+                    finish();
+
                 } else {
                     // 서버로부터 실패 응답을 받았을 때 처리할 내용
+                    Log.d("Record UPLOAD", "업로드 실패 : " + response.code() + " | " + response);
                 }
             }
 
             @Override
-            public void onFailure(Call<DocsUploadResponseModel> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 // 네트워크 요청 실패 시 처리할 내용
+                Log.d("Record UPLOAD", "업로드 실패 : " + t.getMessage());
             }
         });
     }
@@ -166,6 +177,8 @@ public class DocsUploadActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // 업로드 성공 시
                         Toast.makeText(getApplicationContext(), "파일 업로드 성공", Toast.LENGTH_SHORT).show();
+                        requestCreateRecord(recordName, firebasePath);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

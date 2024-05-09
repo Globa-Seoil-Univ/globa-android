@@ -1,8 +1,9 @@
-package team.y2k2.globa.docs;
+package team.y2k2.globa.docs.upload;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DocsInsertRequest {
+public class RecordCreateRequest {
+
     @SerializedName("title")
     String title;
 
@@ -11,6 +12,12 @@ public class DocsInsertRequest {
 
     @SerializedName("size")
     String size;
+
+    public RecordCreateRequest(String title, String path, String size) {
+        this.title = title;
+        this.path = path;
+        this.size = size;
+    }
 
     public String getTitle() {
         return title;

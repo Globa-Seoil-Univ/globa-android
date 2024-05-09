@@ -98,7 +98,7 @@ public class FolderFragment extends Fragment {
                             currentlyModel.addItem(folder.getTitle(), folder.getCreatedTime(), folder.getFolderId());
 
                             // 각 폴더에 대한 처리 작업 수행
-                            Log.d("FOLDER_TEST", folder.getTitle()+" | " + folder.getCreatedTime());
+                            Log.d("FOLDER_TEST", folder.getTitle()+" | " + folder.getCreatedTime() + " | " + folder.getFolderId());
                         }
                         FolderAdapter adapter = new FolderAdapter(model.getItems());
                         FolderCurrentlyAdapter currentlyAdapter = new FolderCurrentlyAdapter(currentlyModel.getItems());
