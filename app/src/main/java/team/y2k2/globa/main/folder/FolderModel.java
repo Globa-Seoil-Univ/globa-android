@@ -5,13 +5,18 @@ import java.util.ArrayList;
 public class FolderModel {
 
     private ArrayList<FolderItem> items;
+
     public FolderModel() {
         items = new ArrayList<>();
+//
+//        items.add(new FolderItem("여기는 테스트","24-03-30 생성"));
+//        items.add(new FolderItem("나는 김인태","24-03-30 생성"));
+//        items.add(new FolderItem("반갑습니다 GPT님","24-03-30 생성"));
+//        items.add(new FolderItem("GPT님 축지법 쓰신다","24-03-30 생성"));
+    }
 
-        items.add(new FolderItem("여기는 테스트","24-03-30 생성"));
-        items.add(new FolderItem("나는 김인태","24-03-30 생성"));
-        items.add(new FolderItem("반갑습니다 GPT님","24-03-30 생성"));
-        items.add(new FolderItem("GPT님 축지법 쓰신다","24-03-30 생성"));
+    public void addItem(String title, String datetime, int folderId) {
+        items.add(new FolderItem(title, datetime, folderId));
     }
 
     public ArrayList<FolderItem> getItems() {

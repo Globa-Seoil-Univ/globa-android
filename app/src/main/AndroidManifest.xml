@@ -64,7 +64,7 @@
             android:enableOnBackInvokedCallback="true"/>
 
         <activity android:name=".main.profile.service_info.ServiceInfoActivity" />
-        <activity android:name=".main.profile.help.HelpActivity" />
+        <activity android:name=".main.profile.inquiry.InquiryActivity" />
         <activity android:name=".main.profile.alert.AlertActivity" />
         <activity android:name=".main.profile.theme.ThemeActivity" />
         <activity android:name=".keyword.detail.KeywordDetailActivity" />

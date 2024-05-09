@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -89,6 +90,7 @@ public class LoginViewModel extends ViewModel {
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
                         // 요청 실패
                         Toast.makeText(context, "서비스 오류가 발생했습니다." + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.d("LOGINFAILED", t.getMessage());
                     }
                 });
             } else {
