@@ -20,6 +20,7 @@ import team.y2k2.globa.main.NoticeResponse;
 import team.y2k2.globa.main.RecordResponse;
 import team.y2k2.globa.main.folder.FolderResponse;
 import team.y2k2.globa.main.folder.add.FolderAddRequest;
+import team.y2k2.globa.main.folder.inside.FolderInsideRecordResponse;
 import team.y2k2.globa.main.profile.UserInfoResponse;
 import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 import team.y2k2.globa.network.jwt.TokenRequestModel;
@@ -147,8 +148,9 @@ public interface ApiService {
     /**
      * 문서 가져오기
      */
-    @POST("/folder/{folder_id}/record")
-    Call<List<Void>> requestGetFolderInside(
+    @GET("/folder/{folder_id}/record")
+    Call<FolderInsideRecordResponse> requestGetFolderInside(
+            @Path("folder_id") int folderId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("page") int page,

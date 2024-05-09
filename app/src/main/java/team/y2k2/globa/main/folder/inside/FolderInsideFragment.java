@@ -31,6 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.FragmentFolderInsideBinding;
+import team.y2k2.globa.main.RecordResponse;
 import team.y2k2.globa.main.folder.FolderAdapter;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.FolderModel;
@@ -93,24 +94,27 @@ public class FolderInsideFragment extends Fragment {
         SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String accessToken = "Bearer " + preferences.getString("accessToken", "");
 
-        Call<List<Void>> call = apiService.requestGetFolderInside("application/json",accessToken, 1, 10);
-        call.enqueue(new Callback<List<Void>>() {
+        Call<FolderInsideRecordResponse> call = apiService.requestGetFolderInside(folderId,"application/json",accessToken, 1, 10);
+        call.enqueue(new Callback<FolderInsideRecordResponse>() {
             @Override
-            public void onResponse(Call<List<Void>> call, Response<List<Void>> response) {
+            public void onResponse(Call<FolderInsideRecordResponse> call, Response<FolderInsideRecordResponse> response) {
                 if (response.isSuccessful()) {
-                    List<Void> folderResponse = response.body();
+                    FolderInsideRecordResponse folderInsideRecords = response.body();
                     // 성공적으로 응답을 받았을 때 처리
-                    Log.d("FOLDERTEST", "성공");
+                    Log.d("FOLDERINSIDETEST", "성공" + response);
 
-                    if (folderResponse != null) {
+                    if (folderInsideRecords != null) {
                         // 받아온 데이터를 처리하는 로직을 작성합니다.
                         model = new FolderInsideModel();
 
-                        for(int i = 0; i < folderResponse.size(); i++) {
+                        for(int i = 0; i < folderInsideRecords.getRecords().size(); i++) {
                             // 각 폴더에 대한 처리 작업 수행
+                            FolderInsideRecord recordResponse = folderInsideRecords.getRecords().get(i);
+                            model.addItem(recordResponse.getTitle(), recordResponse.getPath());
+
+                            Log.d("FOLDERINSIDETEST", recordResponse.getTitle() + " | " + recordResponse.getPath());
 
                         }
-
 
                         FolderInsideDocsAdapter adapter = new FolderInsideDocsAdapter(model.getItems());
 
@@ -125,7 +129,7 @@ public class FolderInsideFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Void>> call, Throwable t) {
+            public void onFailure(Call<FolderInsideRecordResponse> call, Throwable t) {
                 // 네트워크 요청 실패 시 처리
 
             }
