@@ -37,8 +37,6 @@ public class FolderFragment extends Fragment {
     private ApiService apiService;
 
     private final int FOLDER_ADD = 200;
-
-
     public FolderFragment() { }
 
     @Override
