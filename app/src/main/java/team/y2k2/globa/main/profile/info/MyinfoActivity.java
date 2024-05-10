@@ -2,16 +2,19 @@ package team.y2k2.globa.main.profile.info;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
@@ -24,11 +27,14 @@ import team.y2k2.globa.withdraw.WithdrawActivity;
 
 public class MyinfoActivity extends AppCompatActivity {
     private ActivityMyinfoBinding binding;
-    private ArrayList<MyinfoItem> arrayList;
     private MyinfoAdapter myinfoAdapter;
+    private MyinfoViewModel myInfoViewModel;
+    private ActivityResultLauncher<Intent> nicknameEditLauncher;
 
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> pickImageLauncher;
+
+    static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +42,8 @@ public class MyinfoActivity extends AppCompatActivity {
         binding = ActivityMyinfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 리사이클러 뷰 생성
-        binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(this));
-        List<MyinfoItem> itemList = new ArrayList<>();
-        itemList.add(new MyinfoItem("이름", "윤영진", R.drawable.arrow_right, new NicknameEditActivity()));
-        itemList.add(new MyinfoItem("계정 코드", "someCode", R.drawable.item_docs_frame, null));
-        itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_right, null));
-        itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_right, new WithdrawActivity()));
-        myinfoAdapter = new MyinfoAdapter(itemList);
-        binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
+        loadUserInfoList();
+
 
         // 이미지 변경 버튼 동작
         // 갤러리 접근 권한 요청 동작 (menifest 파일에서 허가 받을 수 있지만 이 방식이 권장됨)
@@ -66,8 +65,8 @@ public class MyinfoActivity extends AppCompatActivity {
         });
         // 이미지 선택 버튼 클릭 이벤트 설정
         binding.buttonMyinfoChangephoto.setOnClickListener(v -> {
-            if(ContextCompat.checkSelfPermission(MyinfoActivity.this, Permissions.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissionLauncher.launch(Permissions.READ_EXTERNAL_STORAGE);
+            if(ContextCompat.checkSelfPermission(MyinfoActivity.this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(READ_EXTERNAL_STORAGE);
             } else {
                 pickImage();
             }
@@ -80,8 +79,61 @@ public class MyinfoActivity extends AppCompatActivity {
         pickImageLauncher.launch(intent);
     }
 
-    // 접근 권한 허가 요청 문구
-    class Permissions {
-        static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
+    public void loadUserInfoList() {
+        // 리사이클러뷰 레이아웃 매니저 설정
+        binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyinfoActivity.this));
+        // 리사이클러 뷰에 넣을 아이템 리스트
+        List<MyinfoItem> itemList = new ArrayList<>();
+
+        // 뷰 모델 갖고오기
+        myInfoViewModel = new ViewModelProvider(MyinfoActivity.this).get(MyinfoViewModel.class);
+
+        // 프리퍼런스 불러오기
+        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
+
+        // 헤더 파라미터 2개
+        String contentType = "application/json";
+        String authorization = "Bearer " + preferences.getString("accessToken", "");
+
+        // getter를 통해 값 가져오기
+        myInfoViewModel.getUserInfoResponseLiveData().observe(MyinfoActivity.this, userInfoResponse -> {
+            if (userInfoResponse != null) {
+                String profile = userInfoResponse.getProfile();
+                String name = userInfoResponse.getName();
+                String code = userInfoResponse.getCode();
+                int folderId = Integer.parseInt(userInfoResponse.getPublicFolderId());
+
+
+                itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, new NicknameEditActivity()));
+                itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));
+                itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
+                itemList.add(new MyinfoItem("회월탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
+
+                // 어뎁터에 아이템 리스트 추가
+                myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher);
+                // 라시아클러 뷰에 어뎁터 설정
+                binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
+            }
+        });
+
+        // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
+        nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if(result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+                if(data != null && data.hasExtra("updated_name")) {
+                    String updatedName = data.getStringExtra("updated_name");
+                    itemList.get(0).setName(updatedName);
+                    myinfoAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        // 에러 발생
+        myInfoViewModel.getErrorLiveData().observe(MyinfoActivity.this, errorMessge -> {
+            Toast.makeText(getApplicationContext(), errorMessge, Toast.LENGTH_SHORT).show();
+        });
+
+        // API 호출 실행
+        myInfoViewModel.fetchMyInfo(contentType, authorization);
     }
 }

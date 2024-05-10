@@ -1,5 +1,6 @@
 package team.y2k2.globa.main.profile.edit;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -25,8 +26,16 @@ public class NicknameEditActivity extends AppCompatActivity {
             finish();
         });
 
-        binding.buttonNicknameeditCancel.setOnClickListener(v -> {
+        binding.buttonNicknameEditCancel.setOnClickListener(v -> {
             binding.edittextNicknameeditInputname.setText("");
         });
     }
+
+    private void onNicknameChanged(String newNickname) {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("updated_name", newNickname);
+        setResult(RESULT_OK, resultIntent);
+        finish();
+    }
+
 }

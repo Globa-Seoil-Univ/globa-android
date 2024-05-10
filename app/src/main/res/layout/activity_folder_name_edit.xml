@@ -74,10 +74,9 @@
         android:background="@drawable/cancel"
         android:backgroundTint="@color/gray"
         app:layout_constraintTop_toTopOf="@+id/edittext_folder_name_inputname"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edittext_folder_name_inputname"
         android:layout_marginTop="12dp"
-        android:layout_marginLeft="320dp" />
+        android:layout_marginRight="15dp" />
 
     <TextView
         android:id="@+id/textview_folder_name_count"

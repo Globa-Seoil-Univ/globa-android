@@ -110,5 +110,6 @@ public class LoginViewModel extends ViewModel {
             editor.putString("profile", request.getProfile());
             editor.commit();
         }
+
     }
 }
