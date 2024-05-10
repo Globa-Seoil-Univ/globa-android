@@ -35,7 +35,6 @@ class Record {
     public String getFolderId() {
         return folderId;
     }
-
     public String getRecordId() {
         return recordId;
     }

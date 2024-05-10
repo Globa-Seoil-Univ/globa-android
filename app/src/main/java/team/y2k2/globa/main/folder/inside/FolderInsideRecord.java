@@ -5,7 +5,10 @@ import com.google.gson.annotations.SerializedName;
 public class FolderInsideRecord {
 
     @SerializedName("recordId")
-    private int recordId;
+    private String recordId;
+
+    @SerializedName("folderId")
+    private String folderId;
 
     @SerializedName("title")
     private String title;
@@ -29,7 +32,11 @@ public class FolderInsideRecord {
         return path;
     }
 
-    public int getRecordId() {
+    public String getRecordId() {
         return recordId;
+    }
+
+    public String getFolderId() {
+        return folderId;
     }
 }

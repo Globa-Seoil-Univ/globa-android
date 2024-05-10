@@ -1,5 +1,7 @@
 package team.y2k2.globa.main.docs.list;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +23,9 @@ public class DocsListItemModel {
     }
 
 
-    public void addItem(String title, String datetime, List<String> keywords) {
-        DocsListItem item = new DocsListItem(title,datetime);
+    public void addItem(String recordId, String folderId, String title, String datetime, List<String> keywords) {
+        Log.d(getClass().getName(), recordId + " | " + folderId + " | " + title + " | " + datetime + " | ");
+        DocsListItem item = new DocsListItem(recordId, folderId, title, datetime);
         item.setKeywordList(keywords);
         items.add(item);
     }

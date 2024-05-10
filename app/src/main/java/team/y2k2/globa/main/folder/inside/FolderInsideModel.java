@@ -15,8 +15,8 @@ public class FolderInsideModel {
 //        items.add(new FolderInsideDocsItem("장로님 에쿠스 타신다.","2024-03-30 오후 12:34"));
     }
 
-    public void addItem(String title, String datetime) {
-        items.add(new FolderInsideDocsItem(title, datetime));
+    public void addItem(String folderId, String recordId, String title, String datetime) {
+        items.add(new FolderInsideDocsItem(folderId, recordId, title, datetime));
     }
 
     public ArrayList<FolderInsideDocsItem> getItems() {

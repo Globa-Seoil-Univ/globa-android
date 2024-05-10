@@ -9,9 +9,11 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 import team.y2k2.globa.docs.upload.DocsUploadRequestModel;
 import team.y2k2.globa.docs.upload.DocsUploadResponseModel;
 import team.y2k2.globa.docs.upload.RecordCreateRequest;
@@ -169,14 +171,16 @@ public interface ApiService {
     );
 
     /**
-     * 폴더 이름 수정
-     * - 폴더 이름을 변경합니다.
+     * 문서 이름 수정
+     * - 문서 이름을 변경합니다.
      */
-    @POST("/folder/{folder_id}/name")
-    void requestUpdateFolderName(
+    @PATCH("/folder/{folder_id}/record/{record_id}/name")
+    Call<Void> requestUpdateRecordName(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//            @Body String title
+            @Header("Authorization") String authorization,
+            @Body DocsNameEditRequest docsNameEditRequest
     );
 
     /**

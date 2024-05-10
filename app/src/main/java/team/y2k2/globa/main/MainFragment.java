@@ -145,11 +145,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     for(int i = 0; i < records.size(); i++) {
                         Record record = response.body().getRecords().get(i);
 
+                        String recordId = record.getRecordId();
+                        String folderId = record.getFolderId();
                         String title = record.getTitle();
                         String datetime = record.getCreatedTime();
                         List<String> keywords = record.getKeywords();
 
-                        docsListItemModel.addItem(title, datetime, keywords);
+                        docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
                     }
 
                     DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());

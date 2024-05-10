@@ -110,7 +110,10 @@ public class FolderInsideFragment extends Fragment {
                         for(int i = 0; i < folderInsideRecords.getRecords().size(); i++) {
                             // 각 폴더에 대한 처리 작업 수행
                             FolderInsideRecord recordResponse = folderInsideRecords.getRecords().get(i);
-                            model.addItem(recordResponse.getTitle(), recordResponse.getPath());
+                            String recordId = recordResponse.getRecordId();
+                            String path = recordResponse.getPath();
+
+                            model.addItem(Integer.toString(folderId), recordId, recordResponse.getTitle(), recordResponse.getPath());
 
                             Log.d("FOLDERINSIDETEST", recordResponse.getTitle() + " | " + recordResponse.getPath());
 

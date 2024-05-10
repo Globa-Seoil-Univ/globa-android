@@ -5,18 +5,19 @@ import java.util.List;
 public class DocsListItem {
     private final String title;
     private final String datetime;
-
     private List<String> keywords;
-
+    private String recordId;
+    private String folderId;
 
     private int image_1;
     private int image_2;
     private int image_3;
 
-
-    DocsListItem(String title, String datetime) {
+    DocsListItem(String recordId, String folderId, String title, String datetime) {
         this.title = title;
         this.datetime = datetime;
+        this.recordId = recordId;
+        this.folderId = folderId;
     }
 
     public void setKeywordList(List<String> keywords) {
@@ -39,6 +40,14 @@ public class DocsListItem {
 
     public int getImage_3() {
         return image_3;
+    }
+
+    public String getRecordId() {
+        return recordId;
+    }
+
+    public String getFolderId() {
+        return folderId;
     }
 
     public List<String> getKeywords() {
