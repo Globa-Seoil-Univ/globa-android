@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_comment"
+        android:title="댓글 작성"
+        android:icon="@android:drawable/ic_menu_more"/>
+
+    <!-- 다른 액션 아이템들 추가 가능 -->
+</menu>

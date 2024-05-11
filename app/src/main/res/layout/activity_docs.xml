@@ -197,4 +197,41 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearlayout_docs_comment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:columnCount="3"-->
+<!--        android:rowCount="1"-->
+<!--        android:background="@color/white"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center"-->
+<!--        android:visibility="invisible"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"-->
+<!--        app:layout_constraintStart_toStartOf="@id/linearlayout_document_audio"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/linearlayout_document_audio">-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/edittext_docs_comment"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:layout_weight="9"-->
+<!--            android:background="@drawable/main_button"-->
+<!--            android:hint="댓글 남기기"-->
+<!--            android:textColorHint="@color/darkGray"-->
+<!--            android:textColor="@color/black" />-->
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/edittext_docs_comment_confirm"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:background="@null"-->
+<!--            android:src="@drawable/arrow_right"-->
+<!--            />-->
+<!--    </LinearLayout>-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
