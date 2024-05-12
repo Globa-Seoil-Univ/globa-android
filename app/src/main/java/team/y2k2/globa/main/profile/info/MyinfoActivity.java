@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,16 +13,28 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.fido.fido2.api.common.RequestOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityMyinfoBinding;
+import team.y2k2.globa.main.MainActivity;
 import team.y2k2.globa.main.profile.edit.NicknameEditActivity;
 import team.y2k2.globa.withdraw.WithdrawActivity;
 
@@ -30,9 +43,11 @@ public class MyinfoActivity extends AppCompatActivity {
     private MyinfoAdapter myinfoAdapter;
     private MyinfoViewModel myInfoViewModel;
     private ActivityResultLauncher<Intent> nicknameEditLauncher;
-
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> pickImageLauncher;
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference profileImageRef;
+
 
     static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
 
@@ -60,12 +75,24 @@ public class MyinfoActivity extends AppCompatActivity {
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if(result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 Uri imageUri = result.getData().getData();
-                binding.imageviewMyinfoPhoto.setImageURI(imageUri);
+
+                Glide.with(MyinfoActivity.this)
+                        .load(imageUri)
+                        .asBitmap()
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                binding.imageviewMyinfoPhoto.setImageBitmap(resource);
+
+                                sendImageToServer(resource);
+                            }
+                        });
             }
         });
         // 이미지 선택 버튼 클릭 이벤트 설정
         binding.buttonMyinfoChangephoto.setOnClickListener(v -> {
             if(ContextCompat.checkSelfPermission(MyinfoActivity.this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // 접근 권한을 못받았을 경우
                 requestPermissionLauncher.launch(READ_EXTERNAL_STORAGE);
             } else {
                 pickImage();
@@ -77,6 +104,18 @@ public class MyinfoActivity extends AppCompatActivity {
     private void pickImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickImageLauncher.launch(intent);
+    }
+    private void sendImageToServer(Bitmap bitmap) {
+        // Bitmap을 ByteArray로 변환
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+
+        // ByteArray를 사용하여 뷰모델 호출하여 서버로 전송
+        MyinfoViewModel viewModel = new ViewModelProvider(this).get(MyinfoViewModel.class);
+        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
+        String authorization = "Bearer " + preferences.getString("accessToken", "");
+        viewModel.uploadImage(byteArray, "user_id", authorization);
     }
 
     public void loadUserInfoList() {
@@ -103,11 +142,17 @@ public class MyinfoActivity extends AppCompatActivity {
                 String code = userInfoResponse.getCode();
                 int folderId = Integer.parseInt(userInfoResponse.getPublicFolderId());
 
+                // 초기 이미지 설정
+                profileImageRef = storage.getReference().child(profile);
+
+                Glide.with(this).load(profileImageRef)
+                                .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
+                                .into(binding.imageviewMyinfoPhoto);
 
                 itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, new NicknameEditActivity()));
                 itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));
                 itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
-                itemList.add(new MyinfoItem("회월탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
+                itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
 
                 // 어뎁터에 아이템 리스트 추가
                 myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher);

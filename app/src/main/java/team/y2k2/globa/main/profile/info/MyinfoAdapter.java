@@ -64,11 +64,11 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
             if(item.getActivity() != null) {
 
                 if(item.getTitle().toString().equals("이름")) {
-                    Intent intent = new Intent(holder.itemView.getContext(), item.getActivity().getClass());
+                    Intent intent = new Intent(context, item.getActivity().getClass());
                     intent.putExtra("current_name", item.getName().toString());
                     nicknameEditLauncher.launch(intent);
                 } else if(item.getTitle().toString().equals("회원탈퇴")) {
-                    Intent intent = new Intent(holder.itemView.getContext(), item.getActivity().getClass());
+                    Intent intent = new Intent(context, item.getActivity().getClass());
                     holder.itemView.getContext().startActivity(intent);
                 }
 
@@ -76,16 +76,16 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
 
                 if(item.getTitle().toString().equals("계정코드")) {
                     // 계정코드 클립보드 복사
-                    copyToClipboard(holder.itemView.getContext(), item.getName().toString());
-                    Toast.makeText(holder.itemView.getContext(), "복사완료!", Toast.LENGTH_SHORT).show();
+                    copyToClipboard(context, item.getName().toString());
+                    Toast.makeText(context, "복사완료!", Toast.LENGTH_SHORT).show();
                 } else if(item.getTitle().toString().equals("로그아웃")) {
                     // 로그아웃 로직
                     SharedPreferences preferences = context.getSharedPreferences("account", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
-                    Intent logoutIntent = new Intent(holder.itemView.getContext(), IntroActivity.class);
-                    holder.itemView.getContext().startActivity(logoutIntent);
+                    Intent logoutIntent = new Intent(context, IntroActivity.class);
+                    context.startActivity(logoutIntent);
                 }
 
             }
