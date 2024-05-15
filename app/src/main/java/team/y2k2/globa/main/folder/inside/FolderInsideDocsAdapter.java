@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
+import team.y2k2.globa.docs.move.DocsMoveActivity;
 import team.y2k2.globa.main.docs.keyword.DocsKeywordAdapter;
 import team.y2k2.globa.main.docs.keyword.DocsKeywordModel;
 import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
@@ -75,7 +76,6 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
                 moreBottomSheet.show();
 
                 RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
-
                 rename.setOnClickListener(d1 -> {
                     moreBottomSheet.dismiss();
                     Intent intent = new Intent(holder.itemView.getContext(), DocsNameEditActivity.class);
@@ -84,7 +84,18 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
                     intent.putExtra("title", items.get(position).getTitle());
                     holder.itemView.getContext().startActivity(intent);
                 });
-//            RelativeLayout move = moreBottomSheet.findViewById(R.id.relativelayout_more_move);
+
+                RelativeLayout move = moreBottomSheet.findViewById(R.id.relativelayout_more_move);
+                move.setOnClickListener(d1 -> {
+                    moreBottomSheet.dismiss();
+                    Intent intent = new Intent(holder.itemView.getContext(), DocsMoveActivity.class);
+                    intent.putExtra("recordId", items.get(position).getRecordId());
+                    intent.putExtra("folderId", items.get(position).getFolderId());
+                    intent.putExtra("title", items.get(position).getTitle());
+                    holder.itemView.getContext().startActivity(intent);
+                });
+
+
                 RelativeLayout delete = moreBottomSheet.findViewById(R.id.relativelayout_more_delete);
                 delete.setOnClickListener(d1 -> {
                     moreBottomSheet.dismiss();

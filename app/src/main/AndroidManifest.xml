@@ -75,6 +75,7 @@
         </activity>
         <activity android:name=".docs.DocsActivity"/>
         <activity android:name=".docs.upload.DocsUploadActivity"/>
+        <activity android:name=".docs.move.DocsMoveActivity"/>
         <activity android:name=".docs.more.DocsMoreActivity"/>
 
         <activity android:name=".main.folder.edit.FolderNameEditActivity"/>

@@ -14,6 +14,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
+import team.y2k2.globa.docs.move.DocsMoveRequest;
 import team.y2k2.globa.docs.upload.DocsUploadRequestModel;
 import team.y2k2.globa.docs.upload.DocsUploadResponseModel;
 import team.y2k2.globa.docs.upload.RecordCreateRequest;
@@ -182,6 +183,20 @@ public interface ApiService {
             @Header("Authorization") String authorization,
             @Body DocsNameEditRequest docsNameEditRequest
     );
+
+    /**
+     * 문서 폴더 이동
+     * - 문서를 이동합니다.
+     */
+    @PATCH("/folder/{folder_id}/record/{record_id}/folder")
+    Call<Void> requestUpdateDocsMove(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body DocsMoveRequest docsMoveRequest
+    );
+
 
     /**
      * 폴더 삭제

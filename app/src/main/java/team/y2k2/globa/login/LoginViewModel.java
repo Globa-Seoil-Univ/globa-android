@@ -16,6 +16,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,6 +80,7 @@ public class LoginViewModel extends ViewModel {
                             // 로그인 성공
                             LoginResponse loginResponse = response.body();
                             userPreferences(loginRequest, loginResponse);
+                            sendLogMessage(loginRequest,loginResponse);
 
                             Intent intent = new Intent(context, MainActivity.class);
                             context.startActivity(intent);
@@ -99,7 +102,7 @@ public class LoginViewModel extends ViewModel {
             }
         }
 
-        public void userPreferences(LoginRequest request,LoginResponse response) {
+        public void userPreferences(LoginRequest request, LoginResponse response) {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
 
@@ -111,6 +114,20 @@ public class LoginViewModel extends ViewModel {
             editor.putString("name", request.getName());
             editor.putString("profile", request.getProfile());
             editor.commit();
+        }
+
+        public void sendLogMessage(LoginRequest request, LoginResponse response) {
+            String accessToken = response.getAccessToken();
+            String refreshToken = response.getRefreshToken();
+
+            Log.d(getClass().getName(), "로그인 성공");
+
+            ArrayList list = new ArrayList();
+            list.add("accessToken : " + accessToken);
+            list.add("refreshToken: " + refreshToken);
+            list.add("snsId       : " + request.getSnsId());
+            list.add("name        : " + request.getName());
+            list.add("profile     : " + request.getProfile());
         }
     }
 }

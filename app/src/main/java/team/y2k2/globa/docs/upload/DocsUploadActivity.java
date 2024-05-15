@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.arthenica.mobileffmpeg.FFmpeg;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -110,15 +111,17 @@ public class DocsUploadActivity extends AppCompatActivity {
 
             SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
             // Firebase Storage 참조 가져오기
-            storageReference = FirebaseStorage.getInstance().getReference("users");
-            folderId = "test_folder";
+            storageReference = FirebaseStorage.getInstance().getReference("folders");
 
-            if(preferences.getString("uid", "").length() != 0) {
-                userId = preferences.getString("uid", "");
+            if(preferences.getString("userId", "").length() != 0) {
+                userId = preferences.getString("userId", "");
+            }
+
+            if(preferences.getString("publicFolderId", "").length() != 0) {
+                folderId = preferences.getString("publicFolderId", "");
             }
 
             uploadRecordFile(recordPath, userId, folderId, recordExtension);
-
             finish();
         });
 
@@ -128,9 +131,12 @@ public class DocsUploadActivity extends AppCompatActivity {
 
     }
 
-    private void requestCreateRecord(String title, String path) {
+    private void requestCreateRecord(String title) {
         // 네트워크 요청 보내기
+        String path = "folders/" + folderId + "/" + unixTime + ".ogg";
         RecordCreateRequest request = new RecordCreateRequest(title, path, "0");
+
+
         Log.d("Record UPLOAD", "업로드: " + title + " | " + path);
 
         String folderId = Integer.toString(responses.get(binding.spinnerDocsUpload.getSelectedItemPosition()).getFolderId());
@@ -185,11 +191,14 @@ public class DocsUploadActivity extends AppCompatActivity {
     private void uploadRecordFile(String path, String userId, String folderId, String extension) {
         unixTime = Instant.now();
 
-        firebasePath = userId + "/" + folderId + "/" + unixTime + "."+ extension;
+        String oggPath = path.split("\\.")[0] + ".ogg";
+        convertMp3ToOgg(path,oggPath);
+
+        firebasePath = folderId + "/" + unixTime + ".ogg";
         StorageReference audioRef = storageReference.child(firebasePath);
 
         // 예제로 진행하려면 raw 리소스에서 파일을 가져오고 Uri를 생성하여 사용할 수 있습니다.
-        Uri uri = Uri.fromFile(new File(path));
+        Uri uri = Uri.fromFile(new File(oggPath));
 
         // 파일 업로드
         audioRef.putFile(uri)
@@ -198,7 +207,7 @@ public class DocsUploadActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // 업로드 성공 시
                         Toast.makeText(getApplicationContext(), "파일 업로드 성공", Toast.LENGTH_SHORT).show();
-                        requestCreateRecord(recordName, firebasePath);
+                        requestCreateRecord(recordName);
 
                     }
                 })
@@ -251,5 +260,17 @@ public class DocsUploadActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public static void convertMp3ToOgg(String mp3FilePath, String oggFilePath) {
+        String[] cmd = new String[]{"-i", mp3FilePath, "-vn", "-map_metadata", "-1", "-ac", "1", "-c:a", "libopus", "-b:a", "12k", "-application", "voip", oggFilePath};
+        int rc = FFmpeg.execute(cmd);
+        if (rc == 0) {
+            // 변환 성공
+            Log.d("AudioConverter", "변환 성공");
+        } else {
+            // 변환 실패
+            Log.e("AudioConverter", "변환 실패");
+        }
     }
 }

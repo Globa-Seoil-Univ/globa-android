@@ -72,8 +72,8 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             // 저장소 참조
             StorageReference storageRef = storage.getReference();
 
-            // 저장된 음악 파일 경로
-            String filePath = "users/eRWlCdKT2lfhlBbScYZqskIOILw1/test_folder/2024-05-03T14:44:28.905707Z.mp3";
+//            // 저장된 음악 파일 경로
+            String filePath = "users/9/folders/5/record/2024-05-15T16:54:26.559331Z.ogg";
 
             // 해당 파일의 참조
             StorageReference audioRef = storageRef.child(filePath);
