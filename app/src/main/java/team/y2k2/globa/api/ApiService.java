@@ -5,12 +5,15 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
@@ -76,12 +79,13 @@ public interface ApiService {
     /**
      * 프로필 사진 수정
      */
+    @Multipart
     @POST("/user/{user_id}/profile")
-    void requestUpdateProfileImage(
+    Call<Void> requestUpdateProfileImage(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType, // "multipart/form-data"
-            @Header("Authorization") String authorization
-//            @Body 이미지 파일 profile
+            @Header("Authorization") String authorization,
+            @Part MultipartBody.Part profile
     );
 
     /**
@@ -91,8 +95,8 @@ public interface ApiService {
     void requestUpdateProfileName(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//            @Body String name
+            @Header("Authorization") String authorization,
+            @Body String name
     );
 
     /**
@@ -103,8 +107,9 @@ public interface ApiService {
     @POST("/user")
     void requestWithdrawUser(
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//            @Body
+            @Header("Authorization") String authorization,
+            @Body int surveyType,
+            @Body String content
     );
 
     /**
