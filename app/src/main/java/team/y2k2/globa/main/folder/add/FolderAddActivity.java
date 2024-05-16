@@ -4,24 +4,11 @@ import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,8 +17,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.databinding.ActivityFolderAddBinding;
-import team.y2k2.globa.main.profile.UserInfoResponse;
 
 public class FolderAddActivity extends AppCompatActivity {
     ActivityFolderAddBinding binding;

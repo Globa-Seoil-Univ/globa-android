@@ -24,6 +24,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.request.LoginRequest;
+import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.main.MainActivity;
 
 

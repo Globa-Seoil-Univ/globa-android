@@ -25,6 +25,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.databinding.FragmentFolderBinding;
 import team.y2k2.globa.main.folder.add.FolderAddActivity;
 import team.y2k2.globa.main.folder.currently.FolderCurrentlyAdapter;

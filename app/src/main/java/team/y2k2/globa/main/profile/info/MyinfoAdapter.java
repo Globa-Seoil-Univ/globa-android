@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,15 +15,12 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.intro.IntroActivity;
-import team.y2k2.globa.login.LoginResponse;
-import team.y2k2.globa.main.profile.edit.NicknameEditActivity;
 
 public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHolder>{
 

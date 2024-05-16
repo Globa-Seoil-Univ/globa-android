@@ -1,9 +1,10 @@
-package team.y2k2.globa.main.folder.inside;
+package team.y2k2.globa.api.model.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-public class FolderInsideRecord {
+import java.util.List;
 
+public class Record {
     @SerializedName("recordId")
     private String recordId;
 
@@ -13,30 +14,27 @@ public class FolderInsideRecord {
     @SerializedName("title")
     private String title;
 
-    @SerializedName("path")
-    private String path;
+    @SerializedName("keywords")
+    private List<String> keywords;
 
     @SerializedName("createdTime")
     private String createdTime;
-
+    public String getCreatedTime() {
+        return createdTime;
+    }
 
     public String getTitle() {
         return title;
     }
 
-    public String getCreatedTime() {
-        return createdTime;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getRecordId() {
-        return recordId;
+    public List<String> getKeywords() {
+        return keywords;
     }
 
     public String getFolderId() {
         return folderId;
+    }
+    public String getRecordId() {
+        return recordId;
     }
 }

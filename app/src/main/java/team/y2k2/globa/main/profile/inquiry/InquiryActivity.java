@@ -4,18 +4,13 @@ import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import com.bumptech.glide.Glide;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,7 +19,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.ActivityInquiryBinding;
-import team.y2k2.globa.main.profile.UserInfoResponse;
 
 public class InquiryActivity extends AppCompatActivity {
 

@@ -1,8 +1,10 @@
-package team.y2k2.globa.main.folder.add;
+package team.y2k2.globa.api.model.request;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
+import team.y2k2.globa.api.model.entity.ShareTarget;
 
 public class FolderAddRequest {
     @SerializedName("title")
@@ -29,15 +31,4 @@ public class FolderAddRequest {
     }
 }
 
-class ShareTarget {
-    @SerializedName("code")
-    String code;
 
-    @SerializedName("role")
-    String role;
-
-    ShareTarget(String code, String role) {
-        this.code = code;
-        this.role = role;
-    }
-}

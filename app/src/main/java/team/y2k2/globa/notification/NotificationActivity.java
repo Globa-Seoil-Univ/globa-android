@@ -20,7 +20,7 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.ActivityNotificationBinding;
 import team.y2k2.globa.notification.inquiry.NotificationInquiryAdapter;
 import team.y2k2.globa.notification.inquiry.NotificationInquiryItem;
-import team.y2k2.globa.notification.inquiry.NotificationInquiryResponse;
+import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
 
 public class NotificationActivity extends AppCompatActivity {
 

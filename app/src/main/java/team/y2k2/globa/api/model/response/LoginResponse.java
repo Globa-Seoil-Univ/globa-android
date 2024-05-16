@@ -1,10 +1,13 @@
-package team.y2k2.globa.login;
+package team.y2k2.globa.api.model.response;
+
+import com.google.gson.annotations.SerializedName;
 
 public class LoginResponse {
+    @SerializedName("accessToken")
     private String accessToken;
-    private String refreshToken;
 
-    // Getter 및 Setter 메서드 등 추가 가능
+    @SerializedName("refreshToken")
+    private String refreshToken;
 
 
     public String getAccessToken() {

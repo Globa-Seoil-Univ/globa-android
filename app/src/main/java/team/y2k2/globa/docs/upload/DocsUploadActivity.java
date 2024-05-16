@@ -1,7 +1,5 @@
 package team.y2k2.globa.docs.upload;
 
-import static team.y2k2.globa.api.ApiService.API_BASE_URL;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +18,6 @@ import com.google.firebase.storage.UploadTask;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.io.File;
 import java.time.Instant;
@@ -33,12 +30,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.databinding.ActivityDocsUploadBinding;
-import team.y2k2.globa.main.folder.FolderAdapter;
-import team.y2k2.globa.main.folder.FolderModel;
-import team.y2k2.globa.main.folder.FolderResponse;
-import team.y2k2.globa.main.folder.currently.FolderCurrentlyAdapter;
-import team.y2k2.globa.main.folder.currently.FolderCurrentlyModel;
+import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class DocsUploadActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;

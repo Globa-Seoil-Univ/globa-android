@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.main.folder.FolderResponse;
+import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class DocsUploadFolderAdapter extends ArrayAdapter<String> implements SpinnerAdapter {
     List<FolderResponse> items;

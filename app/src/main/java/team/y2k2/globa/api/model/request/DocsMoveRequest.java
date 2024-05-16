@@ -1,4 +1,4 @@
-package team.y2k2.globa.docs.move;
+package team.y2k2.globa.api.model.request;
 
 import com.google.gson.annotations.SerializedName;
 

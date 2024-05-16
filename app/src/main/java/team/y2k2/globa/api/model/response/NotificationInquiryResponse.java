@@ -1,11 +1,12 @@
-package team.y2k2.globa.notification.inquiry;
+package team.y2k2.globa.api.model.response;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class NotificationInquiryResponse {
+import team.y2k2.globa.api.model.entity.NotificationInquiry;
 
+public class NotificationInquiryResponse {
     @SerializedName("inquires")
     private List<NotificationInquiry> inquires;
 

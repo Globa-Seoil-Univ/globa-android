@@ -1,4 +1,4 @@
-package team.y2k2.globa.network.jwt;
+package team.y2k2.globa.api.model.request;
 
 public class TokenRequest {
     private String refreshToken;

@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 
 public class WithdrawViewModel extends ViewModel {

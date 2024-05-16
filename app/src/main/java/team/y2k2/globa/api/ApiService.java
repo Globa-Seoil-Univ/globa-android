@@ -17,22 +17,22 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
-import team.y2k2.globa.docs.move.DocsMoveRequest;
-import team.y2k2.globa.docs.upload.DocsUploadRequestModel;
-import team.y2k2.globa.docs.upload.DocsUploadResponseModel;
-import team.y2k2.globa.docs.upload.RecordCreateRequest;
-import team.y2k2.globa.login.LoginResponse;
-import team.y2k2.globa.main.NoticeResponse;
-import team.y2k2.globa.main.RecordResponse;
-import team.y2k2.globa.main.folder.FolderResponse;
-import team.y2k2.globa.main.folder.add.FolderAddRequest;
-import team.y2k2.globa.main.folder.inside.FolderInsideRecordResponse;
-import team.y2k2.globa.main.profile.UserInfoResponse;
+import team.y2k2.globa.api.model.request.DocsMoveRequest;
+import team.y2k2.globa.api.model.request.DocsUploadRequest;
+import team.y2k2.globa.api.model.response.DocsUploadResponse;
+import team.y2k2.globa.api.model.request.RecordCreateRequest;
+import team.y2k2.globa.api.model.response.LoginResponse;
+import team.y2k2.globa.api.model.response.NoticeResponse;
+import team.y2k2.globa.api.model.response.RecordResponse;
+import team.y2k2.globa.api.model.response.FolderResponse;
+import team.y2k2.globa.api.model.request.FolderAddRequest;
+import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
-import team.y2k2.globa.network.jwt.TokenRequestModel;
-import team.y2k2.globa.network.jwt.TokenResponseModel;
-import team.y2k2.globa.login.LoginRequest;
-import team.y2k2.globa.notification.inquiry.NotificationInquiryResponse;
+import team.y2k2.globa.api.model.request.TokenRequest;
+import team.y2k2.globa.api.model.response.TokenResponse;
+import team.y2k2.globa.api.model.request.LoginRequest;
+import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
 
 public interface ApiService {
 
@@ -45,10 +45,10 @@ public interface ApiService {
      */
 
     @POST("/auth")
-    Call<TokenResponseModel> getRefreshToken(
+    Call<TokenResponse> getRefreshToken(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
-            @Body TokenRequestModel refreshToken
+            @Body TokenRequest refreshToken
     );
 
     /**
@@ -116,9 +116,9 @@ public interface ApiService {
      *
      */
     @POST("/folder/{folder_id}/record")
-    Call<DocsUploadResponseModel> createRecord(
+    Call<DocsUploadResponse> createRecord(
             @Path("folder_id") String folderId,
-            @Body DocsUploadRequestModel requestBody
+            @Body DocsUploadRequest requestBody
     );
 
 

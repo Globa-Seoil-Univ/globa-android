@@ -9,17 +9,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityNicknameEditBinding;
-import team.y2k2.globa.login.LoginRequest;
+import team.y2k2.globa.api.model.request.LoginRequest;
 
 public class NicknameEditActivity extends AppCompatActivity {
 

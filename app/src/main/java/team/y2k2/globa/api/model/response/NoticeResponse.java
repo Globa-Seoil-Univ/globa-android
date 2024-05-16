@@ -1,4 +1,4 @@
-package team.y2k2.globa.main;
+package team.y2k2.globa.api.model.response;
 
 
 import com.google.gson.annotations.SerializedName;

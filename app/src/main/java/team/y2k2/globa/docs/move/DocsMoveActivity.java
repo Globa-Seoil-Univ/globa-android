@@ -17,9 +17,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.databinding.ActivityDocsMoveBinding;
 import team.y2k2.globa.docs.upload.DocsUploadFolderAdapter;
-import team.y2k2.globa.main.folder.FolderResponse;
+import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class DocsMoveActivity extends AppCompatActivity {
 

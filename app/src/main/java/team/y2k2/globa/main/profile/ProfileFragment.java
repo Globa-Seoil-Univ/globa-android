@@ -28,9 +28,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
-import team.y2k2.globa.login.LoginRequest;
-import team.y2k2.globa.login.LoginResponse;
 import team.y2k2.globa.main.profile.info.MyinfoActivity;
 
 public class ProfileFragment extends Fragment {

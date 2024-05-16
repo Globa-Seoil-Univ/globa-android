@@ -16,12 +16,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,14 +27,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.entity.FolderInsideRecord;
+import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.databinding.FragmentFolderInsideBinding;
-import team.y2k2.globa.main.RecordResponse;
-import team.y2k2.globa.main.folder.FolderAdapter;
 import team.y2k2.globa.main.folder.FolderFragment;
-import team.y2k2.globa.main.folder.FolderModel;
-import team.y2k2.globa.main.folder.FolderResponse;
-import team.y2k2.globa.main.folder.currently.FolderCurrentlyAdapter;
-import team.y2k2.globa.main.folder.currently.FolderCurrentlyModel;
 import team.y2k2.globa.main.folder.edit.FolderNameEditActivity;
 
 public class FolderInsideFragment extends Fragment {

@@ -1,4 +1,4 @@
-package team.y2k2.globa.notification.inquiry;
+package team.y2k2.globa.api.model.entity;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -11,7 +11,6 @@ public class NotificationInquiry {
 
     @SerializedName("solved")
     private boolean solved;
-
 
     public String getContent() {
         return content;

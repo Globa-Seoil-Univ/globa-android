@@ -13,7 +13,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiService;
-import team.y2k2.globa.main.profile.UserInfoResponse;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 
 public class MyinfoViewModel extends ViewModel {
 
@@ -47,7 +47,7 @@ public class MyinfoViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<team.y2k2.globa.main.profile.UserInfoResponse> call, Throwable t) {
+            public void onFailure(Call<UserInfoResponse> call, Throwable t) {
                 errorLiveData.setValue("네트워크 오류 발생");
 
                 Log.d(getClass().getName(), "네트워크 오류 발생:" + t);

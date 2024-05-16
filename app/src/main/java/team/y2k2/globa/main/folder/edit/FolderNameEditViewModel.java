@@ -18,7 +18,7 @@ public class FolderNameEditViewModel extends ViewModel {
 
     public void folderRename(String authorization, String title) {
         try {
-            apiService.requestUpdateFolderName("application/json", authorization, title);
+//            apiService.requestUpdateFolderName("application/json", authorization, title);
             Log.d(getClass().getName(), "회원 탈퇴 요청 성공");
         } catch(Exception e) {
             errorLiveData.setValue("요청 전송 오류 발생");
