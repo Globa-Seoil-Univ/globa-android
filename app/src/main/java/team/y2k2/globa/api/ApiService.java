@@ -3,26 +3,38 @@ package team.y2k2.globa.api;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import team.y2k2.globa.docs.edit.DocsNameEditRequest;
+import team.y2k2.globa.docs.move.DocsMoveRequest;
 import team.y2k2.globa.docs.upload.DocsUploadRequestModel;
 import team.y2k2.globa.docs.upload.DocsUploadResponseModel;
+import team.y2k2.globa.docs.upload.RecordCreateRequest;
 import team.y2k2.globa.login.LoginResponse;
 import team.y2k2.globa.main.NoticeResponse;
+import team.y2k2.globa.main.RecordResponse;
 import team.y2k2.globa.main.folder.FolderResponse;
+import team.y2k2.globa.main.folder.add.FolderAddRequest;
+import team.y2k2.globa.main.folder.inside.FolderInsideRecordResponse;
 import team.y2k2.globa.main.profile.UserInfoResponse;
+import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 import team.y2k2.globa.network.jwt.TokenRequestModel;
 import team.y2k2.globa.network.jwt.TokenResponseModel;
 import team.y2k2.globa.login.LoginRequest;
+import team.y2k2.globa.notification.inquiry.NotificationInquiryResponse;
 
 public interface ApiService {
 
 //    String API_BASE_URL = "http://1.209.165.82:8080";
+//    String API_BASE_URL = "https://1.209.165.82:8080";
     String API_BASE_URL = "http://192.168.219.111:8080";
 //    String API_BASE_URL = "https://globa.tetraplace.com";
     /**
@@ -104,6 +116,18 @@ public interface ApiService {
             @Body DocsUploadRequestModel requestBody
     );
 
+
+    /**
+     * 문서 추가
+     */
+    @POST("/folder/{folder_id}/record")
+    Call<Void> requestCreateRecord(
+            @Path("folder_id") String folderId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body RecordCreateRequest insertDocumentRequest
+    );
+
     /**
      * 공지사항 미리 가져오기
      */
@@ -118,33 +142,63 @@ public interface ApiService {
      * 폴더 가져오기
      */
     @GET("/folder")
-    Call<FolderResponse> requestGetFolders(
+    Call<List<FolderResponse>> requestGetFolders(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("page") int page,
             @Query("count") int count
     );
 
+
+    /**
+     * 문서 가져오기
+     */
+    @GET("/folder/{folder_id}/record")
+    Call<FolderInsideRecordResponse> requestGetFolderInside(
+            @Path("folder_id") int folderId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("page") int page,
+            @Query("count") int count
+    );
+
+
     /**
      * 폴더 추가
      */
     @POST("/folder")
-    void requestCreateFolder(
+    Call<Void> requestInsertFolder(
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//          @Body
+            @Header("Authorization") String authorization,
+            @Nullable @Body FolderAddRequest folderAddRequest
     );
 
     /**
-     * 폴더 이름 수정
-     * - 폴더 이름을 변경합니다.
+     * 문서 이름 수정
+     * - 문서 이름을 변경합니다.
      */
-    @POST("/folder/{folder_id}/name")
-    void requestUpdateFolderName(
+    @PATCH("/folder/{folder_id}/record/{record_id}/name")
+    Call<Void> requestUpdateRecordName(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//            @Body String title
+            @Header("Authorization") String authorization,
+            @Body DocsNameEditRequest docsNameEditRequest
     );
+
+    /**
+     * 문서 폴더 이동
+     * - 문서를 이동합니다.
+     */
+    @PATCH("/folder/{folder_id}/record/{record_id}/folder")
+    Call<Void> requestUpdateDocsMove(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body DocsMoveRequest docsMoveRequest
+    );
+
 
     /**
      * 폴더 삭제
@@ -242,16 +296,17 @@ public interface ApiService {
 //            @Body
     );
 
+
+
+
     /**
      * 모든 문서 가져오기
      */
     @GET("/record")
-    Objects requestGetAllDocument(
+    Call<RecordResponse> requestGetRecords(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
-            @Query("count") int number,
-            @Query("sort") String string
-//            @Body
+            @Query("count") int number
     );
 
     /**
@@ -263,5 +318,31 @@ public interface ApiService {
             @Header("Authorization") String authorization
 //            @Body
     );
+
+    /**
+     * 문의하기
+     *
+     * @return
+     */
+    @POST("/inquiry")
+    Call<Void> requestInsertInquiry(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body InquiryRequest inquiryRequest
+    );
+    /**
+     * 문의내역 목록 조회
+     *
+     * @return
+     */
+    @GET("/inquiry")
+    Call<NotificationInquiryResponse> requestGetInquires(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("page") int page,
+            @Query("count") int count,
+            @Query("sort") String sort
+    );
+
 
 }

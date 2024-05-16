@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraintlayout_docs_move"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_docs_move_tab"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/imagebutton_docs_move_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:layout_marginLeft="24dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/textview_docs_move_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_toEndOf="@id/imagebutton_docs_move_back"
+            android:layout_centerVertical="true"
+            tools:text="폴더 이동" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout_document_icon_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/document_icon_background"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_move_tab"
+        app:layout_constraintBottom_toBottomOf="@id/textview_docs_audio_datetime">
+
+        <ImageView
+            android:id="@+id/imageview_document_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/document" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textview_docs_audio_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2024-03-12 회의록"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
+        app:layout_constraintTop_toTopOf="@id/linearlayout_document_icon_bg" />
+
+    <TextView
+        android:id="@+id/textview_docs_audio_datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2024-03-12 오후 11:07"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/darkGray"
+        app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
+        app:layout_constraintTop_toBottomOf="@id/textview_docs_audio_title" />
+
+    <LinearLayout
+        android:id="@+id/linearlayout_docs_move_border_1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:background="@color/lightGray"
+        app:layout_constraintTop_toBottomOf="@id/linearlayout_document_icon_bg"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/textview_docs_move_folder_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="폴더"
+        android:textColor="@color/black"
+        android:textSize="@dimen/small"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_move_border_1"/>
+
+    <Spinner
+        android:id="@+id/spinner_docs_move"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:padding="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_docs_move_folder_title"/>
+
+
+    <LinearLayout
+        android:id="@+id/linearlayout_docs_move_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+
+        android:background="@drawable/main_button_selected"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/twitter"
+            android:text="업로드"
+            android:textSize="16dp"
+            app:cornerRadius="8dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

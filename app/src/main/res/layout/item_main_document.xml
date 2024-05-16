@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
-        android:id="@+id/imageview_document_more"
+        android:id="@+id/imageview_folder_inside_more"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginTop="10dp"

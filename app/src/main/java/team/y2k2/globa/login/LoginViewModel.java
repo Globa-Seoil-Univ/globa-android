@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,6 +80,7 @@ public class LoginViewModel extends ViewModel {
                             // 로그인 성공
                             LoginResponse loginResponse = response.body();
                             userPreferences(loginRequest, loginResponse);
+                            sendLogMessage(loginRequest,loginResponse);
 
                             Intent intent = new Intent(context, MainActivity.class);
                             context.startActivity(intent);
@@ -89,6 +93,7 @@ public class LoginViewModel extends ViewModel {
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
                         // 요청 실패
                         Toast.makeText(context, "서비스 오류가 발생했습니다." + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.d("LOGINFAILED", t.getMessage());
                     }
                 });
             } else {
@@ -97,7 +102,7 @@ public class LoginViewModel extends ViewModel {
             }
         }
 
-        public void userPreferences(LoginRequest request,LoginResponse response) {
+        public void userPreferences(LoginRequest request, LoginResponse response) {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
 
@@ -110,6 +115,18 @@ public class LoginViewModel extends ViewModel {
             editor.putString("profile", request.getProfile());
             editor.commit();
         }
+        public void sendLogMessage(LoginRequest request, LoginResponse response) {
+            String accessToken = response.getAccessToken();
+            String refreshToken = response.getRefreshToken();
 
+            Log.d(getClass().getName(), "로그인 성공");
+
+            ArrayList list = new ArrayList();
+            list.add("accessToken : " + accessToken);
+            list.add("refreshToken: " + refreshToken);
+            list.add("snsId       : " + request.getSnsId());
+            list.add("name        : " + request.getName());
+            list.add("profile     : " + request.getProfile());
+        }
     }
 }

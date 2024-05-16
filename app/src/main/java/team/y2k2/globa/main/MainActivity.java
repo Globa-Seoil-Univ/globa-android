@@ -21,16 +21,23 @@ import team.y2k2.globa.docs.upload.DocsUploadActivity;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.permission.FolderPermissionActivity;
 import team.y2k2.globa.main.profile.ProfileFragment;
+import team.y2k2.globa.main.statistics.StatisticsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private final int REQUEST_CODE_PICK_RECORD = 101;
+    private final int REQUEST_CODE_UPLOAD_RECORD = 102;
+
     private ActivityMainBinding binding;
     int currentItem = R.id.item_main_main;
+
+    MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+
+        mainFragment = new MainFragment();
 
         setContentView(binding.getRoot());
 
@@ -54,10 +61,10 @@ public class MainActivity extends AppCompatActivity {
                     currentItem = item.getItemId();
 
                 if(index == R.id.item_main_main)
-                    replaceFragment(MainFragment.class);
+                    replaceFragment(mainFragment.getClass());
                 else if(index == R.id.item_main_statistics) {
-                    Intent intent = new Intent(getApplicationContext(), FolderPermissionActivity.class);
-                    startActivity(intent);
+                    replaceFragment(StatisticsFragment.class);
+
                 }
                 else if(index == R.id.item_main_upload)
                     uploadAudio();
@@ -100,8 +107,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, DocsUploadActivity.class);
                 intent.putExtra("recordPath", audioPath);
                 intent.putExtra("recordName", audioName);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_UPLOAD_RECORD);
             }
+        }
+        if (requestCode == REQUEST_CODE_UPLOAD_RECORD && resultCode == RESULT_OK) {
+            mainFragment.showRecords();
         }
     }
 

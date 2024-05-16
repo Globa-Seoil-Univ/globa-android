@@ -20,6 +20,8 @@ import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +29,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
+import team.y2k2.globa.login.LoginRequest;
+import team.y2k2.globa.login.LoginResponse;
 import team.y2k2.globa.main.profile.info.MyinfoActivity;
 
 public class ProfileFragment extends Fragment {
@@ -73,6 +77,11 @@ public class ProfileFragment extends Fragment {
                     // API 호출 성공
                     UserInfoResponse userInfo = response.body();
                     // userInfo를 사용하여 필요한 작업 수행
+                    Log.d("IMAGETEST", userInfo.getProfile());
+                    Log.d("IMAGETEST", userInfo.getName());
+
+                    userPreferences(response.body());
+                    showLogMessages(response.body());
 
                     binding.textviewProfileAccountUsername.setText(userInfo.getName());
                     binding.textviewProfileAccountUsercode.setText(userInfo.getCode());
@@ -97,5 +106,29 @@ public class ProfileFragment extends Fragment {
         });
 
         return binding.getRoot();
+    }
+
+    public void userPreferences(UserInfoResponse response) {
+        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("userName", response.getName());
+        editor.putString("userId", response.getUserId());
+        editor.putString("publicFolderId", response.getPublicFolderId());
+        editor.putString("userCode", response.getCode());
+        editor.commit();
+    }
+
+    public void showLogMessages(UserInfoResponse response) {
+        Log.d(getClass().getName(), "프로필 조회 성공");
+        ArrayList<String> logs = new ArrayList();
+        logs.add("userName      :" + response.getName());
+        logs.add("userId        :" + response.getUserId());
+        logs.add("publicFolderId:" + response.getPublicFolderId());
+        logs.add("userCode      :" + response.getCode());
+
+        for(int i = 0; i < logs.toArray().length; i++) {
+            Log.d(getClass().getName(), logs.get(i));
+        }
+
     }
 }

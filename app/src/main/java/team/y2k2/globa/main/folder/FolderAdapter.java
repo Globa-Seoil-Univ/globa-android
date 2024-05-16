@@ -1,5 +1,7 @@
 package team.y2k2.globa.main.folder;
 
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +38,15 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
         holder.datetime.setText(items.get(position).getDatetime());
 
         holder.layout.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt("folder_id", items.get(position).getFolderId());
+            Log.d("FolderInsideAdapterLog", items.get(position).getFolderId() +"");
+            FolderInsideFragment fragment = new FolderInsideFragment();
+            fragment.setArguments(bundle);
+
             ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .replace(R.id.fcv_main, FolderInsideFragment.class, null)
+                    .replace(R.id.fcv_main, fragment, null)
                     .addToBackStack(null)
                     .commit();
         });

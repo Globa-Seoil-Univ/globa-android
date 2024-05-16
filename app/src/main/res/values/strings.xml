@@ -62,16 +62,16 @@
     <string name="profile_setting_title">설정</string>
     <string name="profile_account_code">계정 코드</string>
     <string name="profile_alert_setting">알림 설정</string>
-    <string name="profile_help">문의하기</string>
+    <string name="profile_inquiry">문의하기</string>
     <string name="profile_clean_data">임시 공간 삭제</string>
     <string name="profile_service_info">서비스 정보</string>
     <string name="profile_theme">테마 모드</string>
 
-    <string name="profile_help_send">접수</string>
-    <string name="profile_help_title">제목</string>
-    <string name="profile_help_title_hint">제목</string>
-    <string name="profile_help_description">내용</string>
-    <string name="profile_help_description_hint">내용을 입력해주세요.</string>
+    <string name="profile_inquiry_send">접수</string>
+    <string name="profile_inquiry_title">제목</string>
+    <string name="profile_inquiry_title_hint">제목</string>
+    <string name="profile_inquiry_description">내용</string>
+    <string name="profile_inquiry_description_hint">내용을 입력해주세요.</string>
 
     <string name="profile_service_info_1_title">Globa 서비스 약관</string>
     <string name="profile_service_info_1_description">Globa 서비스 약관 읽기</string>

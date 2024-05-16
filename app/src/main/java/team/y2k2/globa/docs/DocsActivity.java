@@ -40,7 +40,7 @@ import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
-    ActivityDocsBinding binding;
+    public ActivityDocsBinding binding;
     DocsModel docsModel;
     DocsSummaryModel docsSummaryModel;
 
@@ -64,7 +64,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         binding.textviewDocsTitle.setText(intent.getStringExtra("title").toString());
         audioUrl = intent.getStringExtra("audioUrl").toString();
 
-        DocsDetailAdapter detailAdapter = new DocsDetailAdapter(docsModel.getItems());
+        DocsDetailAdapter detailAdapter = new DocsDetailAdapter(docsModel.getItems(),this);
         DocsSummaryAdapter summaryAdapter = new DocsSummaryAdapter(docsSummaryModel.getItems());
 
         binding.imagebuttonDocsBack.setOnClickListener(v -> {

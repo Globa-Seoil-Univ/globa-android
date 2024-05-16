@@ -1,13 +1,17 @@
 package team.y2k2.globa.docs.upload;
 
+import static team.y2k2.globa.api.ApiService.API_BASE_URL;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.arthenica.mobileffmpeg.FFmpeg;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -16,9 +20,11 @@ import com.google.firebase.storage.UploadTask;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.io.File;
 import java.time.Instant;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,11 +34,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.ActivityDocsUploadBinding;
+import team.y2k2.globa.main.folder.FolderAdapter;
+import team.y2k2.globa.main.folder.FolderModel;
+import team.y2k2.globa.main.folder.FolderResponse;
+import team.y2k2.globa.main.folder.currently.FolderCurrentlyAdapter;
+import team.y2k2.globa.main.folder.currently.FolderCurrentlyModel;
 
 public class DocsUploadActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private StorageReference storageReference;
 
+    private final static int REQUEST_CODE_UPLOAD_RECORD = 102;
     String recordName;
     String recordExtension;
     String recordPath;
@@ -46,10 +58,28 @@ public class DocsUploadActivity extends AppCompatActivity {
 
     private static boolean isAudioPlayed;
 
+    // Retrofit 인스턴스 생성
+    Retrofit retrofit;
+    SharedPreferences preferences;
+    String authorization;
+    ApiService apiService;
+
+    List<FolderResponse> responses;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsUploadBinding.inflate(getLayoutInflater());
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(ApiService.API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        preferences = this.getSharedPreferences("account", Activity.MODE_PRIVATE);
+        authorization = "Bearer " + preferences.getString("accessToken", "");
+        apiService = retrofit.create(ApiService.class);
 
         Intent intent = getIntent();
         recordName = intent.getStringExtra("recordName").split("\\.")[0];
@@ -74,56 +104,64 @@ public class DocsUploadActivity extends AppCompatActivity {
 
 
         binding.linearlayoutDocsUploadConfirm.setOnClickListener(v -> {
-            String title = binding.edittextDocsUploadTitle.getText().toString();
-            if(title.length() == 0) {
-                title = binding.edittextDocsUploadTitle.getHint().toString();
+            recordName = binding.edittextDocsUploadTitle.getText().toString();
+            if(recordName.length() == 0) {
+                recordName = binding.edittextDocsUploadTitle.getHint().toString();
             }
 
             SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
             // Firebase Storage 참조 가져오기
-            storageReference = FirebaseStorage.getInstance().getReference("users");
-            folderId = "test_folder";
+            storageReference = FirebaseStorage.getInstance().getReference("folders");
 
-            if(preferences.getString("uid", "").length() != 0) {
-                userId = preferences.getString("uid", "");
+            if(preferences.getString("userId", "").length() != 0) {
+                userId = preferences.getString("userId", "");
+            }
+
+            if(preferences.getString("publicFolderId", "").length() != 0) {
+                folderId = preferences.getString("publicFolderId", "");
             }
 
             uploadRecordFile(recordPath, userId, folderId, recordExtension);
-//            requestRecordAPI(title, firebasePath);
-
             finish();
         });
 
+
+        loadFolder();
         setContentView(binding.getRoot());
+
     }
 
-    private void requestRecordAPI(String title, String path) {
-        // Retrofit 인스턴스 생성
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiService.API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
-
+    private void requestCreateRecord(String title) {
         // 네트워크 요청 보내기
-        DocsUploadRequestModel requestModel = new DocsUploadRequestModel(title, path);
+        String path = "folders/" + folderId + "/" + unixTime + ".ogg";
+        RecordCreateRequest request = new RecordCreateRequest(title, path, "0");
 
-        Call<DocsUploadResponseModel> call = apiService.createRecord(folderId,requestModel);
-        call.enqueue(new Callback<DocsUploadResponseModel>() {
+
+        Log.d("Record UPLOAD", "업로드: " + title + " | " + path);
+
+        String folderId = Integer.toString(responses.get(binding.spinnerDocsUpload.getSelectedItemPosition()).getFolderId());
+
+        Call<Void> call = apiService.requestCreateRecord(folderId,"application/json", authorization, request);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<DocsUploadResponseModel> call, Response<DocsUploadResponseModel> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // 성공적으로 응답을 받았을 때 처리할 내용
-                    DocsUploadResponseModel apiResponse = response.body();
+                    response.body();
+
+                    Log.d("Record UPLOAD", "업로드 완료 : " + response.code());
+                    finish();
+
                 } else {
                     // 서버로부터 실패 응답을 받았을 때 처리할 내용
+                    Log.d("Record UPLOAD", "업로드 실패 : " + response.code() + " | " + response);
                 }
             }
 
             @Override
-            public void onFailure(Call<DocsUploadResponseModel> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 // 네트워크 요청 실패 시 처리할 내용
+                Log.d("Record UPLOAD", "업로드 실패 : " + t.getMessage());
             }
         });
     }
@@ -153,11 +191,14 @@ public class DocsUploadActivity extends AppCompatActivity {
     private void uploadRecordFile(String path, String userId, String folderId, String extension) {
         unixTime = Instant.now();
 
-        firebasePath = userId + "/" + folderId + "/" + unixTime + "."+ extension;
+        String oggPath = path.split("\\.")[0] + ".ogg";
+        convertMp3ToOgg(path,oggPath);
+
+        firebasePath = folderId + "/" + unixTime + ".ogg";
         StorageReference audioRef = storageReference.child(firebasePath);
 
         // 예제로 진행하려면 raw 리소스에서 파일을 가져오고 Uri를 생성하여 사용할 수 있습니다.
-        Uri uri = Uri.fromFile(new File(path));
+        Uri uri = Uri.fromFile(new File(oggPath));
 
         // 파일 업로드
         audioRef.putFile(uri)
@@ -166,6 +207,8 @@ public class DocsUploadActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // 업로드 성공 시
                         Toast.makeText(getApplicationContext(), "파일 업로드 성공", Toast.LENGTH_SHORT).show();
+                        requestCreateRecord(recordName);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -189,5 +232,45 @@ public class DocsUploadActivity extends AppCompatActivity {
         super.onStop();
         // 액티비티가 정지될 때 MediaPlayer를 해제합니다.
         releaseMediaPlayer();
+    }
+
+    public void loadFolder() {
+        Call<List<FolderResponse>> call = apiService.requestGetFolders("application/json",authorization, 1, 10);
+        call.enqueue(new Callback<List<FolderResponse>>() {
+            @Override
+            public void onResponse(Call<List<FolderResponse>> call, Response<List<FolderResponse>> response) {
+                if (response.isSuccessful()) {
+                    responses = response.body();
+                    if (responses != null) {
+                        DocsUploadFolderAdapter adapter = new DocsUploadFolderAdapter(getApplicationContext(), R.layout.item_folder, responses);
+                        adapter.setDropDownViewResource(R.layout.item_folder);
+                        binding.spinnerDocsUpload.setAdapter(adapter);
+                        binding.spinnerDocsUpload.setSelection(0);
+                    }
+                } else {
+                    // 서버로부터 실패 응답을 받았을 때 처리
+                    Log.d("FOLDERTEST", "오류");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<FolderResponse>> call, Throwable t) {
+                // 네트워크 요청 실패 시 처리
+                Log.d("FOLDERTEST", "오류" + t.getMessage());
+
+            }
+        });
+    }
+
+    public static void convertMp3ToOgg(String mp3FilePath, String oggFilePath) {
+        String[] cmd = new String[]{"-i", mp3FilePath, "-vn", "-map_metadata", "-1", "-ac", "1", "-c:a", "libopus", "-b:a", "12k", "-application", "voip", oggFilePath};
+        int rc = FFmpeg.execute(cmd);
+        if (rc == 0) {
+            // 변환 성공
+            Log.d("AudioConverter", "변환 성공");
+        } else {
+            // 변환 실패
+            Log.e("AudioConverter", "변환 실패");
+        }
     }
 }

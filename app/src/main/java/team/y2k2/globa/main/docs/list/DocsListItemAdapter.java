@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
+import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.main.docs.keyword.DocsKeywordAdapter;
 import team.y2k2.globa.main.docs.keyword.DocsKeywordModel;
 
@@ -71,8 +72,8 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             // 저장소 참조
             StorageReference storageRef = storage.getReference();
 
-            // 저장된 음악 파일 경로
-            String filePath = "users/eRWlCdKT2lfhlBbScYZqskIOILw1/test_folder/2024-05-03T14:44:28.905707Z.mp3";
+//            // 저장된 음악 파일 경로
+            String filePath = "users/9/folders/5/record/2024-05-15T16:54:26.559331Z.ogg";
 
             // 해당 파일의 참조
             StorageReference audioRef = storageRef.child(filePath);
@@ -116,11 +117,18 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         });
 
         holder.more.setOnClickListener(view -> {
-
-
             moreBottomSheet.show();
 
-//            RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
+            RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
+
+            rename.setOnClickListener(d1 -> {
+                moreBottomSheet.dismiss();
+                Intent intent = new Intent(holder.itemView.getContext(), DocsNameEditActivity.class);
+                intent.putExtra("recordId", items.get(position).getRecordId());
+                intent.putExtra("folderId", items.get(position).getFolderId());
+                intent.putExtra("title", items.get(position).getTitle());
+                holder.itemView.getContext().startActivity(intent);
+            });
 //            RelativeLayout move = moreBottomSheet.findViewById(R.id.relativelayout_more_move);
             RelativeLayout delete = moreBottomSheet.findViewById(R.id.relativelayout_more_delete);
             delete.setOnClickListener(d1 -> {
@@ -162,7 +170,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             layout = itemView.findViewById(R.id.constraintlayout_item_main_document);
 
             keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
-            more = itemView.findViewById(R.id.imageview_document_more);
+            more = itemView.findViewById(R.id.imageview_folder_inside_more);
 
             user_1 = itemView.findViewById(R.id.imageview_document_user_1);
             user_2 = itemView.findViewById(R.id.imageview_document_user_2);

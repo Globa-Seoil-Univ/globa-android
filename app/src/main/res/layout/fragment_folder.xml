@@ -13,12 +13,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/imagebutton_folder_add"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
         android:layout_alignParentRight="true"
+        android:background="@null"
         android:src="@drawable/add_folder" />
 
     <TextView

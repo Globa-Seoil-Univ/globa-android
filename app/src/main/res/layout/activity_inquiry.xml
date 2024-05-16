@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
  <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/constraintlayout_help"
+    android:id="@+id/constraintlayout_inquiry"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
-        android:id="@+id/relativelayout_help_top"
+        android:id="@+id/relativelayout_inquiry_top"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
         
         <ImageView
-            android:id="@+id/imageview_help_top_back"
+            android:id="@+id/imageview_inquiry_top_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="24dp"
@@ -22,11 +22,11 @@
             android:src="@drawable/arrow_back" />
 
         <TextView
-            android:id="@+id/textview_help_top_title"
+            android:id="@+id/textview_inquiry_top_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/profile_help"
+            android:text="@string/profile_inquiry"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
@@ -37,7 +37,7 @@
 
 
         <TextView
-            android:id="@+id/textview_help_top_confirm"
+            android:id="@+id/textview_inquiry_top_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
@@ -48,55 +48,55 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relativelayout_help_title"
+        android:id="@+id/relativelayout_inquiry_title"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:padding="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/relativelayout_help_top">
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_inquiry_top">
 
         <TextView
-            android:id="@+id/textview_help_title"
+            android:id="@+id/textview_inquiry_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/profile_help_title"
+            android:text="@string/profile_inquiry_title"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="@dimen/large" />
 
         <EditText
-            android:id="@+id/edittext_help_title"
+            android:id="@+id/edittext_inquiry_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="@string/profile_help_title_hint"
-            android:layout_below="@+id/textview_help_title"/>
+            android:hint="@string/profile_inquiry_title_hint"
+            android:layout_below="@+id/textview_inquiry_title"/>
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relativelayout_help_description"
+        android:id="@+id/relativelayout_inquiry_description"
         android:layout_width="match_parent"
         android:layout_height="320dp"
         android:padding="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/relativelayout_help_title">
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_inquiry_title">
 
         <TextView
-            android:id="@+id/textview_help_description"
+            android:id="@+id/textview_inquiry_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/profile_help_description"
+            android:text="@string/profile_inquiry_description"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="@dimen/large" />
 
         <EditText
-            android:id="@+id/edittext_help_description"
+            android:id="@+id/edittext_inquiry_description"
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:layout_marginTop="10dp"
             android:gravity="top"
-            android:hint="@string/profile_help_description_hint"
-            android:layout_below="@+id/textview_help_description"
+            android:hint="@string/profile_inquiry_description_hint"
+            android:layout_below="@+id/textview_inquiry_description"
             android:background="@null"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

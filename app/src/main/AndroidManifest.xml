@@ -60,9 +60,11 @@
         <activity android:name=".main.profile.info.MyinfoActivity" />
 
         <activity android:name=".login.LoginActivity" />
-        <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.MainActivity"
+            android:enableOnBackInvokedCallback="true"/>
+
         <activity android:name=".main.profile.service_info.ServiceInfoActivity" />
-        <activity android:name=".main.profile.help.HelpActivity" />
+        <activity android:name=".main.profile.inquiry.InquiryActivity" />
         <activity android:name=".main.profile.alert.AlertActivity" />
         <activity android:name=".main.profile.theme.ThemeActivity" />
         <activity android:name=".keyword.detail.KeywordDetailActivity" />
@@ -73,6 +75,7 @@
         </activity>
         <activity android:name=".docs.DocsActivity"/>
         <activity android:name=".docs.upload.DocsUploadActivity"/>
+        <activity android:name=".docs.move.DocsMoveActivity"/>
         <activity android:name=".docs.more.DocsMoreActivity"/>
 
         <activity android:name=".main.folder.edit.FolderNameEditActivity"/>
@@ -80,6 +83,8 @@
         <activity android:name=".main.folder.move.FolderMoveActivity"
             android:exported="true" />
 
+        <activity android:name=".notification.NotificationActivity"/>
+        <activity android:name=".docs.edit.DocsNameEditActivity"/>
     </application>
 
 </manifest>

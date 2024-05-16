@@ -3,20 +3,21 @@ package team.y2k2.globa.main.docs.list;
 import java.util.List;
 
 public class DocsListItem {
-    private final int title;
-    private final int datetime;
-
+    private final String title;
+    private final String datetime;
     private List<String> keywords;
-
+    private String recordId;
+    private String folderId;
 
     private int image_1;
     private int image_2;
     private int image_3;
 
-
-    DocsListItem(int title, int datetime) {
+    DocsListItem(String recordId, String folderId, String title, String datetime) {
         this.title = title;
         this.datetime = datetime;
+        this.recordId = recordId;
+        this.folderId = folderId;
     }
 
     public void setKeywordList(List<String> keywords) {
@@ -41,15 +42,23 @@ public class DocsListItem {
         return image_3;
     }
 
+    public String getRecordId() {
+        return recordId;
+    }
+
+    public String getFolderId() {
+        return folderId;
+    }
+
     public List<String> getKeywords() {
         return keywords;
     }
 
-    public int getDatetime() {
+    public String getDatetime() {
         return datetime;
     }
 
-    public int getTitle() {
+    public String getTitle() {
         return title;
     }
 

@@ -3,6 +3,9 @@ package team.y2k2.globa.main.profile;
 import com.google.gson.annotations.SerializedName;
 
 public class UserInfoResponse {
+    @SerializedName("userId")
+    private String userId;
+
     @SerializedName("profile")
     private String profile;
 
@@ -38,8 +41,8 @@ public class UserInfoResponse {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public String getUserId() {
+        return userId;
     }
 
     public String getPublicFolderId() {

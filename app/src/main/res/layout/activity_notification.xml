@@ -38,26 +38,89 @@
             app:layout_constraintTop_toTopOf="parent" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/linearlayout_notification_type"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+
+    <HorizontalScrollView
+        android:id="@+id/horizontal_notification_sort"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativelayout_notification_title">
 
-        <TextView
-            android:id="@+id/textview_notification_all"
-            android:text="전체"
-            android:textSize="@dimen/normal"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전체"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="공지사항"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="공유"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문서"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearlayout_notification_inquiry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문의"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+        </LinearLayout>
     </LinearLayout>
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_notification"
@@ -67,5 +130,5 @@
         android:layout_marginRight="20dp"
         android:scrollbarFadeDuration="0"
         android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/linearlayout_notification_type" />
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_notification_sort" />
 </androidx.constraintlayout.widget.ConstraintLayout>
