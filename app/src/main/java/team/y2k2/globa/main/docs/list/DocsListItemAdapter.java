@@ -89,8 +89,16 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
                             // 이제 downloadUrl을 사용하여 음악 파일을 재생하거나 처리할 수 있습니다.
                             Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
 
-                            intent.putExtra("title", holder.title.getText().toString());
+                            intent.putExtra("title", items.get(position).getTitle());
                             intent.putExtra("audioUrl", audioUrl);
+                            intent.putExtra("folderId", items.get(position).getFolderId());
+                            intent.putExtra("recordId", items.get(position).getRecordId());
+
+                            Log.d("title", items.get(position).getTitle());
+                            Log.d("audioUrl", audioUrl);
+                            Log.d("folderId", items.get(position).getFolderId());
+                            Log.d("recordId", items.get(position).getRecordId());
+
                             holder.itemView.getContext().startActivity(intent);
 
                         }

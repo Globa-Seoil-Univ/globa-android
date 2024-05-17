@@ -49,7 +49,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        if (position == 0) {
+        if (position == -1) {
             DocsDetailHighlightModel model = new DocsDetailHighlightModel();
             String description = items.get(position).getDescription();
             SpannableString highlightString = new SpannableString(description);
@@ -215,8 +215,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         SpannableString spannableString = new SpannableString(text);
         // 이전에 설정된 span 삭제
         spannableString.removeSpan(BackgroundColorSpan.class);
-
-
 
         spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), startIdx, endIdx, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 텍스트뷰에 설정

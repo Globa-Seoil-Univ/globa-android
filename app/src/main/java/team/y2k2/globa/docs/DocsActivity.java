@@ -1,8 +1,11 @@
 package team.y2k2.globa.docs;
 
 import static okhttp3.internal.concurrent.TaskLoggerKt.formatDuration;
+import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -22,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,20 +33,33 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.response.DocsDetailResponse;
+import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.more.DocsMoreActivity;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
+import team.y2k2.globa.main.notice.NoticeAutoScrollHandler;
+import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
     public ActivityDocsBinding binding;
     DocsModel docsModel;
     DocsSummaryModel docsSummaryModel;
+    String folderId;
+    String recordId;
 
     Timer timer;
 
@@ -50,25 +67,31 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
 
+    DocsDetailAdapter detailAdapter;
+    DocsSummaryAdapter summaryAdapter;
     Boolean isMusicStarted;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
-        docsModel = new DocsModel();
-        docsSummaryModel = new DocsSummaryModel();
+
+        mediaPlayer = new MediaPlayer();
+
+
 
         Intent intent = getIntent();
 
         binding.textviewDocsTitle.setText(intent.getStringExtra("title").toString());
         audioUrl = intent.getStringExtra("audioUrl").toString();
+        folderId = intent.getStringExtra("folderId").toString();
+        recordId = intent.getStringExtra("recordId").toString();
 
-        DocsDetailAdapter detailAdapter = new DocsDetailAdapter(docsModel.getItems(),this);
-        DocsSummaryAdapter summaryAdapter = new DocsSummaryAdapter(docsSummaryModel.getItems());
+
+        getResponse();
 
         binding.imagebuttonDocsBack.setOnClickListener(v -> {
-            mediaPlayer.pause();
+            mediaPlayer.stop();
             timer.cancel();
             finish();
         });
@@ -79,33 +102,17 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         });
 
         binding.buttonDocsDescription.setOnClickListener(v -> {
-            binding.buttonDocsDescription.setTextColor(Color.WHITE);
-            binding.buttonDocsDescription.setBackgroundResource(R.drawable.main_button_selected);
-            binding.buttonDocsSummary.setTextColor(Color.BLACK);
-            binding.buttonDocsSummary.setBackgroundResource(R.drawable.main_button);
-
-
-            binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
-            binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+            showDescription();
         });
 
         binding.buttonDocsSummary.setOnClickListener(v -> {
-            binding.buttonDocsSummary.setTextColor(Color.WHITE);
-            binding.buttonDocsSummary.setBackgroundResource(R.drawable.main_button_selected);
-            binding.buttonDocsDescription.setTextColor(Color.BLACK);
-            binding.buttonDocsDescription.setBackgroundResource(R.drawable.main_button);
-
-            binding.recyclerviewDocsDetail.setAdapter(summaryAdapter);
-            binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+            showSummary();
         });
-
-        binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
-        binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
 
         // 오디오 관련 코드 - 시작
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+        mediaPlayer.setAudioAttributes(new AudioAttributes
+                .Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .setUsage(AudioAttributes.USAGE_MEDIA)
                 .build());
@@ -220,6 +227,75 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         // 오디오 관련 코드 - 종료
         setContentView(binding.getRoot());
     }
+
+
+    public void showSummary() {
+        binding.buttonDocsSummary.setTextColor(Color.WHITE);
+        binding.buttonDocsSummary.setBackgroundResource(R.drawable.main_button_selected);
+        binding.buttonDocsDescription.setTextColor(Color.BLACK);
+        binding.buttonDocsDescription.setBackgroundResource(R.drawable.main_button);
+
+        binding.recyclerviewDocsDetail.setAdapter(summaryAdapter);
+        binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+    }
+
+    public void showDescription() {
+        binding.buttonDocsDescription.setTextColor(Color.WHITE);
+        binding.buttonDocsDescription.setBackgroundResource(R.drawable.main_button_selected);
+        binding.buttonDocsSummary.setTextColor(Color.BLACK);
+        binding.buttonDocsSummary.setBackgroundResource(R.drawable.main_button);
+
+        binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
+        binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+    }
+
+
+    public void getResponse() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        Log.d(getClass().getName(), "folderId : " + folderId);
+        Log.d(getClass().getName(), "recordId : " + recordId);
+
+        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
+        String authorization = "Bearer " + preferences.getString("accessToken", "");
+
+        Call<DocsDetailResponse> call = apiService.requestGetDocumentDetail(folderId, recordId, "application/json",authorization);
+        call.enqueue(new Callback<DocsDetailResponse>() {
+            @Override
+            public void onResponse(Call<DocsDetailResponse> call, Response<DocsDetailResponse> response) {
+                if (response.isSuccessful()) {
+                    DocsDetailResponse docsDetailResponse = response.body();
+                    // 성공적으로 응답을 받았을 때 처리
+
+                    docsModel = new DocsModel(docsDetailResponse.getSections());
+                    detailAdapter = new DocsDetailAdapter(docsModel.getItems(),DocsActivity.this);
+
+                    binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
+                    binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+
+                    docsSummaryModel = new DocsSummaryModel(docsDetailResponse.getSections());
+                    summaryAdapter = new DocsSummaryAdapter(docsSummaryModel.getItems());
+                } else {
+                    // 서버로부터 실패 응답을 받았을 때 처리
+                    Log.d(getClass().getName(), "실패 : " + response.code());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DocsDetailResponse> call, Throwable t) {
+                // 네트워크 요청 실패 시 처리
+                Log.d(getClass().getName(), "실패 : " + t.getMessage());
+
+            }
+        });
+    }
+
 
     private String formatDuration(int duration) {
         int seconds = duration / 1000;
