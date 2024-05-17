@@ -113,4 +113,53 @@
         
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout_foldershare_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/foldershare_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_foldershare_inputname"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:padding="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageview_foldershare_search"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="5dp" />
+
+        <TextView
+            android:id="@+id/textview_foldershare_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="임시이름"
+            android:fontFamily="@font/notosans_regular"
+            android:textSize="@dimen/large"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@+id/imageview_foldershare_search"
+            app:layout_constraintTop_toTopOf="@+id/imageview_foldershare_search"
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_foldershare_search"
+            android:layout_marginStart="15dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_foldershare_selected"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_foldershare_search"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="10dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
