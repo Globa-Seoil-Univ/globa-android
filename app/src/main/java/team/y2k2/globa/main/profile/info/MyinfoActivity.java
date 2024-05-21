@@ -145,9 +145,10 @@ public class MyinfoActivity extends AppCompatActivity {
                 // 초기 이미지 설정
                 profileImageRef = storage.getReference().child(profile);
 
-                Glide.with(this).load(profileImageRef)
-                                .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
-                                .into(binding.imageviewMyinfoPhoto);
+                // 2024-05-22 에러 발생 지점 주석 처리
+//                Glide.with(this).load(profileImageRef)
+//                                .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
+//                                .into(binding.imageviewMyinfoPhoto);
 
                 itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, new NicknameEditActivity()));
                 itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));

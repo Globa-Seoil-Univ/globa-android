@@ -40,6 +40,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
         holder.layout.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putInt("folder_id", items.get(position).getFolderId());
+            bundle.putString("folder_title", items.get(position).getTitle());
             Log.d("FolderInsideAdapterLog", items.get(position).getFolderId() +"");
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
@@ -50,6 +51,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
                     .addToBackStack(null)
                     .commit();
         });
+
+
     }
 
     @Override

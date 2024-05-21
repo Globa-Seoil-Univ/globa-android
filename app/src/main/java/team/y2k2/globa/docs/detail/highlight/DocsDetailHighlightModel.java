@@ -12,9 +12,8 @@ public class DocsDetailHighlightModel {
     public DocsDetailHighlightModel() {
         items = new ArrayList<>();
 
-        items.add(new DocsDetailHighlightItem(212, 214, R.color.secondary));
-        items.add(new DocsDetailHighlightItem(295, 314, R.color.red));
-
+//        items.add(new DocsDetailHighlightItem(212, 214, R.color.secondary));
+//        items.add(new DocsDetailHighlightItem(295, 314, R.color.red));
     }
 
     public ArrayList<DocsDetailHighlightItem> getItems() {

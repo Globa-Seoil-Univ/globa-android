@@ -34,6 +34,9 @@ import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDocsAdapter.AdapterViewHolder> {
     ArrayList<FolderInsideDocsItem> items;
 
+    BottomSheetDialog bottomSheetDialog;
+    BottomSheetDialog moreBottomSheet;
+
     public FolderInsideDocsAdapter(ArrayList<FolderInsideDocsItem> items) {
         this.items = items;
     }
@@ -50,15 +53,8 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
         holder.title.setText(items.get(position).getTitle());
         holder.datetime.setText(items.get(position).getDatetime());
 
-        BottomSheetDialog moreBottomSheet = new BottomSheetDialog(holder.more.getContext());
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
-
-        moreBottomSheet.setContentView(R.layout.dialog_more_docs);
-
-        bottomSheetDialog.setContentView(R.layout.dialog_delete_docs);
-
-        TextView confirm = bottomSheetDialog.findViewById(R.id.textview_delete_docs_confirm);
-        TextView cancel = bottomSheetDialog.findViewById(R.id.textview_delete_docs_cancel);
+        moreBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
+        bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
 
         holder.itemView.setOnClickListener(v -> {
             FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -67,6 +63,7 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
 
 //            // 저장된 음악 파일 경로
             String filePath = "users/9/folders/5/record/2024-05-15T16:54:26.559331Z.ogg";
+//            String filePath = "folders/" + items.get(position).getFolderId() +"/records/";
 
             // 해당 파일의 참조
             StorageReference audioRef = storageRef.child(filePath);
@@ -99,49 +96,64 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
                     });
         });
 
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                viewRecordMore(holder, position);
+                return false;
+            }
+        });
 
         holder.more.setOnClickListener(v -> {
-
-            // 버튼 클릭 리스너를 별도의 메서드로 분리
-            confirm.setOnClickListener(d2 -> {
-                bottomSheetDialog.dismiss();
-            });
-            cancel.setOnClickListener(d2 -> {
-                bottomSheetDialog.dismiss();
-                moreBottomSheet.show();
-            });
-
-            holder.more.setOnClickListener(view -> {
-                moreBottomSheet.show();
-
-                RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
-                rename.setOnClickListener(d1 -> {
-                    moreBottomSheet.dismiss();
-                    Intent intent = new Intent(holder.itemView.getContext(), DocsNameEditActivity.class);
-                    intent.putExtra("recordId", items.get(position).getRecordId());
-                    intent.putExtra("folderId", items.get(position).getFolderId());
-                    intent.putExtra("title", items.get(position).getTitle());
-                    holder.itemView.getContext().startActivity(intent);
-                });
-
-                RelativeLayout move = moreBottomSheet.findViewById(R.id.relativelayout_more_move);
-                move.setOnClickListener(d1 -> {
-                    moreBottomSheet.dismiss();
-                    Intent intent = new Intent(holder.itemView.getContext(), DocsMoveActivity.class);
-                    intent.putExtra("recordId", items.get(position).getRecordId());
-                    intent.putExtra("folderId", items.get(position).getFolderId());
-                    intent.putExtra("title", items.get(position).getTitle());
-                    holder.itemView.getContext().startActivity(intent);
-                });
-
-
-                RelativeLayout delete = moreBottomSheet.findViewById(R.id.relativelayout_more_delete);
-                delete.setOnClickListener(d1 -> {
-                    moreBottomSheet.dismiss();
-                    bottomSheetDialog.show();
-                });
-            });
+            viewRecordMore(holder, position);
         });
+    }
+
+    public void viewRecordMore(FolderInsideDocsAdapter.AdapterViewHolder holder, int position) {
+
+        moreBottomSheet.setContentView(R.layout.dialog_more_docs);
+        bottomSheetDialog.setContentView(R.layout.dialog_delete_docs);
+
+        moreBottomSheet.show();
+
+        RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
+        rename.setOnClickListener(d1 -> {
+            moreBottomSheet.dismiss();
+            Intent intent = new Intent(holder.itemView.getContext(), DocsNameEditActivity.class);
+            intent.putExtra("recordId", items.get(position).getRecordId());
+            intent.putExtra("folderId", items.get(position).getFolderId());
+            intent.putExtra("title", items.get(position).getTitle());
+            holder.itemView.getContext().startActivity(intent);
+        });
+
+        RelativeLayout move = moreBottomSheet.findViewById(R.id.relativelayout_more_move);
+        move.setOnClickListener(d1 -> {
+            moreBottomSheet.dismiss();
+            Intent intent = new Intent(holder.itemView.getContext(), DocsMoveActivity.class);
+            intent.putExtra("recordId", items.get(position).getRecordId());
+            intent.putExtra("folderId", items.get(position).getFolderId());
+            intent.putExtra("title", items.get(position).getTitle());
+            holder.itemView.getContext().startActivity(intent);
+        });
+
+        RelativeLayout delete = moreBottomSheet.findViewById(R.id.relativelayout_more_delete);
+        delete.setOnClickListener(d1 -> {
+            moreBottomSheet.dismiss();
+            bottomSheetDialog.show();
+        });
+
+        TextView confirm = bottomSheetDialog.findViewById(R.id.textview_delete_docs_confirm);
+        TextView cancel = bottomSheetDialog.findViewById(R.id.textview_delete_docs_cancel);
+
+        // 버튼 클릭 리스너를 별도의 메서드로 분리
+        confirm.setOnClickListener(d2 -> {
+            bottomSheetDialog.dismiss();
+        });
+        cancel.setOnClickListener(d2 -> {
+            bottomSheetDialog.dismiss();
+            moreBottomSheet.show();
+        });
+
     }
 
     @Override

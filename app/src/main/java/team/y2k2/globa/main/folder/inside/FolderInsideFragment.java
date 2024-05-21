@@ -41,6 +41,7 @@ public class FolderInsideFragment extends Fragment {
     ApiService apiService;
 
     int folderId;
+    String folderTitle;
 
     private final int REQUEST_CODE = 101;
 
@@ -50,10 +51,13 @@ public class FolderInsideFragment extends Fragment {
 
         Bundle bundle = getArguments();
         folderId = bundle.getInt("folder_id");
+        folderTitle = bundle.getString("folder_title");
 
         Log.d("FOLDER_INSIDE_ID", String.valueOf(folderId));
 
         loadFolderInside();
+
+        binding.textviewFolderInsideTitle.setText(folderTitle);
 
         binding.imageviewFolderInsideBack.setOnClickListener(v -> {
             // 뒤로가기 코드 생성

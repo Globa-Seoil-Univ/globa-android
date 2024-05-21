@@ -1,6 +1,5 @@
 package team.y2k2.globa.docs.detail;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -8,9 +7,7 @@ import android.text.TextPaint;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,7 +46,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        if (position == -1) {
+//        if (position == -1) {
             DocsDetailHighlightModel model = new DocsDetailHighlightModel();
             String description = items.get(position).getDescription();
             SpannableString highlightString = new SpannableString(description);
@@ -58,15 +55,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                 int startIdx = 0;
                 int endIdx = 0;
 
-                float startPivot;
-                float endPivot;
-
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     Log.d(getClass().getName(), "S:" + startIdx + " | E:" + endIdx);
-
-                    startPivot = event.getX();
-                    endPivot = event.getY();
 
                     if(event.getAction() == MotionEvent.ACTION_UP) {
                         Log.d(getClass().getName(), "ACTION_UP | S:" + startIdx + " | E:" + endIdx);
@@ -90,16 +81,14 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
                     }
                     else if(event.getAction() == MotionEvent.ACTION_MOVE) {
-                        endIdx = holder.description.getOffsetForPosition(startPivot, endPivot);
+                        endIdx = holder.description.getOffsetForPosition(event.getX(), event.getY());
                         // Pivot 위치 계산
-//                        Toast.makeText(holder.itemView.getContext(), "선택됨 " + startIdx +" | " + endIdx , Toast.LENGTH_SHORT).show();
-
                         updateSelection(holder.description, startIdx, endIdx);
 
-
+//                        Toast.makeText(holder.itemView.getContext(), "선택됨 " + startIdx +" | " + endIdx , Toast.LENGTH_SHORT).show();
                     }
                     else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        startIdx = holder.description.getOffsetForPosition(startPivot, endPivot);
+                        startIdx = holder.description.getOffsetForPosition(event.getX(), event.getY());
                         endIdx = startIdx;
 
 
@@ -137,17 +126,13 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                         ds.setUnderlineText(false);
                     }
                 };
-
                 BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(holder.itemView.getResources().getColor(highlight.getHighlightColor()));
 
                 highlightString.setSpan(backgroundColorSpan, startIdx, endIdx, 0);
                 highlightString.setSpan(clickableSpan, startIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             holder.description.setText(highlightString);
-            holder.description.setMovementMethod(android.text.method.LinkMovementMethod.getInstance()); // SpannableString을 클릭 가능하게 만듦
-        } else {
-            holder.description.setText(items.get(position).getDescription());
-        }
+            holder.description.setMovementMethod(android.text.method.LinkMovementMethod.getInstance()); // SpannableString 클릭 되도록 함
 
         holder.title.setText(items.get(position).getTitle());
         holder.time.setText(items.get(position).getTime());
