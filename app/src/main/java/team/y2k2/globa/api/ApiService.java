@@ -16,6 +16,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import team.y2k2.globa.api.model.request.NicknameEditRequest;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
@@ -92,12 +93,12 @@ public interface ApiService {
     /**
      * 이름 수정
      */
-    @POST("/user/{user_id}/name")
-    void requestUpdateProfileName(
+    @PATCH("/user/{user_id}/name")
+    Call<Void> requestUpdateProfileName(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
-            @Body String name
+            @Body NicknameEditRequest request
     );
 
     /**

@@ -33,7 +33,7 @@ public class NicknameEditActivity extends AppCompatActivity {
         nicknameEditViewModel = new ViewModelProvider(this).get(NicknameEditViewModel.class);
         SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
         String authorization = "Bearer " + preferences.getString("accessToken", "");
-        String userId = loginRequest.getSnsId();
+        String userId = preferences.getString("userId","");
 
         String currentName = getIntent().getStringExtra("current_name");
         binding.edittextNicknameeditInputname.setText(currentName);
@@ -64,7 +64,7 @@ public class NicknameEditActivity extends AppCompatActivity {
         binding.textviewNicknameeditChange.setOnClickListener(v -> {
             if(isChanged) {
                 String newNickname = binding.edittextNicknameeditInputname.getText().toString();
-                nicknameEditViewModel.updateNickname(userId, authorization, newNickname);
+                nicknameEditViewModel.updateNickname(this,userId, authorization, newNickname);
                 onNicknameChanged(newNickname);
             }
         });

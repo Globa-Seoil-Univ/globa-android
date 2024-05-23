@@ -75,10 +75,9 @@
         android:background="@drawable/cancel"
         android:backgroundTint="@color/gray"
         app:layout_constraintTop_toTopOf="@+id/edittext_nicknameedit_inputname"
-        app:layout_constraintStart_toStartOf="@+id/edittext_nicknameedit_inputname"
         app:layout_constraintEnd_toEndOf="@+id/edittext_nicknameedit_inputname"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="320dp" />
+        android:layout_marginRight="12dp" />
 
     <TextView
         android:id="@+id/textview_nicknameedit_count"
@@ -90,7 +89,6 @@
         android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="@+id/edittext_nicknameedit_inputname"
         app:layout_constraintTop_toBottomOf="@+id/edittext_nicknameedit_inputname"
-        app:layout_constraintStart_toStartOf="@+id/edittext_nicknameedit_inputname"
-        android:layout_marginLeft="330dp" />
+        android:layout_marginRight="10dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
