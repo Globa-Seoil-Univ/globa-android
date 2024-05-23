@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
@@ -16,6 +17,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.DocsUploadRequest;
@@ -38,8 +40,8 @@ public interface ApiService {
 
 //    String API_BASE_URL = "http://1.209.165.82:8080";
 //    String API_BASE_URL = "https://1.209.165.82:8080";
-    String API_BASE_URL = "http://192.168.219.111:8080";
-//    String API_BASE_URL = "https://globa.tetraplace.com";
+//    String API_BASE_URL = "https://192.168.219.111:8080";
+    String API_BASE_URL = "https://globa.tetraplace.com";
     /**
      * 토큰 갱신
      */
@@ -92,7 +94,7 @@ public interface ApiService {
      * 이름 수정
      */
     @POST("/user/{user_id}/name")
-    void requestUpdateProfileName(
+    Call<Void> requestUpdateProfileName(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -105,7 +107,7 @@ public interface ApiService {
      * @content 추가 내용
      */
     @POST("/user")
-    void requestWithdrawUser(
+    Call<Void> requestWithdrawUser(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body int surveyType,
@@ -131,6 +133,17 @@ public interface ApiService {
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body RecordCreateRequest insertDocumentRequest
+    );
+
+    /**
+     * 문서 삭제
+     */
+    @DELETE("/folder/{folder_id}/record/{record_id}")
+    Call<Void> requestDeleteRecord(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
     );
 
     /**
@@ -204,12 +217,22 @@ public interface ApiService {
             @Body DocsMoveRequest docsMoveRequest
     );
 
+    /**
+     * 폴더 이름 수정
+     */
+    @PATCH("/folder/{folder_id}/name")
+    Call<Void> requestUpdateFolderName(
+            @Path("folder_id") String folderId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body String title
+    );
 
     /**
      * 폴더 삭제
      */
-    @GET("/folder/{folder_id}")
-    void requestDeleteFolder(
+    @DELETE("/folder/{folder_id}")
+    Call<Void> requestDeleteFolder(
             @Path("folder_id") String folderId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
@@ -219,7 +242,7 @@ public interface ApiService {
      * 공유된 사용자 가져오기
      */
     @GET("/folder/{folder_id}/share/user")
-    Objects requestFoloderShareUser(
+    Call<FolderPermissionResponse> requestFoloderShareUser(
             @Path("folder_id") String folderId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,

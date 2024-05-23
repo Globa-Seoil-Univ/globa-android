@@ -1,32 +1,21 @@
 package team.y2k2.globa.docs;
 
-import static okhttp3.internal.concurrent.TaskLoggerKt.formatDuration;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.MediaController;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -36,6 +25,7 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.more.DocsMoreActivity;
+import team.y2k2.globa.docs.more.DocsMoreViewModel;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
@@ -52,12 +42,15 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
     Boolean isMusicStarted;
 
+    private DocsMoreViewModel docsMoreViewModel;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
         docsModel = new DocsModel();
         docsSummaryModel = new DocsSummaryModel();
+        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
 
         Intent intent = getIntent();
 
@@ -219,6 +212,14 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         // 오디오 관련 코드 - 종료
         setContentView(binding.getRoot());
+
+        // 문서 삭제 시 액티비티 종료
+        docsMoreViewModel.closeActivities.observe(this, shouldClose -> {
+            if (shouldClose != null && shouldClose) {
+                finish();
+            }
+        });
+
     }
 
     private String formatDuration(int duration) {

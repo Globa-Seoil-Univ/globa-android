@@ -3,12 +3,15 @@ package team.y2k2.globa.main.folder.permission;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -18,8 +21,7 @@ import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerMod
 
 public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPermissionItemAdapter.AdapterViewHolder> {
     ArrayList<FolderPermissionItem> items;
-
-   FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
+    FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
 
     public FolderPermissionItemAdapter(ArrayList<FolderPermissionItem> items) {
         this.items = items;
@@ -27,38 +29,65 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
 
     @NonNull
     @Override
-    public FolderPermissionItemAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_folder_permission, parent, false);
-        return new FolderPermissionItemAdapter.AdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderPermissionItemAdapter.AdapterViewHolder holder, int position) {
-        holder.name.setText(items.get(position).getName());
-        holder.profileImage.setImageResource(items.get(position).getProfileImage());
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
+        FolderPermissionItem item = items.get(position);
+
+        Glide.with(holder.itemView.getContext())
+                .load(item.getProfileImageUrl())
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
+                .into(holder.profileImage);
+
+        holder.name.setText(item.getName());
+        holder.spinner.setSelection(item.getSelectedOption());
 
 
-        FolderPermissionSpinnerAdapter adapter = new FolderPermissionSpinnerAdapter(holder.itemView.getContext(), model.getOptions());
-        holder.spinner.setAdapter(adapter);
-        holder.spinner.setDropDownVerticalOffset(5);
-
+        /*
+        holder.bind(items.get(position));
+         */
     }
 
     @Override
     public int getItemCount() {
-        return (null != items ? items.size() : 0);
+        return (items != null ? items.size() : 0);
     }
 
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+    public class AdapterViewHolder extends RecyclerView.ViewHolder {
         Spinner spinner;
         TextView name;
         ImageView profileImage;
+        FolderPermissionSpinnerAdapter adapter;
+
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
-
             spinner = itemView.findViewById(R.id.spinner_folder_permission);
             name = itemView.findViewById(R.id.textview_folder_permission_name);
             profileImage = itemView.findViewById(R.id.imageview_folder_permission_profile_image);
+
+            adapter = new FolderPermissionSpinnerAdapter(itemView.getContext(), model.getOptions());
+            spinner.setAdapter(adapter);
+            spinner.setDropDownVerticalOffset(5);
+
+            // Spinner 선택 리스너 설정
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    // Spinner 선택했을 때
+                    items.get(getAdapterPosition()).setSelectedOption(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Do nothing
+                }
+            });
         }
+
     }
 }

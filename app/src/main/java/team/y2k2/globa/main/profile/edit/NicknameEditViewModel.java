@@ -1,12 +1,14 @@
 package team.y2k2.globa.main.profile.edit;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import javax.security.auth.callback.Callback;
-
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import team.y2k2.globa.api.ApiService;
 
 public class NicknameEditViewModel extends ViewModel {
@@ -23,14 +25,21 @@ public class NicknameEditViewModel extends ViewModel {
     }
 
     public void updateNickname(String userId, String authorization, String newNickname) {
-        try {
-            apiService.requestUpdateProfileName(userId, "application/json", authorization, newNickname);
-            Log.d(getClass().getName(), "닉네임 업데이트 성공");
-        } catch(Exception e) {
-            errorLiveData.setValue("서버 오류 발생");
-            Log.d(getClass().getName(), "서버 오류 발생: " + e.getMessage());
-        }
+        apiService.requestUpdateProfileName(userId, "application/json", authorization, newNickname).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                    Log.d(getClass().getName(), "이름 수정 성공");
+                } else {
+                    Log.d(getClass().getName(), "이름 수정 실패");
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                errorLiveData.setValue(t.getMessage());
+            }
+        });
     }
 
 

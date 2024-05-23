@@ -31,8 +31,10 @@ public class WithdrawActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         withdrawViewModel = new ViewModelProvider(this).get(WithdrawViewModel.class);
+        /*
         SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
         String authorization = "Bearer" + preferences.getString("accessToken", "");
+         */
 
 
         // 회원 탈퇴 버튼 클릭 동작
@@ -54,7 +56,7 @@ public class WithdrawActivity extends AppCompatActivity {
             content = binding.edittextWithdrawDetail.getText().toString();
 
             // 회원 탈퇴 작동 (탈퇴 사유 전송, 데이터 삭제 등)
-            withdrawViewModel.withdrawUser(authorization, surveyType, content);
+            withdrawViewModel.withdrawUser(surveyType, content);
         });
 
 

@@ -94,8 +94,8 @@ public class LoginViewModel extends ViewModel {
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
                         // 요청 실패
-                        Toast.makeText(context, "서비스 오류가 발생했습니다." + t.getMessage(), Toast.LENGTH_LONG).show();
-                        Log.d("LOGINFAILED", t.getMessage());
+                        Toast.makeText(context, "서비스 오류 발생" + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("LOGINFAILED", t.getMessage());
                     }
                 });
             } else {

@@ -2,11 +2,13 @@ package team.y2k2.globa.main.folder.permission;
 
 public class FolderPermissionItem {
     private final String name;
-    private final int profileImage;
+    private final String profileImageUrl;
+    private int selectedOption;
 
-    public FolderPermissionItem(String name, int profileImage) {
+    public FolderPermissionItem(String name, String profileImageUrl, int selectedOption) {
         this.name = name;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImageUrl;
+        this.selectedOption = selectedOption;
     }
 
 
@@ -14,7 +16,15 @@ public class FolderPermissionItem {
         return name;
     }
 
-    public int getProfileImage() {
-        return profileImage;
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public int getSelectedOption() {
+        return selectedOption;
+    }
+
+    public void setSelectedOption(int selectedOption) {
+        this.selectedOption = selectedOption;
     }
 }

@@ -8,10 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient extends Activity {
     public static ApiService apiService;
+    public static String authorization;
 
     public ApiClient() {
         SharedPreferences preferences = this.getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String authorization = "Bearer " + preferences.getString("accessToken", "");
+        authorization = "Bearer " + preferences.getString("accessToken", "");
     }
 
 
@@ -25,10 +26,5 @@ public class ApiClient extends Activity {
         }
         return apiService;
     }
-
-
-
-
-
 
 }

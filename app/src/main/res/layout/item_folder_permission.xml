@@ -55,4 +55,5 @@
             style="@style/FolderPermissionSpinnerStyle"
             android:gravity="right" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import team.y2k2.globa.api.ApiService;
 
 public class FolderNameEditViewModel extends ViewModel {
@@ -16,14 +19,23 @@ public class FolderNameEditViewModel extends ViewModel {
         apiService = ApiClient.getApiService();
     }
 
-    public void folderRename(String authorization, String title) {
-        try {
-//            apiService.requestUpdateFolderName("application/json", authorization, title);
-            Log.d(getClass().getName(), "회원 탈퇴 요청 성공");
-        } catch(Exception e) {
-            errorLiveData.setValue("요청 전송 오류 발생");
-            Log.d(getClass().getName(), "오류 발생 : " + e.getMessage());
-        }
+    public void folderRename(String folderId, String authorization, String title) {
+        apiService.requestUpdateFolderName(folderId, "application/json", authorization, title).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                    Log.d(getClass().getName(), "폴더 이름 수정 완료");
+                } else {
+                    Log.d(getClass().getName(), "폴더 이름 수정 실패");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                errorLiveData.setValue(t.getMessage());
+            }
+        });
     }
 
 }
