@@ -20,7 +20,6 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.ActivityDocsNameEditBinding;
 
 public class DocsNameEditActivity extends AppCompatActivity {
-
     ActivityDocsNameEditBinding binding;
 
     String title;

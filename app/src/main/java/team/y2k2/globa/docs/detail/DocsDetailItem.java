@@ -22,6 +22,4 @@ public class DocsDetailItem {
     public String getDescription() {
         return description;
     }
-
-
 }

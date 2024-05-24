@@ -1,7 +1,6 @@
 package team.y2k2.globa.main;
 
 
-
 import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 
 import android.app.Activity;
@@ -34,6 +33,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.NoticeResponse;
@@ -96,26 +96,20 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         changeButtonDisplay(binding.buttonMainDocsType1);
 
-
         binding.imagebuttonMainNotification.setOnClickListener(v -> {
             Intent intent = new Intent(this.getActivity(), NotificationActivity.class);
             startActivity(intent);
         });
 
-
         binding.swiperefreshlayoutMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 showRecords();
-
                 binding.swiperefreshlayoutMain.setRefreshing(false);
             }
         });
-
-
         showPromotions();
         showRecords();
-
 
         return binding.getRoot();
     }
@@ -183,51 +177,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showPromotions() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        ApiClient apiClient = new ApiClient(this.getContext());
+        List<NoticeResponse> noticeResponse = apiClient.requestPromotion(3);
 
-        ApiService apiService = retrofit.create(ApiService.class);
+        // 성공적으로 응답을 받았을 때 처리
+        ViewPager viewPager = binding.viewpagerMainCarousel;
 
+        String[] images = new String[noticeResponse.size()];
 
-        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String accessToken = "Bearer " + preferences.getString("accessToken", "");
+        for(int i = 0; i < noticeResponse.size(); i++) {
+            NoticeResponse index = noticeResponse.get(i);
+            images[i] = index.getThumbnail();
+        }
 
-        Call<List<NoticeResponse>> call = apiService.requestPromotion("application/json",accessToken, 3);
-        call.enqueue(new Callback<List<NoticeResponse>>() {
-            @Override
-            public void onResponse(Call<List<NoticeResponse>> call, Response<List<NoticeResponse>> response) {
-                if (response.isSuccessful()) {
-                    List<NoticeResponse> noticeResponse = response.body();
-                    // 성공적으로 응답을 받았을 때 처리
-                    ViewPager viewPager = binding.viewpagerMainCarousel;
-
-                    String[] images = new String[noticeResponse.size()];
-
-                    for(int i = 0; i < noticeResponse.size(); i++) {
-                        NoticeResponse index = noticeResponse.get(i);
-                        images[i] = index.getThumbnail();
-                    }
-
-                    NoticeFragmentAdapter noticeAdapter = new NoticeFragmentAdapter(getChildFragmentManager(), images);
-                    NoticeAutoScrollHandler autoScrollHandler = new NoticeAutoScrollHandler(viewPager);
-                    viewPager.setAdapter(noticeAdapter);
-                    autoScrollHandler.startAutoScroll();
-                } else {
-                    // 서버로부터 실패 응답을 받았을 때 처리
-                    Log.d("IMAGETEST", "오류");
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<NoticeResponse>> call, Throwable t) {
-                // 네트워크 요청 실패 시 처리
-                Log.d("IMAGETEST", "오류" + t.getMessage());
-
-            }
-        });
+        NoticeFragmentAdapter noticeAdapter = new NoticeFragmentAdapter(getChildFragmentManager(), images);
+        NoticeAutoScrollHandler autoScrollHandler = new NoticeAutoScrollHandler(viewPager);
+        viewPager.setAdapter(noticeAdapter);
+        autoScrollHandler.startAutoScroll();
     }
 
     private int calculateNoOfColumns(Context context) {

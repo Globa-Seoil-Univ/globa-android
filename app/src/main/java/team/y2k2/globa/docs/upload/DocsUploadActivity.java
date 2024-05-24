@@ -44,7 +44,9 @@ public class DocsUploadActivity extends AppCompatActivity {
     String recordPath;
     String userId;
     String folderId;
-    Instant unixTime;
+//    Instant unixTime;
+
+    String unixTime;
 
     String firebasePath;
 
@@ -183,7 +185,9 @@ public class DocsUploadActivity extends AppCompatActivity {
     }
 
     private void uploadRecordFile(String path, String userId, String folderId, String extension) {
-        unixTime = Instant.now();
+//        unixTime = Instant.now();
+
+        unixTime = "testB";
 
         String oggPath = path.split("\\.")[0] + ".ogg";
         convertMp3ToOgg(path,oggPath);
