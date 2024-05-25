@@ -90,6 +90,8 @@ public class LoginActivity extends AppCompatActivity {
         final int SIGN_IN_TYPE = v.getId();
 
         if(SIGN_IN_TYPE == GOOGLE) {
+            Log.d(getClass().getName(), "버튼 클릭");
+
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, 1004);
         }
@@ -124,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(getClass().getName(), "Result 시작");
         super.onActivityResult(requestCode, resultCode, data);
 
 //        if(resultCode == RESULT_CANCELED) {
@@ -138,10 +141,13 @@ public class LoginActivity extends AppCompatActivity {
                 signInGoogle(data);
                 break;
         }
+        Log.d(getClass().getName(), "Result 종료");
+
     }
 
 
     private void signInGoogle(Intent data) {
+        Log.d(getClass().getName(), "로그인 시작");
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -149,7 +155,9 @@ public class LoginActivity extends AppCompatActivity {
         } catch (ApiException e) {
             // 로그인 실패
             Toast.makeText(getApplicationContext(), "로그인 실패 :" + e.getMessage() , Toast.LENGTH_SHORT).show();
+            Log.d(getClass().getName(), "로그인 실패 : " + e.getMessage());
         }
+        Log.d(getClass().getName(), "로그인 종료");
     }
 
     private void firebaseAuth(GoogleSignInAccount acct) {
