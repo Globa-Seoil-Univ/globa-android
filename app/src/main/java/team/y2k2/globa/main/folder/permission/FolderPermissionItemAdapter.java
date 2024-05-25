@@ -22,6 +22,7 @@ import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerMod
 public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPermissionItemAdapter.AdapterViewHolder> {
     ArrayList<FolderPermissionItem> items;
     FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
+    private ItemLongClickListener longClickListener;
 
     public FolderPermissionItemAdapter(ArrayList<FolderPermissionItem> items) {
         this.items = items;
@@ -47,15 +48,22 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
         holder.name.setText(item.getName());
         holder.spinner.setSelection(item.getSelectedOption());
 
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longClickListener != null) {
+                longClickListener.onItemLongClick(position);
+            }
+            return true;
+        });
 
-        /*
-        holder.bind(items.get(position));
-         */
     }
 
     @Override
     public int getItemCount() {
         return (items != null ? items.size() : 0);
+    }
+
+    public FolderPermissionItem getItem(int position) {
+        return items.get(position);
     }
 
     public class AdapterViewHolder extends RecyclerView.ViewHolder {
@@ -87,6 +95,10 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
                     // Do nothing
                 }
             });
+
+        }
+        public String getPermission() {
+            return spinner.getSelectedItem().toString();
         }
 
     }
