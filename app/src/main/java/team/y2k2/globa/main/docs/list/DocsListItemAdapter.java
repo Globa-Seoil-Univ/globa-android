@@ -64,55 +64,13 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         TextView cancel = bottomSheetDialog.findViewById(R.id.textview_delete_docs_cancel);
 
         holder.layout.setOnClickListener(v -> {
-            // 여기에 문서 상세로 이동
+            Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
 
-            // 임시로 MP3 파일 경로 여기서 던져줌
+            intent.putExtra("title", items.get(position).getTitle());
+            intent.putExtra("folderId", items.get(position).getFolderId());
+            intent.putExtra("recordId", items.get(position).getRecordId());
 
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            // 저장소 참조
-            StorageReference storageRef = storage.getReference();
-
-//            // 저장된 음악 파일 경로
-            String filePath = "users/9/folders/5/record/2024-05-15T16:54:26.559331Z.ogg";
-
-            // 해당 파일의 참조
-            StorageReference audioRef = storageRef.child(filePath);
-
-            // Firebase Storage에서 MP3 파일 다운로드 및 준비
-            // 다운로드 URL 가져오기
-            audioRef.getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            // 다운로드 URL을 성공적으로 가져왔을 때의 처리
-                            String audioUrl = uri.toString();
-                            // 이제 downloadUrl을 사용하여 음악 파일을 재생하거나 처리할 수 있습니다.
-                            Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
-
-                            intent.putExtra("title", items.get(position).getTitle());
-                            intent.putExtra("audioUrl", audioUrl);
-                            intent.putExtra("folderId", items.get(position).getFolderId());
-                            intent.putExtra("recordId", items.get(position).getRecordId());
-
-                            Log.d("title", items.get(position).getTitle());
-                            Log.d("audioUrl", audioUrl);
-                            Log.d("folderId", items.get(position).getFolderId());
-                            Log.d("recordId", items.get(position).getRecordId());
-
-                            holder.itemView.getContext().startActivity(intent);
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // 다운로드 URL을 가져오는 데 실패했을 때의 처리
-                            Log.e("FirebaseStorage", "다운로드 URL 가져오기 실패", exception);
-                        }
-                    });
-
-
-
+            holder.itemView.getContext().startActivity(intent);
         });
 
         // 버튼 클릭 리스너를 별도의 메서드로 분리

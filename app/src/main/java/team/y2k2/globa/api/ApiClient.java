@@ -99,17 +99,17 @@ public class ApiClient {
                 try {
                     response = call.execute();
 
-//                    switch (response.code()) {
-//                        case 40110: {
-//                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
-//                        }
-//                        case 40120: {
-//                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
-//                        }
-//                        case 500: {
-//                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
-//                        }
-//                    }
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                    }
                 } catch (IOException e) {
                     response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
                     e.printStackTrace();

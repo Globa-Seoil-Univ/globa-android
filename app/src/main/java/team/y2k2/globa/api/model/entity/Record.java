@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import team.y2k2.globa.api.model.Keyword;
+
 public class Record {
     @SerializedName("recordId")
     private String recordId;
@@ -15,7 +17,7 @@ public class Record {
     private String title;
 
     @SerializedName("keywords")
-    private List<String> keywords;
+    private List<Keyword> keywords;
 
     @SerializedName("createdTime")
     private String createdTime;
@@ -27,7 +29,7 @@ public class Record {
         return title;
     }
 
-    public List<String> getKeywords() {
+    public List<Keyword> getKeywords() {
         return keywords;
     }
 

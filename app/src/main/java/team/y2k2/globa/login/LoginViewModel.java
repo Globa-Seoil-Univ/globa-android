@@ -67,6 +67,10 @@ public class LoginViewModel extends ViewModel {
                 String name = user.getDisplayName();
                 String profile = user.getPhotoUrl().toString();
 
+                Log.d(getClass().getName(), uid);
+                Log.d(getClass().getName(), name);
+                Log.d(getClass().getName(), profile);
+
                 LoginRequest loginRequest = new LoginRequest(RC_GOOGLE, uid, name, profile, true);
 
                 // Retrofit 인스턴스 생성

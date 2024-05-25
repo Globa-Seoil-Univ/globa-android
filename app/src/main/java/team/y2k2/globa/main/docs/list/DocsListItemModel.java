@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.model.Keyword;
 
 public class DocsListItemModel {
     private final ArrayList<DocsListItem> items;
@@ -23,7 +24,7 @@ public class DocsListItemModel {
     }
 
 
-    public void addItem(String recordId, String folderId, String title, String datetime, List<String> keywords) {
+    public void addItem(String recordId, String folderId, String title, String datetime, List<Keyword> keywords) {
         Log.d(getClass().getName(), recordId + " | " + folderId + " | " + title + " | " + datetime + " | ");
         DocsListItem item = new DocsListItem(recordId, folderId, title, datetime);
         item.setKeywordList(keywords);

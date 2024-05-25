@@ -20,8 +20,9 @@ public class DocsModel {
             String title = section.getTitle();
             int time = section.getStartTime();
             section.getSummary();
+            String content = section.getAnalysis().getContent();
 
-            items.add(new DocsDetailItem(title, String.valueOf(time), "값이 필요합니다."));
+            items.add(new DocsDetailItem(title, String.valueOf(time), content));
         }
 
 //        items.add(new DocsDetailItem("기후변화협약 이행", "00:01", "유엔기후변화회의(UNFCCC,  UN  Framework  Con-vention  on  Climate  Change  2015)에서 체결된 파리협정은 지구의 평균기온 상승을 산업화 이전 대비  2 oC보다  상당히  낮은  수준(well  below  2oC)으로  유지하고,  기온 상승을  1.5 oC로 제한하도록 노력할 것을 규정하고  있으며,  기후변화협약의  이행을  증진함에  있어 기후변화의 위협에 대한 범지구적 대응 강화를 목표로 선언하고 있다. 이와 관련하여 최근 기후변화에관한 정부간 협의체(IPCC)는  ‘지구온난화  1.5 oC 특별보고서’를 공개하였다."));

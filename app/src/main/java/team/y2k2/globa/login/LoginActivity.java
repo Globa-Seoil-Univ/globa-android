@@ -151,7 +151,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
     private void signInGoogle(Intent data) {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {

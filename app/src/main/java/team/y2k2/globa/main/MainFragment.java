@@ -35,6 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
@@ -116,64 +117,33 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
 
     public void showRecords() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        ApiClient apiClient = new ApiClient(this.getContext());
+        RecordResponse recordResponse = apiClient.requestGetRecords(20);
 
-        ApiService apiService = retrofit.create(ApiService.class);
+        docsListItemModel = new DocsListItemModel();
 
+        List<Record> records = recordResponse.getRecords();
 
-        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String accessToken = "Bearer " + preferences.getString("accessToken", "");
+        for(int i = 0; i < records.size(); i++) {
+            Record record = records.get(i);
 
-        Call<RecordResponse> call = apiService.requestGetRecords("application/json",accessToken, 5);
-        call.enqueue(new Callback<RecordResponse>() {
-            @Override
-            public void onResponse(Call<RecordResponse> call, Response<RecordResponse> response) {
-                if (response.isSuccessful()) {
-                    RecordResponse recordResponse = response.body();
-                    // 성공적으로 응답을 받았을 때 처리
+            String recordId = record.getRecordId();
+            String folderId = record.getFolderId();
+            String title = record.getTitle();
+            String datetime = record.getCreatedTime();
+            List<Keyword> keywords = record.getKeywords();
 
-                    docsListItemModel = new DocsListItemModel();
+            docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
+        }
 
-                    List<Record> records = recordResponse.getRecords();
+        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
+        adapter.notifyDataSetChanged();
 
-                    for(int i = 0; i < records.size(); i++) {
-                        Record record = response.body().getRecords().get(i);
+        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
 
-                        String recordId = record.getRecordId();
-                        String folderId = record.getFolderId();
-                        String title = record.getTitle();
-                        String datetime = record.getCreatedTime();
-                        List<String> keywords = record.getKeywords();
-
-                        docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
-                    }
-
-                    DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
-                    adapter.notifyDataSetChanged();
-
-                    int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
-                    GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
-
-                    binding.recyclerviewMainDocument.setAdapter(adapter);
-                    binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
-                } else {
-                    // 서버로부터 실패 응답을 받았을 때 처리
-                    Log.d("RecordTest", "오류");
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RecordResponse> call, Throwable t) {
-                // 네트워크 요청 실패 시 처리
-                Log.d("RecordTest", "오류" + t.getMessage());
-
-            }
-        });
-
+        binding.recyclerviewMainDocument.setAdapter(adapter);
+        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
     }
 
     private void showPromotions() {
@@ -199,7 +169,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private int calculateNoOfColumns(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-
+    
         if (dpWidth >= 600) { // 화면 사이즈가 600dp 이상이면
             return 2; // 테블릿의 경우 2 컬럼
         } else {

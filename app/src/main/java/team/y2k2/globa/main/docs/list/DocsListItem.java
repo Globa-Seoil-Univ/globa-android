@@ -2,10 +2,12 @@ package team.y2k2.globa.main.docs.list;
 
 import java.util.List;
 
+import team.y2k2.globa.api.model.Keyword;
+
 public class DocsListItem {
     private final String title;
     private final String datetime;
-    private List<String> keywords;
+    private List<Keyword> keywords;
     private String recordId;
     private String folderId;
 
@@ -20,7 +22,7 @@ public class DocsListItem {
         this.folderId = folderId;
     }
 
-    public void setKeywordList(List<String> keywords) {
+    public void setKeywordList(List<Keyword> keywords) {
         this.keywords = keywords;
     }
 
@@ -50,7 +52,7 @@ public class DocsListItem {
         return folderId;
     }
 
-    public List<String> getKeywords() {
+    public List<Keyword> getKeywords() {
         return keywords;
     }
 

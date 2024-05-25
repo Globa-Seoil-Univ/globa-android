@@ -42,20 +42,37 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
 
+
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:id="@+id/linearlayout_main_document_keyword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/textview_item_document_docs_time"
         app:layout_constraintStart_toStartOf="parent"
-        android:weightSum="2">
+        app:layout_constraintBottom_toBottomOf="@id/linearlayout_main_document_profile"
+        app:layout_constraintEnd_toStartOf="@id/linearlayout_main_document_profile"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_document_keyword"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/textview_item_document_docs_time"
             tools:layout_height="30dp"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout_main_document_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintTop_toBottomOf="@id/textview_item_document_docs_time"
+        app:layout_constraintBottom_toBottomOf="@id/linearlayout_main_document_keyword"
+        app:layout_constraintStart_toEndOf="@id/linearlayout_main_document_keyword"
+        app:layout_constraintEnd_toEndOf="parent">
         <LinearLayout
             android:id="@+id/linearlayout_document_users"
             android:layout_width="0dp"
@@ -105,7 +122,9 @@
                     android:src="@drawable/profile_image_4"/>
             </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
