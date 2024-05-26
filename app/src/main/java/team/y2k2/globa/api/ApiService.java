@@ -20,6 +20,7 @@ import retrofit2.http.Query;
 import team.y2k2.globa.api.model.request.NicknameEditRequest;
 import team.y2k2.globa.api.model.request.NotificationRequest;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
+import team.y2k2.globa.api.model.response.InquiryDetailResponse;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
@@ -353,6 +354,13 @@ public interface ApiService {
             @Query("page") int page,
             @Query("count") int count,
             @Query("sort") String sort
+    );
+
+    @GET("/inquiry/{inquiry_id}")
+    Call<InquiryDetailResponse> requestGetInquiryDetail(
+            @Path("inquiry_id") String inquiryId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
     );
 
 

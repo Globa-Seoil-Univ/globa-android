@@ -13,9 +13,17 @@ public class InquiryItem {
     @SerializedName("solved")
     private boolean solved;
 
-    public InquiryItem(String title, String content, boolean solved) {
+    @SerializedName("inquiryId")
+    private String inquiryId;
+
+    @SerializedName("createdTime")
+    private String createdTime;
+
+    public InquiryItem(String inquiryId, String title, String content, String createdTime,boolean solved) {
+        this.inquiryId = inquiryId;
         this.title = title;
         this.content = content;
+        this.createdTime = createdTime;
         this.solved = solved;
     }
 
@@ -30,5 +38,13 @@ public class InquiryItem {
 
     public boolean isSolved() {
         return solved;
+    }
+
+    public String getInquiryId() {
+        return inquiryId;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
     }
 }

@@ -2,10 +2,10 @@ package team.y2k2.globa.api.model.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-public class NotificationInquiry {
+public class Answer {
 
-    @SerializedName("inquiryId")
-    private String inquiryId;
+    @SerializedName("answer")
+    private String answer;
 
     @SerializedName("title")
     private String title;
@@ -13,11 +13,9 @@ public class NotificationInquiry {
     @SerializedName("content")
     private String content;
 
-    @SerializedName("solved")
-    private boolean solved;
-
     @SerializedName("createdTime")
     private String createdTime;
+
 
     public String getContent() {
         return content;
@@ -27,16 +25,11 @@ public class NotificationInquiry {
         return title;
     }
 
-    public String getInquiryId() {
-        return inquiryId;
-    }
-
-    public boolean isSolved() {
-        return solved;
-    }
-
-
     public String getCreatedTime() {
         return createdTime;
+    }
+
+    public String getAnswer() {
+        return answer;
     }
 }

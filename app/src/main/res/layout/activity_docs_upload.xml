@@ -37,7 +37,6 @@
             android:layout_toEndOf="@id/imagebutton_docs_upload_back"
             android:layout_centerVertical="true"
             tools:text="세부정보 추가" />
-
     </RelativeLayout>
 
     <LinearLayout

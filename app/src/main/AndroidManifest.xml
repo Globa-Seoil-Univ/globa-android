@@ -90,6 +90,8 @@
         <activity android:name=".main.folder.move.FolderMoveActivity"
             android:exported="true" />
 
+        <activity android:name=".notification.inquiry.InquiryDetailActivity"/>
+
         <activity android:name=".notification.NotificationActivity"/>
         <activity android:name=".docs.edit.DocsNameEditActivity"/>
     </application>

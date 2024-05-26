@@ -328,6 +328,12 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     }
 
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+    }
+
     public static String formatDuration(int durationMillis) {
         int minutes = (durationMillis / 1000) / 60;
         int seconds = (durationMillis / 1000) % 60;
@@ -394,8 +400,12 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mediaPlayer.release();
-        handler.removeCallbacksAndMessages(null);
+
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+         handler.removeCallbacksAndMessages(null);
     }
 
 }
