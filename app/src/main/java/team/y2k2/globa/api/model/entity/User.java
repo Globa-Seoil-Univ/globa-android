@@ -17,4 +17,16 @@ public class User {
 
     @SerializedName("name")
     private String name;
+
+    @SerializedName("profile")
+    private String profile;
+
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

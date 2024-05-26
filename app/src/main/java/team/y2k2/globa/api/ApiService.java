@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
@@ -17,7 +18,9 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.api.model.request.NicknameEditRequest;
+import team.y2k2.globa.api.model.request.NotificationRequest;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
+import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.DocsUploadRequest;
@@ -271,7 +274,7 @@ public interface ApiService {
      * 공유 초대 수락
      */
     @POST("/folder/{folder_id}/share/{share_id}")
-    void requestAcceptShareInvite(
+    Call<Void> requestAcceptShareInvite(
             @Path("folder_id") String folderId,
             @Path("share_id") String shareId,
             @Header("Content-Type") String contentType,
@@ -281,13 +284,13 @@ public interface ApiService {
     /**
      * 공유 초대 거절
      */
-    @POST("/folder/{folder_id}/share/{share_id}")
-    void requestDeniedShareInvite(
+    @DELETE("/folder/{folder_id}/share/{share_id}")
+    Call<Void> requestDeniedShareInvite(
             @Path("folder_id") String folderId,
             @Path("share_id") String shareid,
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//            @Body notificationId
+            @Header("Authorization") String authorization,
+            @Body NotificationRequest notificationRequest
     );
 
     /**
@@ -350,6 +353,13 @@ public interface ApiService {
             @Query("page") int page,
             @Query("count") int count,
             @Query("sort") String sort
+    );
+
+
+    @GET("/notification")
+    Call<NotificationResponse> requestGetAllNotification(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
     );
 
 

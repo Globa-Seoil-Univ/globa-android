@@ -2,7 +2,7 @@ package team.y2k2.globa.notification.inquiry;
 
 import com.google.gson.annotations.SerializedName;
 
-public class NotificationInquiryItem {
+public class InquiryItem {
 
     @SerializedName("title")
     private String title;
@@ -13,7 +13,7 @@ public class NotificationInquiryItem {
     @SerializedName("solved")
     private boolean solved;
 
-    public NotificationInquiryItem(String title, String content, boolean solved) {
+    public InquiryItem(String title, String content, boolean solved) {
         this.title = title;
         this.content = content;
         this.solved = solved;

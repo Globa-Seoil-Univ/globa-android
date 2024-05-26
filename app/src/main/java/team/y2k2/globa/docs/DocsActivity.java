@@ -58,6 +58,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     public ActivityDocsBinding binding;
     DocsModel docsModel;
     DocsSummaryModel docsSummaryModel;
+    String title;
     String folderId;
     String recordId;
 
@@ -80,10 +81,11 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         Intent intent = getIntent();
 
-        binding.textviewDocsTitle.setText(intent.getStringExtra("title").toString());
+        title = intent.getStringExtra("title").toString();
         folderId = intent.getStringExtra("folderId").toString();
         recordId = intent.getStringExtra("recordId").toString();
 
+        binding.textviewDocsTitle.setText(title);
 
         getResponse();
 
@@ -95,6 +97,9 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         binding.imageviewDocsMore.setOnClickListener(v -> {
             Intent intent1 = new Intent(this, DocsMoreActivity.class);
+            intent1.putExtra("title", title);
+            intent1.putExtra("folderId", folderId);
+            intent1.putExtra("recordId", recordId);
             startActivity(intent1);
         });
 

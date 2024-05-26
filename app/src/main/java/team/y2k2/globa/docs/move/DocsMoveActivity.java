@@ -61,11 +61,14 @@ public class DocsMoveActivity extends AppCompatActivity {
 
         loadFolder();
 
+        binding.imagebuttonDocsMoveBack.setOnClickListener(v -> {
+            finish();
+        });
+
         binding.linearlayoutDocsMoveConfirm.setOnClickListener(v -> {
             moveDocs();
             finish();
         });
-
         setContentView(binding.getRoot());
     }
 
