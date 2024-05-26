@@ -6,11 +6,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.media.AudioAttributes;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.MediaController;
@@ -27,8 +26,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.util.Util;
 
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,22 +61,21 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     Timer timer;
 
     String audioUrl;
-    private MediaPlayer mediaPlayer;
-    private Handler handler = new Handler();
+    private SimpleExoPlayer player;
 
     DocsDetailAdapter detailAdapter;
     DocsSummaryAdapter summaryAdapter;
     Boolean isMusicStarted;
 
-    private DocsMoreViewModel docsMoreViewModel;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable updateSeekbarRunnable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
 
-        mediaPlayer = new MediaPlayer();
-        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
+        player = new SimpleExoPlayer.Builder(this).build();
 
         Intent intent = getIntent();
 
@@ -86,7 +88,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         getResponse();
 
         binding.imagebuttonDocsBack.setOnClickListener(v -> {
-            mediaPlayer.stop();
+            player.stop();
             timer.cancel();
             finish();
         });
@@ -108,53 +110,29 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         });
 
         setContentView(binding.getRoot());
-
-        // 문서 삭제 시 액티비티 종료
-        docsMoreViewModel.closeActivities.observe(this, shouldClose -> {
-            if (shouldClose != null && shouldClose) {
-                finish();
-            }
-        });
-
     }
 
-
     public void loadAudio() {
-        // 임시로 MP3 파일 경로 여기서 던져줌
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        // 저장소 참조
         StorageReference storageRef = storage.getReference();
-
-        // 해당 파일의 참조
         StorageReference audioRef = storageRef.child(audioUrl);
 
-        // Firebase Storage에서 MP3 파일 다운로드 및 준비
-        // 다운로드 URL 가져오기
         audioRef.getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        // 다운로드 URL을 성공적으로 가져왔을 때의 처리
                         String audioUrl = uri.toString();
-                        // 이제 downloadUrl을 사용하여 음악 파일을 재생하거나 처리할 수 있습니다.
 
-                        // 오디오 관련 코드 - 시작
-                        mediaPlayer.setAudioAttributes(new AudioAttributes
-                                .Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .build());
+                        player.setMediaItem(MediaItem.fromUri(audioUrl));
+                        player.prepare();
 
-                        try {
-                            mediaPlayer.setDataSource(DocsActivity.this, Uri.parse(audioUrl));
-                            mediaPlayer.prepareAsync();
-                            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                @Override
-                                public void onPrepared(MediaPlayer mp) {
-                                    // MediaPlayer가 준비되면 재생 시작
-                                    Log.d(getClass().getName(), mp.getDuration() + "sec");
-                                    binding.seekbarAudioProgress.setMax(mp.getDuration());
-                                    binding.textviewDocumentAudioEndTime.setText(formatDuration(mp.getDuration()));
+                        player.addListener(new Player.Listener() {
+                            @Override
+                            public void onPlaybackStateChanged(int playbackState) {
+                                if (playbackState == Player.STATE_READY) {
+                                    Log.d(getClass().getName(), player.getDuration() + " sec");
+                                    binding.seekbarAudioProgress.setMax((int) player.getDuration());
+                                    binding.textviewDocumentAudioEndTime.setText(formatDuration((int) player.getDuration()));
                                     binding.textviewDocumentAudioNowTime.setText(formatDuration(0));
 
                                     binding.lottieAudioDownload.setVisibility(View.INVISIBLE);
@@ -163,104 +141,88 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
                                     binding.imageviewDocumentReplay.setVisibility(View.VISIBLE);
                                     binding.imageviewDocumentForward.setVisibility(View.VISIBLE);
                                 }
-                            });
-                        } catch (IOException e) {
-                            // 파일 재생 실패 시 예외 처리
-                            e.printStackTrace();
-                            Toast.makeText(DocsActivity.this, "음악 재생 실패", Toast.LENGTH_SHORT).show();
-                        }
-
-                        isMusicStarted = false;
-
-
-                        binding.imagebuttonDocumentAudioPlay.setOnClickListener(v -> {
-                            if(! isMusicStarted) {
-                                isMusicStarted = true;
-                                binding.imagebuttonDocumentAudioPlay.setImageResource(R.drawable.docs_pause);
-                                mediaPlayer.start();
-
-                                // 타이머 설정: 1초마다 현재 재생 시간 업데이트
-                                timer = new Timer();
-
-                                timer.scheduleAtFixedRate(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                                            int currentPosition = mediaPlayer.getCurrentPosition(); // 현재 재생 위치 가져오기
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    binding.textviewDocumentAudioNowTime.setText(formatDuration(currentPosition));
-                                                    binding.seekbarAudioProgress.setProgress(currentPosition);
-                                                }
-                                            });
-                                        }
-                                    }
-                                }, 0, 1000); // 1초마다 실행
-                            } else {
-                                isMusicStarted = false;
-                                mediaPlayer.pause();
-                                binding.imagebuttonDocumentAudioPlay.setImageResource(R.drawable.docs_play);
-                                timer.cancel();
                             }
                         });
 
-                        binding.imageviewDocumentForward.setOnClickListener(v ->{
-                            int currentPosition = mediaPlayer.getCurrentPosition();
+                        isMusicStarted = false;
+
+                        binding.imagebuttonDocumentAudioPlay.setOnClickListener(v -> {
+                            if (!isMusicStarted) {
+                                isMusicStarted = true;
+                                binding.imagebuttonDocumentAudioPlay.setImageResource(R.drawable.docs_pause);
+                                player.play();
+                                startUpdatingSeekBar();
+
+                            } else {
+                                isMusicStarted = false;
+                                player.pause();
+                                binding.imagebuttonDocumentAudioPlay.setImageResource(R.drawable.docs_play);
+                                stopUpdatingSeekBar();
+                            }
+                        });
+
+                        binding.imageviewDocumentForward.setOnClickListener(v -> {
+                            int currentPosition = (int) player.getCurrentPosition();
                             int forwardPosition = currentPosition + 5000;
 
-                            if(mediaPlayer.getDuration() <= forwardPosition) {
-                                forwardPosition = mediaPlayer.getDuration();
+                            if (player.getDuration() <= forwardPosition) {
+                                forwardPosition = (int) player.getDuration();
                             }
 
                             binding.seekbarAudioProgress.setProgress(forwardPosition);
                             binding.textviewDocumentAudioNowTime.setText(formatDuration(forwardPosition));
-                            mediaPlayer.seekTo(forwardPosition);
+                            player.seekTo(forwardPosition);
                         });
 
-                        binding.imageviewDocumentReplay.setOnClickListener(v ->{
-                            int currentPosition = mediaPlayer.getCurrentPosition();
+                        binding.imageviewDocumentReplay.setOnClickListener(v -> {
+                            int currentPosition = (int) player.getCurrentPosition();
                             int replayPosition = currentPosition - 5000;
 
-                            if(replayPosition < 0) {
+                            if (replayPosition < 0) {
                                 replayPosition = 0;
                             }
 
                             binding.seekbarAudioProgress.setProgress(replayPosition);
                             binding.textviewDocumentAudioNowTime.setText(formatDuration(replayPosition));
-                            mediaPlayer.seekTo(replayPosition);
+                            player.seekTo(replayPosition);
                         });
-
 
                         binding.seekbarAudioProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                             @Override
                             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                binding.textviewDocumentAudioNowTime.setText(formatDuration(progress));
+                                if (fromUser) {
+                                    binding.textviewDocumentAudioNowTime.setText(formatDuration(progress));
+                                    player.seekTo(progress);
+                                }
                             }
 
                             @Override
-                            public void onStartTrackingTouch(SeekBar seekBar) {
-                                int progress = seekBar.getProgress();
-                                binding.textviewDocumentAudioNowTime.setText(formatDuration(progress));
-                            }
+                            public void onStartTrackingTouch(SeekBar seekBar) {}
 
                             @Override
-                            public void onStopTrackingTouch(SeekBar seekBar) {
-                                int progress = seekBar.getProgress();
-                                binding.textviewDocumentAudioNowTime.setText(formatDuration(progress));
-                                mediaPlayer.seekTo(progress);
-                            }
+                            public void onStopTrackingTouch(SeekBar seekBar) {}
                         });
-                        // 오디오 관련 코드 - 종료
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        // 다운로드 URL을 가져오는 데 실패했을 때의 처리
                         Log.e("FirebaseStorage", "다운로드 URL 가져오기 실패", exception);
                     }
                 });
+    }
+
+    public void setDuration(int second) {
+
+        int position = second * 1000;
+
+        if (player.getDuration() <= position) {
+            position = (int) player.getDuration();
+        }
+
+        binding.seekbarAudioProgress.setProgress(position);
+        binding.textviewDocumentAudioNowTime.setText(formatDuration(position));
+        player.seekTo(position);
     }
 
     public void showSummary() {
@@ -297,16 +259,15 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
         String authorization = "Bearer " + preferences.getString("accessToken", "");
 
-        Call<DocsDetailResponse> call = apiService.requestGetDocumentDetail(folderId, recordId, "application/json",authorization);
+        Call<DocsDetailResponse> call = apiService.requestGetDocumentDetail(folderId, recordId, "application/json", authorization);
         call.enqueue(new Callback<DocsDetailResponse>() {
             @Override
             public void onResponse(Call<DocsDetailResponse> call, Response<DocsDetailResponse> response) {
                 if (response.isSuccessful()) {
                     DocsDetailResponse docsDetailResponse = response.body();
-                    // 성공적으로 응답을 받았을 때 처리
 
                     docsModel = new DocsModel(docsDetailResponse.getSections());
-                    detailAdapter = new DocsDetailAdapter(docsModel.getItems(),DocsActivity.this);
+                    detailAdapter = new DocsDetailAdapter(docsModel.getItems(), DocsActivity.this);
 
                     binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
                     binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
@@ -317,74 +278,64 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
                     audioUrl = docsDetailResponse.getPath();
 
                     loadAudio();
-
                 } else {
-                    // 서버로부터 실패 응답을 받았을 때 처리
                     Log.d(getClass().getName(), "실패 : " + response.code());
                 }
             }
+
             @Override
             public void onFailure(Call<DocsDetailResponse> call, Throwable t) {
-                // 네트워크 요청 실패 시 처리
                 Log.d(getClass().getName(), "실패 : " + t.getMessage());
             }
         });
     }
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mediaPlayer.pause();
-    }
-
     public static String formatDuration(int durationMillis) {
         int hours = (durationMillis / 1000) / 3600;
-        durationMillis %= 1000*3600;
+        durationMillis %= 1000 * 3600;
 
         int minutes = (durationMillis / 1000) / 60;
         int seconds = (durationMillis / 1000) % 60;
 
-        if(hours > 0)
+        if (hours > 0)
             return String.format("%2d:%02d:%02d", hours, minutes, seconds);
         else
             return String.format("%02d:%02d", minutes, seconds);
     }
 
-    // MediaController.MediaPlayerControl 인터페이스 구현
     @Override
     public void start() {
-        mediaPlayer.start();
+        player.play();
     }
 
     @Override
     public void pause() {
-        mediaPlayer.pause();
+        player.pause();
     }
 
     @Override
     public int getDuration() {
-        return mediaPlayer.getDuration();
+        return (int) player.getDuration();
     }
 
     @Override
     public int getCurrentPosition() {
-        return mediaPlayer.getCurrentPosition();
+        return (int) player.getCurrentPosition();
     }
 
     @Override
     public void seekTo(int pos) {
-        mediaPlayer.seekTo(pos);
+        player.seekTo(pos);
     }
 
     @Override
     public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
+        return player.isPlaying();
     }
 
     @Override
     public int getBufferPercentage() {
-        return 0;
+        return player.getBufferedPercentage();
     }
 
     @Override
@@ -404,18 +355,55 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
     @Override
     public int getAudioSessionId() {
-        return mediaPlayer.getAudioSessionId();
+        return player.getAudioSessionId();
+    }
+
+    private void startUpdatingSeekBar() {
+        updateSeekbarRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (player != null && player.isPlaying()) {
+                    int currentPosition = (int) player.getCurrentPosition();
+                    binding.textviewDocumentAudioNowTime.setText(formatDuration(currentPosition));
+                    binding.seekbarAudioProgress.setProgress(currentPosition);
+                }
+                handler.postDelayed(this, 1000); // 1초마다 업데이트
+            }
+        };
+        handler.post(updateSeekbarRunnable);
+    }
+
+    private void stopUpdatingSeekBar() {
+        handler.removeCallbacks(updateSeekbarRunnable);
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopUpdatingSeekBar();
+        if (Util.SDK_INT <= 23) {
+            player.pause();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopUpdatingSeekBar();
+        if (Util.SDK_INT > 23) {
+            player.pause();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-         handler.removeCallbacksAndMessages(null);
+        stopUpdatingSeekBar();
+        player.release();
+        player = null;
     }
+
 
 }

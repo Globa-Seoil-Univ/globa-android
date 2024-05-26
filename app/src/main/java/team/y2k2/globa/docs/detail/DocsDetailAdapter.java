@@ -52,6 +52,12 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         holder.title.setText(title);
         holder.time.setText(time);
 
+        holder.title.setOnClickListener(v -> {
+            int startTime = Integer.parseInt(items.get(position).getTime());
+            activity.setDuration(startTime);
+        });
+
+
 //        if (position == -1) {
             DocsDetailHighlightModel model = new DocsDetailHighlightModel();
             String description = items.get(position).getDescription();

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -113,6 +115,18 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         DocsKeywordModel keywordModel = new DocsKeywordModel(items.get(position).getKeywords());
         DocsKeywordAdapter adapter = new DocsKeywordAdapter(keywordModel.getItems());
 
+
+        if(items.get(position).getKeywords().size() == 0) {
+            // 아직 STT 트렌젝션이 완료되지 않았을 때.
+            holder.user_layout_1.setVisibility(View.INVISIBLE);
+            holder.user_layout_2.setVisibility(View.INVISIBLE);
+            holder.user_layout_3.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.processing.setVisibility(View.INVISIBLE);
+            holder.lottieAnimationView.setVisibility(View.INVISIBLE);
+        }
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.itemView.getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.keywordRecyclerView.setLayoutManager(layoutManager);
@@ -130,6 +144,13 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         RecyclerView keywordRecyclerView;
         ConstraintLayout layout;
         ImageView more;
+
+        TextView processing;
+        LottieAnimationView lottieAnimationView;
+
+        LinearLayout user_layout_1;
+        LinearLayout user_layout_2;
+        LinearLayout user_layout_3;
         ImageView user_1;
         ImageView user_2;
         ImageView user_3;
@@ -143,6 +164,14 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
             keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
             more = itemView.findViewById(R.id.imageview_folder_inside_more);
+
+            processing = itemView.findViewById(R.id.textview_main_document_processing);
+            lottieAnimationView = itemView.findViewById(R.id.lottie_main_document_record);
+
+
+            user_layout_1 = itemView.findViewById(R.id.linearlayout_document_user_1);
+            user_layout_2 = itemView.findViewById(R.id.linearlayout_document_user_2);
+            user_layout_3 = itemView.findViewById(R.id.linearlayout_document_user_3);
 
             user_1 = itemView.findViewById(R.id.imageview_document_user_1);
             user_2 = itemView.findViewById(R.id.imageview_document_user_2);

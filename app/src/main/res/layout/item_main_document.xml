@@ -79,6 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
+                android:id="@+id/linearlayout_document_user_1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="4dp"
@@ -92,6 +93,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearlayout_document_user_2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="4dp"
@@ -106,6 +108,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearlayout_document_user_3"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="4dp"
@@ -117,6 +120,26 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/profile_image_4"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textview_main_document_processing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="요약중.."
+                android:layout_gravity="center"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_main_document_record"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/relativelayout_intro_bottom"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading"
+                app:lottie_repeatCount="20" />
+
         </LinearLayout>
 
     </LinearLayout>
