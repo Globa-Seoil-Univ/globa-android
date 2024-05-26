@@ -12,12 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import org.checkerframework.checker.units.qual.C;
-
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.main.profile.info.MyinfoAdapter;
 
 public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.MyViewHolder> {
 
@@ -52,6 +49,10 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    public FolderShareItem getItem(int position) {
+        return itemList.get(position);
     }
 
     public void removeItem(int position) {

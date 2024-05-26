@@ -103,6 +103,15 @@ public class FolderPermissionActivity extends AppCompatActivity implements ItemL
 
     @Override
     public void onItemLongClick(int position) {
+        FolderPermissionItemAdapter adapter = (FolderPermissionItemAdapter) binding.recyclerviewFolderPermission.getAdapter();
+        FolderPermissionItem item = adapter.getItem(position);
+
+        SharedPreferences preferences = getSharedPreferences("folderid", MODE_PRIVATE);
+        int folderId = preferences.getInt("folderid", 0);
+        int shareId = item.getShareId();
+        int userId = item.getUserId();
+
+        folderPermissionViewModel.deleteSharedUsers(folderId, shareId, userId);
 
     }
 

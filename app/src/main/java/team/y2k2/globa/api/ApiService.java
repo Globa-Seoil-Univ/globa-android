@@ -35,6 +35,7 @@ import team.y2k2.globa.api.model.response.QuizResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
+import team.y2k2.globa.api.model.response.UserSearchResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 
@@ -73,7 +74,7 @@ public interface ApiService {
      * 사용자 검색
      */
     @GET("/user/search")
-    Call<UserInfoResponse> requestSearchUserInfo(
+    Call<UserSearchResponse> requestSearchUserInfo(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("code") String userCode
@@ -256,12 +257,12 @@ public interface ApiService {
      * 공유 추가
      */
     @POST("/folder/{folder_id}/share/user/{user_id}")
-    void requestInsertFolderShareUser(
-            @Path("folder_id") String folderId,
-            @Path("user_id") String userId,
+    Call<Void> requestInsertFolderShareUser(
+            @Path("folder_id") int folderId,
+            @Path("user_id") int userId,
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//            @Body role : R , W
+            @Header("Authorization") String authorization,
+            @Body String role
     );
 
     /**
