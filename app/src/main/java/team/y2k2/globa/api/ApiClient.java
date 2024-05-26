@@ -3,29 +3,19 @@ package team.y2k2.globa.api;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.viewpager.widget.ViewPager;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableOnSubscribe;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
-import team.y2k2.globa.main.notice.NoticeAutoScrollHandler;
-import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
 
 public class ApiClient {
     public static ApiService apiService;
@@ -47,7 +37,6 @@ public class ApiClient {
 
         return retrofit.create(ApiService.class);
     }
-
 
     /**
      * @param count : 가져올 공지사항 개수

@@ -56,28 +56,6 @@
         app:layout_constraintTop_toBottomOf="@+id/layout_quiz_header"
         android:layout_marginLeft="35dp" />
 
-    <TextView
-        android:id="@+id/textview_quiz_timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="22"
-        android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/small"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_quiz_header"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="30dp" />
-
-    <View
-        android:id="@+id/view_quiz_timerBackground"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/quiz_timer_background"
-        app:layout_constraintStart_toStartOf="@+id/textview_quiz_timer"
-        app:layout_constraintEnd_toEndOf="@+id/textview_quiz_timer"
-        app:layout_constraintTop_toTopOf="@+id/textview_quiz_timer"
-        app:layout_constraintBottom_toBottomOf="@+id/textview_quiz_timer" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_quiz_details"

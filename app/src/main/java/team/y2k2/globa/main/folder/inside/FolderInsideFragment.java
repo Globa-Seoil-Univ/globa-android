@@ -45,6 +45,9 @@ public class FolderInsideFragment extends Fragment {
 
     private final int REQUEST_CODE = 101;
 
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentFolderInsideBinding.inflate(getLayoutInflater());
@@ -58,6 +61,10 @@ public class FolderInsideFragment extends Fragment {
         loadFolderInside();
 
         binding.textviewFolderInsideTitle.setText(folderTitle);
+        preferences = getContext().getSharedPreferences("folderid", Activity.MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putInt("folderid", folderId);
+        editor.commit();
 
         binding.imageviewFolderInsideBack.setOnClickListener(v -> {
             // 뒤로가기 코드 생성

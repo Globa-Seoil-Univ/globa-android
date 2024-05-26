@@ -11,8 +11,8 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.PATCH;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -25,20 +25,25 @@ import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.DocsUploadRequest;
-import team.y2k2.globa.api.model.response.DocsUploadResponse;
+import team.y2k2.globa.api.model.request.FolderAddRequest;
+import team.y2k2.globa.api.model.request.LoginRequest;
+import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
+import team.y2k2.globa.api.model.request.TokenRequest;
+import team.y2k2.globa.api.model.response.DocsUploadResponse;
+import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
+import team.y2k2.globa.api.model.response.FolderPermissionResponse;
+import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
-import team.y2k2.globa.api.model.response.RecordResponse;
-import team.y2k2.globa.api.model.response.FolderResponse;
-import team.y2k2.globa.api.model.request.FolderAddRequest;
-import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
-import team.y2k2.globa.api.model.response.UserInfoResponse;
-import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
-import team.y2k2.globa.api.model.request.TokenRequest;
-import team.y2k2.globa.api.model.response.TokenResponse;
-import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
+import team.y2k2.globa.api.model.response.QuizResponse;
+import team.y2k2.globa.api.model.response.RecordResponse;
+import team.y2k2.globa.api.model.response.TokenResponse;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
+import team.y2k2.globa.api.model.response.UserSearchResponse;
+import team.y2k2.globa.docs.edit.DocsNameEditRequest;
+import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 
 public interface ApiService {
 
@@ -49,7 +54,6 @@ public interface ApiService {
     /**
      * 토큰 갱신
      */
-
     @POST("/auth")
     Call<TokenResponse> getRefreshToken(
             @Header("Content-Type") String contentType,
@@ -76,7 +80,7 @@ public interface ApiService {
      * 사용자 검색
      */
     @GET("/user/search")
-    Call<UserInfoResponse> requestSearchUserInfo(
+    Call<UserSearchResponse> requestSearchUserInfo(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("code") String userCode
@@ -111,7 +115,7 @@ public interface ApiService {
      * @content 추가 내용
      */
     @POST("/user")
-    void requestWithdrawUser(
+    Call<Void> requestWithdrawUser(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body int surveyType,
@@ -137,6 +141,17 @@ public interface ApiService {
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body RecordCreateRequest insertDocumentRequest
+    );
+
+    /**
+     * 문서 삭제
+     */
+    @DELETE("/folder/{folder_id}/record/{record_id}")
+    Call<Void> requestDeleteRecord(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
     );
 
     /**
@@ -210,12 +225,22 @@ public interface ApiService {
             @Body DocsMoveRequest docsMoveRequest
     );
 
+    /**
+     * 폴더 이름 수정
+     */
+    @PATCH("/folder/{folder_id}/name")
+    Call<Void> requestUpdateFolderName(
+            @Path("folder_id") String folderId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body String title
+    );
 
     /**
      * 폴더 삭제
      */
-    @GET("/folder/{folder_id}")
-    void requestDeleteFolder(
+    @DELETE("/folder/{folder_id}")
+    Call<Void> requestDeleteFolder(
             @Path("folder_id") String folderId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
@@ -225,8 +250,8 @@ public interface ApiService {
      * 공유된 사용자 가져오기
      */
     @GET("/folder/{folder_id}/share/user")
-    Objects requestFoloderShareUser(
-            @Path("folder_id") String folderId,
+    Call<FolderPermissionResponse> requestFoloderShareUser(
+            @Path("folder_id") int folderId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("page") int page,
@@ -238,35 +263,35 @@ public interface ApiService {
      * 공유 추가
      */
     @POST("/folder/{folder_id}/share/user/{user_id}")
-    void requestInsertFolderShareUser(
-            @Path("folder_id") String folderId,
-            @Path("user_id") String userId,
+    Call<Void> requestInsertFolderShareUser(
+            @Path("folder_id") int folderId,
+            @Path("user_id") int userId,
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//            @Body role : R , W
+            @Header("Authorization") String authorization,
+            @Body String role
     );
 
     /**
      * 공유 권한 변경
      */
-    @POST("/folder/{folder_id}/share/{share_id}/user/{user_id}")
-    void requestUpdateSharePermission(
-            @Path("folder_id") String folderId,
-            @Path("share_id") String share_id,
-            @Path("user_id") String user_id,
+    @PATCH("/folder/{folder_id}/share/{share_id}/user/{user_id}")
+    Call<Void> requestUpdateSharePermission(
+            @Path("folder_id") int folder_id,
+            @Path("share_id") int share_id,
+            @Path("user_id") int user_id,
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-//            @Body
+            @Header("Authorization") String authorization,
+            @Body String role
     );
 
     /**
      * 공유 삭제
      */
     @POST("/folder/{folder_id}/share/{share_id}/user/{user_id}")
-    void requestDeleteSharePermission(
-            @Path("folder_id") String folderId,
-            @Path("share_id") String share_id,
-            @Path("user_id") String user_id,
+    Call<Void> requestDeleteSharePermission(
+            @Path("folder_id") int folderId,
+            @Path("share_id") int share_id,
+            @Path("user_id") int user_id,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
     );
@@ -370,5 +395,28 @@ public interface ApiService {
             @Header("Authorization") String authorization
     );
 
+
+    /**
+     * 퀴즈 가져오기
+     */
+    @GET("/folder/{folder_id}/record/{record_id}/quiz")
+    Call<QuizResponse> requestGetQuiz(
+            @Path("folder_id") int folderId,
+            @Path("record_id") int recordId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
+    );
+
+    /**
+     * 퀴즈 결과 추가
+     */
+    @POST("/folder/{folder_id}/record/{record_id}/quiz")
+    Call<Void> requestInsertQuizResult(
+            @Path("folder_id") int folderId,
+            @Path("record_id") int recordId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body QuizResultRequest result
+    );
 
 }

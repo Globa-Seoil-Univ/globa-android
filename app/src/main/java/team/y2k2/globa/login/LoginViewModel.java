@@ -60,6 +60,8 @@ public class LoginViewModel extends ViewModel {
 
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
+            Log.d(getClass().getName(), "Complete 시작");
+
             if (task.isSuccessful()) {
                 // Firebase 로그인 성공
                 FirebaseUser user = mAuth.getCurrentUser();
@@ -82,10 +84,14 @@ public class LoginViewModel extends ViewModel {
                 ApiService apiService = retrofit.create(ApiService.class);
 
                 Call<LoginResponse> call = apiService.requestSignIn(loginRequest);
+                Log.d(getClass().getName(), "enqeue 시작");
+
                 call.enqueue(new Callback<LoginResponse>() {
                     @Override
                     public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
+                            Log.d(getClass().getName(), "onResponse 시작");
+
                             // 로그인 성공
                             LoginResponse loginResponse = response.body();
                             userPreferences(loginRequest, loginResponse);
@@ -95,17 +101,23 @@ public class LoginViewModel extends ViewModel {
                             context.startActivity(intent);
 
                             Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(getClass().getName(), "로그인 안됐습니다 : " + response.code());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
+                        Log.d(getClass().getName(), "onFailure 시작");
+
                         // 요청 실패
-                        Toast.makeText(context, "서비스 오류가 발생했습니다." + t.getMessage(), Toast.LENGTH_LONG).show();
-                        Log.d("LOGINFAILED", t.getMessage());
+                        Toast.makeText(context, "서비스 오류 발생" + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("LOGINFAILED", t.getMessage());
                     }
                 });
             } else {
+                Log.d(getClass().getName(), "로그인 실패 시작");
+
                 // Firebase 로그인 실패
                 Toast.makeText(context, "로그인 실패| 앱을 다시 실행해주세요.", Toast.LENGTH_SHORT).show();
             }

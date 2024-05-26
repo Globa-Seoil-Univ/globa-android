@@ -32,6 +32,7 @@ public class FolderNameEditActivity extends AppCompatActivity {
         folderNameEditViewModel = new ViewModelProvider(this).get(FolderNameEditViewModel.class);
         SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
         String authorization = "Bearer" + preferences.getString("accessToken", "");
+        String folderId = "";
 
         binding.edittextFolderNameInputname.addTextChangedListener(new TextWatcher() {
             @Override
@@ -57,7 +58,8 @@ public class FolderNameEditActivity extends AppCompatActivity {
             if(binding.textviewFolderNameChangeConfirm.getText().length() == 0) return;
 
             String title = binding.edittextFolderNameInputname.getText().toString();
-            folderNameEditViewModel.folderRename(authorization, title);
+            // folderId 임시로 입력
+            folderNameEditViewModel.folderRename(folderId, authorization, title);
 
             Intent resultIntent = new Intent();
             resultIntent.putExtra("changedFolderName", binding.edittextFolderNameInputname.getText().toString()); // 결과 데이터 설정

@@ -27,10 +27,10 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textview_foldershare_change"
+            android:id="@+id/textview_foldershare_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="변경"
+            android:text="적용"
             android:fontFamily="@font/notosans_regular"
             android:textColor="@color/gray"
             android:textSize="@dimen/large"
@@ -57,7 +57,7 @@
         android:id="@+id/edittext_foldershare_inputname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="유저 코드 입력"
+        android:hint="유저 코드 6글자 입력"
         android:textColorHint="@color/gray"
         android:textSize="@dimen/large"
         android:fontFamily="@font/notosans_regular"
@@ -80,38 +80,6 @@
         app:layout_constraintEnd_toEndOf="@+id/edittext_foldershare_inputname"
         android:layout_marginBottom="4dp"
         android:layout_marginRight="10dp" />
-    
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_foldershare_dropbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/button_foldershare_cancel"
-        app:layout_constraintTop_toTopOf="@+id/button_foldershare_cancel"
-        app:layout_constraintBottom_toBottomOf="@+id/button_foldershare_cancel"
-        android:layout_marginEnd="5dp">
-        
-        <TextView
-            android:id="@+id/textview_foldershare_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="수정"
-            android:fontFamily="@font/notosans_regular"
-            android:textSize="@dimen/small"
-            android:textColor="@color/gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-        
-        <View
-            android:id="@+id/view_foldershare_arrow"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:background="@drawable/arrow_down"
-            app:layout_constraintStart_toEndOf="@+id/textview_foldershare_status"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-        
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintlayout_foldershare_search"

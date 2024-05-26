@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,6 +43,7 @@ import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.more.DocsMoreActivity;
+import team.y2k2.globa.docs.more.DocsMoreViewModel;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
@@ -63,12 +65,15 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     DocsSummaryAdapter summaryAdapter;
     Boolean isMusicStarted;
 
+    private DocsMoreViewModel docsMoreViewModel;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
 
         mediaPlayer = new MediaPlayer();
+        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
 
         Intent intent = getIntent();
 
@@ -103,6 +108,14 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         });
 
         setContentView(binding.getRoot());
+
+        // 문서 삭제 시 액티비티 종료
+        docsMoreViewModel.closeActivities.observe(this, shouldClose -> {
+            if (shouldClose != null && shouldClose) {
+                finish();
+            }
+        });
+
     }
 
 

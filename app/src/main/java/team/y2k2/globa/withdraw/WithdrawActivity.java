@@ -1,21 +1,12 @@
 package team.y2k2.globa.withdraw;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.ArrayList;
-
-import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityWithdrawBinding;
 import team.y2k2.globa.intro.IntroActivity;
 
@@ -34,8 +25,10 @@ public class WithdrawActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         withdrawViewModel = new ViewModelProvider(this).get(WithdrawViewModel.class);
+        /*
         SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
         String authorization = "Bearer" + preferences.getString("accessToken", "");
+         */
 
 
         // 회원 탈퇴 버튼 클릭 동작
@@ -57,15 +50,13 @@ public class WithdrawActivity extends AppCompatActivity {
             content = binding.edittextWithdrawDetail.getText().toString();
 
             // 회원 탈퇴 작동 (탈퇴 사유 전송, 데이터 삭제 등)
-            withdrawViewModel.withdrawUser(authorization, surveyType, content);
-
-            finish();
+            withdrawViewModel.withdrawUser(surveyType, content);
 
             Intent intent = new Intent(this, IntroActivity.class);
             Toast.makeText(this, "회원 탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
             startActivity(intent);
+            finish();
+
         });
-
-
     }
 }

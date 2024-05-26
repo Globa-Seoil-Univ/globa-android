@@ -24,6 +24,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.databinding.FragmentFolderBinding;
@@ -126,4 +127,30 @@ public class FolderFragment extends Fragment {
             }
         });
     }
+
+    public void deleteFolder() {
+        ApiService apiService = ApiClient.getApiService();
+
+        String folderId = "";
+
+        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+        String authorization = "Bearer " + preferences.getString("accessToken", "");
+
+        apiService.requestDeleteFolder(folderId, "application/json", authorization).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                    // 삭제 후 갱신 작업 처리
+                } else {
+                    Log.d(getClass().getName(), "삭제 실패");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d(getClass().getName(), "삭제 요청 실패");
+            }
+        });
+    }
+
 }

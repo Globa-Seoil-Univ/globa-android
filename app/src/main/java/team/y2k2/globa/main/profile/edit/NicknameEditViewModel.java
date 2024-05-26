@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -26,7 +27,6 @@ public class NicknameEditViewModel extends ViewModel {
     public MutableLiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
-
 
     public void updateNickname(Context context, String userId, String authorization, String newNickname) {
         NicknameEditRequest request = new NicknameEditRequest(newNickname);
@@ -53,8 +53,5 @@ public class NicknameEditViewModel extends ViewModel {
             Log.d(getClass().getName(), "서버 오류 발생: " + e.getMessage());
 
         }
-
     }
-
-
 }
