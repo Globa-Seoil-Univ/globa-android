@@ -21,7 +21,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
@@ -46,8 +50,11 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
     @Override
     public void onBindViewHolder(@NonNull DocsListItemAdapter.AdapterViewHolder holder, int position) {
-        holder.title.setText(items.get(position).getTitle());
-        holder.datetime.setText(items.get(position).getDatetime());
+        String title = items.get(position).getTitle();
+        String datetime = getDateFormat(items.get(position).getDatetime());
+
+        holder.title.setText(title);
+        holder.datetime.setText(datetime);
 
         holder.user_1.setImageResource(items.get(position).getImage_1());
         holder.user_2.setImageResource(items.get(position).getImage_2());
@@ -57,7 +64,6 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
 
         moreBottomSheet.setContentView(R.layout.dialog_more_docs);
-
         bottomSheetDialog.setContentView(R.layout.dialog_delete_docs);
 
         TextView confirm = bottomSheetDialog.findViewById(R.id.textview_delete_docs_confirm);
@@ -142,5 +148,26 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             user_2 = itemView.findViewById(R.id.imageview_document_user_2);
             user_3 = itemView.findViewById(R.id.imageview_document_user_3);
         }
+    }
+
+
+    public String getDateFormat(String datetime) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
+        // 출력 형식
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA);
+
+        Date date;
+        String outputDate = "";
+
+        try {
+            // 입력 날짜 문자열을 Date 객체로 파싱
+            date = inputFormat.parse(datetime);
+            // Date 객체를 원하는 출력 형식의 문자열로 변환
+            outputDate = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return outputDate;
     }
 }

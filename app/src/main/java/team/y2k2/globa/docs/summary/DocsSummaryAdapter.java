@@ -29,8 +29,11 @@ public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        holder.title.setText(items.get(position).getTitle());
-        holder.time.setText(items.get(position).getTime());
+        String title = items.get(position).getTitle();
+        String datetime = formatDuration(Integer.parseInt(items.get(position).getTime()));
+
+        holder.title.setText(title);
+        holder.time.setText(datetime);
 
         DocsSummaryDescriptionAdapter adapter = new DocsSummaryDescriptionAdapter(items.get(position).getDescriptions());
 
@@ -54,5 +57,18 @@ public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.
             time = itemView.findViewById(R.id.textview_item_docs_summary_time);
             descriptions = itemView.findViewById(R.id.recyclerview_item_docs_summary_description);
         }
+    }
+
+    public static String formatDuration(int durationSecond) {
+        int hours = durationSecond / 3600;
+        durationSecond %= 3600;
+
+        int minutes = durationSecond / 60;
+        int seconds = durationSecond % 60;
+
+        if(hours > 0)
+            return String.format("%2d:%02d:%02d", hours, minutes, seconds);
+        else
+            return String.format("%02d:%02d", minutes, seconds);
     }
 }

@@ -46,6 +46,12 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
+        String title = items.get(position).getTitle();
+        String time = formatDuration(Integer.parseInt(items.get(position).getTime()));
+
+        holder.title.setText(title);
+        holder.time.setText(time);
+
 //        if (position == -1) {
             DocsDetailHighlightModel model = new DocsDetailHighlightModel();
             String description = items.get(position).getDescription();
@@ -134,8 +140,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             holder.description.setText(highlightString);
             holder.description.setMovementMethod(android.text.method.LinkMovementMethod.getInstance()); // SpannableString 클릭 되도록 함
 
-        holder.title.setText(items.get(position).getTitle());
-        holder.time.setText(items.get(position).getTime());
     }
 
     @Override
@@ -204,5 +208,18 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), startIdx, endIdx, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 텍스트뷰에 설정
         textView.setText(spannableString);
+    }
+
+    public static String formatDuration(int durationSecond) {
+        int hours = durationSecond / 3600;
+        durationSecond %= 3600;
+
+        int minutes = durationSecond / 60;
+        int seconds = durationSecond % 60;
+
+        if(hours > 0)
+            return String.format("%2d:%02d:%02d", hours, minutes, seconds);
+        else
+            return String.format("%02d:%02d", minutes, seconds);
     }
 }

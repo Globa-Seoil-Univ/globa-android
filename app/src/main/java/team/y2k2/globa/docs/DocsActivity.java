@@ -1,6 +1,5 @@
 package team.y2k2.globa.docs;
 
-import static okhttp3.internal.concurrent.TaskLoggerKt.formatDuration;
 import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 
 import android.app.Activity;
@@ -8,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,16 +14,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.MediaController;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,7 +28,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,14 +39,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
-import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.more.DocsMoreActivity;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
-import team.y2k2.globa.main.notice.NoticeAutoScrollHandler;
-import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
     public ActivityDocsBinding binding;
@@ -335,10 +326,16 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     }
 
     public static String formatDuration(int durationMillis) {
+        int hours = (durationMillis / 1000) / 3600;
+        durationMillis %= 1000*3600;
+
         int minutes = (durationMillis / 1000) / 60;
         int seconds = (durationMillis / 1000) % 60;
 
-        return String.format("%02d:%02d", minutes, seconds);
+        if(hours > 0)
+            return String.format("%2d:%02d:%02d", hours, minutes, seconds);
+        else
+            return String.format("%02d:%02d", minutes, seconds);
     }
 
     // MediaController.MediaPlayerControl 인터페이스 구현

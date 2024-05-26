@@ -75,12 +75,12 @@ public class LoginActivity extends AppCompatActivity {
         googleServiceLoading();
 
 //
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if(!Environment.isExternalStorageManager()){
-                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                startActivity(intent);
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            if(!Environment.isExternalStorageManager()){
+//                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+//                startActivity(intent);
+//            }
+//        }
 
         setContentView(binding.getRoot());
     }

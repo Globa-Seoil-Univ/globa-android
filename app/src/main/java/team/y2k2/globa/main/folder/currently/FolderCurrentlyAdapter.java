@@ -14,7 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.main.folder.inside.FolderInsideFragment;
@@ -35,8 +39,11 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
 
     @Override
     public void onBindViewHolder(@NonNull FolderCurrentlyAdapter.AdapterViewHolder holder, int position) {
-        holder.title.setText(items.get(position).getTitle());
-        holder.datetime.setText(items.get(position).getDatetime());
+        String title = items.get(position).getTitle();
+        String datetime = getDateFormat(items.get(position).getDatetime());
+
+        holder.title.setText(title);
+        holder.datetime.setText(datetime);
 
         holder.layout.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
@@ -72,5 +79,25 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
             layout = itemView.findViewById(R.id.constraintlayout_folder_item_currently);
 
         }
+    }
+
+    public String getDateFormat(String datetime) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
+        // 출력 형식
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yy-MM-dd", Locale.KOREA);
+
+        Date date;
+        String outputDate = "";
+
+        try {
+            // 입력 날짜 문자열을 Date 객체로 파싱
+            date = inputFormat.parse(datetime);
+            // Date 객체를 원하는 출력 형식의 문자열로 변환
+            outputDate = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return outputDate;
     }
 }

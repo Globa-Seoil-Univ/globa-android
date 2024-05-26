@@ -50,6 +50,29 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     FragmentMainBinding binding;
     DocsListItemModel docsListItemModel = new DocsListItemModel();
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentMainBinding.inflate(getLayoutInflater());
+
+        setLogoColor();
+        setOnClickListeners();
+        changeButtonDisplay(binding.buttonMainDocsType1);
+
+        binding.swiperefreshlayoutMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showRecords();
+                binding.swiperefreshlayoutMain.setRefreshing(false);
+            }
+        });
+
+        showPromotions();
+        showRecords();
+
+        return binding.getRoot();
+    }
+
     @Override
     public void onClick(View v) {
         if(v == binding.buttonMainDocsType1) {
@@ -81,40 +104,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         button.setTextColor(Color.WHITE);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentMainBinding.inflate(getLayoutInflater());
-
+    public void setLogoColor() {
         SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewMainTitle.getText());
-        spanTitle.setSpan(new ForegroundColorSpan(inflater.getContext().getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanTitle.setSpan(new ForegroundColorSpan(getContext().getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.textviewMainTitle.setText(spanTitle);
+    }
 
+    public void setOnClickListeners() {
         binding.buttonMainDocsType1.setOnClickListener(this);
         binding.buttonMainDocsType2.setOnClickListener(this);
         binding.buttonMainDocsType3.setOnClickListener(this);
         binding.buttonMainDocsType4.setOnClickListener(this);
 
-        changeButtonDisplay(binding.buttonMainDocsType1);
-
         binding.imagebuttonMainNotification.setOnClickListener(v -> {
             Intent intent = new Intent(this.getActivity(), NotificationActivity.class);
             startActivity(intent);
         });
-
-        binding.swiperefreshlayoutMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                showRecords();
-                binding.swiperefreshlayoutMain.setRefreshing(false);
-            }
-        });
-        showPromotions();
-        showRecords();
-
-        return binding.getRoot();
     }
-
 
     public void showRecords() {
         ApiClient apiClient = new ApiClient(this.getContext());
