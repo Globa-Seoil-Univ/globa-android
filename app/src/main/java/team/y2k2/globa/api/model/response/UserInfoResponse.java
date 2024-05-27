@@ -18,9 +18,6 @@ public class UserInfoResponse {
     @SerializedName("publicFolderId")
     private String publicFolderId;
 
-    // 생성자, Getter 및 Setter 메서드 등은 필요에 따라 추가할 수 있습니다.
-
-    // Getter 및 Setter 메서드 예시:
     public String getProfile() {
         return profile;
     }

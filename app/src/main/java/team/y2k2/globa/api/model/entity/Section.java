@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Section {
-
     @SerializedName("sectionId")
     private int sectionId;
 
@@ -33,14 +32,11 @@ public class Section {
         return startTime;
     }
 
-
     public Analysis getAnalysis() {
         return analysis;
     }
 
-
     public List<Summary> getSummary() {
         return summary;
     }
-
 }

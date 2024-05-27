@@ -3,7 +3,7 @@ package team.y2k2.globa.main.docs.keyword;
 import java.util.ArrayList;
 import java.util.List;
 
-import team.y2k2.globa.api.model.Keyword;
+import team.y2k2.globa.api.model.entity.Keyword;
 
 
 public class DocsKeywordModel {

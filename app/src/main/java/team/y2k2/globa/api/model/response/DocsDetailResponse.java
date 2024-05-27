@@ -7,16 +7,23 @@ import java.util.List;
 import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.entity.Section;
 
-public class DocsDetailResponse{
+public class DocsDetailResponse {
+
+    @SerializedName("recordId")
     private int recordId;
+
+    @SerializedName("title")
     private String title;
+
+    @SerializedName("path")
     private String path;
+
+    @SerializedName("folder")
     private Folder folder;
 
     @SerializedName("section")
     private List<Section> sections;
 
-    // Getter and Setter methods
     public int getRecordId() {
         return recordId;
     }

@@ -9,4 +9,11 @@ public class Comment {
     @SerializedName("content")
     private String content;
 
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public String getContent() {
+        return content;
+    }
 }

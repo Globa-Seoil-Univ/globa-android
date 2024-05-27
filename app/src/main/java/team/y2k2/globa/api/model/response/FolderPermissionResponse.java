@@ -27,5 +27,4 @@ public class FolderPermissionResponse {
     public void setTotal(int total) {
         this.total = total;
     }
-
 }

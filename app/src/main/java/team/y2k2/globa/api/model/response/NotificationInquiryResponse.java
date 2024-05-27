@@ -13,7 +13,6 @@ public class NotificationInquiryResponse {
     @SerializedName("total")
     private int total;
 
-
     public List<NotificationInquiry> getInquires() {
         return inquires;
     }

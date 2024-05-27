@@ -3,7 +3,6 @@ package team.y2k2.globa.api.model.entity;
 import com.google.gson.annotations.SerializedName;
 
 public class NotificationInquiry {
-
     @SerializedName("inquiryId")
     private String inquiryId;
 
@@ -34,7 +33,6 @@ public class NotificationInquiry {
     public boolean isSolved() {
         return solved;
     }
-
 
     public String getCreatedTime() {
         return createdTime;

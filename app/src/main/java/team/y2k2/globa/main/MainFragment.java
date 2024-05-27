@@ -1,19 +1,14 @@
 package team.y2k2.globa.main;
 
 
-import static team.y2k2.globa.api.ApiService.API_BASE_URL;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,15 +22,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.ApiService;
-import team.y2k2.globa.api.model.Keyword;
+import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
@@ -47,6 +36,9 @@ import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
 import team.y2k2.globa.notification.NotificationActivity;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
+
+    Button[] docsFilterButtons;
+
     FragmentMainBinding binding;
     DocsListItemModel docsListItemModel = new DocsListItemModel();
 
@@ -56,16 +48,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         binding = FragmentMainBinding.inflate(getLayoutInflater());
 
         setLogoColor();
+        setFilterButtons();
         setOnClickListeners();
-        changeButtonDisplay(binding.buttonMainDocsType1);
+        setOnRefreshListener(binding.swiperefreshlayoutMain);
 
-        binding.swiperefreshlayoutMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                showRecords();
-                binding.swiperefreshlayoutMain.setRefreshing(false);
-            }
-        });
+        changeButtonDisplay(binding.buttonMainDocsType1);
 
         showPromotions();
         showRecords();
@@ -73,35 +60,42 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return binding.getRoot();
     }
 
+    public void setFilterButtons() {
+        docsFilterButtons = new Button[4];
+
+        docsFilterButtons[0] = binding.buttonMainDocsType1;
+        docsFilterButtons[1] = binding.buttonMainDocsType2;
+        docsFilterButtons[2] = binding.buttonMainDocsType3;
+        docsFilterButtons[3] = binding.buttonMainDocsType4;
+    }
+
     @Override
     public void onClick(View v) {
-        if(v == binding.buttonMainDocsType1) {
-            changeButtonDisplay(binding.buttonMainDocsType1);
-        }
-        else if(v == binding.buttonMainDocsType2) {
-            changeButtonDisplay(binding.buttonMainDocsType2);
-        }
-        else if(v == binding.buttonMainDocsType3) {
-            changeButtonDisplay(binding.buttonMainDocsType3);
-        }
-        else if(v == binding.buttonMainDocsType4) {
-            changeButtonDisplay(binding.buttonMainDocsType4);
+        for(int i = 0; i < docsFilterButtons.length; i++) {
+            if(docsFilterButtons[i] == v) {
+                changeButtonDisplay(docsFilterButtons[i]);
+            }
         }
     }
 
     public void changeButtonDisplay(Button button) {
-        binding.buttonMainDocsType1.setBackgroundResource(R.drawable.main_button);
-        binding.buttonMainDocsType2.setBackgroundResource(R.drawable.main_button);
-        binding.buttonMainDocsType3.setBackgroundResource(R.drawable.main_button);
-        binding.buttonMainDocsType4.setBackgroundResource(R.drawable.main_button);
-
-        binding.buttonMainDocsType1.setTextColor(Color.BLACK);
-        binding.buttonMainDocsType2.setTextColor(Color.BLACK);
-        binding.buttonMainDocsType3.setTextColor(Color.BLACK);
-        binding.buttonMainDocsType4.setTextColor(Color.BLACK);
+        for(int i = 0; i < docsFilterButtons.length; i++) {
+            docsFilterButtons[i].setBackgroundResource(R.drawable.main_button);
+            docsFilterButtons[i].setTextColor(Color.BLACK);
+        }
 
         button.setBackgroundResource(R.drawable.main_button_selected);
         button.setTextColor(Color.WHITE);
+    }
+
+    public void setOnRefreshListener(SwipeRefreshLayout refreshLayout) {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showRecords();
+                binding.swiperefreshlayoutMain.setRefreshing(false);
+            }
+        });
     }
 
     public void setLogoColor() {
@@ -111,10 +105,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setOnClickListeners() {
-        binding.buttonMainDocsType1.setOnClickListener(this);
-        binding.buttonMainDocsType2.setOnClickListener(this);
-        binding.buttonMainDocsType3.setOnClickListener(this);
-        binding.buttonMainDocsType4.setOnClickListener(this);
+        for(int i = 0; i < docsFilterButtons.length; i++) {
+            docsFilterButtons[i].setOnClickListener(this);
+        }
 
         binding.imagebuttonMainNotification.setOnClickListener(v -> {
             Intent intent = new Intent(this.getActivity(), NotificationActivity.class);

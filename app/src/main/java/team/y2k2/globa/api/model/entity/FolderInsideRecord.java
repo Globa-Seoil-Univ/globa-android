@@ -18,7 +18,6 @@ public class FolderInsideRecord {
     @SerializedName("createdTime")
     private String createdTime;
 
-
     public String getTitle() {
         return title;
     }

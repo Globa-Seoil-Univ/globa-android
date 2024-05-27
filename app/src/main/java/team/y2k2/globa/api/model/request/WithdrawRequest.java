@@ -1,4 +1,4 @@
-package team.y2k2.globa.api.model.response;
+package team.y2k2.globa.api.model.request;
 
 public class WithdrawRequest {
 

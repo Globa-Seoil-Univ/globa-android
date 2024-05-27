@@ -5,7 +5,6 @@ import java.util.List;
 import team.y2k2.globa.api.model.entity.Quiz;
 
 public class QuizResponse {
-
     private List<Quiz> quizs;
 
     public List<Quiz> getQuizs() {

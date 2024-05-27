@@ -30,5 +30,4 @@ public class Highlight {
     public int getEndIndex() {
         return endIndex;
     }
-
 }

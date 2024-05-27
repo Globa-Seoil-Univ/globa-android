@@ -6,7 +6,6 @@ public class NicknameEditRequest {
     @SerializedName("name")
     String name;
 
-
     public NicknameEditRequest(String name) {
         this.name = name;
     }
