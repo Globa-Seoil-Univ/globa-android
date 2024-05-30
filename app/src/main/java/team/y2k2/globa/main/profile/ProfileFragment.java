@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-
 import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
@@ -67,8 +67,10 @@ public class ProfileFragment extends Fragment {
 
         SharedPreferences preferences = inflater.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String accessToken = "Bearer " + preferences.getString("accessToken", "");
+        Log.d(getClass().getName(), accessToken);
 
         Call<UserInfoResponse> call = apiService.requestUserInfo("application/json", accessToken);
+        Log.d(getClass().getName(), "내 정보 프레그먼트 enqeue 시작");
         call.enqueue(new Callback<UserInfoResponse>() {
             @Override
             public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
@@ -85,13 +87,17 @@ public class ProfileFragment extends Fragment {
                     binding.textviewProfileAccountUsername.setText(userInfo.getName());
                     binding.textviewProfileAccountUsercode.setText(userInfo.getCode());
 
+
                     Glide.with(inflater.getContext())
                             .load(userInfo.getProfile()) // 임시로 로드
+                            .error(R.mipmap.ic_launcher)
                             .into(binding.imageviewProfileAccountImage);
 
                     binding.imageviewProfileAccountImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     binding.imageviewProfileAccountImage.setBackground(new ShapeDrawable(new OvalShape()));
                     binding.imageviewProfileAccountImage.setClipToOutline(true);
+                } else {
+                    Log.d(getClass().getName(), "API 호출 실패");
                 }
             }
 
@@ -99,11 +105,11 @@ public class ProfileFragment extends Fragment {
             public void onFailure(Call<UserInfoResponse> call, Throwable t) {
                 // API 호출 실패
                 // 네트워크 오류 등 예외 처리 로직 구현
-                Log.d("LOGTEST", t.getMessage());
+                Log.d("LOGTEST", "API 호출 실패" + t.getMessage());
 
             }
         });
-
+        Log.d(getClass().getName(), "프로필 조회 완료");
         return binding.getRoot();
     }
 

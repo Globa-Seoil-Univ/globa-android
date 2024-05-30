@@ -1,16 +1,10 @@
-package team.y2k2.globa.main.statistics;
+package team.y2k2.globa.docs.statistics;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -31,34 +25,35 @@ import java.util.List;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Quizgrade;
 import team.y2k2.globa.api.model.entity.Studytime;
-import team.y2k2.globa.databinding.FragmentStatisticsBinding;
+import team.y2k2.globa.databinding.ActivityDocsStatisticsBinding;
 
-public class StatisticsFragment extends Fragment {
-    //String[] dayX = { "딥러닝", "학습", "지능", "데이터", "예측", "인공신경망", "사용", "입력", "패턴", "이미지" };
-    String[] wordX, timeX, gradeX; // 수평 막대 그래프 카테고리 배열
+public class DocsStatisticsActivity extends AppCompatActivity {
+
+    String[] wordX, timeX, gradeX;
     int[] wordValues, timeValues, gradeValues;
-    FragmentStatisticsBinding binding;
-    private HorizontalBarChart barChart;
-    private LineChart timeLineChart, gradeLineChart;
-    StatisticsViewModel statisticsViewModel;
+    ActivityDocsStatisticsBinding binding;
+    private HorizontalBarChart docsBarChart;
+    private LineChart docsTimeLineChart, docsGradeLineChart;
+    DocsStatisticsViewModel docsStatisticsViewModel;
+    int folderId, recordId;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentStatisticsBinding.inflate(getLayoutInflater());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityDocsStatisticsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String userIdStr = preferences.getString("uid", "");
-        int userId = Integer.parseInt(userIdStr);
+        folderId = Integer.parseInt(getIntent().getStringExtra("folderId"));
+        recordId = Integer.parseInt(getIntent().getStringExtra("recordId"));
 
-        statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
-        statisticsViewModel.getStatistics(userId);
+        docsStatisticsViewModel = new ViewModelProvider(this).get(DocsStatisticsViewModel.class);
+        docsStatisticsViewModel.getDocsStatistics(folderId, recordId);
 
-        statisticsViewModel.getStatisticsLiveData().observe(getViewLifecycleOwner(), statistics -> {
-            if(statistics != null) {
-                List<Keyword> keywords = statistics.getKeywords();
-                List<Studytime> studytimes = statistics.getStudyTimes();
-                List<Quizgrade> quizgrades = statistics.getQuizGrades();
+        docsStatisticsViewModel.getDocsStatisticsLiveData().observe(this, docsStatistics -> {
+            if(docsStatistics != null) {
+                List<Keyword> keywords = docsStatistics.getKeywords();
+                List<Studytime> studytimes = docsStatistics.getStudyTimes();
+                List<Quizgrade> quizgrades = docsStatistics.getQuizGrades();
 
                 wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
                 wordValues = keywords.stream().mapToInt(Keyword::getImportance).toArray();
@@ -68,21 +63,19 @@ public class StatisticsFragment extends Fragment {
 
                 gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
                 gradeValues = quizgrades.stream().mapToInt(Quizgrade::getScore).toArray();
-
             } else {
                 Log.e(getClass().getName(), "LiveData 오류 발생");
             }
         });
 
-        barChart = binding.wordBarChart;
-        timeLineChart = binding.timeLineChart;
-        gradeLineChart = binding.gradeLineChart;
+        docsBarChart = binding.docsWordBarChart;
+        docsTimeLineChart = binding.docsTimeLineChart;
+        docsGradeLineChart = binding.docsGradeLineChart;
 
-        drawBarChart(barChart, wordX, wordValues);
-        drawLineChart(timeLineChart, timeX, timeValues);
-        drawLineChart(gradeLineChart, gradeX, gradeValues);
+        drawBarChart(docsBarChart, wordX, wordValues);
+        drawLineChart(docsTimeLineChart, timeX, timeValues);
+        drawLineChart(docsGradeLineChart, gradeX, gradeValues);
 
-        return binding.getRoot();
     }
 
     private void setBarData(String[] dayX, int[] values) {
@@ -107,13 +100,13 @@ public class StatisticsFragment extends Fragment {
         data.setBarWidth(0.7f); // 막대 폭 설정
 
         // X축 라벨 설정
-        XAxis xAxis = barChart.getXAxis();
+        XAxis xAxis = docsBarChart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
         xAxis.setLabelCount(labels.size()); // 모든 라벨 표시
 
         // 차트에 데이터 설정
-        barChart.setData(data);
-        barChart.invalidate(); // 차트 갱신
+        docsBarChart.setData(data);
+        docsBarChart.invalidate(); // 차트 갱신
     }
 
     private void drawBarChart(HorizontalBarChart barChart, String[] dayX, int[] values) {
@@ -202,4 +195,5 @@ public class StatisticsFragment extends Fragment {
         lineChart.getAxisRight().setEnabled(false); // 오른쪽 y축 표시 여부
         lineChart.invalidate(); // 그래프 표시 및 갱신
     }
+
 }

@@ -17,28 +17,29 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import team.y2k2.globa.api.model.request.NicknameEditRequest;
-import team.y2k2.globa.api.model.request.NotificationRequest;
-import team.y2k2.globa.api.model.response.DocsDetailResponse;
-import team.y2k2.globa.api.model.response.InquiryDetailResponse;
-import team.y2k2.globa.api.model.response.NotificationResponse;
-import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.DocsUploadRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
+import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
+import team.y2k2.globa.api.model.request.NicknameEditRequest;
+import team.y2k2.globa.api.model.request.NotificationRequest;
 import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.TokenRequest;
+import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.DocsUploadResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 import team.y2k2.globa.api.model.response.FolderResponse;
+import team.y2k2.globa.api.model.response.InquiryDetailResponse;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
+import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.QuizResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
+import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.response.UserSearchResponse;
@@ -230,10 +231,10 @@ public interface ApiService {
      */
     @PATCH("/folder/{folder_id}/name")
     Call<Void> requestUpdateFolderName(
-            @Path("folder_id") String folderId,
+            @Path("folder_id") int folderId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
-            @Body String title
+            @Body FolderNameEditRequest folderNameEditRequest
     );
 
     /**
@@ -417,6 +418,27 @@ public interface ApiService {
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body QuizResultRequest result
+    );
+
+    /**
+     * 전체 시각화 자료 갖고오기
+     */
+    @GET("/user/{user_id}/analysis")
+    Call<StatisticsResponse> requestStatistics(
+            @Path("user_id") int userId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
+    );
+
+    /**
+     * 문서 시각화 자료 갖고오기
+     */
+    @GET("/folder/{folder_id}/record/{record_id}/analysis")
+    Call<StatisticsResponse> requestDocStatistics(
+            @Path("folder_id") int folderId,
+            @Path("record_id") int recordId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
     );
 
 }

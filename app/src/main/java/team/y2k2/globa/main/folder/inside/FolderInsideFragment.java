@@ -1,8 +1,5 @@
 package team.y2k2.globa.main.folder.inside;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-
 import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 
 import android.app.Activity;
@@ -13,10 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +50,8 @@ public class FolderInsideFragment extends Fragment {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
+    private ActivityResultLauncher<Intent> nameEditLauncher;
+
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentFolderInsideBinding.inflate(getLayoutInflater());
@@ -66,6 +70,18 @@ public class FolderInsideFragment extends Fragment {
         editor.putInt("folderid", folderId);
         editor.commit();
 
+        nameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if(result.getResultCode() == Activity.RESULT_OK) {
+                Intent data = result.getData();
+                if(data != null && data.hasExtra("name")) {
+                    String name = data.getStringExtra("name");
+                    binding.textviewFolderInsideTitle.setText(name);
+                    Toast.makeText(FolderInsideFragment.this.getContext(), "이름 변경 완료", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
         binding.imageviewFolderInsideBack.setOnClickListener(v -> {
             // 뒤로가기 코드 생성
             Log.d("BACKKEY", "뒤로가기");
@@ -76,11 +92,8 @@ public class FolderInsideFragment extends Fragment {
             getFragmentManager().popBackStack();
         });
 
-
         binding.textviewFolderInsideMore.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
-            intent.putExtra("folderName", binding.textviewFolderInsideTitle.getText());
-            startActivityForResult(intent, REQUEST_CODE);
+            showBottomSheetDialog();
         });
 
         return binding.getRoot();
@@ -143,21 +156,34 @@ public class FolderInsideFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void showBottomSheetDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(FolderInsideFragment.this.getContext());
+        View bottomSheetView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_folder_more, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
 
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // 결과 처리
-                if (data != null) {
-                    String changedFolderName = data.getStringExtra("changedFolderName");
-                    binding.textviewFolderInsideTitle.setText(changedFolderName);
-                    // 결과값 사용
-                }
-            } else if (resultCode == RESULT_CANCELED) {
-                // 사용자가 액티비티를 취소한 경우
-            }
-        }
+        RelativeLayout nameEditButton = bottomSheetView.findViewById(R.id.relativelayout_more_rename);
+        RelativeLayout shareButton = bottomSheetView.findViewById(R.id.relativelayout_more_share);
+        RelativeLayout authorityButton = bottomSheetView.findViewById(R.id.relativelayout_more_authority);
+        RelativeLayout deleteButton = bottomSheetView.findViewById(R.id.relativelayout_more_delete);
+
+        nameEditButton.setOnClickListener(v -> {
+            // 이름 변경 클릭
+            bottomSheetDialog.dismiss();
+            Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
+            intent.putExtra("name", binding.textviewFolderInsideTitle.getText().toString());
+            nameEditLauncher.launch(intent);
+        });
+        shareButton.setOnClickListener(v -> {
+
+        });
+        authorityButton.setOnClickListener(v -> {
+
+        });
+        deleteButton.setOnClickListener(v -> {
+
+        });
+
+        bottomSheetDialog.show();
     }
+
 }
