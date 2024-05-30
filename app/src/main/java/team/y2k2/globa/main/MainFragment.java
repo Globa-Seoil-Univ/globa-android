@@ -1,8 +1,10 @@
 package team.y2k2.globa.main;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -21,12 +23,16 @@ import androidx.viewpager.widget.ViewPager;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
+import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.databinding.FragmentMainBinding;
@@ -58,7 +64,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         changeButtonDisplay(binding.buttonMainDocsType1);
 
         showPromotions();
-        showRecords();
+        showCurrentlyAddedRecords();
 
         return binding.getRoot();
     }
@@ -74,11 +80,25 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        for (Button docsFilterButton : docsFilterButtons) {
-            if (docsFilterButton == v) {
-                changeButtonDisplay(docsFilterButton);
-            }
+
+        if(v == docsFilterButtons[0]) {
+            changeButtonDisplay(docsFilterButtons[0]);
+            showCurrentlyAddedRecords();
         }
+        else if(v == docsFilterButtons[1]) {
+            changeButtonDisplay(docsFilterButtons[1]);
+            showMostViewedRecords();
+        }
+        else if(v == docsFilterButtons[2]) {
+            changeButtonDisplay(docsFilterButtons[2]);
+            showSharedRecords();
+        }
+        else if(v == docsFilterButtons[3]) {
+            changeButtonDisplay(docsFilterButtons[3]);
+            showReceivedRecords();
+
+        }
+
     }
 
     public void changeButtonDisplay(Button button) {
@@ -93,7 +113,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void setOnRefreshListener(SwipeRefreshLayout refreshLayout) {
         refreshLayout.setOnRefreshListener(() -> {
-            showRecords();
+            showCurrentlyAddedRecords();
             binding.swiperefreshlayoutMain.setRefreshing(false);
         });
     }
@@ -115,7 +135,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    public void showRecords() {
+    public void showCurrentlyAddedRecords() {
         ApiClient apiClient = new ApiClient(context);
         RecordResponse recordResponse = apiClient.requestGetRecords(20);
 
@@ -140,6 +160,120 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         binding.recyclerviewMainDocument.setAdapter(adapter);
         binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
     }
+
+    public void showReceivedRecords() {
+        ApiClient apiClient = new ApiClient(context);
+        RecordResponse recordResponse = apiClient.requestGetRecords(20);
+        List<FolderResponse> folderResponse = apiClient.requestGetFolders(1, 20);
+
+        docsListItemModel = new DocsListItemModel();
+
+        List<Record> records = recordResponse.getRecords();
+
+        ArrayList<Integer> folderIds = new ArrayList<>();
+
+        for(FolderResponse folder : folderResponse) {
+            folderIds.add(folder.getFolderId());
+        }
+
+        for(Record record : records) {
+            String recordId = record.getRecordId();
+            String folderId = record.getFolderId();
+            String title = record.getTitle();
+            String datetime = record.getCreatedTime();
+            List<Keyword> keywords = record.getKeywords();
+
+            if(! folderIds.contains(Integer.parseInt(folderId))) {
+                docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
+            }
+        }
+        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
+
+        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
+
+        binding.recyclerviewMainDocument.setAdapter(adapter);
+        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
+    }
+
+    public void showMostViewedRecords() {
+        ApiClient apiClient = new ApiClient(context);
+        RecordResponse recordResponse = apiClient.requestGetRecords(20);
+
+        docsListItemModel = new DocsListItemModel();
+
+        // 예제 레코드 리스트 생성 (실제 레코드 리스트는 recordResponse.getRecords()로 가져옴)
+        List<Record> records = recordResponse.getRecords();
+
+        // Record 클래스의 카운트 값 기반으로 정렬
+        Collections.sort(records, new Comparator<Record>() {
+            @Override
+            public int compare(Record r1, Record r2) {
+                SharedPreferences preferences1 = context.getSharedPreferences("record_" + r1.getRecordId(), Activity.MODE_PRIVATE);
+                int count1 = preferences1.getInt("count", 0);
+
+                SharedPreferences preferences2 = context.getSharedPreferences("record_" + r2.getRecordId(), Activity.MODE_PRIVATE);
+                int count2 = preferences2.getInt("count", 0);
+
+                // 내림차순 정렬
+                return Integer.compare(count2, count1);
+            }
+        });
+
+        for(Record record : records) {
+            String recordId = record.getRecordId();
+            String folderId = record.getFolderId();
+            String title = record.getTitle();
+            String datetime = record.getCreatedTime();
+            List<Keyword> keywords = record.getKeywords();
+
+            docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
+        }
+
+        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
+
+        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
+
+        binding.recyclerviewMainDocument.setAdapter(adapter);
+        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
+    }
+
+    public void showSharedRecords() {
+        ApiClient apiClient = new ApiClient(context);
+        RecordResponse recordResponse = apiClient.requestGetRecords(20);
+        List<FolderResponse> folderResponse = apiClient.requestGetFolders(1, 20);
+
+        docsListItemModel = new DocsListItemModel();
+
+        List<Record> records = recordResponse.getRecords();
+
+        for(Record record : records) {
+            String recordId = record.getRecordId();
+            String folderId = record.getFolderId();
+            String title = record.getTitle();
+            String datetime = record.getCreatedTime();
+            List<Keyword> keywords = record.getKeywords();
+
+            for(FolderResponse folder : folderResponse) {
+                int myFolderId = folder.getFolderId();
+                int targetFolderId = Integer.parseInt(folderId);
+
+                if(myFolderId == targetFolderId) {
+                    docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
+                }
+            }
+        }
+        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
+
+        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
+
+        binding.recyclerviewMainDocument.setAdapter(adapter);
+        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
+    }
+
+
 
     private void showPromotions() {
         ApiClient apiClient = new ApiClient(context);

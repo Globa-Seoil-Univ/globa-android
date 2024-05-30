@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if (requestCode == REQUEST_CODE_UPLOAD_RECORD && resultCode == RESULT_OK) {
-            mainFragment.showRecords();
+            mainFragment.showCurrentlyAddedRecords();
         }
     }
 

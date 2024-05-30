@@ -1,8 +1,8 @@
 package team.y2k2.globa.main.docs.list;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +33,6 @@ import team.y2k2.globa.main.docs.keyword.DocsKeywordModel;
 
 public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapter.AdapterViewHolder> {
     ArrayList<DocsListItem> items;
-
 
     public DocsListItemAdapter(ArrayList<DocsListItem> items) {
         this.items = items;
@@ -73,10 +68,14 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
         holder.layout.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
-
             intent.putExtra("title", items.get(position).getTitle());
             intent.putExtra("folderId", items.get(position).getFolderId());
             intent.putExtra("recordId", items.get(position).getRecordId());
+
+            SharedPreferences preferences = holder.itemView.getContext().getSharedPreferences("record_" + items.get(position).getRecordId(), Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("count", preferences.getInt("count", 0) + 1);
+            editor.commit();
 
             holder.itemView.getContext().startActivity(intent);
         });
@@ -94,6 +93,10 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             moreBottomSheet.show();
 
             RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
+            TextView moreTitle = moreBottomSheet.findViewById(R.id.textview_more_docs_title);
+
+            moreTitle.setText(title);
+
 
             rename.setOnClickListener(d1 -> {
                 moreBottomSheet.dismiss();
@@ -118,13 +121,14 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
         if(items.get(position).getKeywords().size() == 0) {
             // 아직 STT 트렌젝션이 완료되지 않았을 때.
-            holder.user_layout_1.setVisibility(View.INVISIBLE);
-            holder.user_layout_2.setVisibility(View.INVISIBLE);
-            holder.user_layout_3.setVisibility(View.INVISIBLE);
+            holder.more.setLayoutParams(new LinearLayout.LayoutParams(0,0));
+            holder.user_layout_1.setLayoutParams(new LinearLayout.LayoutParams(0,0));
+            holder.user_layout_2.setLayoutParams(new LinearLayout.LayoutParams(0,0));
+            holder.user_layout_3.setLayoutParams(new LinearLayout.LayoutParams(0,0));
         }
         else {
-            holder.processing.setVisibility(View.INVISIBLE);
-            holder.lottieAnimationView.setVisibility(View.INVISIBLE);
+            holder.processing.setLayoutParams(new LinearLayout.LayoutParams(0,0));
+            holder.lottieAnimationView.setLayoutParams(new LinearLayout.LayoutParams(0,0));
         }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.itemView.getContext());

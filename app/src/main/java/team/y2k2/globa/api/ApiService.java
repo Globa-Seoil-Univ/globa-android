@@ -49,8 +49,8 @@ public interface ApiService {
 
 //    String API_BASE_URL = "http://1.209.165.82:8080";
 //    String API_BASE_URL = "https://1.209.165.82:8080";
-//    String API_BASE_URL = "http://192.168.219.111:8080";
-    String API_BASE_URL = "https://globa.tetraplace.com";
+    String API_BASE_URL = "http://192.168.219.111:8080";
+//    String API_BASE_URL = "https://globa.tetraplace.com";
     /**
      * 토큰 갱신
      */
@@ -121,16 +121,6 @@ public interface ApiService {
             @Body int surveyType,
             @Body String content
     );
-
-    /**
-     *
-     */
-    @POST("/folder/{folder_id}/record")
-    Call<DocsUploadResponse> createRecord(
-            @Path("folder_id") String folderId,
-            @Body DocsUploadRequest requestBody
-    );
-
 
     /**
      * 문서 추가

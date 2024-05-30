@@ -27,6 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
@@ -55,54 +56,27 @@ public class ProfileFragment extends Fragment {
         binding.recyclerviewProfileSetting.setAdapter(adapter);
         binding.recyclerviewProfileSetting.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
 
+        ApiClient apiClient = new ApiClient(getContext());
 
+        UserInfoResponse response = apiClient.requestUserInfo();
+        // userInfo를 사용하여 필요한 작업 수행
+        Log.d("IMAGETEST", response.getProfile());
+        Log.d("IMAGETEST", response.getName());
 
-        // Retrofit 인스턴스 생성
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiService.API_BASE_URL) // 외부 접근 시 API_BASE_URL 로 변경
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        // API 호출
-        ApiService apiService = retrofit.create(ApiService.class);
+        userPreferences(response);
+        showLogMessages(response);
 
-        SharedPreferences preferences = inflater.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String accessToken = "Bearer " + preferences.getString("accessToken", "");
+        binding.textviewProfileAccountUsername.setText(response.getName());
+        binding.textviewProfileAccountUsercode.setText(response.getCode());
 
-        Call<UserInfoResponse> call = apiService.requestUserInfo("application/json", accessToken);
-        call.enqueue(new Callback<UserInfoResponse>() {
-            @Override
-            public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
-                if (response.isSuccessful()) {
-                    // API 호출 성공
-                    UserInfoResponse userInfo = response.body();
-                    // userInfo를 사용하여 필요한 작업 수행
-                    Log.d("IMAGETEST", userInfo.getProfile());
-                    Log.d("IMAGETEST", userInfo.getName());
+        Glide.with(inflater.getContext())
+                .load(response.getProfile()) // 임시로 로드
+                .into(binding.imageviewProfileAccountImage);
 
-                    userPreferences(response.body());
-                    showLogMessages(response.body());
+        binding.imageviewProfileAccountImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        binding.imageviewProfileAccountImage.setBackground(new ShapeDrawable(new OvalShape()));
+        binding.imageviewProfileAccountImage.setClipToOutline(true);
 
-                    binding.textviewProfileAccountUsername.setText(userInfo.getName());
-                    binding.textviewProfileAccountUsercode.setText(userInfo.getCode());
-
-                    Glide.with(inflater.getContext())
-                            .load(userInfo.getProfile()) // 임시로 로드
-                            .into(binding.imageviewProfileAccountImage);
-
-                    binding.imageviewProfileAccountImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    binding.imageviewProfileAccountImage.setBackground(new ShapeDrawable(new OvalShape()));
-                    binding.imageviewProfileAccountImage.setClipToOutline(true);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserInfoResponse> call, Throwable t) {
-                // API 호출 실패
-                // 네트워크 오류 등 예외 처리 로직 구현
-                Log.d("LOGTEST", t.getMessage());
-
-            }
-        });
 
         return binding.getRoot();
     }

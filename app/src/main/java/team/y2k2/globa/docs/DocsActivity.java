@@ -41,6 +41,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
@@ -57,8 +58,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     String title;
     String folderId;
     String recordId;
-
-    Timer timer;
+    String folderTitle;
 
     String audioUrl;
     private SimpleExoPlayer player;
@@ -84,20 +84,20 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         recordId = intent.getStringExtra("recordId").toString();
 
         binding.textviewDocsTitle.setText(title);
-
         getResponse();
 
         binding.imagebuttonDocsBack.setOnClickListener(v -> {
             player.stop();
-            timer.cancel();
             finish();
         });
 
         binding.imageviewDocsMore.setOnClickListener(v -> {
             Intent intent1 = new Intent(this, DocsMoreActivity.class);
             intent1.putExtra("title", title);
-            intent1.putExtra("folderId", folderId);
             intent1.putExtra("recordId", recordId);
+
+            intent1.putExtra("folderId", folderId);
+            intent1.putExtra("folderTitle", folderTitle);
             startActivity(intent1);
         });
 
@@ -246,48 +246,24 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     }
 
     public void getResponse() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        ApiClient apiClient = new ApiClient(this);
 
-        ApiService apiService = retrofit.create(ApiService.class);
+        DocsDetailResponse response = apiClient.requestGetDocumentDetail(folderId, recordId);
 
-        Log.d(getClass().getName(), "folderId : " + folderId);
-        Log.d(getClass().getName(), "recordId : " + recordId);
+        docsModel = new DocsModel(response.getSections());
+        detailAdapter = new DocsDetailAdapter(docsModel.getItems(), DocsActivity.this);
+        folderTitle = response.getFolder().getTitle();
 
-        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String authorization = "Bearer " + preferences.getString("accessToken", "");
 
-        Call<DocsDetailResponse> call = apiService.requestGetDocumentDetail(folderId, recordId, "application/json", authorization);
-        call.enqueue(new Callback<DocsDetailResponse>() {
-            @Override
-            public void onResponse(Call<DocsDetailResponse> call, Response<DocsDetailResponse> response) {
-                if (response.isSuccessful()) {
-                    DocsDetailResponse docsDetailResponse = response.body();
+        binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
+        binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
 
-                    docsModel = new DocsModel(docsDetailResponse.getSections());
-                    detailAdapter = new DocsDetailAdapter(docsModel.getItems(), DocsActivity.this);
+        docsSummaryModel = new DocsSummaryModel(response.getSections());
+        summaryAdapter = new DocsSummaryAdapter(docsSummaryModel.getItems());
 
-                    binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
-                    binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+        audioUrl = response.getPath();
 
-                    docsSummaryModel = new DocsSummaryModel(docsDetailResponse.getSections());
-                    summaryAdapter = new DocsSummaryAdapter(docsSummaryModel.getItems());
-
-                    audioUrl = docsDetailResponse.getPath();
-
-                    loadAudio();
-                } else {
-                    Log.d(getClass().getName(), "실패 : " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DocsDetailResponse> call, Throwable t) {
-                Log.d(getClass().getName(), "실패 : " + t.getMessage());
-            }
-        });
+        loadAudio();
     }
 
     public static String formatDuration(int durationMillis) {

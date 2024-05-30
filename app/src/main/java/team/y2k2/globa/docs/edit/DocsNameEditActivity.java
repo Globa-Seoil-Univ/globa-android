@@ -49,7 +49,6 @@ public class DocsNameEditActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
     }
 
-
     public void updateDocsName(String title) {
         ApiClient apiClient = new ApiClient(this);
         apiClient.requestUpdateRecordName(folderId,recordId, title);
