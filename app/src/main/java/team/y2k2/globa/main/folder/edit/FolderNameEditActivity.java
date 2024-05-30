@@ -25,9 +25,9 @@ public class FolderNameEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
         binding = ActivityFolderNameEditBinding.inflate(getLayoutInflater());
 
-        String folderName = intent.getStringExtra("folderName");
+        String folderTitle = intent.getStringExtra("folderTitle");
 
-        binding.textviewFolderNameTitle.setText(folderName);
+        binding.textviewFolderNameTitle.setText(folderTitle);
 
         folderNameEditViewModel = new ViewModelProvider(this).get(FolderNameEditViewModel.class);
         SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);

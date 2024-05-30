@@ -35,8 +35,8 @@ public class QuizActivity extends AppCompatActivity {
             finish();
         });
 
-        SharedPreferences folerPreferences = getSharedPreferences("folderid", MODE_PRIVATE);
-        folderId = folerPreferences.getInt("folderid", 0);
+        SharedPreferences folerPreferences = getSharedPreferences("folderId", MODE_PRIVATE);
+        folderId = folerPreferences.getInt("folderId", 0);
 
         quizViewModel = new ViewModelProvider(this).get(QuizViewModel.class);
         quizViewModel.gatherQuiz(folderId, 0);

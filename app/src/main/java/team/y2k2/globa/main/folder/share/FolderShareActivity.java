@@ -47,8 +47,8 @@ public class FolderShareActivity extends AppCompatActivity {
         binding = ActivityFolderShareBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        preferences = getSharedPreferences("folderid", MODE_PRIVATE);
-        folderId = preferences.getInt("folderid", 0);
+        preferences = getSharedPreferences("folderId", MODE_PRIVATE);
+        folderId = preferences.getInt("folderId", 0);
 
         // 코드 입력하는 EditText가 비어있을 땐 X버튼 안보이게 하기
         String input = binding.edittextFoldershareInputname.getText().toString();

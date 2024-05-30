@@ -1,8 +1,6 @@
 package team.y2k2.globa.main.folder.currently;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,7 +44,8 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
 
         holder.layout.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("folder_id", items.get(position).getFolderId());
+            bundle.putInt("folderId", items.get(position).getFolderId());
+            bundle.putString("folderTitle", title);
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 
@@ -77,7 +75,6 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
             title = itemView.findViewById(R.id.textview_folder_item_currently_title);
             datetime = itemView.findViewById(R.id.textview_folder_item_currently_datetime);
             layout = itemView.findViewById(R.id.constraintlayout_folder_item_currently);
-
         }
     }
 

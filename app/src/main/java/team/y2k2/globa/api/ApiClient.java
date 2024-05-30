@@ -16,10 +16,16 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import team.y2k2.globa.api.model.request.DocsMoveRequest;
+import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
+import team.y2k2.globa.api.model.request.RecordCreateRequest;
+import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
+import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
+import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 
 public class ApiClient {
     public static ApiService apiService;
@@ -115,7 +121,6 @@ public class ApiClient {
     }
 
     public LoginResponse requestSignIn(LoginRequest request){
-
         try {
             return CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
@@ -147,5 +152,212 @@ public class ApiClient {
             e.printStackTrace();
             return null;
         }
+    }
+
+
+    public Response<Void> requestInsertFolder(String title) {
+        FolderAddRequest request = new FolderAddRequest(title);
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.requestInsertFolder(APPLICATION_JSON, authorization, request);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+                return response;
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Response<Void> requestUpdateRecordName(String folderId, String recordId, String title) {
+        DocsNameEditRequest request = new DocsNameEditRequest(title);
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.requestUpdateRecordName(folderId, recordId, APPLICATION_JSON, authorization, request);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+                return response;
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<FolderResponse> requestGetFolders(int page, int count) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<List<FolderResponse>> call = apiService.requestGetFolders(APPLICATION_JSON, authorization, page, count);
+                Response<List<FolderResponse>> response;
+
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+
+                return response.body();
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Response<Void> requestUpdateDocsMove(String folderId, String recordId, String targetFolderId) {
+        DocsMoveRequest request = new DocsMoveRequest(String.valueOf(targetFolderId));
+
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.requestUpdateDocsMove(folderId, recordId, APPLICATION_JSON, authorization, request);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+                return response;
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public FolderInsideRecordResponse requestGetFolderInside(int folderId, int page, int count) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<FolderInsideRecordResponse> call = apiService.requestGetFolderInside(folderId,APPLICATION_JSON, authorization, page, count);
+                Response<FolderInsideRecordResponse> response;
+
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+
+                return response.body();
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Response<Void> requestCreateRecord(String folderId, String title, String path, String size) {
+        RecordCreateRequest request = new RecordCreateRequest(title, path, size);
+
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.requestCreateRecord(folderId,APPLICATION_JSON, authorization, request);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+                return response;
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -16,6 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.ActivityDocsNameEditBinding;
 
@@ -45,49 +46,13 @@ public class DocsNameEditActivity extends AppCompatActivity {
             updateDocsName(newName);
         });
 
-
         setContentView(binding.getRoot());
     }
 
 
     public void updateDocsName(String title) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
-
-
-        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String authorization = "Bearer " + preferences.getString("accessToken", "");
-        Log.d(getClass().getName(), "folderId : " + folderId);
-
-        DocsNameEditRequest request = new DocsNameEditRequest(title);
-
-        Call<Void> call = apiService.requestUpdateRecordName(folderId, recordId,"application/json", authorization, request);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    response.body();
-                    // 성공적으로 응답을 받았을 때 처리
-                    Log.d(getClass().getName(), "성공 : " + response.code());
-                    finish();
-                } else {
-                    // 서버로부터 실패 응답을 받았을 때 처리
-                    Log.d(getClass().getName(), "오류 : " + response.code());
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                // 네트워크 요청 실패 시 처리
-                Log.d(getClass().getName(), "오류" + t.getMessage());
-
-            }
-        });
-
+        ApiClient apiClient = new ApiClient(this);
+        apiClient.requestUpdateRecordName(folderId,recordId, title);
+        finish();
     }
 }

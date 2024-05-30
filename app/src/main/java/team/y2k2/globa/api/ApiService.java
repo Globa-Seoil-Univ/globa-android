@@ -418,5 +418,4 @@ public interface ApiService {
             @Header("Authorization") String authorization,
             @Body QuizResultRequest result
     );
-
 }

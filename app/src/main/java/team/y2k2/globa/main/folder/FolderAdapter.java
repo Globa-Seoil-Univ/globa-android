@@ -44,8 +44,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
 
         holder.layout.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("folder_id", items.get(position).getFolderId());
-            bundle.putString("folder_title", items.get(position).getTitle());
+            bundle.putInt("folderId", items.get(position).getFolderId());
+            bundle.putString("folderTitle", items.get(position).getTitle());
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 

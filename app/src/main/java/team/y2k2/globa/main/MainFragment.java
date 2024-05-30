@@ -14,11 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -39,14 +40,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     Button[] docsFilterButtons;
 
+    Context context;
+
     FragmentMainBinding binding;
     DocsListItemModel docsListItemModel = new DocsListItemModel();
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(getLayoutInflater());
-
+        context = getContext();
+        
         setLogoColor();
         setFilterButtons();
         setOnClickListeners();
@@ -71,17 +74,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        for(int i = 0; i < docsFilterButtons.length; i++) {
-            if(docsFilterButtons[i] == v) {
-                changeButtonDisplay(docsFilterButtons[i]);
+        for (Button docsFilterButton : docsFilterButtons) {
+            if (docsFilterButton == v) {
+                changeButtonDisplay(docsFilterButton);
             }
         }
     }
 
     public void changeButtonDisplay(Button button) {
-        for(int i = 0; i < docsFilterButtons.length; i++) {
-            docsFilterButtons[i].setBackgroundResource(R.drawable.main_button);
-            docsFilterButtons[i].setTextColor(Color.BLACK);
+        for (Button docsFilterButton : docsFilterButtons) {
+            docsFilterButton.setBackgroundResource(R.drawable.main_button);
+            docsFilterButton.setTextColor(Color.BLACK);
         }
 
         button.setBackgroundResource(R.drawable.main_button_selected);
@@ -89,24 +92,21 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setOnRefreshListener(SwipeRefreshLayout refreshLayout) {
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                showRecords();
-                binding.swiperefreshlayoutMain.setRefreshing(false);
-            }
+        refreshLayout.setOnRefreshListener(() -> {
+            showRecords();
+            binding.swiperefreshlayoutMain.setRefreshing(false);
         });
     }
 
     public void setLogoColor() {
         SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewMainTitle.getText());
-        spanTitle.setSpan(new ForegroundColorSpan(getContext().getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanTitle.setSpan(new ForegroundColorSpan(context.getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.textviewMainTitle.setText(spanTitle);
     }
 
     public void setOnClickListeners() {
-        for(int i = 0; i < docsFilterButtons.length; i++) {
-            docsFilterButtons[i].setOnClickListener(this);
+        for (Button docsFilterButton : docsFilterButtons) {
+            docsFilterButton.setOnClickListener(this);
         }
 
         binding.imagebuttonMainNotification.setOnClickListener(v -> {
@@ -116,16 +116,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     public void showRecords() {
-        ApiClient apiClient = new ApiClient(this.getContext());
+        ApiClient apiClient = new ApiClient(context);
         RecordResponse recordResponse = apiClient.requestGetRecords(20);
 
         docsListItemModel = new DocsListItemModel();
 
         List<Record> records = recordResponse.getRecords();
 
-        for(int i = 0; i < records.size(); i++) {
-            Record record = records.get(i);
-
+        for(Record record : records) {
             String recordId = record.getRecordId();
             String folderId = record.getFolderId();
             String title = record.getTitle();
@@ -134,9 +132,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
         }
-
         DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
-        adapter.notifyDataSetChanged();
 
         int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
@@ -146,7 +142,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showPromotions() {
-        ApiClient apiClient = new ApiClient(this.getContext());
+        ApiClient apiClient = new ApiClient(context);
         List<NoticeResponse> noticeResponse = apiClient.requestPromotion(3);
 
         // 성공적으로 응답을 받았을 때 처리
