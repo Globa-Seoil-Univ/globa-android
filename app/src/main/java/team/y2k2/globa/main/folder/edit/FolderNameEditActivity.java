@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
@@ -46,16 +48,34 @@ public class FolderNameEditActivity extends AppCompatActivity {
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
             }
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() > 32) {
+                    binding.edittextFolderNameInputname.removeTextChangedListener(this);
+                    String text = s.toString().substring(0, 32);
+                    binding.edittextFolderNameInputname.setText(text);
+                    binding.edittextFolderNameInputname.setSelection(text.length());
+                    binding.edittextFolderNameInputname.addTextChangedListener(this);
+                }
 
+                if (s.length() <= 32) {
+                    binding.textviewFolderNameCount.setText(s.length() + "/32");
+                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                }
+
+                if (s.length() == 0) {
+                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                }
             }
         });
 
         binding.textviewFolderNameChangeConfirm.setOnClickListener(v -> {
-            if(binding.textviewFolderNameChangeConfirm.getText().length() == 0) return;
+            if(binding.edittextFolderNameInputname.getText().length() == 0) {
+                Toast.makeText(this, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             String title = binding.edittextFolderNameInputname.getText().toString();
             // folderId 임시로 입력
