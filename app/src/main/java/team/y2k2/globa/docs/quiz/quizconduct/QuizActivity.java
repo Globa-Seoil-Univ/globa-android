@@ -1,7 +1,6 @@
 package team.y2k2.globa.docs.quiz.quizconduct;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +16,7 @@ import team.y2k2.globa.docs.quiz.quizresult.QuizResultActivity;
 public class QuizActivity extends AppCompatActivity {
 
     ActivityQuizBinding binding;
-    int folderId;
-
+    int folderId, recordId;
     QuizViewModel quizViewModel;
     List<Quiz> quizList;
     private int currentIndex = 0;
@@ -35,11 +33,11 @@ public class QuizActivity extends AppCompatActivity {
             finish();
         });
 
-        SharedPreferences folerPreferences = getSharedPreferences("folderid", MODE_PRIVATE);
-        folderId = folerPreferences.getInt("folderid", 0);
+        folderId = Integer.parseInt(getIntent().getStringExtra("folderId"));
+        recordId = Integer.parseInt(getIntent().getStringExtra("recordId"));
 
         quizViewModel = new ViewModelProvider(this).get(QuizViewModel.class);
-        quizViewModel.gatherQuiz(folderId, 0);
+        quizViewModel.gatherQuiz(folderId, recordId);
 
         quizViewModel.getQuizLiveData().observe(this, quiz -> {
             if(quiz != null) {

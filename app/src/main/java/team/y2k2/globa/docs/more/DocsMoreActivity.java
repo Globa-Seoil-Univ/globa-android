@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsMoreBinding;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
+import team.y2k2.globa.docs.quiz.quizconduct.QuizActivity;
+import team.y2k2.globa.docs.statistics.DocsStatisticsActivity;
 
 public class DocsMoreActivity extends AppCompatActivity {
     ActivityDocsMoreBinding binding;
@@ -84,6 +86,20 @@ public class DocsMoreActivity extends AppCompatActivity {
             if (shouldClose != null && shouldClose) {
                 finish();
             }
+        });
+
+        binding.relativelayoutDocsMoreStatistics.setOnClickListener(v -> {
+            Intent toStatisticsIntent = new Intent(DocsMoreActivity.this, DocsStatisticsActivity.class);
+            toStatisticsIntent.putExtra("folderId", folderId);
+            toStatisticsIntent.putExtra("recordId", recordId);
+            startActivity(toStatisticsIntent);
+        });
+
+        binding.relativelayoutDocsMoreQuiz.setOnClickListener(v -> {
+            Intent toQuizIntent = new Intent(DocsMoreActivity.this, QuizActivity.class);
+            toQuizIntent.putExtra("folderId", folderId);
+            toQuizIntent.putExtra("recordId", recordId);
+            startActivity(toQuizIntent);
         });
     }
 

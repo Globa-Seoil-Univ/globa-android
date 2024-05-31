@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 import team.y2k2.globa.databinding.ActivityFolderNameEditBinding;
 
 public class FolderNameEditActivity extends AppCompatActivity {
@@ -25,14 +26,13 @@ public class FolderNameEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
         binding = ActivityFolderNameEditBinding.inflate(getLayoutInflater());
 
-        String folderName = intent.getStringExtra("folderName");
+        String folderName = intent.getStringExtra("name");
 
         binding.textviewFolderNameTitle.setText(folderName);
 
         folderNameEditViewModel = new ViewModelProvider(this).get(FolderNameEditViewModel.class);
-        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String authorization = "Bearer" + preferences.getString("accessToken", "");
-        String folderId = "";
+        SharedPreferences preferences = getSharedPreferences("folderid", Activity.MODE_PRIVATE);
+        int folderId = preferences.getInt("folderId", 0);
 
         binding.edittextFolderNameInputname.addTextChangedListener(new TextWatcher() {
             @Override
@@ -58,11 +58,12 @@ public class FolderNameEditActivity extends AppCompatActivity {
             if(binding.textviewFolderNameChangeConfirm.getText().length() == 0) return;
 
             String title = binding.edittextFolderNameInputname.getText().toString();
-            // folderId 임시로 입력
-            folderNameEditViewModel.folderRename(folderId, authorization, title);
+            FolderNameEditRequest folderNameEditRequest = new FolderNameEditRequest(title);
+
+            folderNameEditViewModel.folderRename(folderId, folderNameEditRequest);
 
             Intent resultIntent = new Intent();
-            resultIntent.putExtra("changedFolderName", binding.edittextFolderNameInputname.getText().toString()); // 결과 데이터 설정
+            resultIntent.putExtra("name", binding.edittextFolderNameInputname.getText().toString()); // 결과 데이터 설정
             setResult(RESULT_OK, resultIntent);
             finish(); // 액티비티 종료
         });
