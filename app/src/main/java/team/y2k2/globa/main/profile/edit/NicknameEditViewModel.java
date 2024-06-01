@@ -35,18 +35,21 @@ public class NicknameEditViewModel extends ViewModel {
             apiService.requestUpdateProfileName(userId, "application/json", authorization, request).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    Log.d(getClass().getName(), "닉네임 업데이트 성공" + response.code());
-                    SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("name", newNickname);
-                    editor.commit();
+                    if(response.isSuccessful()) {
+                        Log.d(getClass().getName(), "닉네임 업데이트 성공");
+                        SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("name", newNickname);
+                        editor.commit();
+                    } else {
+                        Log.d(getClass().getName(), "닉네임 업데이트 실패 : " + response.code());
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
                     errorLiveData.setValue("서버 오류 발생");
                     Log.d(getClass().getName(), "닉네임 업데이트 실패"  + t.getMessage());
-
                 }
             });
         } catch(Exception e) {

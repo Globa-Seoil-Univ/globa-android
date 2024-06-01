@@ -49,7 +49,12 @@ public class StatisticsFragment extends Fragment {
 
         SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String userIdStr = preferences.getString("uid", "");
-        int userId = Integer.parseInt(userIdStr);
+        int userId = 0;
+        if(userIdStr.equals("")) {
+            Log.d(getClass().getName(), "userId가 비어있습니다 : " + userIdStr);
+        } else {
+            userId = Integer.parseInt(userIdStr);
+        }
 
         statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
         statisticsViewModel.getStatistics(userId);

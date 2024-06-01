@@ -128,6 +128,7 @@ public class FolderFragment extends Fragment {
         });
     }
 
+    /*
     public void deleteFolder() {
         ApiService apiService = ApiClient.getApiService();
 
@@ -152,5 +153,6 @@ public class FolderFragment extends Fragment {
             }
         });
     }
+     */
 
 }

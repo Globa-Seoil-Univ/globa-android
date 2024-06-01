@@ -1,5 +1,7 @@
 package team.y2k2.globa.withdraw;
 
+import static team.y2k2.globa.api.ApiClient.authorization;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -16,30 +18,25 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.request.WithdrawRequest;
 import team.y2k2.globa.intro.IntroActivity;
 
 public class WithdrawViewModel extends ViewModel {
 
     private ApiService apiService;
     private ApiClient apiClient;
-    private String authorization;
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private Context context;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
-    public WithdrawViewModel(@NonNull Application application) {
-        super();
-        apiClient = new ApiClient(context);
+    public WithdrawViewModel() {
         apiService = ApiClient.apiService;
-        authorization = apiClient.authorization;
-        preferences = application.getSharedPreferences("account", Activity.MODE_PRIVATE);
-        editor = preferences.edit();
-        context = application;
     }
     
-    public void withdrawUser(int surveyType, String content) {
-        apiService.requestWithdrawUser("application/json", authorization, surveyType, content).enqueue(new Callback<Void>() {
+    public void withdrawUser(int[] surveyType, String content) {
+        WithdrawRequest withdrawRequest = new WithdrawRequest(surveyType, content);
+        apiService.requestWithdrawUser("application/json", authorization, withdrawRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
@@ -49,13 +46,14 @@ public class WithdrawViewModel extends ViewModel {
                     context.startActivity(withDrawIntent);
                     Log.d(getClass().getName(), "로그아웃 성공");
                 } else {
-                    Log.d(getClass().getName(), "로그아웃 실패");
+                    Log.d(getClass().getName(), "로그아웃 실패 : " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 errorLiveData.setValue(t.getMessage());
+                Log.d(getClass().getName(), "request 실패");
             }
         });
     }

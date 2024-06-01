@@ -74,15 +74,15 @@ public class ProfileFragment extends Fragment {
         call.enqueue(new Callback<UserInfoResponse>() {
             @Override
             public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     // API 호출 성공
                     UserInfoResponse userInfo = response.body();
                     // userInfo를 사용하여 필요한 작업 수행
-                    Log.d("IMAGETEST", userInfo.getProfile());
-                    Log.d("IMAGETEST", userInfo.getName());
+//                    Log.d("IMAGETEST", userInfo.getProfile());
+//                    Log.d("IMAGETEST", userInfo.getName());
 
                     userPreferences(response.body());
-                    showLogMessages(response.body());
+//                    showLogMessages(response.body());
 
                     binding.textviewProfileAccountUsername.setText(userInfo.getName());
                     binding.textviewProfileAccountUsercode.setText(userInfo.getCode());
@@ -96,7 +96,10 @@ public class ProfileFragment extends Fragment {
                     binding.imageviewProfileAccountImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     binding.imageviewProfileAccountImage.setBackground(new ShapeDrawable(new OvalShape()));
                     binding.imageviewProfileAccountImage.setClipToOutline(true);
-                } else {
+                } else if (response.body() == null) {
+                    Log.d(getClass().getName(), "응답 값이 없음 : " + response.message());
+                }
+                else {
                     Log.d(getClass().getName(), "API 호출 실패");
                 }
             }

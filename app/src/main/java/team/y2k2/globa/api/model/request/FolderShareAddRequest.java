@@ -4,6 +4,10 @@ public class FolderShareAddRequest {
 
     private static String role;
 
+    public FolderShareAddRequest(String role) {
+        this.role = role;
+    }
+
     public static String getRole() {
         return role;
     }

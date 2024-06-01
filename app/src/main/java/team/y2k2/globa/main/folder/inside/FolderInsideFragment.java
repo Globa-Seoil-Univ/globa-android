@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -34,6 +35,8 @@ import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.databinding.FragmentFolderInsideBinding;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.edit.FolderNameEditActivity;
+import team.y2k2.globa.main.folder.permission.FolderPermissionActivity;
+import team.y2k2.globa.main.folder.share.FolderShareActivity;
 
 public class FolderInsideFragment extends Fragment {
     FragmentFolderInsideBinding binding;
@@ -174,16 +177,71 @@ public class FolderInsideFragment extends Fragment {
             nameEditLauncher.launch(intent);
         });
         shareButton.setOnClickListener(v -> {
-
+            Intent toShareIntent = new Intent(getActivity(), FolderShareActivity.class);
+            toShareIntent.putExtra("folderId", folderId);
+            startActivity(toShareIntent);
         });
         authorityButton.setOnClickListener(v -> {
-
+            Intent toPermissionIntent = new Intent(getActivity(), FolderPermissionActivity.class);
+            toPermissionIntent.putExtra("folderId", folderId);
+            startActivity(toPermissionIntent);
         });
         deleteButton.setOnClickListener(v -> {
-
+            bottomSheetDialog.dismiss();
+            showSecondBottomSheetDialog();
         });
 
         bottomSheetDialog.show();
+    }
+
+    public void showSecondBottomSheetDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(FolderInsideFragment.this.getContext());
+        View bottomSheetView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_delete_folder, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        TextView cancelButton = bottomSheetView.findViewById(R.id.textview_delete_folder_cancel);
+        TextView confirmButton = bottomSheetView.findViewById(R.id.textview_delete_folder_confirm);
+
+        cancelButton.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+        });
+
+        confirmButton.setOnClickListener(v -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(API_BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            apiService = retrofit.create(ApiService.class);
+
+            SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+            String accessToken = "Bearer " + preferences.getString("accessToken", "");
+
+            apiService.requestDeleteFolder(folderId, "application/json", accessToken).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if(response.isSuccessful()) {
+                        Log.d(getClass().getName(), "폴더 삭제 성공");
+                    } else {
+                        Log.d(getClass().getName(), "폴더 삭제 실패 : " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.d(getClass().getName(), "request 실패");
+                }
+            });
+
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .remove(FolderInsideFragment.this)
+                    .commit();
+
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.show();
+
     }
 
 }

@@ -21,12 +21,14 @@ import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.DocsUploadRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.FolderNameEditRequest;
+import team.y2k2.globa.api.model.request.FolderShareAddRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.NicknameEditRequest;
 import team.y2k2.globa.api.model.request.NotificationRequest;
 import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.TokenRequest;
+import team.y2k2.globa.api.model.request.WithdrawRequest;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.DocsUploadResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
@@ -119,8 +121,7 @@ public interface ApiService {
     Call<Void> requestWithdrawUser(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
-            @Body int surveyType,
-            @Body String content
+            @Body WithdrawRequest withdrawRequest
     );
 
     /**
@@ -242,7 +243,7 @@ public interface ApiService {
      */
     @DELETE("/folder/{folder_id}")
     Call<Void> requestDeleteFolder(
-            @Path("folder_id") String folderId,
+            @Path("folder_id") int folderId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
     );
@@ -269,7 +270,7 @@ public interface ApiService {
             @Path("user_id") int userId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
-            @Body String role
+            @Body FolderShareAddRequest folderShareAddRequest
     );
 
     /**

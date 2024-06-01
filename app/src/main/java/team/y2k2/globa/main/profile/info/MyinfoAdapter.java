@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,16 +71,19 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
 
             } else {
 
-                if(item.getTitle().toString().equals("계정코드")) {
+                if(item.getTitle().toString().equals("계정 코드")) {
                     // 계정코드 클립보드 복사
                     copyToClipboard(context, item.getName().toString());
                     Toast.makeText(context, "복사완료!", Toast.LENGTH_SHORT).show();
+                    Log.d(getClass().getName(), "클립보드 복사 완료");
                 } else if(item.getTitle().toString().equals("로그아웃")) {
                     // 로그아웃 로직
+                    Log.d(getClass().getName(), "프리퍼런스 리셋 시작");
                     SharedPreferences preferences = context.getSharedPreferences("account", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
+                    Log.d(getClass().getName(), "프리퍼런스 리셋 완료 : " + preferences.getString("accessToken", ""));
                     Intent logoutIntent = new Intent(context, IntroActivity.class);
                     context.startActivity(logoutIntent);
                 }

@@ -57,8 +57,11 @@ public class MyinfoActivity extends AppCompatActivity {
         binding = ActivityMyinfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        loadUserInfoList();
+        binding.buttonMyinfoBack.setOnClickListener(v -> {
+            finish();
+        });
 
+        loadUserInfoList();
 
         // 이미지 변경 버튼 동작
         // 갤러리 접근 권한 요청 동작 (menifest 파일에서 허가 받을 수 있지만 이 방식이 권장됨)
@@ -142,13 +145,17 @@ public class MyinfoActivity extends AppCompatActivity {
                 String code = userInfoResponse.getCode();
                 int folderId = Integer.parseInt(userInfoResponse.getPublicFolderId());
 
-                // 초기 이미지 설정
-                profileImageRef = storage.getReference().child(profile);
+                if (profile != null) {
+                    // 초기 이미지 설정
+                    profileImageRef = storage.getReference().child(profile);
 
-                // 2024-05-22 에러 발생 지점 주석 처리
-//                Glide.with(this).load(profileImageRef)
-//                                .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
-//                                .into(binding.imageviewMyinfoPhoto);
+                    Glide.with(this).load(profileImageRef)
+                            .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
+                            .into(binding.imageviewMyinfoPhoto);
+                } else {
+                    Glide.with(this).load(R.mipmap.ic_launcher).placeholder(R.mipmap.ic_launcher).into(binding.imageviewMyinfoPhoto);
+                }
+
 
                 itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, new NicknameEditActivity()));
                 itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));

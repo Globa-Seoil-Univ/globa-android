@@ -51,8 +51,9 @@ public class FolderShareViewModel extends ViewModel {
         });
     }
 
-    public void addSharedUser(int folderId, int userId) {
-        apiService.requestInsertFolderShareUser(folderId, userId, "application/json", authorization, FolderShareAddRequest.getRole()).enqueue(new Callback<Void>() {
+    public void addSharedUser(int folderId, int userId, String role) {
+        FolderShareAddRequest folderShareAddRequest = new FolderShareAddRequest(role);
+        apiService.requestInsertFolderShareUser(folderId, userId, "application/json", authorization, folderShareAddRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
