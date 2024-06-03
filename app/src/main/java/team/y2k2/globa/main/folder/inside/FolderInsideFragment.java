@@ -164,6 +164,9 @@ public class FolderInsideFragment extends Fragment {
         View bottomSheetView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_folder_more, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
+        TextView dialogTitle = bottomSheetView.findViewById(R.id.textview_more_folder_title);
+        dialogTitle.setText(binding.textviewFolderInsideTitle.getText().toString());
+
         RelativeLayout nameEditButton = bottomSheetView.findViewById(R.id.relativelayout_more_rename);
         RelativeLayout shareButton = bottomSheetView.findViewById(R.id.relativelayout_more_share);
         RelativeLayout authorityButton = bottomSheetView.findViewById(R.id.relativelayout_more_authority);
@@ -180,11 +183,13 @@ public class FolderInsideFragment extends Fragment {
             Intent toShareIntent = new Intent(getActivity(), FolderShareActivity.class);
             toShareIntent.putExtra("folderId", folderId);
             startActivity(toShareIntent);
+            bottomSheetDialog.dismiss();
         });
         authorityButton.setOnClickListener(v -> {
             Intent toPermissionIntent = new Intent(getActivity(), FolderPermissionActivity.class);
             toPermissionIntent.putExtra("folderId", folderId);
             startActivity(toPermissionIntent);
+            bottomSheetDialog.dismiss();
         });
         deleteButton.setOnClickListener(v -> {
             bottomSheetDialog.dismiss();

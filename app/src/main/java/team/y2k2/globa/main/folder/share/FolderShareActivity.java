@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -105,7 +106,12 @@ public class FolderShareActivity extends AppCompatActivity {
 
         binding.constraintlayoutFoldershareSearch.setOnClickListener(v -> {
 
-            showBottomSheetDialog();
+            if(!binding.textviewFoldershareSearch.equals("")) {
+                showBottomSheetDialog();
+            } else {
+                Toast.makeText(FolderShareActivity.this, "사용자를 검색해주세요", Toast.LENGTH_SHORT).show();
+            }
+
 
         });
 
@@ -130,7 +136,7 @@ public class FolderShareActivity extends AppCompatActivity {
                     }
                 }
             }
-
+            finish();
         });
 
     }
@@ -141,8 +147,8 @@ public class FolderShareActivity extends AppCompatActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_foldershare_authority, null);
         bottomSheetDialog.setContentView(dialogView);
 
-        Button readButton = dialogView.findViewById(R.id.relativelayout_foldershare_read);
-        Button writeButton = dialogView.findViewById(R.id.relativelayout_foldershare_write);
+        RelativeLayout readButton = dialogView.findViewById(R.id.relativelayout_foldershare_read);
+        RelativeLayout writeButton = dialogView.findViewById(R.id.relativelayout_foldershare_write);
 
         readButton.setOnClickListener(v -> {
             if(lastImageUrl != null) {
@@ -157,6 +163,7 @@ public class FolderShareActivity extends AppCompatActivity {
                 binding.textviewFoldershareSearch.setText("");
                 lastImageUrl = null;
             }
+            bottomSheetDialog.dismiss();
         });
         writeButton.setOnClickListener(v -> {
             if(lastImageUrl != null) {
@@ -171,7 +178,10 @@ public class FolderShareActivity extends AppCompatActivity {
                 binding.textviewFoldershareSearch.setText("");
                 lastImageUrl = null;
             }
+            bottomSheetDialog.dismiss();
         });
+
+        bottomSheetDialog.show();
 
     }
 

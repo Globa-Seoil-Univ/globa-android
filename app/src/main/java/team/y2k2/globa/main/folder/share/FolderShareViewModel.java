@@ -40,7 +40,7 @@ public class FolderShareViewModel extends ViewModel {
                 if(response.isSuccessful()) {
                     userSearchLiveData.postValue(response.body());
                 } else {
-                    errorLiveData.postValue("Failed to fetch user info");
+                    errorLiveData.postValue("해당 코드의 사용자가 없습니다");
                 }
             }
 
@@ -59,7 +59,7 @@ public class FolderShareViewModel extends ViewModel {
                 if(response.isSuccessful()) {
                     Log.d(getClass().getName(), "공유 추가 성공");
                 } else {
-                    Log.e(getClass().getName(), "공유 추가 실패");
+                    Log.d(getClass().getName(), "공유 추가 실패 : " + response.code());
                 }
             }
 
