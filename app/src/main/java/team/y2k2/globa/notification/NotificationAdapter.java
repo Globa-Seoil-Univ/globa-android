@@ -20,7 +20,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.entity.Inquiry;
@@ -41,7 +40,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private static final int TYPE_UPLOAD_FAILED = 7;
     private static final int TYPE_INQUIRY_ANSWERED = 8;
 
+
     NotificationModel items;
+
 
     private int createViewHolderCount = 0; // 호출 횟수를 추적하는 변수
 
@@ -90,7 +91,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 return new NotificationAdapter.AdapterViewHolder(view, TYPE_INQUIRY_ANSWERED);
         }
 
-        return null;
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_inquiry, parent, false);
+        return new NotificationAdapter.AdapterViewHolder(view, TYPE_NOTIFICATION);
 
     }
 
@@ -104,7 +106,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 break;
             case TYPE_SHARE_INVITE:
                 break;
-
             case TYPE_SHARED_FOLDER_ADD_RECORD:
                 break;
 
@@ -115,14 +116,80 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 holder.shareUserTitle.setText(user.getName() + "님이" + folder.getTitle() +" 폴더 공유 초대를 보냈습니다.");
 
                 holder.shareUserAccess.setOnClickListener(v -> {
-                    ApiClient apiClient = new ApiClient(holder.itemView.getContext());
+                    // Retrofit 인스턴스 생성
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(ApiService.API_BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
 
-                    Response<Void> response = apiClient.requestAcceptShareInvite(folder.getFolderId(), share.getShareId());
+                    SharedPreferences preferences = holder.itemView.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+                    String accessToken = "Bearer " + preferences.getString("accessToken", "");
 
-                    Log.d("초대 수락", "초대 수락 성공 : " + response.code());
-                    holder.shareUserAccess.setVisibility(View.INVISIBLE);
-                    holder.shareUserDenied.setVisibility(View.INVISIBLE);
-                    Toast.makeText(holder.itemView.getContext(), "수락했습니다.", Toast.LENGTH_LONG);
+                    ApiService apiService = retrofit.create(ApiService.class);
+
+                    Call<Void> call2 = apiService.requestAcceptShareInvite(folder.getFolderId(), share.getShareId(), "application/json",accessToken);
+                    call2.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                // 성공적으로 응답을 받았을 때 처리할 내용
+                                Log.d("초대 수락", "초대 수락 성공 : " + response.code());
+                                holder.shareUserAccess.setVisibility(View.INVISIBLE);
+                                holder.shareUserDenied.setVisibility(View.INVISIBLE);
+                                Toast.makeText(holder.itemView.getContext(), "수락했습니다.", Toast.LENGTH_LONG);
+                            } else {
+                                // 서버로부터 실패 응답을 받았을 때 처리할 내용
+                                Log.d("초대 수락", "초대 수락 실패 : " + response.code() + " | " + response);
+                                Toast.makeText(holder.itemView.getContext(), "에러 발생 : " +response.code(), Toast.LENGTH_LONG);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            // 네트워크 요청 실패 시 처리할 내용
+                            Log.d("초대 수락", "초대 수락 실패 : " + t.getMessage());
+                        }
+                    });
+                });
+
+                holder.shareUserDenied.setOnClickListener(v -> {
+                    // Retrofit 인스턴스 생성
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(ApiService.API_BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    SharedPreferences preferences = holder.itemView.getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+                    String accessToken = "Bearer " + preferences.getString("accessToken", "");
+
+                    ApiService apiService = retrofit.create(ApiService.class);
+
+                    NotificationRequest request = new NotificationRequest(items.getNotifications().get(position).getNotificationId());
+
+                    Call<Void> call2 = apiService.requestDeniedShareInvite(folder.getFolderId(), share.getShareId(), "application/json",accessToken, request);
+                    call2.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                // 성공적으로 응답을 받았을 때 처리할 내용
+                                Log.d("초대 거절", "초대를 거절했습니다. " + response.code());
+                                Toast.makeText(holder.itemView.getContext(), "수락했습니다.", Toast.LENGTH_LONG);
+
+                                holder.shareUserAccess.setVisibility(View.INVISIBLE);
+                                holder.shareUserDenied.setVisibility(View.INVISIBLE);
+                            } else {
+                                // 서버로부터 실패 응답을 받았을 때 처리할 내용
+                                Log.d("초대 거절", "초대 거절 실패: " + response.code() + " | " + response);
+                                Toast.makeText(holder.itemView.getContext(), "에러 발생 : " +response.code(), Toast.LENGTH_LONG);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            // 네트워크 요청 실패 시 처리할 내용
+                            Log.d("초대 거절", "실패 : " + t.getMessage());
+                        }
+                    });
                 });
                 break;
 
@@ -142,7 +209,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 break;
 
             case TYPE_UPLOAD_FAILED:
-//                holder.inquiryTitle.setText("이 외 형식입니다.");
+                holder.inquiryTitle.setText("이 외 형식입니다.");
                 break;
 
             case TYPE_INQUIRY_ANSWERED:
@@ -213,9 +280,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     shareUserTitle = itemView.findViewById(R.id.textview_item_notification_share_title);
                     shareUserAccess = itemView.findViewById(R.id.button_item_notification_share_access);
                     shareUserDenied = itemView.findViewById(R.id.button_item_notification_share_denied);
-
                     break;
-
                 case TYPE_SHARED_FOLDER_ADD_COMMENT:
                     break;
 
