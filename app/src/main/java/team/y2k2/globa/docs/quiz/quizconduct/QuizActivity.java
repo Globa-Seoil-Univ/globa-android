@@ -2,6 +2,7 @@ package team.y2k2.globa.docs.quiz.quizconduct;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,6 +23,7 @@ public class QuizActivity extends AppCompatActivity {
     private int currentIndex = 0;
     private List<Boolean> answerList;
     private List<QuizResult> quizResultList;
+    boolean isReceived = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,24 +44,32 @@ public class QuizActivity extends AppCompatActivity {
         quizViewModel.getQuizLiveData().observe(this, quiz -> {
             if(quiz != null) {
                 quizList = quiz.getQuizs();
+                isReceived = true;
+                Log.d("api 수신 여부", "수신 성공");
+            } else {
+                Log.d("api 수신 여부", "수신 실패");
             }
         });
 
-        // 1번 문제 설정
-        if(!quizList.isEmpty()) {
-            binding.textviewQuizCount.setText("문제 1/10");
-            binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
+        if(isReceived) {
+            Log.d("퀴즈 시작", "퀴즈 시작");
+            // 1번 문제 설정
+            if(!quizList.isEmpty()) {
+                binding.textviewQuizCount.setText("문제 1/10");
+                binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
+            }
+
+            // O 선택
+            binding.layoutQuizCorrect.setOnClickListener(v -> {
+                fetchQuiz(true);
+            });
+
+            // X 선택
+            binding.layoutQuizWrong.setOnClickListener(v -> {
+                fetchQuiz(false);
+            });
         }
 
-        // O 선택
-        binding.layoutQuizCorrect.setOnClickListener(v -> {
-            fetchQuiz(true);
-        });
-
-        // X 선택
-        binding.layoutQuizWrong.setOnClickListener(v -> {
-            fetchQuiz(false);
-        });
 
     }
 
@@ -80,7 +90,7 @@ public class QuizActivity extends AppCompatActivity {
             binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
         } else {
             // 결과화면으로 넘어가기전 퀴즈 결과 api 전송
-            quizViewModel.submitQuizResult(folderId, 0, quizResultList);
+            quizViewModel.submitQuizResult(folderId, recordId, quizResultList);
 
             // 결과화면으로 넘어가기전 결과 계산
             int totalQuestion = quizList.size(); // 총 문제 수

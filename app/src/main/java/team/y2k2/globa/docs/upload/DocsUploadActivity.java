@@ -143,6 +143,7 @@ public class DocsUploadActivity extends AppCompatActivity {
     }
 
     private void uploadRecordFile(String path, String userId, String folderId, String extension) {
+        Log.d(getClass().getName(), "path 값 : " + path);
         Instant instant = Instant.now();
         unixTime = instant.getEpochSecond();
 

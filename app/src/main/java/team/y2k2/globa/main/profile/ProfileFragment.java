@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
@@ -53,7 +54,7 @@ public class ProfileFragment extends Fragment {
 
         UserInfoResponse response = apiClient.requestUserInfo();
         // userInfo를 사용하여 필요한 작업 수행
-        Log.d("IMAGETEST", response.getProfile());
+        //Log.d("IMAGETEST", response.getProfile());
         Log.d("IMAGETEST", response.getName());
 
         userPreferences(response);
@@ -64,6 +65,7 @@ public class ProfileFragment extends Fragment {
 
         Glide.with(inflater.getContext())
                 .load(response.getProfile()) // 임시로 로드
+                .error(R.mipmap.ic_launcher)
                 .into(binding.imageviewProfileAccountImage);
 
         binding.imageviewProfileAccountImage.setScaleType(ImageView.ScaleType.CENTER_CROP);

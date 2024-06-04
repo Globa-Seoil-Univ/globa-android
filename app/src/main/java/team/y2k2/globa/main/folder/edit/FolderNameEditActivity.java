@@ -33,8 +33,12 @@ public class FolderNameEditActivity extends AppCompatActivity {
         binding.textviewFolderNameTitle.setText(folderTitle);
 
         folderNameEditViewModel = new ViewModelProvider(this).get(FolderNameEditViewModel.class);
-        SharedPreferences preferences = getSharedPreferences("folderid", Activity.MODE_PRIVATE);
-        int folderId = preferences.getInt("folderId", 0);
+
+        int folderId = getIntent().getIntExtra("folderId", 0);
+        if(folderId == 0) {
+            Toast.makeText(this, "유효하지 않은 폴더 ID 입니다", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         binding.edittextFolderNameInputname.addTextChangedListener(new TextWatcher() {
             @Override

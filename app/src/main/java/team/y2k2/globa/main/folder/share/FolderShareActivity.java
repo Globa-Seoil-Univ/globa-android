@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -133,7 +134,8 @@ public class FolderShareActivity extends AppCompatActivity {
                         int userId = item.getUserId();
                         String role = item.getRole();
 
-                        folderShareViewModel.addSharedUser(folderId, userId, role);
+                        folderShareViewModel.addSharedUser(folderId, 1, role);
+                        Log.d(getClass().getName(), folderId + ", " + userId + ", " + role);
                     }
                 }
             }

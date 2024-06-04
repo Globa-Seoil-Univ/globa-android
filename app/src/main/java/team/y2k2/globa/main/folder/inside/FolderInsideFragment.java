@@ -154,6 +154,7 @@ public class FolderInsideFragment extends Fragment {
             bottomSheetDialog.dismiss();
             Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
             intent.putExtra("name", binding.textviewFolderInsideTitle.getText().toString());
+            intent.putExtra("folderId", folderId);
             nameEditLauncher.launch(intent);
         });
         shareButton.setOnClickListener(v -> {

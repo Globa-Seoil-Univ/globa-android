@@ -9,6 +9,7 @@ import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -52,8 +53,8 @@ public interface ApiService {
 
 //    String API_BASE_URL = "http://1.209.165.82:8080";
 //    String API_BASE_URL = "https://1.209.165.82:8080";
-    String API_BASE_URL = "http://192.168.219.111:8080";
-//    String API_BASE_URL = "https://globa.tetraplace.com";
+//    String API_BASE_URL = "http://192.168.219.111:8080";
+    String API_BASE_URL = "https://globa.tetraplace.com";
     /**
      * 토큰 갱신
      */
@@ -416,7 +417,7 @@ public interface ApiService {
      */
     @GET("/user/{user_id}/analysis")
     Call<StatisticsResponse> requestStatistics(
-            @Path("user_id") int userId,
+            @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
     );

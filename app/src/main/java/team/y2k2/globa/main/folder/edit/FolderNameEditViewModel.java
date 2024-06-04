@@ -7,6 +7,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,7 +31,12 @@ public class FolderNameEditViewModel extends ViewModel {
                 if(response.isSuccessful()) {
                     Log.d(getClass().getName(), "폴더 이름 수정 완료");
                 } else {
-                    Log.d(getClass().getName(), "폴더 이름 수정 실패: " + response.code());
+                    try {
+                        Log.d(getClass().getName(), "폴더 이름 수정 실패: " + response.code() + ", " + response.errorBody().string());
+                        Log.d(getClass().getName(), String.valueOf(folderId));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
             }

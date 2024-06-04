@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -27,37 +28,49 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Quizgrade;
 import team.y2k2.globa.api.model.entity.Studytime;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentStatisticsBinding;
 
 public class StatisticsFragment extends Fragment {
     //String[] dayX = { "딥러닝", "학습", "지능", "데이터", "예측", "인공신경망", "사용", "입력", "패턴", "이미지" };
     String[] wordX, timeX, gradeX; // 수평 막대 그래프 카테고리 배열
     int[] wordValues, timeValues, gradeValues;
+    double[] doubleWordValues;
     FragmentStatisticsBinding binding;
     private HorizontalBarChart barChart;
     private LineChart timeLineChart, gradeLineChart;
     StatisticsViewModel statisticsViewModel;
+    String userId;
+    private MutableLiveData<Boolean> isUserIdReceived = new MutableLiveData<>(false);
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentStatisticsBinding.inflate(getLayoutInflater());
 
-        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String userIdStr = preferences.getString("uid", "");
-        int userId = 0;
-        if(userIdStr.equals("")) {
-            Log.d(getClass().getName(), "userId가 비어있습니다 : " + userIdStr);
-        } else {
-            userId = Integer.parseInt(userIdStr);
-        }
-
         statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
-        statisticsViewModel.getStatistics(userId);
+
+        statisticsViewModel.getUserId();
+        statisticsViewModel.getUserInfoLiveData().observe(getViewLifecycleOwner(), userInfo -> {
+            if(userInfo != null) {
+                userId = userInfo.getUserId();
+                isUserIdReceived.setValue(true);
+                Log.d("userId 수신 성공", "userId : " + userId);
+            }
+        });
+
+        isUserIdReceived.observe(getViewLifecycleOwner(), isReceived -> {
+            statisticsViewModel.getStatistics(userId);
+        });
+
+        barChart = binding.wordBarChart;
+        timeLineChart = binding.timeLineChart;
+        gradeLineChart = binding.gradeLineChart;
 
         statisticsViewModel.getStatisticsLiveData().observe(getViewLifecycleOwner(), statistics -> {
             if(statistics != null) {
@@ -66,27 +79,89 @@ public class StatisticsFragment extends Fragment {
                 List<Quizgrade> quizgrades = statistics.getQuizGrades();
 
                 wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
-                // 여기 고쳐주세용
-//                wordValues = keywords.stream().mapToInt(Keyword::getImportance).toArray();
+                // 여기 float으로 고쳐주세용
+                doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
+                wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 10)).toArray();
+                drawBarChart(barChart, wordX, wordValues);
 
                 timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
                 timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
+                if(timeX.length < 10 && timeX.length > 0) {
+                    List<String> timeXList = new ArrayList<>();
+                    List<Integer> timeValuesList = new ArrayList<>();
+                    for(int i = 0; i < timeX.length; i ++) {
+                        timeXList.add(timeX[i]);
+                        timeValuesList.add(timeValues[i]);
+                    }
+                    for(int i = 0; i < 10 - timeX.length; i++) {
+                        timeXList.add("0");
+                        timeValuesList.add(0);
+                    }
+                    String[] newTimeX = new String[10];
+                    int[] newTimeValues = new int[10];
+                    int i = 0, j = 0;
+                    for(String s : timeXList) {
+                        newTimeX[i] = s;
+                        i++;
+                    }
+                    for(int n : timeValuesList) {
+                        newTimeValues[j] = n;
+                        j++;
+                    }
+                    drawLineChart(timeLineChart, newTimeX, newTimeValues, "공부시간");
+                } else if (timeX.length == 0) {
+                    String[] newTimeX = new String[10];
+                    int[] newTimeValues = new int[10];
+                    for(int i = 0; i < 10; i++) {
+                        newTimeX[i] = "0";
+                        newTimeValues[i] = 0;
+                    }
+                    drawLineChart(timeLineChart, newTimeX, newTimeValues, "공부시간");
+                } else {
+                    drawLineChart(timeLineChart, timeX, timeValues, "공부시간");
+                }
 
                 gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
                 gradeValues = quizgrades.stream().mapToInt(Quizgrade::getScore).toArray();
+                if(gradeX.length < 10 && gradeX.length > 0) {
+                    List<String> gradeXList = new ArrayList<>();
+                    List<Integer> gradeValuesList = new ArrayList<>();
+                    for(int i = 0; i < gradeX.length; i ++) {
+                        gradeXList.add(timeX[i]);
+                        gradeValuesList.add(timeValues[i]);
+                    }
+                    for(int i = 0; i < 10 - gradeX.length; i++) {
+                        gradeXList.add("0");
+                        gradeValuesList.add(0);
+                    }
+                    String[] newGradeX = new String[10];
+                    int[] newGradeValues = new int[10];
+                    int i = 0, j = 0;
+                    for(String s : gradeXList) {
+                        newGradeX[i] = s;
+                        i++;
+                    }
+                    for(int n : gradeValuesList) {
+                        newGradeValues[j] = n;
+                        j++;
+                    }
+                    drawLineChart(gradeLineChart, newGradeX, newGradeValues, "퀴즈 점수");
+                } else if (gradeX.length == 0) {
+                    String[] newGradeX = new String[10];
+                    int[] newGradeValues = new int[10];
+                    for(int i = 0; i < 10; i++) {
+                        newGradeX[i] = "0";
+                        newGradeValues[i] = 0;
+                    }
+                    drawLineChart(gradeLineChart, newGradeX, newGradeValues, "퀴즈 점수");
+                } else {
+                    drawLineChart(gradeLineChart, gradeX, gradeValues, "퀴즈 점수");
+                }
 
             } else {
                 Log.e(getClass().getName(), "LiveData 오류 발생");
             }
         });
-
-        barChart = binding.wordBarChart;
-        timeLineChart = binding.timeLineChart;
-        gradeLineChart = binding.gradeLineChart;
-
-        drawBarChart(barChart, wordX, wordValues);
-        drawLineChart(timeLineChart, timeX, timeValues);
-        drawLineChart(gradeLineChart, gradeX, gradeValues);
 
         return binding.getRoot();
     }
@@ -152,7 +227,7 @@ public class StatisticsFragment extends Fragment {
         axisLeft.setDrawGridLines(true); // 기준선 활성화
         axisLeft.setDrawAxisLine(true); // 축선 활성화
         axisLeft.setAxisMinimum(0f); // 최솟값
-        axisLeft.setAxisMaximum(0.5f); // 최댓값
+        axisLeft.setAxisMaximum(8f); // 최댓값
         axisLeft.setGranularity(0.1f); // 기준선 간격 설정
         axisLeft.setDrawLabels(false); // label 삭제
 
@@ -169,13 +244,13 @@ public class StatisticsFragment extends Fragment {
         xAxis.setValueFormatter(new IndexAxisValueFormatter(dayX));
     }
 
-    private void drawLineChart(LineChart lineChart, String[] dayX, int[] values) {
+    private void drawLineChart(LineChart lineChart, String[] dayX, int[] values, String title) {
         List<Entry> entries = new ArrayList<>();
         for(int i = 0; i < 10; i++) {
             entries.add(new Entry(i, values[i]));
         }
 
-        LineDataSet lineDataSet = new LineDataSet(entries, "");
+        LineDataSet lineDataSet = new LineDataSet(entries, title);
         lineDataSet.setColor(Color.parseColor("#E8C1A0")); // 선 색깔 지정
         lineDataSet.setDrawValues(false); // 해당 포인트에 값 라벨 지정
         lineDataSet.setLineWidth(2f); // 선 두깨 지정

@@ -1,9 +1,14 @@
 package team.y2k2.globa.api.model.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Quiz {
 
+    @SerializedName("quizId")
     private int quizId;
+    @SerializedName("question")
     private String question;
+    @SerializedName("answer")
     private boolean answer;
 
     public int getQuizId() {

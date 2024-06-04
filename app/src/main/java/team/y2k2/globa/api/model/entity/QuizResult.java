@@ -1,8 +1,12 @@
 package team.y2k2.globa.api.model.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 public class QuizResult {
 
+    @SerializedName("quizId")
     private int quizId;
+    @SerializedName("isCorrect")
     private boolean isCorrect;
 
     public QuizResult(int quizId, boolean isCorrect) {
