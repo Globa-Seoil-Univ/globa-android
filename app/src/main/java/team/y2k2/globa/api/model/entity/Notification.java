@@ -24,9 +24,6 @@ public class Notification {
     @SerializedName("inquiry")
     private Inquiry inquiry;
 
-    // Getters and Setters
-
-
     public String getCreatedTime() {
         return createdTime;
     }

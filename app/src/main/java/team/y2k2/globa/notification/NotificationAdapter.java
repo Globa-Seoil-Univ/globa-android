@@ -91,7 +91,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 return new NotificationAdapter.AdapterViewHolder(view, TYPE_INQUIRY_ANSWERED);
         }
 
-        return null;
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_inquiry, parent, false);
+        return new NotificationAdapter.AdapterViewHolder(view, TYPE_NOTIFICATION);
 
     }
 
@@ -105,7 +106,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 break;
             case TYPE_SHARE_INVITE:
                 break;
-
             case TYPE_SHARED_FOLDER_ADD_RECORD:
                 break;
 
@@ -209,7 +209,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 break;
 
             case TYPE_UPLOAD_FAILED:
-//                holder.inquiryTitle.setText("이 외 형식입니다.");
+                holder.inquiryTitle.setText("이 외 형식입니다.");
                 break;
 
             case TYPE_INQUIRY_ANSWERED:
@@ -280,9 +280,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     shareUserTitle = itemView.findViewById(R.id.textview_item_notification_share_title);
                     shareUserAccess = itemView.findViewById(R.id.button_item_notification_share_access);
                     shareUserDenied = itemView.findViewById(R.id.button_item_notification_share_denied);
-
                     break;
-
                 case TYPE_SHARED_FOLDER_ADD_COMMENT:
                     break;
 

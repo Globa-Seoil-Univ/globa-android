@@ -1,11 +1,9 @@
 package team.y2k2.globa.main.folder;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,8 +44,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
 
         holder.layout.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("folder_id", items.get(position).getFolderId());
-            bundle.putString("folder_title", items.get(position).getTitle());
+            bundle.putInt("folderId", items.get(position).getFolderId());
+            bundle.putString("folderTitle", items.get(position).getTitle());
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 
@@ -69,9 +67,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView datetime;
-
         ConstraintLayout layout;
-
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -1,21 +1,16 @@
 package team.y2k2.globa.login;
 
-import android.app.Activity;
+import static team.y2k2.globa.login.LoginModel.*;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,35 +21,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.databinding.ActivityLoginBinding;
-import team.y2k2.globa.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
     // 구글
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-
-    private final int RC_KAKAO = 1001;
-    private final int RC_NAVER = 1002;
-    private final int RC_TWITTER = 1003;
-    private final int RC_GOOGLE = 1004;
 
     public int GOOGLE = R.id.button_sign_in_google;
     /*
@@ -73,14 +52,6 @@ public class LoginActivity extends AppCompatActivity {
 
         setFirstCharColorPrimary();
         googleServiceLoading();
-
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            if(!Environment.isExternalStorageManager()){
-//                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-//                startActivity(intent);
-//            }
-//        }
 
         setContentView(binding.getRoot());
     }
@@ -177,6 +148,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "로그인 실패 : NULL of AccessToken", Toast.LENGTH_SHORT).show();
             return;
         }
+
         AuthCredential credential = GoogleAuthProvider.getCredential(accessToken, null);
 
         mAuth.signInWithCredential(credential)

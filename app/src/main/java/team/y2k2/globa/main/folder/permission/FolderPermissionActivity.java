@@ -32,8 +32,8 @@ public class FolderPermissionActivity extends AppCompatActivity implements ItemL
         binding = ActivityFolderPermissionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        SharedPreferences preferences = getSharedPreferences("folderid", MODE_PRIVATE);
-        int folderId = preferences.getInt("folderid", 0);
+        SharedPreferences preferences = getSharedPreferences("folderId", MODE_PRIVATE);
+        int folderId = preferences.getInt("folderId", 0);
 
         ArrayList<FolderPermissionItem> itemList = new ArrayList<>();
 
@@ -106,8 +106,8 @@ public class FolderPermissionActivity extends AppCompatActivity implements ItemL
         FolderPermissionItemAdapter adapter = (FolderPermissionItemAdapter) binding.recyclerviewFolderPermission.getAdapter();
         FolderPermissionItem item = adapter.getItem(position);
 
-        SharedPreferences preferences = getSharedPreferences("folderid", MODE_PRIVATE);
-        int folderId = preferences.getInt("folderid", 0);
+        SharedPreferences preferences = getSharedPreferences("folderId", MODE_PRIVATE);
+        int folderId = preferences.getInt("folderId", 0);
         int shareId = item.getShareId();
         int userId = item.getUserId();
 

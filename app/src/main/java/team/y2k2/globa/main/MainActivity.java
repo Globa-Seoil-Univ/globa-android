@@ -7,25 +7,22 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.navigation.NavigationBarView;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityMainBinding;
 import team.y2k2.globa.docs.upload.DocsUploadActivity;
 import team.y2k2.globa.main.folder.FolderFragment;
-import team.y2k2.globa.main.folder.permission.FolderPermissionActivity;
 import team.y2k2.globa.main.profile.ProfileFragment;
 import team.y2k2.globa.main.statistics.StatisticsFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private final int REQUEST_CODE_PICK_RECORD = 101;
-    private final int REQUEST_CODE_UPLOAD_RECORD = 102;
+    private static final int REQUEST_CODE_PICK_RECORD = 101;
+    private static final int REQUEST_CODE_UPLOAD_RECORD = 102;
 
     private ActivityMainBinding binding;
     int currentItem = R.id.item_main_main;
@@ -43,47 +40,39 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putInt("some_int", 0);
-        binding.navigationMainBottom.setOnItemReselectedListener(new NavigationBarView.OnItemReselectedListener() {
-            @Override
-            public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
+        binding.navigationMainBottom.setOnItemReselectedListener(item -> {
 
-            }
         });
 
-        binding.navigationMainBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item){
-                int index = item.getItemId();
+        binding.navigationMainBottom.setOnItemSelectedListener(item -> {
+            int index = item.getItemId();
 
-                if (currentItem == item.getItemId())
-                    return true;
-                else
-                    currentItem = item.getItemId();
+            if (currentItem == index)
+                return true;
+            else
+                currentItem = item.getItemId();
 
-                if(index == R.id.item_main_main)
-                    replaceFragment(mainFragment.getClass());
-                else if(index == R.id.item_main_statistics) {
-                    replaceFragment(StatisticsFragment.class);
+            if(index == R.id.item_main_main)
+                replaceFragment(mainFragment);
+            else if(index == R.id.item_main_statistics) {
+                replaceFragment(new StatisticsFragment());
 
-                }
-                else if(index == R.id.item_main_upload)
-                    uploadAudio();
-                else if(index == R.id.item_main_profile)
-                    replaceFragment(ProfileFragment.class);
-                else if(index == R.id.item_main_folder)
-                    replaceFragment(FolderFragment.class);
-
-                binding.navigationMainBottom.setSelectedItemId(item.getItemId());
-
-                return false;
             }
+            else if(index == R.id.item_main_upload)
+                uploadAudio();
+            else if(index == R.id.item_main_profile)
+                replaceFragment(new ProfileFragment());
+            else if(index == R.id.item_main_folder)
+                replaceFragment(new FolderFragment());
+
+            binding.navigationMainBottom.setSelectedItemId(item.getItemId());
+
+            return false;
         });
     }
     private void uploadAudio() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(binding.activityMain.getContext());
         bottomSheetDialog.setContentView(R.layout.dialog_upload);
-//                    bottomSheetDialog.show();
-
 
         // ACTION_GET_CONTENT - 문서나 사진 등의 파일을 선택하고 앱에 그 참조를 반환하기 위해 요청하는 액션
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -111,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if (requestCode == REQUEST_CODE_UPLOAD_RECORD && resultCode == RESULT_OK) {
-            mainFragment.showRecords();
+            mainFragment.showCurrentlyAddedRecords();
         }
     }
 
@@ -140,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         return uri.getLastPathSegment(); // 기본적인 이름 반환
     }
 
-    private void replaceFragment(Class fragment) {
+    private void replaceFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fcv_main, fragment, null)

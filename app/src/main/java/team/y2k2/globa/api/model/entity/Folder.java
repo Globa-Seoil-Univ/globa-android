@@ -12,9 +12,6 @@ public class Folder {
     @SerializedName("createdTime")
     private String createdTime;
 
-    // Getter and Setter methods
-
-
     public String getFolderId() {
         return folderId;
     }

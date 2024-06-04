@@ -1,5 +1,7 @@
 package team.y2k2.globa.login;
 
+import static team.y2k2.globa.login.LoginModel.*;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,36 +20,22 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.main.MainActivity;
 
-
 public class LoginViewModel extends ViewModel {
     Activity activity;
-
-
 
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
 
-
     public static class LoginListener implements OnCompleteListener<AuthResult>{
         Context context;
         FirebaseAuth mAuth;
         String accessToken;
-
-        private final int RC_KAKAO = 1001;
-        private final int RC_NAVER = 1002;
-        private final int RC_TWITTER = 1003;
-        private final int RC_GOOGLE = 1004;
 
         public LoginListener(Context context, FirebaseAuth mAuth, String accessToken) {
             this.context = context;
@@ -57,8 +45,6 @@ public class LoginViewModel extends ViewModel {
 
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            Log.d(getClass().getName(), "Complete 시작");
-
             if (task.isSuccessful()) {
                 // Firebase 로그인 성공
                 FirebaseUser user = mAuth.getCurrentUser();
@@ -66,56 +52,20 @@ public class LoginViewModel extends ViewModel {
                 String name = user.getDisplayName();
                 String profile = user.getPhotoUrl().toString();
 
-                Log.d(getClass().getName(), uid);
-                Log.d(getClass().getName(), name);
-                Log.d(getClass().getName(), profile);
+                ApiClient apiClient = new ApiClient(context);
 
-                LoginRequest loginRequest = new LoginRequest(RC_GOOGLE, uid, name, profile, true);
+                LoginRequest request = new LoginRequest(RC_GOOGLE, uid, name, profile, true);
 
-                // Retrofit 인스턴스 생성
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(ApiService.API_BASE_URL) // 외부 접근 시 API_BASE_URL 로 변경
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+                LoginResponse response = apiClient.requestSignIn(request);
+                userPreferences(request, response);
+                sendLogMessage(request,response);
 
-                ApiService apiService = retrofit.create(ApiService.class);
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
 
-                Call<LoginResponse> call = apiService.requestSignIn(loginRequest);
-                Log.d(getClass().getName(), "enqeue 시작");
-
-                call.enqueue(new Callback<LoginResponse>() {
-                    @Override
-                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            Log.d(getClass().getName(), "onResponse 시작");
-
-                            // 로그인 성공
-                            LoginResponse loginResponse = response.body();
-                            userPreferences(loginRequest, loginResponse);
-                            sendLogMessage(loginRequest,loginResponse);
-
-                            Intent intent = new Intent(context, MainActivity.class);
-                            context.startActivity(intent);
-
-                            Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d(getClass().getName(), "로그인 안됐습니다 : " + response.code());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<LoginResponse> call, Throwable t) {
-                        Log.d(getClass().getName(), "onFailure 시작");
-
-                        // 요청 실패
-                        Toast.makeText(context, "서비스 오류 발생" + t.getMessage(), Toast.LENGTH_LONG).show();
-                        Log.e("LOGINFAILED", t.getMessage());
-                    }
-                });
-            } else {
-                Log.d(getClass().getName(), "로그인 실패 시작");
-
-                // Firebase 로그인 실패
+                Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+            else {
                 Toast.makeText(context, "로그인 실패| 앱을 다시 실행해주세요.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -133,6 +83,7 @@ public class LoginViewModel extends ViewModel {
             editor.putString("profile", request.getProfile());
             editor.commit();
         }
+
         public void sendLogMessage(LoginRequest request, LoginResponse response) {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();

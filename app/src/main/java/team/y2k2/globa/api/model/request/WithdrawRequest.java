@@ -3,7 +3,6 @@ package team.y2k2.globa.api.model.request;
 import com.google.gson.annotations.SerializedName;
 
 public class WithdrawRequest {
-
     @SerializedName("surveyType")
     private int[] surveyType;
     @SerializedName("content")
@@ -24,6 +23,7 @@ public class WithdrawRequest {
     public String getContent() {
         return content;
     }
+
     public void setContent(String content) {
         this.content = content;
     }

@@ -66,7 +66,8 @@ public class StatisticsFragment extends Fragment {
                 List<Quizgrade> quizgrades = statistics.getQuizGrades();
 
                 wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
-                wordValues = keywords.stream().mapToInt(Keyword::getImportance).toArray();
+                // 여기 고쳐주세용
+//                wordValues = keywords.stream().mapToInt(Keyword::getImportance).toArray();
 
                 timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
                 timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();

@@ -20,7 +20,8 @@ public class DocsMoreActivity extends AppCompatActivity {
     String title;
     String folderId;
     String recordId;
-    DocsMoreViewModel docsMoreViewModel;
+    String folderTitle;
+//    DocsMoreViewModel docsMoreViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class DocsMoreActivity extends AppCompatActivity {
         binding = ActivityDocsMoreBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
+//        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
 
         binding.imagebuttonDocsMoreBack.setOnClickListener(v -> {
             finish();
@@ -38,7 +39,9 @@ public class DocsMoreActivity extends AppCompatActivity {
         title = intent.getStringExtra("title");
         folderId = intent.getStringExtra("folderId");
         recordId = intent.getStringExtra("recordId");
+        folderTitle = intent.getStringExtra("folderTitle");
 
+        binding.textviewDocsMoreFolderTitle.setText(folderTitle);
         binding.textviewDocsMoreDocsTitle.setText(title);
 
         binding.relativelayoutDocsMoreRename.setOnClickListener(v -> {
@@ -82,11 +85,11 @@ public class DocsMoreActivity extends AppCompatActivity {
 
 
         // 문서 삭제시 액티비티 종료
-        docsMoreViewModel.closeActivities.observe(this, shouldClose -> {
-            if (shouldClose != null && shouldClose) {
-                finish();
-            }
-        });
+//        docsMoreViewModel.closeActivities.observe(this, shouldClose -> {
+//            if (shouldClose != null && shouldClose) {
+//                finish();
+//            }
+//        });
 
         binding.relativelayoutDocsMoreStatistics.setOnClickListener(v -> {
             Intent toStatisticsIntent = new Intent(DocsMoreActivity.this, DocsStatisticsActivity.class);
@@ -114,7 +117,7 @@ public class DocsMoreActivity extends AppCompatActivity {
         btn_delete.setOnClickListener(v -> {
             String folderId = "";
             String recordId = "";
-            docsMoreViewModel.deleteDocs(folderId, recordId);
+//            docsMoreViewModel.deleteDocs(folderId, recordId);
             dialog.cancel();
         });
 

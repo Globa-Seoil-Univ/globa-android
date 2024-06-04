@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import team.y2k2.globa.api.model.entity.Answer;
 
 public class InquiryDetailResponse {
-
-
     @SerializedName("title")
     private String title;
 
@@ -18,7 +16,6 @@ public class InquiryDetailResponse {
 
     @SerializedName("answer")
     private Answer answer;
-
 
     public String getContent() {
         return content;

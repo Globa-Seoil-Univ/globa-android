@@ -2,7 +2,7 @@ package team.y2k2.globa.main.docs.list;
 
 import java.util.List;
 
-import team.y2k2.globa.api.model.Keyword;
+import team.y2k2.globa.api.model.entity.Keyword;
 
 public class DocsListItem {
     private final String title;

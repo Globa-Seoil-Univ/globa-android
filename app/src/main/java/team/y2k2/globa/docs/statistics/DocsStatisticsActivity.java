@@ -56,7 +56,8 @@ public class DocsStatisticsActivity extends AppCompatActivity {
                 List<Quizgrade> quizgrades = docsStatistics.getQuizGrades();
 
                 wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
-                wordValues = keywords.stream().mapToInt(Keyword::getImportance).toArray();
+                // 여기 float으로 고쳐주세용
+//                wordValues = keywords.stream().mapToInt(Keyword::getImportance).toArray();
 
                 timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
                 timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
