@@ -146,6 +146,9 @@ public class DocsStatisticsActivity extends AppCompatActivity {
             }
         });
 
+        binding.buttonDocsStatisticsBack.setOnClickListener(v -> {
+            finish();
+        });
 
     }
 

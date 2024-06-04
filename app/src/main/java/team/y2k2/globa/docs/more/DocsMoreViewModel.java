@@ -20,22 +20,13 @@ public class DocsMoreViewModel extends ViewModel {
     private ApiClient apiClient;
     private String authorization;
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> _closeActivities = new MutableLiveData<>();
-    public LiveData<Boolean> closeActivities = _closeActivities;
-    private Context context;
 
-    public DocsMoreViewModel(Context context) {
-        this.context = context;
-        apiClient = new ApiClient(context);
+    public DocsMoreViewModel() {
         apiService = apiClient.getApiService();
     }
 
     public MutableLiveData<String> getErrorLiveData() {
         return errorLiveData;
-    }
-
-    public void triggerCloseActivities() {
-        _closeActivities.setValue(true);
     }
 
     public void deleteDocs(String folderId, String recordId) {
@@ -44,19 +35,14 @@ public class DocsMoreViewModel extends ViewModel {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Log.d(getClass().getName(), "문서 삭제 성공");
-                    Toast.makeText(context, "문서 삭제 성공", Toast.LENGTH_SHORT).show();
-                    triggerCloseActivities();
-
                 } else {
-                    Log.d(getClass().getName(), "문서 삭제 실패");
-                    Toast.makeText(context, "문서 삭제 실패", Toast.LENGTH_SHORT).show();
+                    Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.d(getClass().getName(), "문서 삭제 요청 실패");
-                Toast.makeText(context, "문서 삭제 요청 실패", Toast.LENGTH_SHORT).show();
+                Log.d(getClass().getName(), "문서 삭제 요청 실패 : " + t.getMessage());
             }
         });
     }
