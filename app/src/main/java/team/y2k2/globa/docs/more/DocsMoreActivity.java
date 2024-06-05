@@ -3,11 +3,18 @@ package team.y2k2.globa.docs.more;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Dialog;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import org.w3c.dom.Text;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsMoreBinding;
@@ -21,7 +28,7 @@ public class DocsMoreActivity extends AppCompatActivity {
     String folderId;
     String recordId;
     String folderTitle;
-//    DocsMoreViewModel docsMoreViewModel;
+    DocsMoreViewModel docsMoreViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +36,7 @@ public class DocsMoreActivity extends AppCompatActivity {
         binding = ActivityDocsMoreBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
+        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
 
         binding.imagebuttonDocsMoreBack.setOnClickListener(v -> {
             finish();
@@ -80,7 +87,7 @@ public class DocsMoreActivity extends AppCompatActivity {
 
 
         binding.relativelayoutDocsMoreDelete.setOnClickListener(v -> {
-            showDialog();
+            showBottomSheetDialog();
         });
 
 
@@ -106,22 +113,28 @@ public class DocsMoreActivity extends AppCompatActivity {
         });
     }
 
-    public void showDialog() {
-        Dialog dialog = new Dialog(DocsMoreActivity.this);
-        dialog.setContentView(R.layout.dialog_delete_docs);
-        Button btn_cancel = dialog.findViewById(R.id.textview_delete_docs_cancel);
-        Button btn_delete = dialog.findViewById(R.id.textview_delete_docs_confirm);
-        btn_cancel.setOnClickListener(v -> {
-            dialog.cancel();
-        });
-        btn_delete.setOnClickListener(v -> {
-            String folderId = "";
-            String recordId = "";
-//            docsMoreViewModel.deleteDocs(folderId, recordId);
-            dialog.cancel();
+    protected void showBottomSheetDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_delete_docs, null);
+        bottomSheetDialog.setContentView(dialogView);
+
+        TextView cancelButton = dialogView.findViewById(R.id.textview_delete_docs_cancel);
+        TextView confirmButton = dialogView.findViewById(R.id.textview_delete_docs_confirm);
+
+        cancelButton.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
         });
 
-        dialog.show();
+        confirmButton.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+            // 삭제 처리
+            docsMoreViewModel.deleteDocs(folderId, recordId);
+            finish();
+        });
+
+        bottomSheetDialog.show();
+
     }
 
 }
