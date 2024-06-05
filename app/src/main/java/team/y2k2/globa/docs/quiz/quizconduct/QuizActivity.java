@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.api.model.entity.Quiz;
@@ -22,9 +23,10 @@ public class QuizActivity extends AppCompatActivity {
     QuizViewModel quizViewModel;
     List<Quiz> quizList;
     private int currentIndex = 0;
-    private List<Boolean> answerList;
-    private List<QuizResult> quizResultList;
+    private List<Boolean> answerList = new ArrayList<>();
+    private List<QuizResult> quizResultList = new ArrayList<>();
     boolean isReceived = false;
+    private MutableLiveData<Boolean> isReceivedLiveData = new MutableLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,32 +47,31 @@ public class QuizActivity extends AppCompatActivity {
         quizViewModel.getQuizLiveData().observe(this, quiz -> {
             if(quiz != null) {
                 quizList = quiz;
-                isReceived = true;
                 Log.d("api 수신 여부", "수신 성공");
+                isReceivedLiveData.postValue(true);
+
             } else {
                 Log.d("api 수신 여부", "수신 실패");
             }
         });
 
-        if(isReceived) {
+        isReceivedLiveData.observe(this, quizReceived -> {
             Log.d("퀴즈 시작", "퀴즈 시작");
             // 1번 문제 설정
-            if(!quizList.isEmpty()) {
-                binding.textviewQuizCount.setText("문제 1/10");
-                binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
-            }
+            binding.textviewQuizCount.setText("문제 1/10");
+            binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
 
-            // O 선택
-            binding.layoutQuizCorrect.setOnClickListener(v -> {
-                fetchQuiz(true);
-            });
+        });
 
-            // X 선택
-            binding.layoutQuizWrong.setOnClickListener(v -> {
-                fetchQuiz(false);
-            });
-        }
+        // O 선택
+        binding.layoutQuizCorrect.setOnClickListener(v -> {
+            fetchQuiz(true);
+        });
 
+        // X 선택
+        binding.layoutQuizWrong.setOnClickListener(v -> {
+            fetchQuiz(false);
+        });
 
     }
 
