@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class QuizActivity extends AppCompatActivity {
 
         quizViewModel.getQuizLiveData().observe(this, quiz -> {
             if(quiz != null) {
-                quizList = quiz.getQuizs();
+                quizList = quiz;
                 isReceived = true;
                 Log.d("api 수신 여부", "수신 성공");
             } else {
@@ -75,7 +76,7 @@ public class QuizActivity extends AppCompatActivity {
 
     protected void fetchQuiz(boolean answer) {
 
-        if(quizList.get(currentIndex).getAnswer() == answer) {
+        if(quizList.get(currentIndex).getAnswer() == 1) {
             // 정답일 때
             answerList.add(true);
             quizResultList.add(new QuizResult(quizList.get(currentIndex).getQuizId(), true));

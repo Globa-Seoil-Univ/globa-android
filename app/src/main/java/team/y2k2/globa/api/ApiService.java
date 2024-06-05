@@ -18,6 +18,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import team.y2k2.globa.api.model.entity.Quiz;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.DocsUploadRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
@@ -393,7 +394,7 @@ public interface ApiService {
      * 퀴즈 가져오기
      */
     @GET("/folder/{folder_id}/record/{record_id}/quiz")
-    Call<QuizResponse> requestGetQuiz(
+    Call<List<Quiz>> requestGetQuiz(
             @Path("folder_id") int folderId,
             @Path("record_id") int recordId,
             @Header("Content-Type") String contentType,

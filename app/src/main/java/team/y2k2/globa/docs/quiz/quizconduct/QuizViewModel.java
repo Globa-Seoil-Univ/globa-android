@@ -14,6 +14,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.entity.Quiz;
 import team.y2k2.globa.api.model.entity.QuizResult;
 import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.response.QuizResponse;
@@ -21,13 +22,13 @@ import team.y2k2.globa.api.model.response.QuizResponse;
 public class QuizViewModel extends ViewModel {
 
     private ApiService apiService;
-    private MutableLiveData<QuizResponse> quizLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Quiz>> quizLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public QuizViewModel() {
         apiService = ApiClient.getApiService();
     }
-    public MutableLiveData<QuizResponse> getQuizLiveData() {
+    public MutableLiveData<List<Quiz>> getQuizLiveData() {
         return quizLiveData;
     }
     public MutableLiveData<String> getErrorLiveData() {
@@ -35,11 +36,13 @@ public class QuizViewModel extends ViewModel {
     }
 
     public void gatherQuiz(int folderId, int recordId) {
-        apiService.requestGetQuiz(folderId, recordId, "application/json", authorization).enqueue(new Callback<QuizResponse>() {
+        apiService.requestGetQuiz(folderId, recordId, "application/json", authorization).enqueue(new Callback<List<Quiz>>() {
             @Override
-            public void onResponse(Call<QuizResponse> call, Response<QuizResponse> response) {
+            public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
                 if (response.isSuccessful()) {
-                    quizLiveData.setValue(response.body());
+                    List<Quiz> quizzes = response.body();
+
+                    quizLiveData.setValue(quizzes);
                     Log.d("api 수신", "성공");
                 } else {
                     Log.d("api 수신", "실패 : " + response.code());
@@ -47,7 +50,7 @@ public class QuizViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<QuizResponse> call, Throwable t) {
+            public void onFailure(Call<List<Quiz>> call, Throwable t) {
                 Log.d("api 송신", "실패 : " + t.getMessage());
                 Log.d("폴더id, 문서id", String.valueOf(folderId) + ", " + String.valueOf(recordId));
             }

@@ -91,6 +91,7 @@ public class FolderInsideFragment extends Fragment {
         binding.textviewFolderInsideMore.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
             intent.putExtra("folderTitle", binding.textviewFolderInsideTitle.getText());
+            intent.putExtra("folderId", folderId);
             startActivityForResult(intent, REQUEST_CODE);
         });
 
