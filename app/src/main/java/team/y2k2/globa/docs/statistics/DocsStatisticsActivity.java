@@ -110,8 +110,8 @@ public class DocsStatisticsActivity extends AppCompatActivity {
                     List<String> gradeXList = new ArrayList<>();
                     List<Integer> gradeValuesList = new ArrayList<>();
                     for(int i = 0; i < gradeX.length; i ++) {
-                        gradeXList.add(timeX[i]);
-                        gradeValuesList.add(timeValues[i]);
+                        gradeXList.add(gradeX[i]);
+                        gradeValuesList.add(gradeValues[i]);
                     }
                     for(int i = 0; i < 10 - gradeX.length; i++) {
                         gradeXList.add("0");
