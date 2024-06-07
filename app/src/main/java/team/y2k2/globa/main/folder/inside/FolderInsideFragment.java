@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,10 +90,11 @@ public class FolderInsideFragment extends Fragment {
         });
 
         binding.textviewFolderInsideMore.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
-            intent.putExtra("folderTitle", binding.textviewFolderInsideTitle.getText());
-            intent.putExtra("folderId", folderId);
-            startActivityForResult(intent, REQUEST_CODE);
+//            Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
+//            intent.putExtra("folderTitle", binding.textviewFolderInsideTitle.getText());
+//            intent.putExtra("folderId", folderId);
+//            startActivityForResult(intent, REQUEST_CODE);
+            showBottomSheetDialog();
         });
 
         return binding.getRoot();
@@ -154,7 +156,7 @@ public class FolderInsideFragment extends Fragment {
             // 이름 변경 클릭
             bottomSheetDialog.dismiss();
             Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
-            intent.putExtra("name", binding.textviewFolderInsideTitle.getText().toString());
+            intent.putExtra("folderTitle", binding.textviewFolderInsideTitle.getText().toString());
             intent.putExtra("folderId", folderId);
             nameEditLauncher.launch(intent);
         });
@@ -220,6 +222,18 @@ public class FolderInsideFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .remove(FolderInsideFragment.this)
                     .commit();
+
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    FolderFragment folderFragment = new FolderFragment();
+
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fcv_main, folderFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
 
             bottomSheetDialog.dismiss();
         });
