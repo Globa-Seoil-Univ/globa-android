@@ -134,7 +134,7 @@ public class FolderShareActivity extends AppCompatActivity {
                         int userId = item.getUserId();
                         String role = item.getRole();
 
-                        folderShareViewModel.addSharedUser(folderId, 1, role);
+                        folderShareViewModel.addSharedUser(folderId, userId, role);
                         Log.d(getClass().getName(), folderId + ", " + userId + ", " + role);
                     }
                 }
