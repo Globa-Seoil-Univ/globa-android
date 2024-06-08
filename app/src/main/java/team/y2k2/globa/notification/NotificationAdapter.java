@@ -69,8 +69,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 return new NotificationAdapter.AdapterViewHolder(view, TYPE_NOTIFICATION);
 
             case TYPE_SHARE_INVITE:
-                break;
-
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_share, parent, false);
+                return new NotificationAdapter.AdapterViewHolder(view, TYPE_SHARE_INVITE);
             case TYPE_SHARED_FOLDER_ADD_RECORD:
                 break;
 
@@ -105,15 +105,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 holder.inquiryTitle.setText("공지사항 알림 준비중입니다.");
                 break;
             case TYPE_SHARE_INVITE:
-                break;
-            case TYPE_SHARED_FOLDER_ADD_RECORD:
-                break;
-
-            case TYPE_SHARED_FOLDER_ADD_USER:
                 User user = items.getNotifications().get(position).getUser();
                 Share share = items.getNotifications().get(position).getShare();
                 Folder folder = items.getNotifications().get(position).getFolder();
-                holder.shareUserTitle.setText(user.getName() + "님이" + folder.getTitle() +" 폴더 공유 초대를 보냈습니다.");
+                holder.shareUserTitle.setText(user.getName() + "님이 " + folder.getTitle() +" 폴더 공유 초대를 보냈습니다.");
 
                 holder.shareUserAccess.setOnClickListener(v -> {
                     // Retrofit 인스턴스 생성
@@ -140,6 +135,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                             } else {
                                 // 서버로부터 실패 응답을 받았을 때 처리할 내용
                                 Log.d("초대 수락", "초대 수락 실패 : " + response.code() + " | " + response);
+                                holder.shareUserAccess.setVisibility(View.INVISIBLE);
+//                                holder.shareUserDenied.setVisibility(View.INVISIBLE);
                                 Toast.makeText(holder.itemView.getContext(), "에러 발생 : " +response.code(), Toast.LENGTH_LONG);
                             }
                         }
@@ -192,6 +189,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     });
                 });
                 break;
+            case TYPE_SHARED_FOLDER_ADD_RECORD:
+                break;
+
+            case TYPE_SHARED_FOLDER_ADD_USER:
+
+                break;
 
             case TYPE_SHARED_FOLDER_ADD_COMMENT:
                 break;
@@ -234,10 +237,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 break;
 
         }
-
-
-
-//        holder.itemView.setOnClickListener();
     }
 
     @Override
@@ -248,9 +247,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         TextView inquiryTitle;
         TextView uploadSuccessTitle;
-
         TextView shareUserTitle;
-
         Button shareUserAccess;
         Button shareUserDenied;
 
@@ -271,6 +268,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     break;
 
                 case TYPE_SHARE_INVITE:
+                    shareUserTitle = itemView.findViewById(R.id.textview_item_notification_share_title);
+                    shareUserAccess = itemView.findViewById(R.id.button_item_notification_share_access);
+                    shareUserDenied = itemView.findViewById(R.id.button_item_notification_share_denied);
                     break;
 
                 case TYPE_SHARED_FOLDER_ADD_RECORD:

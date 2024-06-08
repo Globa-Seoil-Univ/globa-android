@@ -15,7 +15,7 @@
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="님이 다음 폴더에 초대했습니다."/>
+        android:text="님이 다음 폴더에 초대했습니다."/>
 
     <TextView
         android:id="@+id/textview_item_notification_share_description"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/textview_item_notification_share_title"
         app:layout_constraintStart_toStartOf="@id/textview_item_notification_share_title"
-        tools:text="내용입니다."/>
+        android:text="내용입니다."/>
 
 
     <Button
