@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.kakao.sdk.auth.model.OAuthToken;
 
 import java.util.ArrayList;
 
@@ -36,11 +37,38 @@ public class LoginViewModel extends ViewModel {
         Context context;
         FirebaseAuth mAuth;
         String accessToken;
+        OAuthToken token;
+
+        String uid;
+        String name;
+        String profile;
 
         public LoginListener(Context context, FirebaseAuth mAuth, String accessToken) {
             this.context = context;
             this.mAuth = mAuth;
             this.accessToken = accessToken;
+        }
+
+        public LoginListener(String uid, String name, String profile, Context context) {
+            this.uid = uid;
+            this.name = name;
+            this.profile = profile;
+            this.context = context;
+        }
+
+        public void KakaoLogin() {
+            ApiClient apiClient = new ApiClient(context);
+
+            LoginRequest request = new LoginRequest(RC_KAKAO, uid, name, profile, true);
+
+            LoginResponse response = apiClient.requestSignIn(request);
+            userPreferences(request, response);
+            sendLogMessage(request,response);
+
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+            Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
         }
 
         @Override

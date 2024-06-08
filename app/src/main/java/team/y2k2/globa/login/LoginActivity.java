@@ -26,20 +26,30 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.common.KakaoSdk;
+import com.kakao.sdk.common.model.AuthErrorCause;
+import com.kakao.sdk.common.util.Utility;
+import com.kakao.sdk.user.UserApiClient;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityLoginBinding;
+import team.y2k2.globa.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
     // 구글
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
 
+
     public int GOOGLE = R.id.button_sign_in_google;
+    public int KAKAO = R.id.button_sign_in_kakao;
+
     /*
     public int NAVER = R.id.button_sign_in_naver;
     public int TWITTER = R.id.button_sign_in_twitter;
-    public int KAKAO = R.id.button_sign_in_kakao;
      */
     private ActivityLoginBinding binding;
     LoginViewModel viewModel;
@@ -49,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
+
+        KakaoSdk.init(this, "8a572ba277b6059bd51f23fe58474f13");
 
         setFirstCharColorPrimary();
         googleServiceLoading();
@@ -77,14 +89,24 @@ public class LoginActivity extends AppCompatActivity {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, 1004);
         }
+        else if(SIGN_IN_TYPE == KAKAO) {
+            Log.d(getClass().getName(), "카카오 클릭");
+            String keyHash = Utility.INSTANCE.getKeyHash(this);
+            Log.d("KeyHash", keyHash);
+
+            if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
+                UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, kakaoLoginCallback);
+
+            } else {
+                UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, kakaoLoginCallback);
+            }
+        }
         /*
         else if(SIGN_IN_TYPE == TWITTER) {
 
         }
 
-        else if(SIGN_IN_TYPE == KAKAO) {
 
-        }
 
         else if(SIGN_IN_TYPE == NAVER) {
 
@@ -117,6 +139,9 @@ public class LoginActivity extends AppCompatActivity {
 //        }
         switch (requestCode) {
             case RC_KAKAO:
+                Log.d(getClass().getName(), "onActivityResult 카카오 로그인");
+
+                break;
             case RC_NAVER:
             case RC_TWITTER:
             case RC_GOOGLE:
@@ -164,5 +189,46 @@ public class LoginActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
+    }
+
+    // 카카오 로그인 콜백 함수
+    Function2<OAuthToken, Throwable, Unit> kakaoLoginCallback = (token, error) -> {
+        if (error != null) {
+            Log.e(getClass().getName(), "로그인 실패", error);
+        } else if (token != null) {
+            Log.i(getClass().getName(), "로그인 성공(토큰) : " + token.getAccessToken());
+            Toast.makeText(this, "로그인에 성공했습니다.", Toast.LENGTH_SHORT).show();
+            // 사용자 정보 요청
+            requestMe(); // 사용자 정보 요청 함수 호출
+        }
+        return null;
+    };
+
+    // 사용자 정보 요청 함수
+    private void requestMe() {
+        UserApiClient.getInstance().me((user, meError) -> {
+            if (meError != null) {
+                Log.e(getClass().getName(), "사용자 정보 요청 실패", meError);
+            } else {
+                Log.i(getClass().getName(),
+                        "사용자 정보 요청 성공" +
+                        "\n회원번호: " + user.getId() +
+                        "\n닉네임: " + user.getKakaoAccount().getProfile().getNickname() +
+                        "\n프로필: " + user.getKakaoAccount().getProfile().getProfileImageUrl() );
+                // 사용자 정보를 활용하여 필요한 작업 수행 (예: 메인 화면으로 이동)
+
+                LoginViewModel.LoginListener listener = new LoginViewModel.LoginListener(user.getId().toString(), user.getKakaoAccount().getProfile().getNickname(), user.getKakaoAccount().getProfile().getProfileImageUrl(), this);
+                listener.KakaoLogin();
+            }
+            return null;
+        });
+    }
+
+
+
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish(); // 로그인 화면 종료
     }
 }
