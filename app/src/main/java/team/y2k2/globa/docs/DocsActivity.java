@@ -1,10 +1,7 @@
 package team.y2k2.globa.docs;
 
-import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,40 +11,28 @@ import android.util.Log;
 import android.view.View;
 import android.widget.MediaController;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.util.Util;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.more.DocsMoreActivity;
-import team.y2k2.globa.docs.more.DocsMoreViewModel;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
@@ -251,7 +236,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         DocsDetailResponse response = apiClient.requestGetDocumentDetail(folderId, recordId);
 
         docsModel = new DocsModel(response.getSections());
-        detailAdapter = new DocsDetailAdapter(docsModel.getItems(), DocsActivity.this);
+        detailAdapter = new DocsDetailAdapter(docsModel.getDetailItems(), DocsActivity.this);
         folderTitle = response.getFolder().getTitle();
 
 
@@ -382,4 +367,11 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     }
 
 
+    public String getFolderId() {
+        return folderId;
+    }
+
+    public String getRecordId() {
+        return recordId;
+    }
 }

@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,18 +24,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.entity.Highlight;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightItem;
 import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightModel;
 
 public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.AdapterViewHolder> {
-    ArrayList<DocsDetailItem> items;
+    ArrayList<DocsDetailItem> detailItems;
+
     DocsActivity activity;
 
-    public DocsDetailAdapter(ArrayList<DocsDetailItem> items, DocsActivity activity) {
-        this.items = items;
+    public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
+        this.detailItems = detailItems;
         this.activity = activity;
     }
 
@@ -46,21 +52,20 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        String title = items.get(position).getTitle();
-        String time = formatDuration(Integer.parseInt(items.get(position).getTime()));
+        String title = detailItems.get(position).getTitle();
+        String time = formatDuration(Integer.parseInt(detailItems.get(position).getTime()));
 
         holder.title.setText(title);
         holder.time.setText(time);
 
         holder.title.setOnClickListener(v -> {
-            int startTime = Integer.parseInt(items.get(position).getTime());
+            int startTime = Integer.parseInt(detailItems.get(position).getTime());
             activity.setDuration(startTime);
         });
 
 
 //        if (position == -1) {
-            DocsDetailHighlightModel model = new DocsDetailHighlightModel();
-            String description = items.get(position).getDescription();
+            String description = detailItems.get(position).getDescription();
             SpannableString highlightString = new SpannableString(description);
 
             holder.description.setOnTouchListener(new View.OnTouchListener() {
@@ -87,7 +92,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                             updateSelection(holder.description, startIdx, endIdx);
                             String selectedText = holder.description.getText().subSequence(startIdx, endIdx).toString();
                             Toast.makeText(holder.itemView.getContext(), "선택한 텍스트: " + selectedText, Toast.LENGTH_SHORT).show();
-                            showPopupMenu(v, selectedText);
+                            showPopupMenu(v, activity.getFolderId(), activity.getRecordId(), detailItems.get(position).getSectionId(), String.valueOf(startIdx), String.valueOf(endIdx), selectedText);
                         }
 
 
@@ -109,9 +114,10 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                     return false;
                 }
             });
+            List<Highlight> highlights = detailItems.get(position).getHighlights();
 
-            for (int i = 0; i < model.getItems().size(); i++) {
-                DocsDetailHighlightItem highlight = model.getItems().get(i);
+            for (int i = 0; i < highlights.size(); i++) {
+                Highlight highlight = highlights.get(i);
 
                 int startIdx = highlight.getStartIndex();
                 int endIdx = highlight.getEndIndex();
@@ -128,7 +134,10 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                         commentBottomSheet.setContentView(R.layout.dialog_comment);
                         commentBottomSheet.show();
 
-                        commentBottomSheet.findViewById(R.id.recyclerview_comment);
+                        TextView name = commentBottomSheet.findViewById(R.id.textview_comment_name);
+
+                        name.setText(detailItems.get(position).getDescription());
+
                     }
 
                     @Override
@@ -138,7 +147,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                         ds.setUnderlineText(false);
                     }
                 };
-                BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(holder.itemView.getResources().getColor(highlight.getHighlightColor()));
+                BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(holder.itemView.getResources().getColor(R.color.primary_3));
 
                 highlightString.setSpan(backgroundColorSpan, startIdx, endIdx, 0);
                 highlightString.setSpan(clickableSpan, startIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -150,7 +159,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     @Override
     public int getItemCount() {
-        return (null != items ? items.size() : 0);
+        return (null != detailItems ? detailItems.size() : 0);
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
@@ -167,7 +176,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         }
     }
 
-    public void showPopupMenu(View v, String selectedText) {
+    public void showPopupMenu(View v, String folderId, String recordId, String sectionId, String startIdx, String endIdx, String selectedText) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.getMenuInflater().inflate(R.menu.comment, popupMenu.getMenu());
 
@@ -180,8 +189,20 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                     commentBottomSheet.setContentView(R.layout.dialog_comment);
                     commentBottomSheet.show();
 
-                    TextView textView = commentBottomSheet.findViewById(R.id.textview_comment_point);
-                    textView.setText("> " + selectedText);
+                    TextView textView = commentBottomSheet.findViewById(R.id.textview_comment_name);
+                    textView.setText("본문 :" + selectedText);
+
+                    ImageButton confirm = commentBottomSheet.findViewById(R.id.imagebutton_comment_confirm);
+
+
+                    confirm.setOnClickListener(v -> {
+                        ApiClient apiClient = new ApiClient(v.getContext());
+
+                        EditText comment = commentBottomSheet.findViewById(R.id.edittext_comment);
+
+                        apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, comment.getText().toString());
+                        commentBottomSheet.dismiss();
+                    });
                     return true;
                 }
                 return false;

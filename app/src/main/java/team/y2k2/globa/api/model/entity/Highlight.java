@@ -15,6 +15,13 @@ public class Highlight {
     @SerializedName("endIndex")
     private int endIndex;
 
+    public Highlight(int highlightId, String type, int startIndex, int endIndex) {
+        this.highlightId = highlightId;
+        this.type = type;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+    }
+
     public int getHighlightId() {
         return highlightId;
     }

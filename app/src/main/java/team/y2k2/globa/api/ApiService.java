@@ -9,7 +9,6 @@ import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -19,8 +18,8 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.api.model.entity.Quiz;
+import team.y2k2.globa.api.model.request.FirstCommentRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
-import team.y2k2.globa.api.model.request.DocsUploadRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 import team.y2k2.globa.api.model.request.FolderShareAddRequest;
@@ -32,7 +31,6 @@ import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.request.WithdrawRequest;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
-import team.y2k2.globa.api.model.response.DocsUploadResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 import team.y2k2.globa.api.model.response.FolderResponse;
@@ -41,7 +39,6 @@ import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
 import team.y2k2.globa.api.model.response.NotificationResponse;
-import team.y2k2.globa.api.model.response.QuizResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
@@ -432,6 +429,19 @@ public interface ApiService {
             @Path("record_id") int recordId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
+    );
+
+    /**
+     * 댓글 최초 쓰기
+     */
+    @POST("/folder/{folder_id}/record/{record_id}/section/{section_id}")
+    Call<Void> requestInsertFirstComment(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Path("section_id") String sectionId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body FirstCommentRequest request
     );
 
 }

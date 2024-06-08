@@ -31,6 +31,9 @@ import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.model.AuthErrorCause;
 import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
+import com.navercorp.nid.oauth.OAuthLoginCallback;
+import com.navercorp.nid.NaverIdLoginSDK;
+import com.navercorp.nid.oauth.OAuthLoginCallback;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -225,7 +228,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    OAuthLoginCallback oauthLoginCallback = new OAuthLoginCallback() {
+        @Override
+        public void onSuccess() {
+            // 로그인 성공
+            String accessToken = NaverIdLoginSDK.INSTANCE.getAccessToken();
+            // 사용자 정보 가져오기 등 추가 작업 수행
+        }
 
+        @Override
+        public void onFailure(int httpStatus, String message) {
+            // 로그인 실패
+            // 오류 처리
+        }
+
+        @Override
+        public void onError(int errorCode, String message) {
+            // 로그인 에러
+            // 오류 처리
+        }
+    };
     private void startMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
