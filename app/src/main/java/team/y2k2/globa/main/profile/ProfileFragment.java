@@ -41,12 +41,6 @@ public class ProfileFragment extends Fragment {
 
         SettingItemAdapter adapter = new SettingItemAdapter(model.getItems());
 
-        binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
-
-            Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
-            startActivity(intent);
-        });
-
         binding.recyclerviewProfileSetting.setAdapter(adapter);
         binding.recyclerviewProfileSetting.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
 
@@ -72,6 +66,13 @@ public class ProfileFragment extends Fragment {
         binding.imageviewProfileAccountImage.setBackground(new ShapeDrawable(new OvalShape()));
         binding.imageviewProfileAccountImage.setClipToOutline(true);
 
+        binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
+
+            Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
+            intent.putExtra("name", response.getName());
+            intent.putExtra("code", response.getCode());
+            startActivity(intent);
+        });
 
         return binding.getRoot();
     }

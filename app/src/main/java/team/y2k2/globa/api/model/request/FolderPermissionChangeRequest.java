@@ -1,13 +1,20 @@
 package team.y2k2.globa.api.model.request;
 
+import com.google.gson.annotations.SerializedName;
+
 public class FolderPermissionChangeRequest {
 
-    private static String role;
+    @SerializedName("role")
+    private String role;
 
-    public static void setRole(String role) {
-        FolderPermissionChangeRequest.role = role;
+    public FolderPermissionChangeRequest(String role) {
+        this.role = role;
     }
-    public static String getRole() {
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+    public String getRole() {
         return role;
     }
 }

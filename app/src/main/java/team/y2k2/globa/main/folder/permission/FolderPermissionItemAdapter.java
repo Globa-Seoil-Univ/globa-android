@@ -1,5 +1,6 @@
 package team.y2k2.globa.main.folder.permission;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,15 @@ import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerMod
 public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPermissionItemAdapter.AdapterViewHolder> {
     ArrayList<FolderPermissionItem> items;
     FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
-    private ItemLongClickListener longClickListener;
+    private OnItemLongClickListener longClickListener;
+
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View view, int position);
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.longClickListener = listener;
+    }
 
     public FolderPermissionItemAdapter(ArrayList<FolderPermissionItem> items) {
         this.items = items;
@@ -49,12 +58,24 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
         holder.spinner.setSelection(item.getSelectedOption());
 
         holder.itemView.setOnLongClickListener(v -> {
-            if (longClickListener != null) {
-                longClickListener.onItemLongClick(position);
+            Log.d("롱클릭", "롱클릭 발생!");
+            if(longClickListener != null) {
+                longClickListener.onItemLongClick(v, position);
+                remove(position);
             }
+
             return true;
         });
 
+    }
+
+    public void remove(int position) {
+        try {
+            items.remove(position);
+            notifyItemRemoved(position);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -22,6 +22,7 @@ import team.y2k2.globa.api.model.request.FirstCommentRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.FolderNameEditRequest;
+import team.y2k2.globa.api.model.request.FolderPermissionChangeRequest;
 import team.y2k2.globa.api.model.request.FolderShareAddRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.NicknameEditRequest;
@@ -266,23 +267,21 @@ public interface ApiService {
     /**
      * 공유 권한 변경
      */
-    @PATCH("/folder/{folder_id}/share/{share_id}/user/{user_id}")
+    @PATCH("/folder/{folder_id}/share/user/{user_id}")
     Call<Void> requestUpdateSharePermission(
             @Path("folder_id") int folder_id,
-            @Path("share_id") int share_id,
             @Path("user_id") int user_id,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
-            @Body String role
+            @Body FolderPermissionChangeRequest folderPermissionChangeRequest
     );
 
     /**
      * 공유 삭제
      */
-    @POST("/folder/{folder_id}/share/{share_id}/user/{user_id}")
+    @DELETE("/folder/{folder_id}/share/user/{user_id}")
     Call<Void> requestDeleteSharePermission(
             @Path("folder_id") int folderId,
-            @Path("share_id") int share_id,
             @Path("user_id") int user_id,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
