@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
+        android:lineSpacingExtra="-2dp"
         android:textSize="@dimen/normal_light"
         tools:text="유엔기후변화회의(UNFCCC,  UN  Framework  Con-vention  on  Climate  Change  2015)에서 체결된 파리협정은 지구의 평균기온 상승을 산업화 이전 대비  2 oC보다  상당히  낮은  수준(well  below  2oC)으로  유지하고,  기온 상승을  1.5 oC로 제한하도록 노력할 것을 규정하고  있으며,  기후변화협약의  이행을  증진함에  있어 기후변화의 위협에 대한 범지구적 대응 강화를 목표로 선언하고 있다. 이와 관련하여 최근 기후변화에관한 정부간 협의체(IPCC)는  ‘ 지구온난화  1.5 oC 특별보고서’를 공개하였다."
         app:layout_constraintTop_toBottomOf="@id/textview_item_docs_detail_title"

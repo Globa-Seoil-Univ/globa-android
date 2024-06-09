@@ -9,11 +9,37 @@ public class Comment {
     @SerializedName("content")
     private String content;
 
+    @SerializedName("hasReply")
+    private boolean hasReply;
+    @SerializedName("deleted")
+    private boolean deleted;
+    @SerializedName("createdTime")
+    private String createdTime;
+    @SerializedName("user")
+    private User user;
+
+
     public String getCommentId() {
         return commentId;
     }
 
     public String getContent() {
         return content;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public boolean isHasReply() {
+        return hasReply;
     }
 }

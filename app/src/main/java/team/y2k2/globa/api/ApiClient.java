@@ -21,6 +21,7 @@ import team.y2k2.globa.api.model.request.FirstCommentRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
+import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.api.model.response.FolderResponse;
@@ -429,6 +430,66 @@ public class ApiClient {
             return CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<Void> call = apiService.requestInsertFirstComment(folderId, recordId, sectionId, APPLICATION_JSON, authorization, request);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+                return response;
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public CommentResponse getComments(String folderId, String recordId, String sectionId, String highlightId, int page, int count){
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<CommentResponse> call = apiService.getComments(folderId, recordId, sectionId, highlightId, APPLICATION_JSON, authorization, page, count);
+                Response<CommentResponse> response;
+                try {
+                    response = call.execute();
+
+                    if(response.isSuccessful()) {
+                        return response.body();
+                    }
+                    else {
+                        handleErrorCode(response.code());
+                        return null;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Response<Void> deleteComment(String folderId, String recordId, String sectionId, String highlightId, String commentId) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.deleteComment(folderId, recordId, sectionId, highlightId, commentId, APPLICATION_JSON, authorization);
 
                 Response<Void> response;
                 try {

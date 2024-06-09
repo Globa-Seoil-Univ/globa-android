@@ -30,6 +30,7 @@ import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.request.WithdrawRequest;
+import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.api.model.response.FolderPermissionResponse;
@@ -51,8 +52,8 @@ public interface ApiService {
 
 //    String API_BASE_URL = "http://1.209.165.82:8080";
 //    String API_BASE_URL = "https://1.209.165.82:8080";
-    String API_BASE_URL = "http://192.168.219.111:8080";
-//    String API_BASE_URL = "https://globa.tetraplace.com";
+//    String API_BASE_URL = "http://192.168.219.111:8080";
+    String API_BASE_URL = "https://globa.tetraplace.com";
     /**
      * 토큰 갱신
      */
@@ -442,6 +443,51 @@ public interface ApiService {
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body FirstCommentRequest request
+    );
+
+
+    /**
+     * 댓글 읽기
+     * @param folderId
+     * @param recordId
+     * @param sectionId
+     * @param highlightId
+     * @param contentType
+     * @param authorization
+     * @param page
+     * @param count
+     * @return
+     */
+    @GET("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment")
+    Call<CommentResponse> getComments(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Path("section_id") String sectionId,
+            @Path("highlight_id") String highlightId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("page") int page,
+            @Query("count") int count
+    );
+
+    /**
+     * 댓글 삭제
+     * @param folderId
+     * @param recordId
+     * @param sectionId
+     * @param highlightId
+     * @param commentId
+     * @return
+     */
+    @DELETE("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{comment_id}")
+    Call<Void> deleteComment(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Path("section_id") String sectionId,
+            @Path("highlight_id") String highlightId,
+            @Path("comment_id") String commentId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
     );
 
 }

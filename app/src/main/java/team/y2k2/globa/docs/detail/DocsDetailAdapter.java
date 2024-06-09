@@ -1,12 +1,16 @@
 package team.y2k2.globa.docs.detail;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -26,9 +30,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.entity.Comment;
 import team.y2k2.globa.api.model.entity.Highlight;
+import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightItem;
 import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightModel;
@@ -38,9 +45,14 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     DocsActivity activity;
 
+    String folderId;
+    String recordId;
+
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
         this.detailItems = detailItems;
         this.activity = activity;
+        this.folderId = activity.getFolderId();
+        this.recordId = activity.getRecordId();
     }
 
     @NonNull
@@ -54,6 +66,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         String title = detailItems.get(position).getTitle();
         String time = formatDuration(Integer.parseInt(detailItems.get(position).getTime()));
+        String sectionId = detailItems.get(position).getSectionId();
 
         holder.title.setText(title);
         holder.time.setText(time);
@@ -63,98 +76,124 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             activity.setDuration(startTime);
         });
 
+        String description = detailItems.get(position).getDescription();
+        SpannableString highlightString = new SpannableString(description);
 
-//        if (position == -1) {
-            String description = detailItems.get(position).getDescription();
-            SpannableString highlightString = new SpannableString(description);
+        holder.description.setOnTouchListener(new View.OnTouchListener() {
+            int startIdx = 0;
+            int endIdx = 0;
 
-            holder.description.setOnTouchListener(new View.OnTouchListener() {
-                int startIdx = 0;
-                int endIdx = 0;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(getClass().getName(), "S:" + startIdx + " | E:" + endIdx);
 
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    Log.d(getClass().getName(), "S:" + startIdx + " | E:" + endIdx);
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Log.d(getClass().getName(), "ACTION_UP | S:" + startIdx + " | E:" + endIdx);
 
-                    if(event.getAction() == MotionEvent.ACTION_UP) {
-                        Log.d(getClass().getName(), "ACTION_UP | S:" + startIdx + " | E:" + endIdx);
-
-//                        endIdx = holder.description.getOffsetForPosition(startPivot, endPivot);
-
-                        if(startIdx >= endIdx) {
-                            int temp = startIdx;
-                            startIdx = endIdx;
-                            endIdx = temp;
-                        }
-
-                        if (startIdx != -1 && endIdx != -1) {
-//                            activity.binding.linearlayoutDocsComment.setVisibility(View.VISIBLE);
-                            updateSelection(holder.description, startIdx, endIdx);
-                            String selectedText = holder.description.getText().subSequence(startIdx, endIdx).toString();
-                            Toast.makeText(holder.itemView.getContext(), "선택한 텍스트: " + selectedText, Toast.LENGTH_SHORT).show();
-                            showPopupMenu(v, activity.getFolderId(), activity.getRecordId(), detailItems.get(position).getSectionId(), String.valueOf(startIdx), String.valueOf(endIdx), selectedText);
-                        }
-
-
+                    if (startIdx >= endIdx) {
+                        int temp = startIdx;
+                        startIdx = endIdx;
+                        endIdx = temp;
                     }
-                    else if(event.getAction() == MotionEvent.ACTION_MOVE) {
-                        endIdx = holder.description.getOffsetForPosition(event.getX(), event.getY());
-                        // Pivot 위치 계산
+
+                    if (startIdx != -1 && endIdx != -1) {
                         updateSelection(holder.description, startIdx, endIdx);
-
-//                        Toast.makeText(holder.itemView.getContext(), "선택됨 " + startIdx +" | " + endIdx , Toast.LENGTH_SHORT).show();
+                        String selectedText = holder.description.getText().subSequence(startIdx, endIdx).toString();
+                        Toast.makeText(holder.itemView.getContext(), "선택한 텍스트: " + selectedText, Toast.LENGTH_SHORT).show();
+                        showPopupMenu(v, activity.getFolderId(), activity.getRecordId(), detailItems.get(position).getSectionId(), String.valueOf(startIdx), String.valueOf(endIdx), selectedText);
                     }
-                    else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        startIdx = holder.description.getOffsetForPosition(event.getX(), event.getY());
-                        endIdx = startIdx;
-
-
-//                        activity.binding.linearlayoutDocsComment.setVisibility(View.INVISIBLE);
-                    }
-                    return false;
+                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    endIdx = holder.description.getOffsetForPosition(event.getX(), event.getY());
+                    updateSelection(holder.description, startIdx, endIdx);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    startIdx = holder.description.getOffsetForPosition(event.getX(), event.getY());
+                    endIdx = startIdx;
                 }
-            });
-            List<Highlight> highlights = detailItems.get(position).getHighlights();
-
-            for (int i = 0; i < highlights.size(); i++) {
-                Highlight highlight = highlights.get(i);
-
-                int startIdx = highlight.getStartIndex();
-                int endIdx = highlight.getEndIndex();
-
-                // 클릭 가능한 Span 설정
-                ClickableSpan clickableSpan = new ClickableSpan() {
-                    @Override
-                    public void onClick(View widget) {
-                        // 클릭 시 동작할 내용 구현
-                        Log.d(getClass().getName(), "클릭됨");
-                        Toast.makeText(widget.getContext(), "SpannableString 클릭됨", Toast.LENGTH_SHORT).show();
-
-                        BottomSheetDialog commentBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
-                        commentBottomSheet.setContentView(R.layout.dialog_comment);
-                        commentBottomSheet.show();
-
-                        TextView name = commentBottomSheet.findViewById(R.id.textview_comment_name);
-
-                        name.setText(detailItems.get(position).getDescription());
-
-                    }
-
-                    @Override
-                    public void updateDrawState(@NonNull TextPaint ds) {
-                        super.updateDrawState(ds);
-                        ds.setColor(Color.WHITE);
-                        ds.setUnderlineText(false);
-                    }
-                };
-                BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(holder.itemView.getResources().getColor(R.color.primary_3));
-
-                highlightString.setSpan(backgroundColorSpan, startIdx, endIdx, 0);
-                highlightString.setSpan(clickableSpan, startIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+                return false;
             }
-            holder.description.setText(highlightString);
-            holder.description.setMovementMethod(android.text.method.LinkMovementMethod.getInstance()); // SpannableString 클릭 되도록 함
+        });
 
+        List<Highlight> highlights = detailItems.get(position).getHighlights();
+        for (int i = 0; i < highlights.size(); i++) {
+            Highlight highlight = highlights.get(i);
+            applyHighlightAndClick(holder, highlightString, sectionId, highlight, i);
+        }
+
+        holder.description.setText(highlightString);
+        holder.description.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void applyHighlightAndClick(@NonNull AdapterViewHolder holder, SpannableString highlightString, String sectionId, Highlight highlight, int highlightIndex) {
+        String highlightId = String.valueOf(highlight.getHighlightId());
+        int startIdx = highlight.getStartIndex();
+        int endIdx = highlight.getEndIndex();
+
+        GestureDetector gestureDetector = new GestureDetector(holder.itemView.getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                ApiClient apiClient = new ApiClient(activity);
+                List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
+
+                BottomSheetDialog commentBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
+                commentBottomSheet.setContentView(R.layout.dialog_comment);
+
+                TextView name = commentBottomSheet.findViewById(R.id.textview_comment_name);
+                name.setText(comments.get(highlightIndex).getContent());
+
+                commentBottomSheet.show();
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity); // context는 현재 Activity 또는 Fragment
+
+                builder.setTitle("댓글 삭제")
+                        .setMessage("댓글을 삭제하시겠습니까?")
+                        .setPositiveButton("예", (dialog, witch) -> {
+                            // 예 버튼 클릭 시 동작 (댓글 삭제 로직)
+                            Toast.makeText(activity,"댓글을 삭제했습니다.", Toast.LENGTH_LONG).show();
+
+                            ApiClient apiClient = new ApiClient(activity);
+
+                            List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
+                            String commentId = comments.get(highlightIndex).getCommentId();
+                            Log.d(getClass().getName(), "commentId : " + commentId);
+                            Response<Void> result = apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
+
+                            Log.d(getClass().getName(), "code : " + result.code());
+                        })
+                        .setNegativeButton("아니오", (dialog, which) -> {
+                            dialog.dismiss();
+                            Toast.makeText(activity, "아니오를 선택함", Toast.LENGTH_SHORT).show();
+                                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                // 클릭 이벤트는 GestureDetector에서 처리하므로 비워둠
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(Color.WHITE);
+                ds.setUnderlineText(false);
+            }
+        };
+
+        BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(holder.itemView.getResources().getColor(R.color.primary_3));
+
+        highlightString.setSpan(backgroundColorSpan, startIdx, endIdx, 0);
+        highlightString.setSpan(clickableSpan, startIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        holder.description.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
     }
 
     @Override
@@ -176,6 +215,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         }
     }
 
+
+
     public void showPopupMenu(View v, String folderId, String recordId, String sectionId, String startIdx, String endIdx, String selectedText) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.getMenuInflater().inflate(R.menu.comment, popupMenu.getMenu());
@@ -194,12 +235,10 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
                     ImageButton confirm = commentBottomSheet.findViewById(R.id.imagebutton_comment_confirm);
 
-
                     confirm.setOnClickListener(v -> {
                         ApiClient apiClient = new ApiClient(v.getContext());
 
                         EditText comment = commentBottomSheet.findViewById(R.id.edittext_comment);
-
                         apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, comment.getText().toString());
                         commentBottomSheet.dismiss();
                     });

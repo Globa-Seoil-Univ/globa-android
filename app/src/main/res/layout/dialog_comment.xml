@@ -42,7 +42,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/recyclerview_comment"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="> 해당 관련해서"/>
+        android:text="> 댓글 예시"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_comment"
