@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -76,26 +77,22 @@ public class QuizResultActivity extends AppCompatActivity {
             if(lastCorrected != 0) {
                 if(gradeInt > lastCorrected) {
                     // 점수 상승 경우
-                    different = (int)((gradeInt - lastCorrected) / lastCorrected * 100);
-                    percentString = "지난번 성적보다 " + different + "% 상승했습니다!";
+                    different = gradeInt - lastCorrected;
+                    percentString = "지난번 성적보다 " + different + "점 상승했습니다!";
                     SpannableStringBuilder percentSpannable = new SpannableStringBuilder(percentString);
                     int percentStartIndex = 9;
                     int percentEndIndex = percentString.length() - 1;
                     percentSpannable.setSpan(new ForegroundColorSpan(color), percentStartIndex, percentEndIndex - 8, 0);
                     binding.textviewQuizresultPercent.setText(percentSpannable);
-                    // 새로운 점수 프리퍼런스 저장 필요
-
                 } else if (gradeInt < lastCorrected) {
                     // 점수 하락 경우
-                    different = (int)((lastCorrected - gradeInt) / lastCorrected * 100);
-                    percentString = "지난번 성적보다 " + different + "% 감소했습니다ㅠ";
+                    different = lastCorrected - gradeInt;
+                    percentString = "지난번 성적보다 " + different + "점 감소했습니다ㅠ";
                     SpannableStringBuilder percentSpannable = new SpannableStringBuilder(percentString);
                     int percentStartIndex = 9;
                     int percentEndIndex = percentString.length() - 1;
                     percentSpannable.setSpan(new ForegroundColorSpan(color), percentStartIndex, percentEndIndex - 8, 0);
                     binding.textviewQuizresultPercent.setText(percentSpannable);
-                    // 새로운 점수 프리퍼런스 저장 필요
-
                 } else {
                     // 점수 동일 경우
                     percentString = "지난번과 성적이 같습니다!!";
@@ -106,7 +103,8 @@ public class QuizResultActivity extends AppCompatActivity {
                 percentString = "지난 성적이 0점이군요...";
                 binding.textviewQuizresultPercent.setText(percentString);
             }
-
+            quizResultEditor.putInt("lastGrade", gradeInt);
+            quizResultEditor.apply();
         }
 
     }

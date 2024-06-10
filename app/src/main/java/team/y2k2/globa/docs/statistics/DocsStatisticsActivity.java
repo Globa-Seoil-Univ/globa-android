@@ -106,11 +106,13 @@ public class DocsStatisticsActivity extends AppCompatActivity {
 
                 gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
                 gradeValues = quizgrades.stream().mapToInt(Quizgrade::getScore).toArray();
+
                 if(gradeX.length < 10 && gradeX.length > 0) {
                     List<String> gradeXList = new ArrayList<>();
                     List<Integer> gradeValuesList = new ArrayList<>();
                     for(int i = 0; i < gradeX.length; i ++) {
                         gradeXList.add(gradeX[i]);
+                        Log.d("퀴즈 점수", "퀴즈 점수 들: " + gradeValues[i]);
                         gradeValuesList.add(gradeValues[i]);
                     }
                     for(int i = 0; i < 10 - gradeX.length; i++) {

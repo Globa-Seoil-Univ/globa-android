@@ -37,6 +37,7 @@ public class DocsStatisticsViewModel extends ViewModel {
             public void onResponse(Call<StatisticsResponse> call, Response<StatisticsResponse> response) {
                 if(response.isSuccessful()) {
                     docsStatisticsLiveData.postValue(response.body());
+                    Log.d(getClass().getName(), "서버 응답 성공!");
                 } else {
                     Log.e(getClass().getName(), "서버 응답 오류 발생 : " + response.code());
                 }

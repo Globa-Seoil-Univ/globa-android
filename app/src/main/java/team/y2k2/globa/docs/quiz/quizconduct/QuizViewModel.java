@@ -63,15 +63,15 @@ public class QuizViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
-                    Log.d(getClass().getName(), "퀴즈 결과 전송 완료");
+                    Log.d("API 응답 성공", "퀴즈 결과 전송 완료");
                 } else {
-                    Log.e(getClass().getName(), response.message());
+                    Log.d("API 응답 오류", "퀴즈 결과 전송 실패: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(getClass().getName(), t.getMessage());
+                Log.e("API 전송 오류", t.getMessage());
             }
         });
     }

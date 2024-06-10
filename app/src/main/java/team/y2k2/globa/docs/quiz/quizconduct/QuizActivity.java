@@ -93,6 +93,9 @@ public class QuizActivity extends AppCompatActivity {
             Log.d("퀴즈 정답", String.valueOf(quizList.get(currentIndex).getAnswer()));
         } else {
             // 결과화면으로 넘어가기전 퀴즈 결과 api 전송
+            for(int i = 0; i < quizResultList.size(); i++) {
+                Log.d("퀴즈 결과", "퀴즈 결과: " + String.valueOf(quizResultList.get(i).getQuizId()) + ", " + String.valueOf(quizResultList.get(i).isCorrect()));
+            }
             quizViewModel.submitQuizResult(folderId, recordId, quizResultList);
 
             // 결과화면으로 넘어가기전 결과 계산

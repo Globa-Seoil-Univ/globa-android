@@ -81,7 +81,7 @@ public class StatisticsFragment extends Fragment {
                 wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
                 // 여기 float으로 고쳐주세용
                 doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
-                wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 10)).toArray();
+                wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 100)).toArray();
                 drawBarChart(barChart, wordX, wordValues);
 
                 timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
@@ -129,6 +129,7 @@ public class StatisticsFragment extends Fragment {
                     for(int i = 0; i < gradeX.length; i ++) {
                         gradeXList.add(gradeX[i]);
                         gradeValuesList.add(gradeValues[i]);
+                        Log.d("퀴즈 시각화", "날짜: " + gradeX[i] + ", 점수 : " + gradeValues[i]);
                     }
                     for(int i = 0; i < 10 - gradeX.length; i++) {
                         gradeXList.add("0");
@@ -227,7 +228,7 @@ public class StatisticsFragment extends Fragment {
         axisLeft.setDrawGridLines(true); // 기준선 활성화
         axisLeft.setDrawAxisLine(true); // 축선 활성화
         axisLeft.setAxisMinimum(0f); // 최솟값
-        axisLeft.setAxisMaximum(8f); // 최댓값
+        axisLeft.setAxisMaximum(100f); // 최댓값
         axisLeft.setGranularity(0.1f); // 기준선 간격 설정
         axisLeft.setDrawLabels(false); // label 삭제
 

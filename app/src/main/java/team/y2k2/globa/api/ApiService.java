@@ -18,6 +18,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.api.model.entity.Quiz;
+import team.y2k2.globa.api.model.entity.QuizResult;
 import team.y2k2.globa.api.model.request.FirstCommentRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
