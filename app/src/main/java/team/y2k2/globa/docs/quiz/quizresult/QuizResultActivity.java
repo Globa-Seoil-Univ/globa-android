@@ -47,14 +47,14 @@ public class QuizResultActivity extends AppCompatActivity {
         SpannableStringBuilder scoreSpannable = new SpannableStringBuilder(grade);
         int scoreStartIndex = 0;
         int scoreEndIndex = grade.length() - 1;
-        scoreSpannable.setSpan(new ForegroundColorSpan(color), scoreStartIndex, scoreEndIndex - 1, 0);
+        scoreSpannable.setSpan(new ForegroundColorSpan(color), scoreStartIndex, scoreEndIndex, 0);
         binding.textviewQuizresultScore.setText(scoreSpannable);
 
         // 정답 수
         SpannableStringBuilder countSpannable = new SpannableStringBuilder(corrected);
         int countStartIndex = 0;
         int countEndIndex = corrected.length() - 1;
-        countSpannable.setSpan(new ForegroundColorSpan(color), countStartIndex, countEndIndex - 1, 0);
+        countSpannable.setSpan(new ForegroundColorSpan(color), countStartIndex, countEndIndex, 0);
         binding.textviewQuizresultCorrect.setText(countSpannable);
 
         // 상승률
