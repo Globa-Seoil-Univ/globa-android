@@ -117,6 +117,7 @@ public class LoginViewModel extends ViewModel {
             String refreshToken = response.getRefreshToken();
 
             Log.d(getClass().getName(), "로그인 성공");
+            Log.d("엑세스 토큰", "토큰: " + accessToken);
 
             ArrayList list = new ArrayList();
             list.add("accessToken : " + accessToken);

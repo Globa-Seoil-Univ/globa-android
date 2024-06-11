@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class Quizgrade {
 
-    @SerializedName("score")
-    private int score;
+    @SerializedName("quizGrade")
+    private double score;
     @SerializedName("createdTime")
     private String createdTime;
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

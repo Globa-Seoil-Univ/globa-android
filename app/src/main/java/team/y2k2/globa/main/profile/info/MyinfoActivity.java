@@ -153,7 +153,11 @@ public class MyinfoActivity extends AppCompatActivity {
                             .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
                             .into(binding.imageviewMyinfoPhoto);
                 } else {
-                    Glide.with(this).load(R.mipmap.ic_launcher).placeholder(R.mipmap.ic_launcher).into(binding.imageviewMyinfoPhoto);
+                    Glide.with(this)
+                            .load(R.mipmap.ic_launcher)
+                            .error(R.mipmap.ic_launcher)
+                            .placeholder(R.mipmap.ic_launcher)
+                            .into(binding.imageviewMyinfoPhoto);
                 }
 
 

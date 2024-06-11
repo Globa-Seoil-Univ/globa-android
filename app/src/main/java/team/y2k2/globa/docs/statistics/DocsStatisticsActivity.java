@@ -32,7 +32,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
 
     String[] wordX, timeX, gradeX;
     int[] wordValues, timeValues, gradeValues;
-    double[] doubleWordValues;
+    double[] doubleWordValues, doubleGradeValues;
     ActivityDocsStatisticsBinding binding;
     private HorizontalBarChart docsBarChart;
     private LineChart docsTimeLineChart, docsGradeLineChart;
@@ -105,7 +105,8 @@ public class DocsStatisticsActivity extends AppCompatActivity {
                 }
 
                 gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
-                gradeValues = quizgrades.stream().mapToInt(Quizgrade::getScore).toArray();
+                doubleGradeValues = quizgrades.stream().mapToDouble(Quizgrade::getScore).toArray();
+                gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
 
                 if(gradeX.length < 10 && gradeX.length > 0) {
                     List<String> gradeXList = new ArrayList<>();
@@ -254,7 +255,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // 그래프의 x축 위치 지정 (디폴드: 위)
 
         YAxis yAxis = lineChart.getAxisLeft(); // 그래프의 y축 갖고오기
-        yAxis.setAxisMaximum(40); // y축 최댓값 지정
+        yAxis.setAxisMaximum(100); // y축 최댓값 지정
         yAxis.setAxisMinimum(0); // y축 최솟값 지정
         yAxis.setLabelCount(9, true); // y축 갯수 지정 (값 간격을 조정)
 
