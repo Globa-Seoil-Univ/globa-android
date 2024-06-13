@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.io.File;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -35,12 +37,12 @@ public class MyinfoViewModel extends ViewModel {
         return errorLiveData;
     }
 
-    public void uploadImage(byte[] imageData, String userId) {
+    public void uploadImage(File imageFile, String userId) {
         // ByteArray를 RequestBody로 변환
-        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), imageData);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
 
         // MultipartBody.Part로 변환
-        MultipartBody.Part profilePart = MultipartBody.Part.createFormData("profile", "image.jpg", requestFile);
+        MultipartBody.Part profilePart = MultipartBody.Part.createFormData("profile", imageFile.getName(), requestFile);
 
         apiService.requestUpdateProfileImage(userId, "multipart/form-data", authorization, profilePart).enqueue(new Callback<Void>() {
             @Override

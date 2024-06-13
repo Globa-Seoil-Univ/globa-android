@@ -16,9 +16,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
@@ -30,6 +34,8 @@ import team.y2k2.globa.main.profile.info.MyinfoActivity;
 public class ProfileFragment extends Fragment {
     ProfileModel model;
     FragmentProfileBinding binding;
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference profileImageRef;
 
     public ProfileFragment() {
         model = new ProfileModel();
@@ -57,8 +63,19 @@ public class ProfileFragment extends Fragment {
         binding.textviewProfileAccountUsername.setText(response.getName());
         binding.textviewProfileAccountUsercode.setText(response.getCode());
 
+        String profile = response.getProfile();
+
+        String httpProfileUrl;
+        if(response.getProfile() != null) {
+            profileImageRef = storage.getReference().child(profile);
+            httpProfileUrl = convertGsToHttps(String.valueOf(profileImageRef));
+        } else {
+            httpProfileUrl = null;
+        }
+
+
         Glide.with(inflater.getContext())
-                .load(response.getProfile()) // 임시로 로드
+                .load(httpProfileUrl) // 임시로 로드
                 .error(R.mipmap.ic_launcher)
                 .into(binding.imageviewProfileAccountImage);
 
@@ -69,7 +86,7 @@ public class ProfileFragment extends Fragment {
         binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
 
             Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
-            intent.putExtra("profile", response.getProfile());
+            intent.putExtra("profile", httpProfileUrl);
             intent.putExtra("name", response.getName());
             intent.putExtra("code", response.getCode());
             intent.putExtra("userId", response.getUserId());
@@ -102,5 +119,34 @@ public class ProfileFragment extends Fragment {
             Log.d(getClass().getName(), logs.get(i));
         }
 
+    }
+
+    public static String convertGsToHttps(String gsUrl) {
+        if (!gsUrl.startsWith("gs://")) {
+            throw new IllegalArgumentException("Invalid gs:// URL");
+        }
+
+        // Extract bucket name and path
+        int bucketEndIndex = gsUrl.indexOf("/", 5); // Find the end of bucket name
+        if (bucketEndIndex == -1 || bucketEndIndex == gsUrl.length() - 1) {
+            throw new IllegalArgumentException("Invalid gs:// URL format");
+        }
+
+        String bucketName = gsUrl.substring(5, bucketEndIndex);
+        String filePath = gsUrl.substring(bucketEndIndex + 1);
+
+        // URL encode the file path
+        String encodedFilePath;
+        try {
+            encodedFilePath = URLEncoder.encode(filePath, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("URL encoding failed", e);
+        }
+
+        // Construct the HTTPS URL
+        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
+                "/o/" + encodedFilePath + "?alt=media";
+
+        return httpsUrl;
     }
 }

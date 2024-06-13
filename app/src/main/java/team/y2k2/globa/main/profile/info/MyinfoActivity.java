@@ -32,8 +32,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,13 +81,10 @@ public class MyinfoActivity extends AppCompatActivity {
                         .error(R.mipmap.ic_launcher)
                         .placeholder(R.mipmap.ic_launcher)
                         .into(binding.imageviewMyinfoPhoto);
-                try {
-                    imageBytes = uriToByteArray(uri);
-                } catch (IOException e) {
-                    Log.d(getClass().getName(), "URI BYTE 변환 중 오류 발생");
-                }
 
-                myInfoViewModel.uploadImage(imageBytes, userId);
+                File imageFile = new File(uri.getPath());
+
+                myInfoViewModel.uploadImage(imageFile, userId);
 
             } else {
                 Log.d("PhotoPicker", "No media selected");
@@ -100,20 +100,6 @@ public class MyinfoActivity extends AppCompatActivity {
 
     }
 
-    private byte[] uriToByteArray(Uri uri) throws IOException {
-        ContentResolver contentResolver = getContentResolver();
-        InputStream inputStream = contentResolver.openInputStream(uri);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while((bytesRead = inputStream.read(buffer)) != -1) {
-            byteArrayOutputStream.write(buffer, 0, bytesRead);
-        }
-
-        return byteArrayOutputStream.toByteArray();
-    }
-
     public void loadUserInfoList(MyinfoViewModel myInfoViewModel) {
         // 리사이클러뷰 레이아웃 매니저 설정
         binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyinfoActivity.this));
@@ -125,9 +111,8 @@ public class MyinfoActivity extends AppCompatActivity {
         String code = getIntent().getStringExtra("code");
 
         if(profile != null) {
-            profileImageRef = storage.getReference().child(profile);
-            Glide.with(this).load(profileImageRef)
-                    .placeholder(R.mipmap.ic_launcher)
+            Glide.with(this).load(profile)
+                    //.placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(binding.imageviewMyinfoPhoto);
         } else {
@@ -166,4 +151,5 @@ public class MyinfoActivity extends AppCompatActivity {
         });
 
     }
+
 }
