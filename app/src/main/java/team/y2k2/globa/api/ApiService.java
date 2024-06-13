@@ -95,7 +95,7 @@ public interface ApiService {
      * 프로필 사진 수정
      */
     @Multipart
-    @POST("/user/{user_id}/profile")
+    @PATCH("/user/{user_id}/profile")
     Call<Void> requestUpdateProfileImage(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType, // "multipart/form-data"

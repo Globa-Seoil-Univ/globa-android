@@ -40,7 +40,7 @@ public class StatisticsFragment extends Fragment {
     //String[] dayX = { "딥러닝", "학습", "지능", "데이터", "예측", "인공신경망", "사용", "입력", "패턴", "이미지" };
     String[] wordX, timeX, gradeX; // 수평 막대 그래프 카테고리 배열
     int[] wordValues, timeValues, gradeValues;
-    double[] doubleWordValues;
+    double[] doubleWordValues, doubleGradeValues;
     FragmentStatisticsBinding binding;
     private HorizontalBarChart barChart;
     private LineChart timeLineChart, gradeLineChart;
@@ -122,7 +122,8 @@ public class StatisticsFragment extends Fragment {
                 }
 
                 gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
-                //gradeValues = quizgrades.stream().mapToInt(Quizgrade::getScore).toArray();
+                doubleGradeValues = quizgrades.stream().mapToDouble(Quizgrade::getScore).toArray();
+                gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
                 if(gradeX.length < 10 && gradeX.length > 0) {
                     List<String> gradeXList = new ArrayList<>();
                     List<Integer> gradeValuesList = new ArrayList<>();
@@ -267,7 +268,7 @@ public class StatisticsFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // 그래프의 x축 위치 지정 (디폴드: 위)
 
         YAxis yAxis = lineChart.getAxisLeft(); // 그래프의 y축 갖고오기
-        yAxis.setAxisMaximum(40); // y축 최댓값 지정
+        yAxis.setAxisMaximum(100); // y축 최댓값 지정
         yAxis.setAxisMinimum(0); // y축 최솟값 지정
         yAxis.setLabelCount(9, true); // y축 갯수 지정 (값 간격을 조정)
 

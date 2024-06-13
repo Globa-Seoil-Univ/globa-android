@@ -69,9 +69,12 @@ public class ProfileFragment extends Fragment {
         binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
 
             Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
+            intent.putExtra("profile", response.getProfile());
             intent.putExtra("name", response.getName());
             intent.putExtra("code", response.getCode());
+            intent.putExtra("userId", response.getUserId());
             startActivity(intent);
+
         });
 
         return binding.getRoot();

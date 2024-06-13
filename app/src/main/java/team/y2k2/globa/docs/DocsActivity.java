@@ -2,6 +2,7 @@ package team.y2k2.globa.docs;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,11 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.util.Util;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
@@ -54,11 +60,25 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable updateSeekbarRunnable;
+    private long startTime, endTime;
+    private String startDate;
+    private SharedPreferences pref;
+    private static final String KEY_HISTORY = "studyHistory";
+    private static final int MAX_HISTORY_SIZE = 10;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
+
+        pref = getSharedPreferences("studyTime", DocsActivity.MODE_PRIVATE);
+
+        // 파일이 열리는 시간 측정
+        startTime = System.currentTimeMillis();
+        Date date = new Date(startTime);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        startDate = dateFormat.format(date);
+        Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
 
         player = new SimpleExoPlayer.Builder(this).build();
 
@@ -364,8 +384,13 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         stopUpdatingSeekBar();
         player.release();
         player = null;
-    }
 
+        // 문서 상세 보기 종료 시
+        endTime = System.currentTimeMillis();
+        long durationMilliSecond = endTime - startTime;
+        int durationMinute = (int)(durationMilliSecond / 60000);
+        Log.d("시간", "열려 있던 시간(분): " + durationMinute);
+    }
 
     public String getFolderId() {
         return folderId;
