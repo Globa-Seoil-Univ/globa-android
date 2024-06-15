@@ -62,16 +62,15 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private Runnable updateSeekbarRunnable;
     private long startTime, endTime;
     private String startDate;
-    private SharedPreferences pref;
-    private static final String KEY_HISTORY = "studyHistory";
-    private static final int MAX_HISTORY_SIZE = 10;
+    private PreferencesHelper preferencesHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
 
-        pref = getSharedPreferences("studyTime", DocsActivity.MODE_PRIVATE);
+        // 프리퍼런스 헬퍼 호출
+        preferencesHelper = new PreferencesHelper(this);
 
         // 파일이 열리는 시간 측정
         startTime = System.currentTimeMillis();
@@ -390,6 +389,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         long durationMilliSecond = endTime - startTime;
         int durationMinute = (int)(durationMilliSecond / 60000);
         Log.d("시간", "열려 있던 시간(분): " + durationMinute);
+        preferencesHelper.addData(startDate, durationMinute);
     }
 
     public String getFolderId() {

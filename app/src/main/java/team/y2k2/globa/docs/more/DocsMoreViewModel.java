@@ -1,5 +1,7 @@
 package team.y2k2.globa.docs.more;
 
+import static team.y2k2.globa.api.ApiClient.authorization;
+
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,7 +20,6 @@ public class DocsMoreViewModel extends ViewModel {
 
     private ApiService apiService;
     private ApiClient apiClient;
-    private String authorization;
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public DocsMoreViewModel() {
@@ -34,9 +35,9 @@ public class DocsMoreViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Log.d(getClass().getName(), "문서 삭제 성공");
+                    Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());
                 } else {
-                    Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code());
+                    Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
                 }
             }
 
