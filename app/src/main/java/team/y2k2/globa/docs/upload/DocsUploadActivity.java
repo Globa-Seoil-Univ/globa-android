@@ -47,6 +47,8 @@ public class DocsUploadActivity extends AppCompatActivity {
     long unixTime;
 
 
+
+    DocsUploadFolderAdapter adapter;
     String firebasePath;
 
     ActivityDocsUploadBinding binding;
@@ -95,7 +97,10 @@ public class DocsUploadActivity extends AppCompatActivity {
             }
 
             if(preferences.getString("publicFolderId", "").length() != 0) {
-                folderId = preferences.getString("publicFolderId", "");
+//                folderId = preferences.getString("publicFolderId", "");
+
+                FolderResponse folder = adapter.getItems().get(binding.spinnerDocsUpload.getSelectedItemPosition());
+                folderId = String.valueOf(folder.getFolderId());
             }
 
             uploadRecordFile(recordPath, userId, folderId, recordExtension);
@@ -189,7 +194,7 @@ public class DocsUploadActivity extends AppCompatActivity {
         response = apiClient.requestGetFolders(1, 10);
 
         if (response != null) {
-            DocsUploadFolderAdapter adapter = new DocsUploadFolderAdapter(getApplicationContext(), R.layout.item_folder, response);
+            adapter = new DocsUploadFolderAdapter(getApplicationContext(), R.layout.item_folder, response);
             adapter.setDropDownViewResource(R.layout.item_folder);
             binding.spinnerDocsUpload.setAdapter(adapter);
             binding.spinnerDocsUpload.setSelection(0);

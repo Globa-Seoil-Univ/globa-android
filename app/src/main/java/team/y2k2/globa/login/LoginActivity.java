@@ -64,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
 
         KakaoSdk.init(this, "8a572ba277b6059bd51f23fe58474f13");
-
         setFirstCharColorPrimary();
         googleServiceLoading();
 
