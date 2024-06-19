@@ -128,11 +128,6 @@ public class MyinfoActivity extends AppCompatActivity {
         itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
         itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
 
-        // 어뎁터에 아이템 리스트 추가
-        myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher);
-        // 라시아클러 뷰에 어뎁터 설정
-        binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
-
         // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
         nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if(result.getResultCode() == RESULT_OK) {
@@ -144,6 +139,11 @@ public class MyinfoActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // 어뎁터에 아이템 리스트 추가
+        myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher);
+        // 라시아클러 뷰에 어뎁터 설정
+        binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
 
         // 에러 발생
         myInfoViewModel.getErrorLiveData().observe(MyinfoActivity.this, errorMessge -> {

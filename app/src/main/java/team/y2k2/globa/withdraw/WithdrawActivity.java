@@ -24,6 +24,10 @@ public class WithdrawActivity extends AppCompatActivity {
         binding = ActivityWithdrawBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.buttonWithdrawBack.setOnClickListener(v -> {
+            finish();
+        });
+
         withdrawViewModel = new ViewModelProvider(this).get(WithdrawViewModel.class);
         /*
         SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
