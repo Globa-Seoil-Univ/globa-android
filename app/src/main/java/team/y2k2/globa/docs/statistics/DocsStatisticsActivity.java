@@ -24,10 +24,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.model.entity.Keyword;
+import team.y2k2.globa.api.model.entity.Pair;
 import team.y2k2.globa.api.model.entity.Quizgrade;
 import team.y2k2.globa.api.model.entity.Studytime;
 import team.y2k2.globa.databinding.ActivityDocsStatisticsBinding;
@@ -69,9 +71,19 @@ public class DocsStatisticsActivity extends AppCompatActivity {
                 List<Quizgrade> quizgrades = docsStatistics.getQuizGrades();
 
                 wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
-                // 여기 float으로 고쳐주세용
                 doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
                 wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 10)).toArray();
+
+                Pair[] pairs = new Pair[wordValues.length];
+                for(int i = 0; i < wordValues.length; i++) {
+                    pairs[i] = new Pair(wordValues[i], wordX[i]);
+                }
+                Arrays.sort(pairs);
+                for(int i = 0; i < pairs.length; i++) {
+                    wordValues[i] = pairs[i].getNumber();
+                    wordX[i] = pairs[i].getText();
+                }
+
                 drawBarChart(docsBarChart, wordX, wordValues);
 
 //                timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
