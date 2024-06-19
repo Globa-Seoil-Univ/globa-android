@@ -98,7 +98,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
 
     public void updateDocsName(String title) {
         ApiClient apiClient = new ApiClient(this);
-        apiClient.requestUpdateRecordName(folderId,recordId, title);
+        apiClient.requestUpdateRecordName(folderId, recordId, title);
         finish();
     }
 }
