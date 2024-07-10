@@ -2,6 +2,7 @@ package team.y2k2.globa.docs.detail;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -17,14 +18,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -39,6 +43,7 @@ import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightItem;
 import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightModel;
+import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
 
 public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.AdapterViewHolder> {
     ArrayList<DocsDetailItem> detailItems;
@@ -48,11 +53,17 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     String folderId;
     String recordId;
 
+    private BottomSheetBehavior<FrameLayout> bottomSheetBehavior;
+
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
         this.detailItems = detailItems;
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
+
+        // 댓글 레이아웃 bottomSheetBehavior 선언
+        FrameLayout bottomSheet = activity.findViewById(R.id.framelayout_docs_comment);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
     }
 
     @NonNull
@@ -123,6 +134,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         holder.description.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    // 만들어진 하이라이트 클릭 (댓글 가져오기)
     private void applyHighlightAndClick(@NonNull AdapterViewHolder holder, SpannableString highlightString, String sectionId, Highlight highlight, int highlightIndex) {
         String highlightId = String.valueOf(highlight.getHighlightId());
         int startIdx = highlight.getStartIndex();
@@ -215,8 +227,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         }
     }
 
-
-
+    // 새로운 하이라이트 생성 시 작동
     public void showPopupMenu(View v, String folderId, String recordId, String sectionId, String startIdx, String endIdx, String selectedText) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.getMenuInflater().inflate(R.menu.comment, popupMenu.getMenu());
@@ -225,6 +236,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_comment) {
+                    /* 다이얼로그 방식
                     // 댓글 작성 기능 수행
                     BottomSheetDialog commentBottomSheet = new BottomSheetDialog(v.getContext());
                     commentBottomSheet.setContentView(R.layout.dialog_comment);
@@ -242,6 +254,54 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                         apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, comment.getText().toString());
                         commentBottomSheet.dismiss();
                     });
+                    return true;
+                     */
+
+                    // 댓글 창 띄우기
+                    if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                        Log.d("새로운 하이라이트 댓글", "댓글 창 띄우기 시작");
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    } else {
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    }
+
+                    TextView textView = activity.findViewById(R.id.textview_docs_comment_name);
+                    textView.setText("선택 단어 : " + selectedText);
+
+                    ImageButton confirm = activity.findViewById(R.id.imagebutton_docs_comment_confirm);
+                    confirm.setOnClickListener(v -> {
+                        // api 송신
+                        ApiClient apiClient = new ApiClient(v.getContext());
+
+                        EditText comment = activity.findViewById(R.id.edittext_docs_comment_input);
+                        apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, comment.getText().toString());
+
+                        // 리사이클러뷰 동작
+
+                    });
+
+                    // 댓글 레이아웃 바깥영역 클릭 시 댓글 레이아웃 감추기
+                    CoordinatorLayout coordinatorLayout = activity.findViewById(R.id.coordinatorlayout_docs);
+                    coordinatorLayout.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+
+                            if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    });
+
+
+                } else if (item.getItemId() == R.id.action_search) {
+                    // 단어 검색
+                    Intent searchIntent = new Intent(activity, KeywordDetailActivity.class);
+                    searchIntent.putExtra("keyword", selectedText);
+                    activity.startActivity(searchIntent);
+
                     return true;
                 }
                 return false;
