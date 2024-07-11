@@ -276,8 +276,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                         EditText comment = activity.findViewById(R.id.edittext_docs_comment_input);
                         apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, comment.getText().toString());
 
-                        // 리사이클러뷰 동작
-
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     });
 
                     // 댓글 레이아웃 바깥영역 클릭 시 댓글 레이아웃 감추기
