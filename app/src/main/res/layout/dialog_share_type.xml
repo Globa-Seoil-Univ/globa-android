@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/modal_rounded_24">
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_share_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearlayout_share_tab"
+            android:layout_width="44dp"
+            android:layout_height="8dp"
+            android:background="@drawable/alert_tab"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal" />
+
+        <TextView
+            android:id="@+id/textview_share_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/folder_share_type_title"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_share_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darkGray"
+            android:layout_below="@+id/textview_share_title"
+            android:layout_marginTop="5dp"
+            android:text="@string/folder_share_type_description"
+            android:textSize="@dimen/small" />
+
+
+        <LinearLayout
+            android:id="@+id/linearlayout_share_type_select_1"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/textview_share_description">
+            
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@drawable/clip" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/folder_share_type_1"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_share_type_select_2"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/linearlayout_share_type_select_1">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@drawable/members" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/folder_share_type_2"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

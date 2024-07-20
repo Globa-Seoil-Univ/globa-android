@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/view_folderadd_circle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle_folderadd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_folderadd_plus"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/add_folderadd"
+        app:layout_constraintStart_toStartOf="@+id/view_folderadd_circle"
+        app:layout_constraintEnd_toEndOf="@+id/view_folderadd_circle"
+        app:layout_constraintTop_toTopOf="@+id/view_folderadd_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/view_folderadd_circle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

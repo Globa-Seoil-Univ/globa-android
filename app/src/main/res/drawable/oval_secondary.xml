@@ -1,0 +1,9 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 하얀 배경색 -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/secondary" />
+            <corners android:topLeftRadius="24dp" android:topRightRadius="24dp" />
+        </shape>
+    </item>
+</layer-list>

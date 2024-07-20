@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintlayout_notification"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_notification_title"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/imagebutton_notification_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/textview_notification_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/profile_alert"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </RelativeLayout>
+
+
+    <HorizontalScrollView
+        android:id="@+id/horizontal_notification_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:scrollbars="none"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_notification_title">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/linearlayout_notification_type_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:id="@+id/textview_notification_type_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전체"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_notification_type_all_bar"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:orientation="vertical"
+                android:background="@color/primary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearlayout_notification_type_announcement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:id="@+id/textview_notification_type_announcement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="공지사항"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_notification_type_announcement_bar"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:orientation="vertical"
+                android:background="@color/primary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearlayout_notification_type_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:id="@+id/textview_notification_type_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="공유"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_notification_type_share_bar"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:orientation="vertical"
+                android:background="@color/primary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearlayout_notification_type_docs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:id="@+id/textview_notification_type_docs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문서"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_notification_type_docs_bar"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:orientation="vertical"
+                android:background="@color/primary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearlayout_notification_inquiry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_margin="6dp">
+
+            <TextView
+                android:id="@+id/textview_notification_type_inquiry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문의"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_notification_type_inquiry_bar"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:orientation="vertical"
+                android:background="@color/primary"/>
+        </LinearLayout>
+    </LinearLayout>
+    </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_notification"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbarFadeDuration="0"
+        android:scrollbars="vertical"
+        android:background="@color/lightGray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_notification_sort" />
+</androidx.constraintlayout.widget.ConstraintLayout>

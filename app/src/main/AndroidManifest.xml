@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- 오디오 권한 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 인터넷 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 파일 접근 권한 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
     <application
         android:allowBackup="true"
@@ -11,9 +20,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Globa"
-        tools:targetApi="31">
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+        tools:targetApi="34">
         <activity
-            android:name=".loading.LoadingActivity"
+            android:name=".docs.statistics.DocsStatisticsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".intro.IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +35,70 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".docs.quiz.quizconduct.QuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".docs.quiz.quizresult.QuizResultActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Globa" />
+        <activity
+            android:name=".main.folder.share.FolderShareActivity"
+            android:exported="false" />
+        <activity
+            android:name=".main.folder.add.FolderAddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".theme.ThemeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".withdraw.WithdrawActivity"
+            android:exported="false" />
+        <activity
+            android:name=".main.profile.edit.NicknameEditActivity"
+            android:exported="false" />
+        <activity android:name=".main.profile.info.MyinfoActivity" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:requestLegacyExternalStorage="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao8a572ba277b6059bd51f23fe58474f13" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".main.MainActivity"
+            android:enableOnBackInvokedCallback="true" />
+        <activity android:name=".main.profile.service_info.ServiceInfoActivity" />
+        <activity android:name=".main.profile.inquiry.InquiryActivity" />
+        <activity android:name=".main.profile.alert.AlertActivity" />
+        <activity android:name=".main.profile.theme.ThemeActivity" />
+        <activity android:name=".keyword.detail.KeywordDetailActivity" />
+        <activity android:name=".main.folder.permission.FolderPermissionActivity" />
+        <activity
+            android:name=".conditions.ConditionsActivity"
+            android:exported="false"></activity>
+        <activity android:name=".docs.DocsActivity" />
+        <activity
+            android:name=".docs.upload.DocsUploadActivity"
+            android:requestLegacyExternalStorage="true" />
+        <activity android:name=".docs.move.DocsMoveActivity" />
+        <activity android:name=".docs.more.DocsMoreActivity" />
+        <activity android:name=".main.folder.edit.FolderNameEditActivity" />
+        <activity
+            android:name=".main.folder.move.FolderMoveActivity"
+            android:exported="true" />
+        <activity android:name=".notification.inquiry.InquiryDetailActivity" />
+        <activity android:name=".notification.NotificationActivity" />
+        <activity android:name=".docs.edit.DocsNameEditActivity" />
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="8a572ba277b6059bd51f23fe58474f13" />
     </application>
 
 </manifest>

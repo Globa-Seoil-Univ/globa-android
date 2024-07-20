@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintlayout_document_item"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/document_background"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/linearlayout_document_icon_bg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/document_icon_background"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageview_document_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/document" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textview_document_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2024-03-12 회의록"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
+        app:layout_constraintTop_toTopOf="@+id/linearlayout_document_icon_bg" />
+
+    <TextView
+        android:id="@+id/textview_document_datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2024-03-12 오후 11:07"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/darkGray"
+        app:layout_constraintStart_toStartOf="@+id/textview_document_title"
+        app:layout_constraintTop_toBottomOf="@+id/textview_document_title" />
+
+    <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/profile_icon_background"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearlayout_document_icon_bg">
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageview_document_more"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/more"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

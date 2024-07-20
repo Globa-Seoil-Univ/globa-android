@@ -1,10 +1,15 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id 'com.google.gms.google-services'
 }
 
 android {
     namespace 'team.y2k2.globa'
     compileSdk 34
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     dataBinding {
         enable = true
@@ -12,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId "team.y2k2.globa"
-        minSdk 34
+        minSdk 30
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -33,11 +38,54 @@ android {
 }
 
 dependencies {
+    implementation 'com.airbnb.android:lottie:6.4.0'
+
+    implementation platform('com.google.firebase:firebase-bom:33.0.0')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-storage'
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    implementation "com.kakao.sdk:v2-user-rx:2.20.1" // 카카오 로그인 API 모듈
+
+
+//    implementation 'com.navercorp.nid:oauth:5.9.0' // jdk 11
+//    implementation 'com.navercorp.nid:oauth-jdk8:5.9.0' // jdk 8
+
+    implementation 'com.navercorp.nid:oauth:5.3.0' // 최신 버전 확인
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+
+
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.4.LTS'
+
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.2'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.1'
+
+    implementation 'com.google.android.material:material:1.4.0'
+
 
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    implementation libs.lifecycle.livedata.ktx
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.recyclerview.v7
+    implementation libs.annotation.jvm
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
