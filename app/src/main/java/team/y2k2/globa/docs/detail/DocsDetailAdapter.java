@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -40,7 +41,10 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Comment;
 import team.y2k2.globa.api.model.entity.Highlight;
 import team.y2k2.globa.api.model.response.CommentResponse;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.DocsActivity;
+import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;
+import team.y2k2.globa.docs.detail.comment.DocsDetailCommentItem;
 import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightItem;
 import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightModel;
 import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
@@ -54,6 +58,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     String recordId;
 
     private BottomSheetBehavior<FrameLayout> bottomSheetBehavior;
+    private DocsDetailCommentAdapter commentAdapter;
 
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
         this.detailItems = detailItems;
@@ -143,9 +148,16 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         GestureDetector gestureDetector = new GestureDetector(holder.itemView.getContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
+
+                activity.binding.recyclerviewDocsComment.setLayoutManager(new LinearLayoutManager(activity));
+                ArrayList<DocsDetailCommentItem> itemList = new ArrayList<>();
+
                 ApiClient apiClient = new ApiClient(activity);
                 List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
-
+                String myProfile = apiClient.requestUserInfo().getProfile();
+                String myName = apiClient.requestUserInfo().getName();
+                /*
+                // 다이얼로그 방식
                 BottomSheetDialog commentBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
                 commentBottomSheet.setContentView(R.layout.dialog_comment);
 
@@ -153,6 +165,46 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                 name.setText(comments.get(highlightIndex).getContent());
 
                 commentBottomSheet.show();
+                 */
+                for(Comment comment : comments) {
+
+                    String profile = comment.getUser().getProfile();
+                    String name = comment.getUser().getName();
+                    String createdTime = comment.getCreatedTime();
+                    String content = comment.getContent();
+
+                    itemList.add(new DocsDetailCommentItem(profile, name, createdTime, content));
+
+                }
+
+                commentAdapter = new DocsDetailCommentAdapter(itemList, activity);
+                activity.binding.recyclerviewDocsComment.setAdapter(commentAdapter);
+
+                // 댓글 창 띄우기
+                if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                    Log.d("하이라이트 댓글", "댓글 창 띄우기 시작");
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                } else {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+
+                TextView textView = activity.findViewById(R.id.textview_docs_comment_name);
+                textView.setText("선택 단어 : " + highlightString);
+
+                ImageButton confirmButton = activity.findViewById(R.id.imagebutton_docs_comment_confirm);
+                EditText commentInput = activity.findViewById(R.id.edittext_docs_comment_input);
+                confirmButton.setOnClickListener(v -> {
+                    if(commentInput.getText().toString() != "") {
+                        apiClient.requestInsertComment(folderId, recordId, sectionId, highlightId, commentInput.getText().toString());
+                        itemList.add(new DocsDetailCommentItem(myProfile, myName, "방금 전", commentInput.getText().toString()));
+                        commentAdapter.notifyDataSetChanged();
+                        commentInput.setText("");
+                    } else {
+                        Toast.makeText(activity, "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
                 return true;
             }
 
