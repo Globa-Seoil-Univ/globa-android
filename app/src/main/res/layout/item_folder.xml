@@ -50,22 +50,4 @@
         app:layout_constraintTop_toBottomOf="@+id/textview_folder_item_title"
         />
 
-    <LinearLayout
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginRight="10dp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearlayout_docs_upload_folder_item_icon_bg">
-        
-        
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/more"
-            android:rotation="90"/>
-
-    </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

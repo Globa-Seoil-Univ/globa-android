@@ -55,10 +55,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
                     .addToBackStack(null)
                     .commit();
         });
-
-
     }
-
     @Override
     public int getItemCount() {
         return (null != items ? items.size() : 0);
@@ -68,7 +65,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
         TextView title;
         TextView datetime;
         ConstraintLayout layout;
-
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
