@@ -2,6 +2,8 @@ package team.y2k2.globa.api.model.request;
 
 import com.google.gson.annotations.SerializedName;
 
+import team.y2k2.globa.login.LoginModel;
+
 public class LoginRequest {
     @SerializedName("snsKind")
     private int snsKind;
@@ -19,11 +21,12 @@ public class LoginRequest {
     @SerializedName("notification")
     private boolean notification;
 
-    public LoginRequest(int snsKind, String snsId, String name, String profile, boolean notification) {
-        this.snsKind = snsKind;
-        this.snsId = snsId;
-        this.name = name;
-        this.profile = profile;
+
+    public LoginRequest(LoginModel model, boolean notification) {
+        this.snsKind = model.getSnsKind();
+        this.snsId = model.getUid();
+        this.name = model.getName();
+        this.profile = model.getProfileImageUrl();
         this.notification = notification;
     }
 

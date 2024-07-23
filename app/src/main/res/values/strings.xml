@@ -40,6 +40,7 @@
 
     <string name="keyword_title">단어 검색</string>
 
+    <string name="login_error_message">로그인 오류가 발생했습니다. </string>
 
     <string name="docs_more_title">폴더 삭제 타이틀입니다. 이 값 쓰지 마세요</string>
     <string name="docs_more_datetime">2001-04-24 오후 14:10</string>

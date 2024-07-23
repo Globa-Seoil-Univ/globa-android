@@ -16,8 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.user.model.User;
 
 import java.util.ArrayList;
 
@@ -29,39 +28,38 @@ import team.y2k2.globa.main.MainActivity;
 public class LoginViewModel extends ViewModel {
     Activity activity;
 
+    LoginModel model;
+
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
 
-    public static class LoginListener implements OnCompleteListener<AuthResult>{
+    public static class LoginListener implements OnCompleteListener<AuthResult> {
+        ApiClient apiClient;
+        LoginModel model;
         Context context;
         FirebaseAuth mAuth;
         String accessToken;
-        OAuthToken token;
-
-        String uid;
-        String name;
-        String profile;
 
         public LoginListener(Context context, FirebaseAuth mAuth, String accessToken) {
             this.context = context;
             this.mAuth = mAuth;
             this.accessToken = accessToken;
+
+            apiClient = new ApiClient(context);
         }
 
-        public LoginListener(String uid, String name, String profile, Context context) {
-            this.uid = uid;
-            this.name = name;
-            this.profile = profile;
+        public LoginListener(User user, Context context) {
             this.context = context;
+            this.model = new LoginModel(user, RC_KAKAO);
+
+            apiClient = new ApiClient(context);
         }
 
         public void KakaoLogin() {
-            ApiClient apiClient = new ApiClient(context);
-
-            LoginRequest request = new LoginRequest(RC_KAKAO, uid, name, profile, true);
-
+            LoginRequest request = new LoginRequest(model, true);
             LoginResponse response = apiClient.requestSignIn(request);
+
             userPreferences(request, response);
             sendLogMessage(request,response);
 
@@ -75,14 +73,9 @@ public class LoginViewModel extends ViewModel {
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
                 // Firebase 로그인 성공
-                FirebaseUser user = mAuth.getCurrentUser();
-                String uid = user.getUid();
-                String name = user.getDisplayName();
-                String profile = user.getPhotoUrl().toString();
+                model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE);
 
-                ApiClient apiClient = new ApiClient(context);
-
-                LoginRequest request = new LoginRequest(RC_GOOGLE, uid, name, profile, true);
+                LoginRequest request = new LoginRequest(model, true);
 
                 LoginResponse response = apiClient.requestSignIn(request);
                 userPreferences(request, response);
@@ -94,7 +87,7 @@ public class LoginViewModel extends ViewModel {
                 Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(context, "로그인 실패| 앱을 다시 실행해주세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "로그인 실패 : " + task.getResult(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -116,9 +109,6 @@ public class LoginViewModel extends ViewModel {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
 
-            Log.d(getClass().getName(), "로그인 성공");
-            Log.d("엑세스 토큰", "토큰: " + accessToken);
-
             ArrayList list = new ArrayList();
             list.add("accessToken : " + accessToken);
             list.add("refreshToken: " + refreshToken);
@@ -126,5 +116,9 @@ public class LoginViewModel extends ViewModel {
             list.add("name        : " + request.getName());
             list.add("profile     : " + request.getProfile());
         }
+    }
+
+    public String getAppKeyForKakao() {
+        return model.APP_KEY_KAKAO;
     }
 }
