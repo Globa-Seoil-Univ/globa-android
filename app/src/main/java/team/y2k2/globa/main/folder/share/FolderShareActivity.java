@@ -7,7 +7,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.model.request.FolderShareAddRequest;
 import team.y2k2.globa.databinding.ActivityFolderShareBinding;
 
 public class FolderShareActivity extends AppCompatActivity {
@@ -147,7 +145,7 @@ public class FolderShareActivity extends AppCompatActivity {
     protected void showBottomSheetDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
 
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_foldershare_authority, null);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_folder_share_authority, null);
         bottomSheetDialog.setContentView(dialogView);
 
         RelativeLayout readButton = dialogView.findViewById(R.id.relativelayout_foldershare_read);

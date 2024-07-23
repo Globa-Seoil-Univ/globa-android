@@ -1,4 +1,4 @@
-package team.y2k2.globa.main;
+package team.y2k2.globa.main.main;
 
 
 import android.app.Activity;
@@ -43,7 +43,6 @@ import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
 import team.y2k2.globa.notification.NotificationActivity;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
-
     Button[] docsFilterButtons;
 
     Context context;
@@ -80,7 +79,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
         if(v == docsFilterButtons[0]) {
             changeButtonDisplay(docsFilterButtons[0]);
             showCurrentlyAddedRecords();
@@ -96,7 +94,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         else if(v == docsFilterButtons[3]) {
             changeButtonDisplay(docsFilterButtons[3]);
             showReceivedRecords();
-
         }
 
     }
