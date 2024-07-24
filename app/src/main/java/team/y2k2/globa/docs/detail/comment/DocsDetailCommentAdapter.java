@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
+import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentAdapter;
+import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 
 public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCommentAdapter.AdapterViewHolder> {
 
@@ -30,6 +32,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
+
+    ArrayList<DocsDetailSubCommentItem> subCommentItems = new ArrayList<>();
 
     public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity) {
         this.commentItems = commentItems;
@@ -70,6 +74,11 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         holder.showSubComments.setOnClickListener(v -> {
             // 답글 더보기 클릭 이벤트
+            if(holder.subCommentRecyclerview.getVisibility() == View.GONE) {
+                holder.subCommentRecyclerview.setVisibility(View.VISIBLE);
+            } else {
+                holder.subCommentRecyclerview.setVisibility(View.GONE);
+            }
 
             
 
@@ -85,7 +94,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         return (commentItems != null ? commentItems.size() : 0);
     }
 
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+    public class AdapterViewHolder extends RecyclerView.ViewHolder {
 
         ImageView profileImage;
         TextView name;
@@ -93,6 +102,9 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         TextView content;
         TextView showSubComments;
         TextView writeSubComment;
+
+        RecyclerView subCommentRecyclerview;
+        DocsDetailSubCommentAdapter adapter;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +115,11 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             content = itemView.findViewById(R.id.textview_item_comment_content);
             showSubComments = itemView.findViewById(R.id.textview_item_comment_visible);
             writeSubComment = itemView.findViewById(R.id.textview_item_comment_add);
+
+            subCommentRecyclerview = itemView.findViewById(R.id.recyclerview_docs_comment_sub);
+            adapter = new DocsDetailSubCommentAdapter(subCommentItems, (DocsActivity) itemView.getContext());
+            subCommentRecyclerview.setAdapter(adapter);
+
 
         }
     }

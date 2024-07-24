@@ -15,7 +15,7 @@
         android:text="이름"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
-        android:textSize="@dimen/big"
+        android:textSize="@dimen/large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -36,7 +36,7 @@
         android:text="윤영진"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/gray"
-        android:textSize="@dimen/big"
+        android:textSize="@dimen/large"
         app:layout_constraintEnd_toStartOf="@+id/imageview_myinfoItemlist_next"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

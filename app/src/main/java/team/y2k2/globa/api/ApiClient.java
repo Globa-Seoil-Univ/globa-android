@@ -143,7 +143,7 @@ public class ApiClient {
         }
     }
 
-
+    // 폴더 추가
     public Response<Void> requestInsertFolder(String title) {
         FolderAddRequest request = new FolderAddRequest(title);
         try {
@@ -178,6 +178,7 @@ public class ApiClient {
         return null;
     }
 
+    // 문서 이름 업데이트
     public Response<Void> requestUpdateRecordName(String folderId, String recordId, String title) {
         DocsNameEditRequest request = new DocsNameEditRequest(title);
         try {
@@ -537,6 +538,7 @@ public class ApiClient {
         return null;
     }
 
+    // 댓글 가져오기
     public CommentResponse getComments(String folderId, String recordId, String sectionId, String highlightId, int page, int count){
         try {
             return CompletableFuture.supplyAsync(() -> {
@@ -564,6 +566,7 @@ public class ApiClient {
         }
     }
 
+    // 댓글 삭제
     public Response<Void> deleteComment(String folderId, String recordId, String sectionId, String highlightId, String commentId) {
         try {
             return CompletableFuture.supplyAsync(() -> {

@@ -31,14 +31,15 @@ import team.y2k2.globa.api.model.request.NotificationRequest;
 import team.y2k2.globa.notification.inquiry.InquiryDetailActivity;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.AdapterViewHolder> {
-    private static final int TYPE_NOTIFICATION = 1;
-    private static final int TYPE_SHARE_INVITE = 2;
-    private static final int TYPE_SHARED_FOLDER_ADD_RECORD = 3;
-    private static final int TYPE_SHARED_FOLDER_ADD_USER = 4;
-    private static final int TYPE_SHARED_FOLDER_ADD_COMMENT = 5;
-    private static final int TYPE_UPLOAD_SUCCESS = 6;
-    private static final int TYPE_UPLOAD_FAILED = 7;
-    private static final int TYPE_INQUIRY_ANSWERED = 8;
+
+    private static final int TYPE_NOTIFICATION = 1; // 공지 사항 알림
+    private static final int TYPE_SHARE_INVITE = 2; // 초대 알림
+    private static final int TYPE_SHARED_FOLDER_ADD_RECORD = 3; // 공유 폴더 문서 추가 알림
+    private static final int TYPE_SHARED_FOLDER_ADD_USER = 4; // 공유 초대 완료 알림
+    private static final int TYPE_SHARED_FOLDER_ADD_COMMENT = 5; // 공율 폴더 문서 댓글 추가 알림
+    private static final int TYPE_UPLOAD_SUCCESS = 6; // 문서 업로드 완료 알림
+    private static final int TYPE_UPLOAD_FAILED = 7; // 문서 업로드 실패 알림
+    private static final int TYPE_INQUIRY_ANSWERED = 8; // 문의 답변 알림
 
 
     NotificationModel items;
@@ -101,9 +102,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         Log.d(getClass().getName(),  "onBindViewHolder 시작 ");
 
         switch (holder.type) {
+            // 공지 사항 알림
             case TYPE_NOTIFICATION:
                 holder.inquiryTitle.setText("공지사항 알림 준비중입니다.");
                 break;
+
+            // 공유 알림
             case TYPE_SHARE_INVITE:
                 User user = items.getNotifications().get(position).getUser();
                 Share share = items.getNotifications().get(position).getShare();
@@ -189,16 +193,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     });
                 });
                 break;
+
+            //
             case TYPE_SHARED_FOLDER_ADD_RECORD:
                 break;
 
+
+            // 공유 멤버 추가 알림
             case TYPE_SHARED_FOLDER_ADD_USER:
 
                 break;
 
+            // 댓글 추가 알림
             case TYPE_SHARED_FOLDER_ADD_COMMENT:
                 break;
 
+            // 업로드 완료 알림
             case TYPE_UPLOAD_SUCCESS:
                 try {
                     Record record = items.getNotifications().get(position).getRecord();
@@ -211,10 +221,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 }
                 break;
 
+            // 업로드 실패 알림
             case TYPE_UPLOAD_FAILED:
                 holder.inquiryTitle.setText("이 외 형식입니다.");
                 break;
 
+            // 문의 답변 알림
             case TYPE_INQUIRY_ANSWERED:
                 Inquiry inquiry = items.getNotifications().get(position).getInquiry();
                 holder.inquiryTitle.setText(inquiry.getTitle());

@@ -73,6 +73,13 @@ public class MyinfoActivity extends AppCompatActivity {
 
         userId = getIntent().getStringExtra("userId");
 
+        changeUserProfileImage(userId);
+
+    }
+
+    // 이미지 클릭시 변경
+    public void changeUserProfileImage(String userId) {
+
         // 이미지 선택 (PhotoPicker Android 14)
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             if(uri != null) {
@@ -97,7 +104,6 @@ public class MyinfoActivity extends AppCompatActivity {
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                     .build());
         });
-
     }
 
     public void loadUserInfoList(MyinfoViewModel myInfoViewModel) {
@@ -123,10 +129,10 @@ public class MyinfoActivity extends AppCompatActivity {
             Log.d("이미지 로드 오류", "profile 값이 null입니다");
         }
 
-        itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, new NicknameEditActivity()));
-        itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));
-        itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
-        itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
+        itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, userId, new NicknameEditActivity()));
+        itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, "", null));
+        itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, "", null));
+        itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, "", new WithdrawActivity()));
 
         // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
         nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -145,9 +151,11 @@ public class MyinfoActivity extends AppCompatActivity {
         // 라시아클러 뷰에 어뎁터 설정
         binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
 
-        // 에러 발생
+        // API 에러 발생
         myInfoViewModel.getErrorLiveData().observe(MyinfoActivity.this, errorMessge -> {
-            Toast.makeText(getApplicationContext(), errorMessge, Toast.LENGTH_SHORT).show();
+            if(errorMessge != null) {
+                Toast.makeText(getApplicationContext(), errorMessge, Toast.LENGTH_SHORT).show();
+            }
         });
 
     }
