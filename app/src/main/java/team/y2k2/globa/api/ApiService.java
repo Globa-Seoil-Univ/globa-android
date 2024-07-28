@@ -305,7 +305,7 @@ public interface ApiService {
     @DELETE("/folder/{folder_id}/share/{share_id}")
     Call<Void> requestDeniedShareInvite(
             @Path("folder_id") String folderId,
-            @Path("share_id") String shareid,
+            @Path("share_id") String shareId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body NotificationRequest notificationRequest
