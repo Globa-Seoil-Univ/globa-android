@@ -55,7 +55,7 @@ public class DocsMoreActivity extends AppCompatActivity {
             Intent docsRename = new Intent(DocsMoreActivity.this, DocsNameEditActivity.class);
             docsRename.putExtra("title", title);
             docsRename.putExtra("folderId", title);
-            docsRename.putExtra("record", title);
+            docsRename.putExtra("recordId", title);
             startActivity(docsRename);
         });
 

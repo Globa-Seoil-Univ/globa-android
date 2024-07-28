@@ -5,6 +5,7 @@ import static team.y2k2.globa.api.ApiModel.*;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -183,9 +184,10 @@ public class ApiClient {
                 Call<Void> call = apiService.requestUpdateRecordName(folderId, recordId, APPLICATION_JSON, authorization, request);
 
                 Response<Void> response;
+
                 try {
                     response = call.execute();
-
+                    Log.d("문서 수정", "응답 코드: " + response.code());
                     switch (response.code()) {
                         case 40110: {
                             response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;

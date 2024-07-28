@@ -38,6 +38,7 @@ import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.InquiryDetailResponse;
+import team.y2k2.globa.api.model.response.KeywordDetailResponse;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
@@ -95,7 +96,7 @@ public interface ApiService {
      * 프로필 사진 수정
      */
     @Multipart
-    @POST("/user/{user_id}/profile")
+    @PATCH("/user/{user_id}/profile")
     Call<Void> requestUpdateProfileImage(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType, // "multipart/form-data"
@@ -488,6 +489,16 @@ public interface ApiService {
             @Path("comment_id") String commentId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
+    );
+
+    /**
+     * 실시간 키워드 검색
+     */
+    @GET("/dictionary")
+    Call<KeywordDetailResponse> searchKeyword(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("keyword") String keyword
     );
 
 }

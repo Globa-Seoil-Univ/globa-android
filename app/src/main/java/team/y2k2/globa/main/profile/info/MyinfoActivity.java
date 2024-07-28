@@ -1,10 +1,12 @@
 package team.y2k2.globa.main.profile.info;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +32,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,13 +51,10 @@ public class MyinfoActivity extends AppCompatActivity {
     private MyinfoAdapter myinfoAdapter;
     private MyinfoViewModel myInfoViewModel;
     private ActivityResultLauncher<Intent> nicknameEditLauncher;
-    private ActivityResultLauncher<String> requestPermissionLauncher;
-    private ActivityResultLauncher<Intent> pickImageLauncher;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
-
-
-    static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
+    private byte[] imageBytes;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,117 +66,67 @@ public class MyinfoActivity extends AppCompatActivity {
             finish();
         });
 
-        loadUserInfoList();
+        // 뷰 모델 갖고오기
+        myInfoViewModel = new ViewModelProvider(MyinfoActivity.this).get(MyinfoViewModel.class);
 
-        // 이미지 변경 버튼 동작
-        // 갤러리 접근 권한 요청 동작 (menifest 파일에서 허가 받을 수 있지만 이 방식이 권장됨)
-        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-            if(isGranted) {
-                // 접근 권한 허가 됨
-                pickImage();
+        loadUserInfoList(myInfoViewModel);
+
+        userId = getIntent().getStringExtra("userId");
+
+        // 이미지 선택 (PhotoPicker Android 14)
+        ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+            if(uri != null) {
+                Log.d("PhotoPicker", "Selected URI: " + uri);
+                Glide.with(this).load(uri)
+                        .error(R.mipmap.ic_launcher)
+                        .placeholder(R.mipmap.ic_launcher)
+                        .into(binding.imageviewMyinfoPhoto);
+
+                File imageFile = new File(uri.getPath());
+
+                myInfoViewModel.uploadImage(imageFile, userId);
+
             } else {
-                // 접근 권한 거부 됨
-                Toast.makeText(getApplicationContext(), "갤러리 접근이 거부 되었습니다.", Toast.LENGTH_SHORT).show();
+                Log.d("PhotoPicker", "No media selected");
             }
         });
-        // 이미지 선택을 위한 ActivityResultLauncher 설정
-        pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if(result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                Uri imageUri = result.getData().getData();
 
-                Glide.with(MyinfoActivity.this)
-                        .load(imageUri)
-                        .asBitmap()
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                binding.imageviewMyinfoPhoto.setImageBitmap(resource);
-
-                                sendImageToServer(resource);
-                            }
-                        });
-            }
-        });
-        // 이미지 선택 버튼 클릭 이벤트 설정
+        // 사진 변경 버튼 클릭 시 PhotoPicker 실행
         binding.buttonMyinfoChangephoto.setOnClickListener(v -> {
-            if(ContextCompat.checkSelfPermission(MyinfoActivity.this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                // 접근 권한을 못받았을 경우
-                requestPermissionLauncher.launch(READ_EXTERNAL_STORAGE);
-            } else {
-                pickImage();
-            }
+            pickMedia.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         });
 
     }
-    // 갤러리에서 이미지를 선택하는 메소드
-    private void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageLauncher.launch(intent);
-    }
-    private void sendImageToServer(Bitmap bitmap) {
-        // Bitmap을 ByteArray로 변환
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
 
-        // ByteArray를 사용하여 뷰모델 호출하여 서버로 전송
-        MyinfoViewModel viewModel = new ViewModelProvider(this).get(MyinfoViewModel.class);
-        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String authorization = "Bearer " + preferences.getString("accessToken", "");
-        viewModel.uploadImage(byteArray, "user_id", authorization);
-    }
-
-    public void loadUserInfoList() {
+    public void loadUserInfoList(MyinfoViewModel myInfoViewModel) {
         // 리사이클러뷰 레이아웃 매니저 설정
         binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyinfoActivity.this));
         // 리사이클러 뷰에 넣을 아이템 리스트
         List<MyinfoItem> itemList = new ArrayList<>();
 
-        // 뷰 모델 갖고오기
-        myInfoViewModel = new ViewModelProvider(MyinfoActivity.this).get(MyinfoViewModel.class);
+        String profile = getIntent().getStringExtra("profile");
+        String name = getIntent().getStringExtra("name");
+        String code = getIntent().getStringExtra("code");
 
-        // 프리퍼런스 불러오기
-        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
+        if(profile != null) {
+            Glide.with(this).load(profile)
+                    //.placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .into(binding.imageviewMyinfoPhoto);
+        } else {
+            Glide.with(this).load(R.mipmap.ic_launcher)
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .into(binding.imageviewMyinfoPhoto);
+            Log.d("이미지 로드 오류", "profile 값이 null입니다");
+        }
 
-        // 헤더 파라미터 2개
-        String contentType = "application/json";
-        String authorization = "Bearer " + preferences.getString("accessToken", "");
-
-        // getter를 통해 값 가져오기
-        myInfoViewModel.getUserInfoResponseLiveData().observe(MyinfoActivity.this, userInfoResponse -> {
-            if (userInfoResponse != null) {
-                String profile = userInfoResponse.getProfile();
-                String name = userInfoResponse.getName();
-                String code = userInfoResponse.getCode();
-                int folderId = Integer.parseInt(userInfoResponse.getPublicFolderId());
-
-                if (profile != null) {
-                    // 초기 이미지 설정
-                    profileImageRef = storage.getReference().child(profile);
-
-                    Glide.with(this).load(profileImageRef)
-                            .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
-                            .into(binding.imageviewMyinfoPhoto);
-                } else {
-                    Glide.with(this)
-                            .load(R.mipmap.ic_launcher)
-                            .error(R.mipmap.ic_launcher)
-                            .placeholder(R.mipmap.ic_launcher)
-                            .into(binding.imageviewMyinfoPhoto);
-                }
-
-
-                itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, new NicknameEditActivity()));
-                itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));
-                itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
-                itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
-
-                // 어뎁터에 아이템 리스트 추가
-                myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher);
-                // 라시아클러 뷰에 어뎁터 설정
-                binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
-            }
-        });
+        itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, new NicknameEditActivity()));
+        itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));
+        itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
+        itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
 
         // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
         nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -185,12 +140,16 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
+        // 어뎁터에 아이템 리스트 추가
+        myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher);
+        // 라시아클러 뷰에 어뎁터 설정
+        binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
+
         // 에러 발생
         myInfoViewModel.getErrorLiveData().observe(MyinfoActivity.this, errorMessge -> {
             Toast.makeText(getApplicationContext(), errorMessge, Toast.LENGTH_SHORT).show();
         });
 
-        // API 호출 실행
-        myInfoViewModel.fetchMyInfo(contentType, authorization);
     }
+
 }

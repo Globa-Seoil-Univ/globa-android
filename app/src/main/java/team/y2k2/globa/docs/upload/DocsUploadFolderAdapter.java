@@ -40,6 +40,10 @@ public class DocsUploadFolderAdapter extends ArrayAdapter<String> implements Spi
         return super.getItem(position);
     }
 
+    public List<FolderResponse> getItems() {
+        return items;
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
