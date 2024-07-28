@@ -1,6 +1,11 @@
 package team.y2k2.globa.main.main;
 
 
+import static team.y2k2.globa.main.main.MainFragmentModel.RECORDS_FILTER_CURRENTLY;
+import static team.y2k2.globa.main.main.MainFragmentModel.RECORDS_FILTER_MOST_VIEWED;
+import static team.y2k2.globa.main.main.MainFragmentModel.RECORDS_FILTER_RECEIVED;
+import static team.y2k2.globa.main.main.MainFragmentModel.RECORDS_FILTER_SHARED;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -48,54 +53,46 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     Context context;
 
     FragmentMainBinding binding;
-    DocsListItemModel docsListItemModel = new DocsListItemModel();
+
+    MainFragmentViewModel viewModel;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(getLayoutInflater());
         context = getContext();
+
+        viewModel = new MainFragmentViewModel(this.getContext());
         
         setLogoColor();
         setFilterButtons();
         setOnClickListeners();
+
         setOnRefreshListener(binding.swiperefreshlayoutMain);
 
-        changeButtonDisplay(binding.buttonMainDocsType1);
-
         showPromotions();
-        showCurrentlyAddedRecords();
-
+        showRecords(RECORDS_FILTER_CURRENTLY);
         return binding.getRoot();
     }
 
     public void setFilterButtons() {
         docsFilterButtons = new Button[4];
 
-        docsFilterButtons[0] = binding.buttonMainDocsType1;
-        docsFilterButtons[1] = binding.buttonMainDocsType2;
-        docsFilterButtons[2] = binding.buttonMainDocsType3;
-        docsFilterButtons[3] = binding.buttonMainDocsType4;
+        docsFilterButtons[RECORDS_FILTER_CURRENTLY] = binding.buttonMainDocsType1;
+        docsFilterButtons[RECORDS_FILTER_MOST_VIEWED] = binding.buttonMainDocsType2;
+        docsFilterButtons[RECORDS_FILTER_SHARED] = binding.buttonMainDocsType3;
+        docsFilterButtons[RECORDS_FILTER_RECEIVED] = binding.buttonMainDocsType4;
+
+        changeButtonDisplay(binding.buttonMainDocsType1);
     }
 
     @Override
     public void onClick(View v) {
-        if(v == docsFilterButtons[0]) {
-            changeButtonDisplay(docsFilterButtons[0]);
-            showCurrentlyAddedRecords();
-        }
-        else if(v == docsFilterButtons[1]) {
-            changeButtonDisplay(docsFilterButtons[1]);
-            showMostViewedRecords();
-        }
-        else if(v == docsFilterButtons[2]) {
-            changeButtonDisplay(docsFilterButtons[2]);
-            showSharedRecords();
-        }
-        else if(v == docsFilterButtons[3]) {
-            changeButtonDisplay(docsFilterButtons[3]);
-            showReceivedRecords();
-        }
+        for (int i = 0; i < docsFilterButtons.length; i++) {
+            if (docsFilterButtons[i] != v) continue;
 
+            changeButtonDisplay(docsFilterButtons[i]);
+            showRecords(i);
+        }
     }
 
     public void changeButtonDisplay(Button button) {
@@ -110,7 +107,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void setOnRefreshListener(SwipeRefreshLayout refreshLayout) {
         refreshLayout.setOnRefreshListener(() -> {
-            showCurrentlyAddedRecords();
+            showRecords(RECORDS_FILTER_CURRENTLY);
             binding.swiperefreshlayoutMain.setRefreshing(false);
         });
     }
@@ -132,24 +129,25 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    public void showCurrentlyAddedRecords() {
-        ApiClient apiClient = new ApiClient(context);
-        RecordResponse recordResponse = apiClient.requestGetRecords(20);
+    public void showRecords(int buttonFilterType) {
+        DocsListItemAdapter adapter;
 
-        docsListItemModel = new DocsListItemModel();
-
-        List<Record> records = recordResponse.getRecords();
-
-        for(Record record : records) {
-            String recordId = record.getRecordId();
-            String folderId = record.getFolderId();
-            String title = record.getTitle();
-            String datetime = record.getCreatedTime();
-            List<Keyword> keywords = record.getKeywords();
-
-            docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
+        switch (buttonFilterType) {
+            case RECORDS_FILTER_CURRENTLY:
+                adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords());
+                break;
+            case RECORDS_FILTER_MOST_VIEWED:
+                adapter = new DocsListItemAdapter(viewModel.getMostViewedRecords());
+                break;
+            case RECORDS_FILTER_SHARED:
+                adapter = new DocsListItemAdapter(viewModel.getSharedRecords());
+                break;
+            case RECORDS_FILTER_RECEIVED:
+                adapter = new DocsListItemAdapter(viewModel.getReceivedRecords());
+                break;
+            default:
+                adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords());
         }
-        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
 
         int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
@@ -157,136 +155,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         binding.recyclerviewMainDocument.setAdapter(adapter);
         binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
     }
-
-    public void showReceivedRecords() {
-        ApiClient apiClient = new ApiClient(context);
-        RecordResponse recordResponse = apiClient.requestGetRecords(20);
-        List<FolderResponse> folderResponse = apiClient.requestGetFolders(1, 20);
-
-        docsListItemModel = new DocsListItemModel();
-
-        List<Record> records = recordResponse.getRecords();
-
-        ArrayList<Integer> folderIds = new ArrayList<>();
-
-        for(FolderResponse folder : folderResponse) {
-            folderIds.add(folder.getFolderId());
-        }
-
-        for(Record record : records) {
-            String recordId = record.getRecordId();
-            String folderId = record.getFolderId();
-            String title = record.getTitle();
-            String datetime = record.getCreatedTime();
-            List<Keyword> keywords = record.getKeywords();
-
-            if(! folderIds.contains(Integer.parseInt(folderId))) {
-                docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
-            }
-        }
-        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
-
-        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
-
-        binding.recyclerviewMainDocument.setAdapter(adapter);
-        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
-    }
-
-    public void showMostViewedRecords() {
-        ApiClient apiClient = new ApiClient(context);
-        RecordResponse recordResponse = apiClient.requestGetRecords(20);
-
-        docsListItemModel = new DocsListItemModel();
-
-        // 예제 레코드 리스트 생성 (실제 레코드 리스트는 recordResponse.getRecords()로 가져옴)
-        List<Record> records = recordResponse.getRecords();
-
-        // Record 클래스의 카운트 값 기반으로 정렬
-        Collections.sort(records, new Comparator<Record>() {
-            @Override
-            public int compare(Record r1, Record r2) {
-                SharedPreferences preferences1 = context.getSharedPreferences("record_" + r1.getRecordId(), Activity.MODE_PRIVATE);
-                int count1 = preferences1.getInt("count", 0);
-
-                SharedPreferences preferences2 = context.getSharedPreferences("record_" + r2.getRecordId(), Activity.MODE_PRIVATE);
-                int count2 = preferences2.getInt("count", 0);
-
-                // 내림차순 정렬
-                return Integer.compare(count2, count1);
-            }
-        });
-
-        for(Record record : records) {
-            String recordId = record.getRecordId();
-            String folderId = record.getFolderId();
-            String title = record.getTitle();
-            String datetime = record.getCreatedTime();
-            List<Keyword> keywords = record.getKeywords();
-
-            docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
-        }
-
-        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
-
-        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
-
-        binding.recyclerviewMainDocument.setAdapter(adapter);
-        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
-    }
-
-    public void showSharedRecords() {
-        ApiClient apiClient = new ApiClient(context);
-        RecordResponse recordResponse = apiClient.requestGetRecords(20);
-        List<FolderResponse> folderResponse = apiClient.requestGetFolders(1, 20);
-
-        docsListItemModel = new DocsListItemModel();
-
-        List<Record> records = recordResponse.getRecords();
-
-        for(Record record : records) {
-            String recordId = record.getRecordId();
-            String folderId = record.getFolderId();
-            String title = record.getTitle();
-            String datetime = record.getCreatedTime();
-            List<Keyword> keywords = record.getKeywords();
-
-            for(FolderResponse folder : folderResponse) {
-                int myFolderId = folder.getFolderId();
-                int targetFolderId = Integer.parseInt(folderId);
-
-                if(myFolderId == targetFolderId) {
-                    docsListItemModel.addItem(recordId, folderId, title, datetime, keywords);
-                }
-            }
-        }
-        DocsListItemAdapter adapter = new DocsListItemAdapter(docsListItemModel.getItems());
-
-        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
-
-        binding.recyclerviewMainDocument.setAdapter(adapter);
-        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
-    }
-
-
 
     private void showPromotions() {
-        ApiClient apiClient = new ApiClient(context);
-        List<NoticeResponse> noticeResponse = apiClient.requestPromotion(3);
-
-        // 성공적으로 응답을 받았을 때 처리
         ViewPager viewPager = binding.viewpagerMainCarousel;
 
-        String[] images = new String[noticeResponse.size()];
-
-        for(int i = 0; i < noticeResponse.size(); i++) {
-            NoticeResponse index = noticeResponse.get(i);
-            images[i] = index.getThumbnail();
-        }
-
-        NoticeFragmentAdapter noticeAdapter = new NoticeFragmentAdapter(getChildFragmentManager(), images);
+        NoticeFragmentAdapter noticeAdapter = new NoticeFragmentAdapter(getChildFragmentManager(), viewModel.getPromotionsImage());
         NoticeAutoScrollHandler autoScrollHandler = new NoticeAutoScrollHandler(viewPager);
         viewPager.setAdapter(noticeAdapter);
         autoScrollHandler.startAutoScroll();

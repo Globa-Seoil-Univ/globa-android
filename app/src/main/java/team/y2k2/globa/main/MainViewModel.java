@@ -1,7 +1,10 @@
 package team.y2k2.globa.main;
 
+import static team.y2k2.globa.main.MainModel.PRF_RECORD_NAME;
+import static team.y2k2.globa.main.MainModel.PRF_RECORD_PATH;
 import static team.y2k2.globa.main.MainModel.REQUEST_CODE_PICK_RECORD;
 import static team.y2k2.globa.main.MainModel.REQUEST_CODE_UPLOAD_RECORD;
+import static team.y2k2.globa.main.MainModel.TYPE_AUDIO;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,11 +37,12 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel() {
         mainFragment = new MainFragment();
+        model = new MainModel();
     }
 
-    public boolean viewFragment(int index) {
+    public void viewFragment(int index) {
         if (currentItem == index)
-            return true;
+            return;
 
         if(index == R.id.item_main_main)
             replaceFragment(mainFragment);
@@ -50,8 +54,6 @@ public class MainViewModel extends ViewModel {
             replaceFragment(new ProfileFragment());
         else if(index == R.id.item_main_folder)
             replaceFragment(new FolderFragment());
-
-        return true;
     }
 
     private void uploadAudio() {
@@ -59,7 +61,7 @@ public class MainViewModel extends ViewModel {
         bottomSheetDialog.setContentView(R.layout.dialog_upload);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("audio/*"); // 탐색할 파일 MIME 타입 설정
+        intent.setType(TYPE_AUDIO);
         activity.startActivityForResult(intent, REQUEST_CODE_PICK_RECORD);
     }
 
@@ -70,8 +72,8 @@ public class MainViewModel extends ViewModel {
             String audioName = getFileNameFromURI(audioUri);
 
             Intent intent = new Intent(activity, DocsUploadActivity.class);
-            intent.putExtra("recordPath", audioPath);
-            intent.putExtra("recordName", audioName);
+            intent.putExtra(PRF_RECORD_PATH, audioPath);
+            intent.putExtra(PRF_RECORD_NAME, audioName);
             activity.startActivityForResult(intent, REQUEST_CODE_UPLOAD_RECORD);
         }
     }
@@ -93,7 +95,7 @@ public class MainViewModel extends ViewModel {
             cursor.close();
             return path;
         }
-        return uri.getPath(); // 기본적인 경로 반환
+        return uri.getPath();
     }
 
     private String getFileNameFromURI(Uri uri) {
@@ -105,6 +107,6 @@ public class MainViewModel extends ViewModel {
             cursor.close();
             return name;
         }
-        return uri.getLastPathSegment(); // 기본적인 이름 반환
+        return uri.getLastPathSegment();
     }
 }
