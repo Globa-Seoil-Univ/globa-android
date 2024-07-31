@@ -56,7 +56,6 @@ public class NicknameEditViewModel extends ViewModel {
             });
         } catch(Exception e) {
             Log.d(getClass().getName(), "서버 오류 발생: " + e.getMessage());
-
         }
     }
 }

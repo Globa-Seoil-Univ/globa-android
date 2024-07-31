@@ -79,6 +79,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                     editor.apply();
                     Log.d(getClass().getName(), "프리퍼런스 리셋 완료 : " + preferences.getString("accessToken", ""));
                     Intent logoutIntent = new Intent(context, IntroActivity.class);
+                    logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(logoutIntent);
                 }
 
@@ -92,7 +93,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemList != null ? itemList.size() : 0;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

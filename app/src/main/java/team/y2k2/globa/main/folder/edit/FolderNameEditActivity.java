@@ -44,15 +44,15 @@ public class FolderNameEditActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(count != 0) {
-                    binding.textviewFolderNameChangeConfirm.setTextColor(getResources().getColor(R.color.primary));
+                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 }
                 else {
-                    binding.textviewFolderNameChangeConfirm.setTextColor(getResources().getColor(R.color.darkGray));
+                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.darkGray));
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.darkGray));
             }
             @Override
             public void afterTextChanged(Editable s) {

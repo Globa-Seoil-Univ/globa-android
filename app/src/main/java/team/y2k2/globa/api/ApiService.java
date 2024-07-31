@@ -383,11 +383,16 @@ public interface ApiService {
             @Header("Authorization") String authorization
     );
 
-
+    /**
+     * 알림 가져오기
+     */
     @GET("/notification")
     Call<NotificationResponse> requestGetAllNotification(
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
+            @Header("Authorization") String authorization,
+            @Query("page") int page,
+            @Query("count") int count,
+            @Query("type") String type
     );
 
 

@@ -51,9 +51,6 @@ public class MyinfoActivity extends AppCompatActivity {
     private MyinfoAdapter myinfoAdapter;
     private MyinfoViewModel myInfoViewModel;
     private ActivityResultLauncher<Intent> nicknameEditLauncher;
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference profileImageRef;
-    private byte[] imageBytes;
     private String userId;
 
     @Override
@@ -106,6 +103,7 @@ public class MyinfoActivity extends AppCompatActivity {
         });
     }
 
+    // 초기 화면 구성
     public void loadUserInfoList(MyinfoViewModel myInfoViewModel) {
         // 리사이클러뷰 레이아웃 매니저 설정
         binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyinfoActivity.this));
@@ -118,7 +116,6 @@ public class MyinfoActivity extends AppCompatActivity {
 
         if(profile != null) {
             Glide.with(this).load(profile)
-                    //.placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(binding.imageviewMyinfoPhoto);
         } else {
@@ -143,6 +140,8 @@ public class MyinfoActivity extends AppCompatActivity {
                     itemList.get(0).setName(updatedName);
                     myinfoAdapter.notifyDataSetChanged();
                 }
+            } else {
+                Log.d("이름변경 오류", "registerForActivity 오류");
             }
         });
 
@@ -154,7 +153,7 @@ public class MyinfoActivity extends AppCompatActivity {
         // API 에러 발생
         myInfoViewModel.getErrorLiveData().observe(MyinfoActivity.this, errorMessge -> {
             if(errorMessge != null) {
-                Toast.makeText(getApplicationContext(), errorMessge, Toast.LENGTH_SHORT).show();
+                Log.d("이미지 api 오류", "이미지 api Request 실패");
             }
         });
 

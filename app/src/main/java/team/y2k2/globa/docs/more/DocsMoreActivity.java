@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -38,19 +40,28 @@ public class DocsMoreActivity extends AppCompatActivity {
 
         docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
 
+        initializeUI();
+
+    }
+
+    private void initializeUI() {
+
+        // 뒤로 가기 버튼
         binding.imagebuttonDocsMoreBack.setOnClickListener(v -> {
             finish();
         });
 
-        Intent intent = getIntent();
-        title = intent.getStringExtra("title");
-        folderId = intent.getStringExtra("folderId");
-        recordId = intent.getStringExtra("recordId");
-        folderTitle = intent.getStringExtra("folderTitle");
+        // 문서 제목, 폴더 ID, 문서 ID, 폴더 제목
+        title = getIntent().getStringExtra("title");
+        folderId = getIntent().getStringExtra("folderId");
+        recordId = getIntent().getStringExtra("recordId");
+        folderTitle = getIntent().getStringExtra("folderTitle");
 
+        // 기본 제목 설정
         binding.textviewDocsMoreFolderTitle.setText(folderTitle);
         binding.textviewDocsMoreDocsTitle.setText(title);
 
+        // 이름 변경 버튼
         binding.relativelayoutDocsMoreRename.setOnClickListener(v -> {
             Intent docsRename = new Intent(DocsMoreActivity.this, DocsNameEditActivity.class);
             docsRename.putExtra("title", title);
@@ -59,45 +70,12 @@ public class DocsMoreActivity extends AppCompatActivity {
             startActivity(docsRename);
         });
 
-//        binding.relativelayoutDocsMoreMove.setOnClickListener(v -> {
-//            Intent docsMove = new Intent(DocsMoreActivity.this, DocsMoveActivity.class);
-//            docsMove.putExtra("title", title);
-//            docsMove.putExtra("folderId", folderId);
-//            docsMove.putExtra("recordId", recordId);
-//            startActivity(docsMove);
-//        });
-//
-//        BottomSheetDialog deleteBottomSheet = new BottomSheetDialog(this);
-//        deleteBottomSheet.setContentView(R.layout.dialog_delete_docs);
-//
-//        TextView confirm = deleteBottomSheet.findViewById(R.id.textview_delete_docs_confirm);
-//        TextView cancel = deleteBottomSheet.findViewById(R.id.textview_delete_docs_cancel);
-//
-//        // 버튼 클릭 리스너를 별도의 메서드로 분리
-//        confirm.setOnClickListener(d2 -> {
-//            deleteBottomSheet.dismiss();
-//            Intent newIntent = new Intent(DocsMoreActivity.this, MainActivity.class);
-//            newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(newIntent);
-//            finish();
-//        });
-//        cancel.setOnClickListener(d2 -> {
-//            deleteBottomSheet.dismiss();
-//        });
-
-
+        // 문서 삭제 버튼
         binding.relativelayoutDocsMoreDelete.setOnClickListener(v -> {
             showBottomSheetDialog();
         });
 
-
-        // 문서 삭제시 액티비티 종료
-//        docsMoreViewModel.closeActivities.observe(this, shouldClose -> {
-//            if (shouldClose != null && shouldClose) {
-//                finish();
-//            }
-//        });
-
+        // 시각화 자료 보기 버튼
         binding.relativelayoutDocsMoreStatistics.setOnClickListener(v -> {
             Intent toStatisticsIntent = new Intent(DocsMoreActivity.this, DocsStatisticsActivity.class);
             toStatisticsIntent.putExtra("folderId", folderId);
@@ -105,12 +83,19 @@ public class DocsMoreActivity extends AppCompatActivity {
             startActivity(toStatisticsIntent);
         });
 
+        // 퀴즈 풀기 버튼
         binding.relativelayoutDocsMoreQuiz.setOnClickListener(v -> {
             Intent toQuizIntent = new Intent(DocsMoreActivity.this, QuizActivity.class);
             toQuizIntent.putExtra("folderId", folderId);
             toQuizIntent.putExtra("recordId", recordId);
             startActivity(toQuizIntent);
         });
+
+        // 링크 공유 버튼
+        binding.relativelayoutDocsMoreShare.setOnClickListener(v -> {
+            Toast.makeText(this, "미구현", Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     protected void showBottomSheetDialog() {
@@ -136,5 +121,6 @@ public class DocsMoreActivity extends AppCompatActivity {
         bottomSheetDialog.show();
 
     }
+
 
 }

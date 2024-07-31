@@ -32,13 +32,18 @@ public class NicknameEditActivity extends AppCompatActivity {
         binding = ActivityNicknameEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.buttonNicknameeditBack.setOnClickListener(v -> {
-            finish();
-        });
-
         nicknameEditViewModel = new ViewModelProvider(this).get(NicknameEditViewModel.class);
         userId = getIntent().getStringExtra("userId");
         currentName = getIntent().getStringExtra("current_name");
+
+        initializeUI(userId, currentName);
+    }
+
+    private void initializeUI(String userId, String currentName) {
+
+        binding.buttonNicknameeditBack.setOnClickListener(v -> {
+            finish();
+        });
 
         binding.edittextNicknameeditInputname.setText(currentName);
         int currentNameCount = binding.edittextNicknameeditInputname.getText().length();
@@ -66,7 +71,7 @@ public class NicknameEditActivity extends AppCompatActivity {
             }
         });
 
-        // 이름이 변경되었을때 동작
+        // 변경 버튼
         binding.textviewNicknameeditChange.setOnClickListener(v -> {
             if(isChanged) {
                 String newNickname = binding.edittextNicknameeditInputname.getText().toString();
@@ -77,6 +82,7 @@ public class NicknameEditActivity extends AppCompatActivity {
             }
         });
 
+        // 글자 모두 지우기 버튼
         binding.buttonNicknameEditCancel.setOnClickListener(v -> {
             if(binding.edittextNicknameeditInputname.getText().toString().equals("")){
                 binding.buttonNicknameEditCancel.setVisibility(View.GONE);

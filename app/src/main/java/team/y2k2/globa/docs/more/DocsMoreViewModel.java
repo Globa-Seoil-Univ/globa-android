@@ -20,12 +20,16 @@ public class DocsMoreViewModel extends ViewModel {
 
     private ApiService apiService;
     private ApiClient apiClient;
+    private MutableLiveData<Boolean> isDeleted = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public DocsMoreViewModel() {
         apiService = apiClient.getApiService();
     }
 
+    public MutableLiveData<Boolean> getIsDeleted() {
+        return isDeleted;
+    }
     public MutableLiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
@@ -36,6 +40,7 @@ public class DocsMoreViewModel extends ViewModel {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());
+                    isDeleted.setValue(true);
                 } else {
                     Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
                 }

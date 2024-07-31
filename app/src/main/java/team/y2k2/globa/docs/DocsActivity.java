@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,6 +42,7 @@ import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.more.DocsMoreActivity;
+import team.y2k2.globa.docs.more.DocsMoreViewModel;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
@@ -65,6 +67,8 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private long startTime, endTime;
     private String startDate;
     private PreferencesHelper preferencesHelper;
+
+    DocsMoreViewModel docsMoreViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,6 +120,16 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         });
 
         setContentView(binding.getRoot());
+
+
+        // 문서 삭제 시
+        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
+        docsMoreViewModel.getIsDeleted().observe(DocsActivity.this, isDeleted -> {
+            // 문서 더보기의 삭제여부 변수(LiveData) 관찰
+            if(isDeleted) {
+                finish();
+            }
+        });
     }
 
     public void loadAudio() {
@@ -401,4 +415,5 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     public String getRecordId() {
         return recordId;
     }
+
 }
