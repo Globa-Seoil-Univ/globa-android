@@ -74,14 +74,15 @@ public class FolderInsideFragment extends Fragment {
         setPreferences();
 
         nameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if(result.getResultCode() == Activity.RESULT_OK) {
+            if(result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
-                if(data != null && data.hasExtra("name")) {
+                if (data != null && data.hasExtra("name")) {
                     String name = data.getStringExtra("name");
                     binding.textviewFolderInsideTitle.setText(name);
                     Toast.makeText(FolderInsideFragment.this.getContext(), "이름 변경 완료", Toast.LENGTH_SHORT).show();
                 }
-
+            } else if(result.getResultCode() == RESULT_CANCELED) {
+                Log.d("폴더 이름 변경", "이름변경 취소됨 (RESULT_CANCLED");
             }
         });
 

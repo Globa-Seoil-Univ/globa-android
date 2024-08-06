@@ -7,6 +7,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
@@ -28,10 +29,6 @@ public class QuizResultActivity extends AppCompatActivity {
         binding = ActivityQuizResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Lotti 재생
-        GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(binding.imageviewQuizresultClear);
-        Glide.with(this).load(R.drawable.clear).into(gifImage);
-
         binding.buttonQuizresultBack.setOnClickListener(v -> {
             finish();
         });
@@ -39,10 +36,10 @@ public class QuizResultActivity extends AppCompatActivity {
         // 띄어줄 점수와 정답 수
         int gradeInt = getIntent().getIntExtra("grade", 0);
         int correctedInt = getIntent().getIntExtra("correctAnswer", 0);
-        String grade = String.valueOf(gradeInt) + "점";
-        String corrected = String.valueOf(correctedInt) + "개";
+        String grade = gradeInt + "점";
+        String corrected = correctedInt + "개";
 
-        int color = getResources().getColor(R.color.primary);
+        int color = ContextCompat.getColor(this, R.color.primary);
         // 점수
         SpannableStringBuilder scoreSpannable = new SpannableStringBuilder(grade);
         int scoreStartIndex = 0;

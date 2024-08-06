@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +43,6 @@ public class FolderShareActivity extends AppCompatActivity {
     private String lastImageUrl;
     private int tempUserId;
 
-    private SharedPreferences preferences;
     int folderId;
 
     @Override
@@ -49,8 +51,12 @@ public class FolderShareActivity extends AppCompatActivity {
         binding = ActivityFolderShareBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        preferences = getSharedPreferences("folderId", MODE_PRIVATE);
-        folderId = preferences.getInt("folderId", 0);
+        initializeUI();
+
+    }
+
+    private void initializeUI() {
+        folderId = getIntent().getIntExtra("folderId", 0);
 
         // 코드 입력하는 EditText가 비어있을 땐 X버튼 안보이게 하기
         String input = binding.edittextFoldershareInputname.getText().toString();
@@ -70,6 +76,23 @@ public class FolderShareActivity extends AppCompatActivity {
         binding.recyclerviewFoldershareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.recyclerviewFoldershareSelected.setAdapter(adapter);
 
+        initializeEditText();
+
+        binding.constraintlayoutFoldershareSearch.setOnClickListener(v -> {
+
+            if(!binding.textviewFoldershareSearch.equals("")) {
+                showBottomSheetDialog();
+                binding.textviewFoldershareConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+            } else {
+                Toast.makeText(FolderShareActivity.this, "사용자를 검색해주세요", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        initializeConfirmBtn();
+    }
+
+    private void initializeEditText() {
         binding.edittextFoldershareInputname.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,15 +110,15 @@ public class FolderShareActivity extends AppCompatActivity {
                             profileImageRef = storage.getReference().child(userInfoResponse.getProfile());
                             String firebaseImageUrl = profileImageRef.toString();
                             lastImageUrl = firebaseImageUrl;
-                            Glide.with(FolderShareActivity.this).load(lastImageUrl)
-                                    .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
+                            Glide.with(FolderShareActivity.this).load(convertGsToHttps(lastImageUrl))
+                                    .error(R.mipmap.ic_launcher)
                                     .into(binding.imageviewFoldershareSearch);
                             tempUserId = userInfoResponse.getUserId();
                             isSearched = true;
                         }
                     });
                     folderShareViewModel.getErrorLiveData().observe(FolderShareActivity.this, errorMessage -> {
-                        Toast.makeText(FolderShareActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        Log.e("사용자 조회 오류", "사용자 조회 오류: " + errorMessage);
                     });
                 }
             }
@@ -105,21 +128,12 @@ public class FolderShareActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-        binding.constraintlayoutFoldershareSearch.setOnClickListener(v -> {
-
-            if(!binding.textviewFoldershareSearch.equals("")) {
-                showBottomSheetDialog();
-            } else {
-                Toast.makeText(FolderShareActivity.this, "사용자를 검색해주세요", Toast.LENGTH_SHORT).show();
-            }
-
-
-        });
-
+    private void initializeConfirmBtn() {
         binding.textviewFoldershareConfirm.setOnClickListener(v -> {
 
-            // 리사이클러뷰를 순회하면서 API 전송
+            // 리사이클러뷰를 순회하면서 하나씩 API Request
             LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFoldershareSelected.getLayoutManager();
             if(collectNewUserManager != null) {
                 int firstPosition = collectNewUserManager.findFirstVisibleItemPosition();
@@ -139,9 +153,9 @@ public class FolderShareActivity extends AppCompatActivity {
                     }
                 }
             }
+            Toast.makeText(this, "공유 추가 완료!", Toast.LENGTH_SHORT).show();
             finish();
         });
-
     }
 
     protected void showBottomSheetDialog() {
@@ -155,37 +169,61 @@ public class FolderShareActivity extends AppCompatActivity {
 
         readButton.setOnClickListener(v -> {
             if(lastImageUrl != null) {
-                FolderShareItem newItem = new FolderShareItem(lastImageUrl);
-                newItem.setUserId(tempUserId);
-                newItem.setRole("r");
-                itemList.add(newItem);
-                adapter.notifyItemInserted(itemList.size() - 1);
-                binding.edittextFoldershareInputname.setText("");
-                Glide.with(this).load(R.mipmap.ic_launcher)
-                        .into(binding.imageviewFoldershareSearch);
-                binding.textviewFoldershareSearch.setText("");
-                lastImageUrl = null;
+                onClickDialogBtn("r");
             }
             bottomSheetDialog.dismiss();
         });
         writeButton.setOnClickListener(v -> {
             if(lastImageUrl != null) {
-                FolderShareItem newItem = new FolderShareItem(lastImageUrl);
-                newItem.setUserId(tempUserId);
-                newItem.setRole("w");
-                itemList.add(newItem);
-                adapter.notifyItemInserted(itemList.size() - 1);
-                binding.edittextFoldershareInputname.setText("");
-                Glide.with(this).load(R.mipmap.ic_launcher)
-                        .into(binding.imageviewFoldershareSearch);
-                binding.textviewFoldershareSearch.setText("");
-                lastImageUrl = null;
+                onClickDialogBtn("w");
             }
             bottomSheetDialog.dismiss();
         });
 
         bottomSheetDialog.show();
 
+    }
+
+    private void onClickDialogBtn(String role) {
+        FolderShareItem newItem = new FolderShareItem(lastImageUrl);
+        newItem.setUserId(tempUserId);
+        newItem.setRole(role);
+        itemList.add(newItem);
+        adapter.notifyItemInserted(itemList.size() - 1);
+        binding.edittextFoldershareInputname.setText("");
+        Glide.with(this).load(R.mipmap.ic_launcher)
+                .into(binding.imageviewFoldershareSearch);
+        binding.textviewFoldershareSearch.setText("");
+        lastImageUrl = null;
+    }
+
+    private String convertGsToHttps(String gsUrl) {
+        if (!gsUrl.startsWith("gs://")) {
+            throw new IllegalArgumentException("Invalid gs:// URL");
+        }
+
+        // Extract bucket name and path
+        int bucketEndIndex = gsUrl.indexOf("/", 5); // Find the end of bucket name
+        if (bucketEndIndex == -1 || bucketEndIndex == gsUrl.length() - 1) {
+            throw new IllegalArgumentException("Invalid gs:// URL format");
+        }
+
+        String bucketName = gsUrl.substring(5, bucketEndIndex);
+        String filePath = gsUrl.substring(bucketEndIndex + 1);
+
+        // URL encode the file path
+        String encodedFilePath;
+        try {
+            encodedFilePath = URLEncoder.encode(filePath, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("URL encoding failed", e);
+        }
+
+        // Construct the HTTPS URL
+        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
+                "/o/" + encodedFilePath + "?alt=media";
+
+        return httpsUrl;
     }
 
 }

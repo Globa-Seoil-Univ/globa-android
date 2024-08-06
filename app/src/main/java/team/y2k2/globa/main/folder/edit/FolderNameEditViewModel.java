@@ -30,22 +30,16 @@ public class FolderNameEditViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
-                    Log.d(getClass().getName(), "폴더 이름 수정 완료");
+                    Log.d("API 수신 완료", "폴더 이름 변경 성공: " + response.code());
                 } else {
-                    try {
-                        Log.d(getClass().getName(), "폴더 이름 수정 실패: " + response.code() + ", " + response.errorBody().string());
-                        Log.d(getClass().getName(), String.valueOf(folderId));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    Log.d("API 수신 오류", "폴더 이름 변경 실패: " + response.code());
                 }
-
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 errorLiveData.setValue(t.getMessage());
-                Log.d(getClass().getName(), "이름 수정 실패" + t.getMessage());
+                Log.d("API 송신 오류", "폴더 이름 변경 실패" + t.getMessage());
             }
         });
     }
