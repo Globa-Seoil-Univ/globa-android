@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     public int GOOGLE = R.id.button_sign_in_google;
     public int KAKAO = R.id.button_sign_in_kakao;
 
-    public final String LOGIN_ERR_MSG = getString(R.string.login_error_message);
+    public final String LOGIN_ERR_MSG = "로그인 오류가 발생했습니다." ;
 
     private ActivityLoginBinding binding;
     LoginViewModel viewModel;

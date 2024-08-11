@@ -1,7 +1,6 @@
 package team.y2k2.globa.docs.detail;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.Spannable;
@@ -39,10 +38,7 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Comment;
 import team.y2k2.globa.api.model.entity.Highlight;
-import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.docs.DocsActivity;
-import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightItem;
-import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightModel;
 import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
 
 public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.AdapterViewHolder> {
@@ -188,10 +184,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
-            public void onClick(View widget) {
-                // 클릭 이벤트는 GestureDetector에서 처리하므로 비워둠
-            }
-
+            public void onClick(View widget) { }
             @Override
             public void updateDrawState(@NonNull TextPaint ds) {
                 super.updateDrawState(ds);
@@ -306,7 +299,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                 return false;
             }
         });
-
         popupMenu.show();
     }
 

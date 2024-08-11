@@ -104,9 +104,7 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
             }
         });
 
-        holder.more.setOnClickListener(v -> {
-            viewRecordMore(holder, position);
-        });
+//            viewRecordMore(holder, position);
     }
 
     public void viewRecordMore(FolderInsideDocsAdapter.AdapterViewHolder holder, int position) {
@@ -165,14 +163,11 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
         TextView title;
         TextView datetime;
 
-        ImageView more;
-
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.textview_document_title);
             datetime = itemView.findViewById(R.id.textview_document_datetime);
-            more = itemView.findViewById(R.id.imageview_document_more);
         }
     }
 

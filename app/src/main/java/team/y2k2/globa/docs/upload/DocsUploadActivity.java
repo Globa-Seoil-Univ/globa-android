@@ -38,14 +38,12 @@ import team.y2k2.globa.api.model.response.FolderResponse;
 public class DocsUploadActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private StorageReference storageReference;
-//    private final static int REQUEST_CODE_UPLOAD_RECORD = 102;
     String recordName;
     String recordExtension;
     String recordPath;
     String userId;
     String folderId;
     long unixTime;
-
 
 
     DocsUploadFolderAdapter adapter;
@@ -81,7 +79,6 @@ public class DocsUploadActivity extends AppCompatActivity {
             playAudio(recordPath);
         });
 
-
         binding.linearlayoutDocsUploadConfirm.setOnClickListener(v -> {
             recordName = binding.edittextDocsUploadTitle.getText().toString();
             if(recordName.length() == 0) {
@@ -106,7 +103,6 @@ public class DocsUploadActivity extends AppCompatActivity {
             uploadRecordFile(recordPath, userId, folderId, recordExtension);
             finish();
         });
-
 
         loadFolder();
         setContentView(binding.getRoot());

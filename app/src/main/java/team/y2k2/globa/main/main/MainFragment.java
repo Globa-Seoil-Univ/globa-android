@@ -45,6 +45,7 @@ import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
 import team.y2k2.globa.main.notice.NoticeAutoScrollHandler;
 import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
+import team.y2k2.globa.main.search.SearchActivity;
 import team.y2k2.globa.notification.NotificationActivity;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
@@ -125,6 +126,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         binding.imagebuttonMainNotification.setOnClickListener(v -> {
             Intent intent = new Intent(this.getActivity(), NotificationActivity.class);
+            startActivity(intent);
+        });
+
+        binding.imagebuttonMainSearch.setOnClickListener(v -> {
+            Intent intent = new Intent(this.getActivity(), SearchActivity.class);
             startActivity(intent);
         });
     }

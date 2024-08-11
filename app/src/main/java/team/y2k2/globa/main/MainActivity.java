@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel.setActivity(this);
         setContentView(binding.getRoot());
         setNavigationView(binding.navigationMainBottom);
     }
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private void setNavigationView(BottomNavigationView view) {
         view.setOnItemSelectedListener(item -> {
             viewModel.viewFragment(item.getItemId());
-            view.setSelectedItemId(item.getItemId());
             return true;
         });
     }

@@ -20,7 +20,7 @@
             android:id="@+id/button_theme_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/header_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

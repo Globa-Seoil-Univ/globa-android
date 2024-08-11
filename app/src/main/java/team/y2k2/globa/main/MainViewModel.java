@@ -28,8 +28,9 @@ public class MainViewModel extends ViewModel {
     MainActivity activity;
     MainModel model;
     MainFragment mainFragment;
-    int currentItem = R.id.item_main_main;
-
+    StatisticsFragment statisticsFragment;
+    ProfileFragment profileFragment;
+    FolderFragment folderFragment;
 
     public void setActivity(MainActivity activity) {
         this.activity = activity;
@@ -37,23 +38,24 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel() {
         mainFragment = new MainFragment();
+        statisticsFragment = new StatisticsFragment();
+        profileFragment = new ProfileFragment();
+        folderFragment = new FolderFragment();
+
         model = new MainModel();
     }
 
     public void viewFragment(int index) {
-        if (currentItem == index)
-            return;
-
         if(index == R.id.item_main_main)
             replaceFragment(mainFragment);
         else if(index == R.id.item_main_statistics)
-            replaceFragment(new StatisticsFragment());
+            replaceFragment(statisticsFragment);
         else if(index == R.id.item_main_upload)
             uploadAudio();
         else if(index == R.id.item_main_profile)
-            replaceFragment(new ProfileFragment());
+            replaceFragment(profileFragment);
         else if(index == R.id.item_main_folder)
-            replaceFragment(new FolderFragment());
+            replaceFragment(folderFragment);
     }
 
     private void uploadAudio() {
@@ -79,7 +81,8 @@ public class MainViewModel extends ViewModel {
     }
 
     private void replaceFragment(Fragment fragment) {
-        mainFragment.getFragmentManager().beginTransaction()
+        androidx.fragment.app.FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fcv_main, fragment, null)
                 .commit();
