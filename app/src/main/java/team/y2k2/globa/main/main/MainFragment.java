@@ -67,7 +67,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         setLogoColor();
         setFilterButtons();
         setOnClickListeners();
-
         setOnRefreshListener(binding.swiperefreshlayoutMain);
 
         showPromotions();
