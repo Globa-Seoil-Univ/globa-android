@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,72 +24,66 @@
         android:id="@+id/textview_comment_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
         android:text="댓글"
         android:textColor="@color/black"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/textview_comment_name"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout_comment_tab"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
     <TextView
         android:id="@+id/textview_comment_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:text="> 댓글 예시"
         android:textColor="@color/black"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/recyclerview_comment"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="> 댓글 예시"/>
+        app:layout_constraintTop_toBottomOf="@+id/textview_comment_title"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toTopOf="@id/linearlayout_comment"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_comment_name"
+        android:layout_margin="16dp"/>
 
-    <LinearLayout
-        android:id="@+id/linearlayout_comment"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/edittext_comment"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:rowCount="1"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/main_button"
+        android:hint="댓글 남기기"
+        android:textSize="@dimen/large"
+        android:textColorHint="@color/darkGray"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/imagebutton_comment_confirm"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview_comment"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
 
-        <EditText
-            android:id="@+id/edittext_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:layout_weight="9"
-            android:background="@drawable/main_button"
-            android:hint="댓글 남기기"
-            android:textColorHint="@color/darkGray"
-            android:textColor="@color/black" />
-
-        <ImageButton
-            android:id="@+id/imagebutton_comment_confirm"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@null"
-            android:src="@drawable/arrow_right" />
-
-    </LinearLayout>
-
-
+    <ImageButton
+        android:id="@+id/imagebutton_comment_confirm"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@null"
+        android:src="@drawable/arrow_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edittext_comment"
+        app:layout_constraintBottom_toBottomOf="@+id/edittext_comment"
+        android:layout_marginEnd="16dp"
+        android:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

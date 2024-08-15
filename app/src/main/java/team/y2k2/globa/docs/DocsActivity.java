@@ -39,6 +39,7 @@ import java.util.List;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.more.DocsMoreActivity;
@@ -70,10 +71,18 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
     DocsMoreViewModel docsMoreViewModel;
 
+    private ApiClient apiClient;
+    private String profile;
+    private String name;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
+
+        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+        profile = userInfoResponse.getProfile();
+        name = userInfoResponse.getName();
 
         // 프리퍼런스 헬퍼 호출
         preferencesHelper = new PreferencesHelper(this);
@@ -406,14 +415,22 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         int durationMinute = (int)(durationMilliSecond / 60000);
         Log.d("시간", "열려 있던 시간(분): " + durationMinute);
         preferencesHelper.addData(startDate, durationMinute);
+
+        // 댓글에 사용된 disposable 해제
+        detailAdapter.clearDisposable();
     }
 
     public String getFolderId() {
         return folderId;
     }
-
     public String getRecordId() {
         return recordId;
     }
 
+    public String getProfile() {
+        return profile;
+    }
+    public String getName() {
+        return name;
+    }
 }

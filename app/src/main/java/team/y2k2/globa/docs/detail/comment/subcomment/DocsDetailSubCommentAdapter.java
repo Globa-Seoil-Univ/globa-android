@@ -16,6 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
@@ -36,6 +37,11 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
+    }
+
+    public void updateData(ArrayList<DocsDetailSubCommentItem> subCommentItemList) {
+        this.subCommentItems = subCommentItemList;
+        notifyDataSetChanged();
     }
 
     @NonNull

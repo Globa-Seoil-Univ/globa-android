@@ -1,7 +1,6 @@
 package team.y2k2.globa.docs.detail;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.Spannable;
@@ -18,57 +17,77 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.core.Observable;
 import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Comment;
 import team.y2k2.globa.api.model.entity.Highlight;
-import team.y2k2.globa.api.model.response.CommentResponse;
-import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentItem;
-import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightItem;
-import team.y2k2.globa.docs.detail.highlight.DocsDetailHighlightModel;
+import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
 
 public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.AdapterViewHolder> {
+
+    ApiClient apiClient;
+
     ArrayList<DocsDetailItem> detailItems;
 
     DocsActivity activity;
 
     String folderId;
     String recordId;
+    String DocsSectionId;
+    String DocsHighlightId;
 
-    private BottomSheetBehavior<FrameLayout> bottomSheetBehavior;
+    String myProfile;
+    String myName;
+
+    int selectedPosition;
+
+    TextView commentTv;
+    RecyclerView commentRv;
+    EditText commentEt;
+    ImageButton commentBtn;
+
+    private Disposable disposable;
     private DocsDetailCommentAdapter commentAdapter;
+
+    ArrayList<DocsDetailCommentItem> commentItems;
+
+    private final int BUTTON_COMMENT_CONFIRM = 0;
+    private final int BUTTON_COMMENT_SUB_CONFIRM = 1;
+    private final int BUTTON_COMMENT_UPDATE = 2;
+    private final int BUTTON_COMMENT_SUB_UPDATE = 3;
+    private int buttonStatus = BUTTON_COMMENT_CONFIRM;
 
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
         this.detailItems = detailItems;
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
-
-        // 댓글 레이아웃 bottomSheetBehavior 선언
-        FrameLayout bottomSheet = activity.findViewById(R.id.framelayout_docs_comment);
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        this.apiClient = new ApiClient(activity);
+        this.myProfile = activity.getProfile();
+        this.myName = activity.getName();
     }
 
     @NonNull
@@ -145,17 +164,13 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         int startIdx = highlight.getStartIndex();
         int endIdx = highlight.getEndIndex();
 
+        DocsSectionId = sectionId;
+        DocsHighlightId = highlightId;
+
         GestureDetector gestureDetector = new GestureDetector(holder.itemView.getContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
 
-                activity.binding.recyclerviewDocsComment.setLayoutManager(new LinearLayoutManager(activity));
-                ArrayList<DocsDetailCommentItem> itemList = new ArrayList<>();
-
-                ApiClient apiClient = new ApiClient(activity);
-                List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
-                String myProfile = apiClient.requestUserInfo().getProfile();
-                String myName = apiClient.requestUserInfo().getName();
                 /*
                 // 다이얼로그 방식
                 BottomSheetDialog commentBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
@@ -166,44 +181,20 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
                 commentBottomSheet.show();
                  */
-                for(Comment comment : comments) {
 
+                List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
+                commentItems = new ArrayList<>();
+                for(Comment comment : comments) {
                     String profile = comment.getUser().getProfile();
                     String name = comment.getUser().getName();
                     String createdTime = comment.getCreatedTime();
                     String content = comment.getContent();
-
-                    itemList.add(new DocsDetailCommentItem(profile, name, createdTime, content));
-
+                    String commentId = comment.getCommentId();
+                    boolean hasReply = comment.isHasReply();
+                    commentItems.add(new DocsDetailCommentItem(profile, name, createdTime, content, commentId, hasReply));
                 }
 
-                commentAdapter = new DocsDetailCommentAdapter(itemList, activity);
-                activity.binding.recyclerviewDocsComment.setAdapter(commentAdapter);
-
-                // 댓글 창 띄우기
-                if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    Log.d("하이라이트 댓글", "댓글 창 띄우기 시작");
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                } else {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-
-                TextView textView = activity.findViewById(R.id.textview_docs_comment_name);
-                textView.setText("선택 단어 : " + highlightString);
-
-                ImageButton confirmButton = activity.findViewById(R.id.imagebutton_docs_comment_confirm);
-                EditText commentInput = activity.findViewById(R.id.edittext_docs_comment_input);
-                confirmButton.setOnClickListener(v -> {
-                    if(commentInput.getText().toString() != "") {
-                        apiClient.requestInsertComment(folderId, recordId, sectionId, highlightId, commentInput.getText().toString());
-                        itemList.add(new DocsDetailCommentItem(myProfile, myName, "방금 전", commentInput.getText().toString()));
-                        commentAdapter.notifyDataSetChanged();
-                        commentInput.setText("");
-                    } else {
-                        Toast.makeText(activity, "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+                showCommentSheetDialog(commentItems, highlightString.toString(), sectionId, null, null, highlightId);
 
                 return true;
             }
@@ -282,7 +273,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     // 새로운 하이라이트 생성 시 작동
     public void showPopupMenu(View v, String folderId, String recordId, String sectionId, String startIdx, String endIdx, String selectedText) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
-        popupMenu.getMenuInflater().inflate(R.menu.comment, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.highlight_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -309,42 +300,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                     return true;
                      */
 
-                    // 댓글 창 띄우기
-                    if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                        Log.d("새로운 하이라이트 댓글", "댓글 창 띄우기 시작");
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    } else {
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    }
+                    showCommentSheetDialog(null, selectedText, sectionId, startIdx, endIdx, null);
 
-                    TextView textView = activity.findViewById(R.id.textview_docs_comment_name);
-                    textView.setText("선택 단어 : " + selectedText);
-
-                    ImageButton confirm = activity.findViewById(R.id.imagebutton_docs_comment_confirm);
-                    confirm.setOnClickListener(v -> {
-                        // api 송신
-                        ApiClient apiClient = new ApiClient(v.getContext());
-
-                        EditText comment = activity.findViewById(R.id.edittext_docs_comment_input);
-                        apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, comment.getText().toString());
-
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    });
-
-                    // 댓글 레이아웃 바깥영역 클릭 시 댓글 레이아웃 감추기
-                    CoordinatorLayout coordinatorLayout = activity.findViewById(R.id.coordinatorlayout_docs);
-                    coordinatorLayout.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-
-                            if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                                return true;
-                            }
-
-                            return false;
-                        }
-                    });
 
 
                 } else if (item.getItemId() == R.id.action_search) {
@@ -398,5 +355,94 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             return String.format("%2d:%02d:%02d", hours, minutes, seconds);
         else
             return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    private void showCommentSheetDialog(ArrayList<DocsDetailCommentItem> commentItems, String name, String sectionId, String startIdx, String endIdx, String highlightId) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
+        View bottomSheetView = activity.getLayoutInflater().inflate(R.layout.dialog_comment, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        commentTv = bottomSheetView.findViewById(R.id.textview_comment_name);
+        commentRv = bottomSheetView.findViewById(R.id.recyclerview_comment);
+        commentEt = bottomSheetView.findViewById(R.id.edittext_comment);
+        commentBtn = bottomSheetView.findViewById(R.id.imagebutton_comment_confirm);
+
+        // 선택된 단어 표시
+        commentTv.setText(name);
+
+        // null처리 관련 작업 필요...?
+        commentAdapter = new DocsDetailCommentAdapter(commentItems, activity);
+        commentRv.setLayoutManager(new LinearLayoutManager(activity));
+        commentRv.setAdapter(commentAdapter);
+
+        // 댓글 달기 버튼 이벤트 처리
+        Observable<Object> commentBtnClickStream = Observable.create(emitter -> {
+            commentBtn.setOnClickListener(v -> emitter.onNext(new Object()));
+        });
+        disposable = commentBtnClickStream.throttleFirst(1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    String text = commentEt.getText().toString();
+                    if(!text.isEmpty()) {
+                        if(buttonStatus == BUTTON_COMMENT_CONFIRM) {
+                            // 댓글 아이템 리스트 추가
+                            commentAdapter.addNewItem(new DocsDetailCommentItem(myProfile, myName, "방금전", text, "commentId", false));
+                            // API Request 필요
+                            if(commentItems == null) {
+                                // 댓글 최초 추가
+                                apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, text);
+                            } else {
+                                // 댓글 추가 (최초X)
+                                apiClient.requestInsertComment(folderId, recordId, sectionId, highlightId, text);
+                            }
+                        } else if(buttonStatus == BUTTON_COMMENT_SUB_CONFIRM) {
+                            // 대댓글 아이템 리스트 추가
+                            commentAdapter.addItemToSubCommentRecyclerView(selectedPosition, new DocsDetailSubCommentItem(myProfile, myName, "방금전", text));
+                            // API Request 필요
+                            apiClient.requestInsertSubComment(folderId, recordId, sectionId, highlightId, "parentId", text);
+                        } else if(buttonStatus == BUTTON_COMMENT_UPDATE) {
+                            // 댓글 아이템 수정 (수정 필요)
+                            commentAdapter.updateItem(text, 0);
+                            // API Request 필요
+                            apiClient.updateComment(folderId, recordId, sectionId, highlightId, "commentId", text);
+                        } else if(buttonStatus == BUTTON_COMMENT_SUB_UPDATE) {
+                            // 대댓글 아이템 수정
+
+                            // API Request 필요
+                            apiClient.updateComment(folderId, recordId, sectionId, highlightId, "commentId", text);
+                        }
+
+                        commentEt.setText("");
+                    } else {
+                        Toast.makeText(activity, "댓글을 입력해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        bottomSheetDialog.show();
+
+    }
+
+    public void clearDisposable() {
+        if(disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+    }
+
+    public void setButtonStatus(int status) {
+        this.buttonStatus = status;
+    }
+    public int getButtonStatus() {
+        return buttonStatus;
+    }
+
+    public void setSelectedPosition(int position) {
+        this.selectedPosition = position;
+    }
+
+    public String getDocsHighlightId() {
+        return DocsHighlightId;
+    }
+    public String getDocsSectionId() {
+        return DocsSectionId;
     }
 }

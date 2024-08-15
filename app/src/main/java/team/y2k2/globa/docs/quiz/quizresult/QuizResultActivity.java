@@ -23,42 +23,76 @@ public class QuizResultActivity extends AppCompatActivity {
     private SharedPreferences quizResultPref;
     private SharedPreferences.Editor quizResultEditor;
 
+    private int gradeInt;
+    private int correctedInt;
+
+    private String grade;
+    private String corrected;
+    private String percentString;
+    private Map<String, ?> allEntries;
+
+    int color = ContextCompat.getColor(this, R.color.primary);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityQuizResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        initializeUI();
+
+    }
+
+    private void initializeUI() {
+
         binding.buttonQuizresultBack.setOnClickListener(v -> {
             finish();
         });
 
-        // 띄어줄 점수와 정답 수
-        int gradeInt = getIntent().getIntExtra("grade", 0);
-        int correctedInt = getIntent().getIntExtra("correctAnswer", 0);
-        String grade = gradeInt + "점";
-        String corrected = correctedInt + "개";
+        // 데이터 수집
+        loadData();
 
-        int color = ContextCompat.getColor(this, R.color.primary);
+        // 정답 표시
+        setScoreText();
+
+        // 점수 표시
+        setCorrectedText();
+
+        // 상승률 표시
+        setIncreasedText();
+
+    }
+
+    private void loadData() {
+        // 띄어줄 점수와 정답 수
+        gradeInt = getIntent().getIntExtra("grade", 0);
+        correctedInt = getIntent().getIntExtra("correctAnswer", 0);
+        grade = gradeInt + "점";
+        corrected = correctedInt + "개";
+    }
+
+    private void setScoreText() {
         // 점수
         SpannableStringBuilder scoreSpannable = new SpannableStringBuilder(grade);
         int scoreStartIndex = 0;
         int scoreEndIndex = grade.length() - 1;
         scoreSpannable.setSpan(new ForegroundColorSpan(color), scoreStartIndex, scoreEndIndex, 0);
         binding.textviewQuizresultScore.setText(scoreSpannable);
+    }
 
+    private void setCorrectedText() {
         // 정답 수
         SpannableStringBuilder countSpannable = new SpannableStringBuilder(corrected);
         int countStartIndex = 0;
         int countEndIndex = corrected.length() - 1;
         countSpannable.setSpan(new ForegroundColorSpan(color), countStartIndex, countEndIndex, 0);
         binding.textviewQuizresultCorrect.setText(countSpannable);
+    }
 
-        // 상승률
-        quizResultPref = getSharedPreferences("quizResult", MODE_PRIVATE);
-        quizResultEditor = quizResultPref.edit();
-        Map<String, ?> allEntries = quizResultPref.getAll();
-        String percentString;
+    private void setIncreasedText() {
+
+        loadPreference();
+
         if(allEntries.isEmpty()) {
             // 문제 푼 이력이 없는 경우
             percentString = "문제를 다시풀면 상승률을 알려드립니다!!";
@@ -103,7 +137,12 @@ public class QuizResultActivity extends AppCompatActivity {
             quizResultEditor.putInt("lastGrade", gradeInt);
             quizResultEditor.apply();
         }
+    }
 
+    private void loadPreference() {
+        quizResultPref = getSharedPreferences("quizResult", MODE_PRIVATE);
+        quizResultEditor = quizResultPref.edit();
+        allEntries = quizResultPref.getAll();
     }
 
 }

@@ -31,7 +31,7 @@ public class DocsStatisticsViewModel extends ViewModel {
         return errorLiveData;
     }
 
-    public void getDocsStatistics(int folderId, int recordId) {
+    public void getDocsStatistics(String folderId, String recordId) {
         apiService.requestDocStatistics(folderId, recordId, "application/json", authorization).enqueue(new Callback<StatisticsResponse>() {
             @Override
             public void onResponse(Call<StatisticsResponse> call, Response<StatisticsResponse> response) {

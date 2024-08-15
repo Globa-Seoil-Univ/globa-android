@@ -72,7 +72,7 @@
         app:layout_constraintStart_toStartOf="@id/textview_item_comment_username"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="이것은 댓글입니다.이것은 댓글입니다.이것은 댓글입니다.이것은 댓글입니다."
-        android:maxLines="3"/>
+        android:maxLines="3" />
 
     <TextView
         android:id="@+id/textview_item_comment_visible"
