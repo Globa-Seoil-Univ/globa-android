@@ -59,7 +59,7 @@ public class MainViewModel extends ViewModel {
     }
 
     private void uploadAudio() {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(mainFragment.getContext());
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity.getApplication().getApplicationContext());
         bottomSheetDialog.setContentView(R.layout.dialog_upload);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

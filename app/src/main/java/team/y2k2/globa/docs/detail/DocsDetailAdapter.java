@@ -43,7 +43,6 @@ import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
 
 public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.AdapterViewHolder> {
     ArrayList<DocsDetailItem> detailItems;
-
     DocsActivity activity;
 
     String folderId;
@@ -85,7 +84,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
         String description = detailItems.get(position).getDescription();
         SpannableString highlightString = new SpannableString(description);
-
         holder.description.setOnTouchListener(new View.OnTouchListener() {
             int startIdx = 0;
             int endIdx = 0;

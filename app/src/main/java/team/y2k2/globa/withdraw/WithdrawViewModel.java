@@ -49,7 +49,6 @@ public class WithdrawViewModel extends ViewModel {
                     Log.d(getClass().getName(), "로그아웃 실패 : " + response.code());
                 }
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 errorLiveData.setValue(t.getMessage());
@@ -57,6 +56,4 @@ public class WithdrawViewModel extends ViewModel {
             }
         });
     }
-
-
 }

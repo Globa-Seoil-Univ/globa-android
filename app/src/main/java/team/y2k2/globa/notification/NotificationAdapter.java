@@ -40,9 +40,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private static final int TYPE_UPLOAD_FAILED = 7;
     private static final int TYPE_INQUIRY_ANSWERED = 8;
 
-
     NotificationModel items;
-
 
     private int createViewHolderCount = 0; // 호출 횟수를 추적하는 변수
 
