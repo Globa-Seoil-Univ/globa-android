@@ -17,6 +17,7 @@ import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.main.docs.list.DocsListItem;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
+import team.y2k2.globa.sql.RecordDB;
 
 public class MainFragmentViewModel {
     ApiClient apiClient;
@@ -30,10 +31,7 @@ public class MainFragmentViewModel {
     public MainFragmentViewModel(Context context) {
         this.context = context;
         apiClient = new ApiClient(context);
-        recordResponse = apiClient.requestGetRecords(20);
-        folderResponse = apiClient.requestGetFolders(1, 20);
     }
-
 
     public String[] getPromotionsImage() {
         List<NoticeResponse> noticeResponse = apiClient.requestPromotion(3);
@@ -48,16 +46,37 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getCurrentlyRecords() {
-        DocsListItemModel listItems = new DocsListItemModel();
+        recordResponse = apiClient.requestGetRecords(20);
+        folderResponse = apiClient.requestGetFolders(1, 20);
 
-        model = new MainFragmentModel(recordResponse.getRecords());
+        DocsListItemModel listItems = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
 
-        listItems.addItems(records);
+        RecordDB recordDB = new RecordDB(context);
+        for (int i = 0; i < records.size(); i++) {
+            Record record = records.get(i);
+
+            String recordId = record.getRecordId();
+            String folderId = record.getFolderId();
+            String title = record.getTitle();
+            String datetime = record.getCreatedTime();
+            List<Keyword> keywords = record.getKeywords();
+
+
+            recordDB.onInsert(Integer.valueOf(recordId), Integer.valueOf(folderId), title, datetime, keywords);
+        }
+
+
+        model = new MainFragmentModel(records);
+
+        listItems.addItems(model.records);
         return listItems.getItems();
     }
 
     public ArrayList<DocsListItem> getMostViewedRecords() {
+        recordResponse = apiClient.requestGetRecords(20);
+        folderResponse = apiClient.requestGetFolders(1, 20);
+
         DocsListItemModel listItems = new DocsListItemModel();
 
         List<Record> records = recordResponse.getRecords();
@@ -81,6 +100,9 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getSharedRecords() {
+        recordResponse = apiClient.requestGetRecords(20);
+        folderResponse = apiClient.requestGetFolders(1, 20);
+
         DocsListItemModel docsList = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
 
@@ -104,6 +126,9 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getReceivedRecords() {
+        recordResponse = apiClient.requestGetRecords(20);
+        folderResponse = apiClient.requestGetFolders(1, 20);
+
         DocsListItemModel docsList = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
 

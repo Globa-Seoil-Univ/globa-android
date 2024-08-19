@@ -27,7 +27,7 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
 
     @NonNull
     @Override
-    public FolderShareAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.item_folder_share, parent, false);
 
@@ -35,7 +35,7 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderShareAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         FolderShareItem item = itemList.get(position);
         if(!item.getImage().equals("")) {

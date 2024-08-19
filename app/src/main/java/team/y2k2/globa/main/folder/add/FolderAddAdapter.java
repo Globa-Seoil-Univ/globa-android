@@ -23,13 +23,13 @@ public class FolderAddAdapter extends RecyclerView.Adapter<FolderAddAdapter.View
 
     @NonNull
     @Override
-    public FolderAddAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_folder_add, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderAddAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int imageId = mImages[position];
         holder.imageView.setImageResource(imageId);
     }

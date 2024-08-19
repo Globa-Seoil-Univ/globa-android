@@ -22,13 +22,13 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
 
     @NonNull
     @Override
-    public AlertItemAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alert,parent,false);
-        return new AlertItemAdapter.AdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AlertItemAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         holder.title.setText(items.get(position).getTitle());
         holder.description.setText(items.get(position).getDescription());
 

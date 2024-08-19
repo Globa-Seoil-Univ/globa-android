@@ -36,7 +36,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     }
 
     @Override
-    public MyinfoAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.item_my_info, parent, false);
 
@@ -44,7 +44,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(MyinfoAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
         MyinfoItem item = itemList.get(position);
         holder.title.setText(item.getTitle());
         holder.name.setText(item.getName());

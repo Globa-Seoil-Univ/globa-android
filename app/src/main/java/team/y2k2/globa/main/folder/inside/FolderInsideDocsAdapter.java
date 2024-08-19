@@ -43,13 +43,13 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
 
     @NonNull
     @Override
-    public FolderInsideDocsAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_docs, parent, false);
-        return new FolderInsideDocsAdapter.AdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderInsideDocsAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         holder.title.setText(items.get(position).getTitle());
         holder.datetime.setText(items.get(position).getDatetime());
 
@@ -107,7 +107,7 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
 //            viewRecordMore(holder, position);
     }
 
-    public void viewRecordMore(FolderInsideDocsAdapter.AdapterViewHolder holder, int position) {
+    public void viewRecordMore(AdapterViewHolder holder, int position) {
 
         moreBottomSheet.setContentView(R.layout.dialog_more_docs);
         bottomSheetDialog.setContentView(R.layout.dialog_delete_docs);

@@ -22,13 +22,13 @@ public class KeywordDetailItemAdapter extends RecyclerView.Adapter<KeywordDetail
 
     @NonNull
     @Override
-    public KeywordDetailItemAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_keyword_detail, parent, false);
-        return new KeywordDetailItemAdapter.AdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull KeywordDetailItemAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         holder.index.setText(String.valueOf(position + 1));
         holder.tag.setText(items.get(position).getTag());
         holder.description.setText(items.get(position).getDescription());

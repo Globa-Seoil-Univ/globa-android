@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -93,6 +94,8 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void initKakaoSdk() {
         KakaoSdk.init(this, viewModel.getAppKeyForKakao());
+
+        Log.d("KAKAO_KEY",KakaoSdk.INSTANCE.getKeyHash());
     }
 
     private void initGoogleSdk() {
@@ -142,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
             signInGoogleOfFirebaseAuth(account);
         }
         catch (ApiException e) {
-            Toast.makeText(this, LOGIN_ERR_MSG + e.getMessage() , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, LOGIN_ERR_MSG + ":" + e.getMessage() , Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -151,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (accessToken == null) {
             String e = "액세스 토큰 없음";
-            Toast.makeText(this,  LOGIN_ERR_MSG + e, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,  LOGIN_ERR_MSG + ":" + e, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -164,7 +167,7 @@ public class LoginActivity extends AppCompatActivity {
     private void signInKakao() {
         UserApiClient.getInstance().me((user, meError) -> {
             if (meError != null) {
-                Toast.makeText(this, LOGIN_ERR_MSG + meError, Toast.LENGTH_LONG);
+                Toast.makeText(this, LOGIN_ERR_MSG + ":" + meError.getMessage(), Toast.LENGTH_LONG);
             } else {
                 LoginViewModel.LoginListener listener = new LoginViewModel.LoginListener(user, this);
                 listener.KakaoLogin();
@@ -175,7 +178,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Function2<OAuthToken, Throwable, Unit> signInKakaoOfCallback = (token, error) -> {
         if (error != null) {
-            Toast.makeText(this, LOGIN_ERR_MSG + error, Toast.LENGTH_LONG);
+            Toast.makeText(this, LOGIN_ERR_MSG +":"+ error.getMessage(), Toast.LENGTH_LONG);
         }
         else if (token != null) {
             signInKakao();
