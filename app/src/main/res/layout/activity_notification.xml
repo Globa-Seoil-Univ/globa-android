@@ -240,7 +240,7 @@
             android:id="@+id/textview_notification_docs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="공유"
+            android:text="문서"
             android:fontFamily="@font/notosans_regular"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_light"

@@ -1,24 +1,20 @@
-package team.y2k2.globa.notification.total;
+package team.y2k2.globa.notification.docs;
 
-public class TotalFragmentItem {
+public class DocsFragmentItem {
 
     private String notificationId;
     private String profile;
     private String title;
     private String content;
     private String createdTime;
-    private String folderId;
-    private String shareId;
     private String type;
 
-    public TotalFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String type) {
+    public DocsFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String type) {
         this.notificationId = notificationId;
         this.profile = profile;
         this.title = title;
         this.content = content;
         this.createdTime = createdTime;
-        this.folderId = folderId;
-        this.shareId = shareId;
         this.type = type;
     }
 
@@ -36,12 +32,6 @@ public class TotalFragmentItem {
     }
     public String getCreatedTime() {
         return createdTime;
-    }
-    public String getFolderId() {
-        return folderId;
-    }
-    public String getShareId() {
-        return shareId;
     }
     public String getType() {
         return type;

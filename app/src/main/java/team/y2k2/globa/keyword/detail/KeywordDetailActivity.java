@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
                     itemList.add(new KeywordDetailItem(word, description, category));
                 }
 
-                KeywordDetailItemAdapter adapter = new KeywordDetailItemAdapter(itemList);
+                KeywordDetailAdapter adapter = new KeywordDetailAdapter(itemList);
                 binding.recyclerviewKeyword.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
                 binding.recyclerviewKeyword.setAdapter(adapter);
 

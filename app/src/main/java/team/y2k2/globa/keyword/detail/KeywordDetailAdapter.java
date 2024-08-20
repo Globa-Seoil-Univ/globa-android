@@ -13,22 +13,22 @@ import java.util.ArrayList;
 
 import team.y2k2.globa.R;
 
-public class KeywordDetailItemAdapter extends RecyclerView.Adapter<KeywordDetailItemAdapter.AdapterViewHolder> {
+public class KeywordDetailAdapter extends RecyclerView.Adapter<KeywordDetailAdapter.AdapterViewHolder> {
     ArrayList<KeywordDetailItem> items;
 
-    public KeywordDetailItemAdapter(ArrayList<KeywordDetailItem> items) {
+    public KeywordDetailAdapter(ArrayList<KeywordDetailItem> items) {
         this.items = items;
     }
 
     @NonNull
     @Override
-    public KeywordDetailItemAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public KeywordDetailAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_keyword_detail, parent, false);
-        return new KeywordDetailItemAdapter.AdapterViewHolder(view);
+        return new KeywordDetailAdapter.AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull KeywordDetailItemAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull KeywordDetailAdapter.AdapterViewHolder holder, int position) {
         holder.index.setText(String.valueOf(position + 1));
         holder.tag.setText(items.get(position).getTag());
         holder.description.setText(items.get(position).getDescription());

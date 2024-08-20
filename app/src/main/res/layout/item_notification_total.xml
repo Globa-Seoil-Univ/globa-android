@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="16dp">
+    android:padding="20dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageview_item_notification_total"
@@ -78,4 +78,5 @@
         app:layout_constraintTop_toTopOf="@id/button_item_notification_total_access"
         app:layout_constraintBottom_toBottomOf="@+id/button_item_notification_total_access"
         android:layout_marginLeft="10dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -388,7 +388,7 @@ public interface ApiService {
      * 알림 가져오기
      */
     @GET("/notification")
-    Call<NotificationResponse> requestGetAllNotification(
+    Call<NotificationResponse> requestGetNotification(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("page") int page,

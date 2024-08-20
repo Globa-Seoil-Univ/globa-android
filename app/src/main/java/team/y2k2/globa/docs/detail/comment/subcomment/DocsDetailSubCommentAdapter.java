@@ -20,28 +20,40 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
+import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 
 public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetailSubCommentAdapter.AdapterViewHolder> {
 
-    ArrayList<DocsDetailSubCommentItem> subCommentItems;
+    List<DocsDetailSubCommentItem> subCommentItems;
 
     DocsActivity activity;
     String folderId;
     String recordId;
+    String sectionId;
+    String highlightId;
 
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
 
-    public DocsDetailSubCommentAdapter(ArrayList<DocsDetailSubCommentItem> subCommentItems, DocsActivity activity) {
+    private DocsDetailAdapter mainAdapter;
+
+    public DocsDetailSubCommentAdapter(List<DocsDetailSubCommentItem> subCommentItems, DocsActivity activity) {
         this.subCommentItems = subCommentItems;
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
+        this.sectionId = mainAdapter.getDocsSectionId();
+        this.highlightId = mainAdapter.getDocsHighlightId();
     }
 
-    public void updateData(ArrayList<DocsDetailSubCommentItem> subCommentItemList) {
+    public void updateAllData(List<DocsDetailSubCommentItem> subCommentItemList) {
         this.subCommentItems = subCommentItemList;
         notifyDataSetChanged();
+    }
+
+    public void updateData(List<DocsDetailSubCommentItem> subCommentItems, String text, int position) {
+        subCommentItems.get(position).setContent(text);
+        notifyItemChanged(position);
     }
 
     @NonNull
@@ -93,6 +105,8 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
             content = itemView.findViewById(R.id.textview_item_comment_content);
         }
     }
+
+
 
     public static String convertGsToHttps(String gsUrl) {
         if (!gsUrl.startsWith("gs://")) {

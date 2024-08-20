@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityNotificationBinding;
-import team.y2k2.globa.notification.announcement.AnnouncementFragment;
+import team.y2k2.globa.notification.notice.NoticeFragment;
 import team.y2k2.globa.notification.docs.DocsFragment;
 import team.y2k2.globa.notification.share.ShareFragment;
 import team.y2k2.globa.notification.total.TotalFragment;
@@ -42,7 +42,7 @@ public class NotificationActivity extends AppCompatActivity {
         });
         binding.constraintlayoutNotificationAnnouncement.setOnClickListener(v -> {
             changeUnderlineColor(linearLayouts, 1);
-            replaceFragment(new AnnouncementFragment());
+            replaceFragment(new NoticeFragment());
         });
         binding.constraintlayoutNotificationShare.setOnClickListener(v -> {
             changeUnderlineColor(linearLayouts, 2);

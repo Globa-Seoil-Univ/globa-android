@@ -49,7 +49,6 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
 
         Glide.with(holder.itemView.getContext())
                 .load(convertGsToHttps(item.getProfileImageUrl()))
-                .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
                 .into(holder.profileImage);
 

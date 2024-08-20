@@ -1,6 +1,6 @@
-package team.y2k2.globa.notification.total;
+package team.y2k2.globa.notification.share;
 
-public class TotalFragmentItem {
+public class ShareFragmentItem {
 
     private String notificationId;
     private String profile;
@@ -11,7 +11,7 @@ public class TotalFragmentItem {
     private String shareId;
     private String type;
 
-    public TotalFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String type) {
+    public ShareFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String type) {
         this.notificationId = notificationId;
         this.profile = profile;
         this.title = title;

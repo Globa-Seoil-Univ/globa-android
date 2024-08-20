@@ -67,7 +67,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private Runnable updateSeekbarRunnable;
     private long startTime, endTime;
     private String startDate;
-    private PreferencesHelper preferencesHelper;
 
     DocsMoreViewModel docsMoreViewModel;
 
@@ -83,9 +82,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
         profile = userInfoResponse.getProfile();
         name = userInfoResponse.getName();
-
-        // 프리퍼런스 헬퍼 호출
-        preferencesHelper = new PreferencesHelper(this);
 
         // 파일이 열리는 시간 측정
         startTime = System.currentTimeMillis();
@@ -414,7 +410,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         long durationMilliSecond = endTime - startTime;
         int durationMinute = (int)(durationMilliSecond / 60000);
         Log.d("시간", "열려 있던 시간(분): " + durationMinute);
-        preferencesHelper.addData(startDate, durationMinute);
 
         // 댓글에 사용된 disposable 해제
         detailAdapter.clearDisposable();

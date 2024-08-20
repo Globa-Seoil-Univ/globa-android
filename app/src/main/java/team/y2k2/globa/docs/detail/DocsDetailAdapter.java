@@ -172,7 +172,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             public boolean onSingleTapUp(MotionEvent e) {
 
                 /*
-                // 다이얼로그 방식
+                // 캡스톤 댓글
                 BottomSheetDialog commentBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
                 commentBottomSheet.setContentView(R.layout.dialog_comment);
 
@@ -406,8 +406,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                             // API Request 필요
                             apiClient.updateComment(folderId, recordId, sectionId, highlightId, "commentId", text);
                         } else if(buttonStatus == BUTTON_COMMENT_SUB_UPDATE) {
-                            // 대댓글 아이템 수정
-
+                            // 대댓글 아이템 수정 (수정 필요)
+                            commentAdapter.updateItemToSubCommentRecyclerView(text, 0, 0);
                             // API Request 필요
                             apiClient.updateComment(folderId, recordId, sectionId, highlightId, "commentId", text);
                         }

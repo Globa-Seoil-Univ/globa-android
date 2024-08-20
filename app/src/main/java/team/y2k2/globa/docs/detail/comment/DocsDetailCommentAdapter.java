@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -53,6 +55,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     private final int BUTTON_COMMENT_UPDATE = 2;
     private final int BUTTON_COMMENT_SUB_UPDATE = 3;
 
+    ApiClient apiClient;
+
     public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity) {
         this.commentItems = commentItems;
         this.activity = activity;
@@ -72,9 +76,21 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         notifyItemInserted(commentItems.size() - 1);
     }
 
+    public void updateItemToSubCommentRecyclerView(String text, int parentPosition, int position) {
+        // 대댓글 수정
+        List<DocsDetailSubCommentItem> subCommentItemList = commentItems.get(parentPosition).getSubCommentItemList();
+        subAdapter.updateData(subCommentItemList, text, position);
+        notifyItemChanged(parentPosition);
+    }
+
     public void updateItem(String text, int position) {
         commentItems.get(position).setContent(text);
         notifyItemChanged(position);
+    }
+
+    public void removeItem(int position) {
+        commentItems.remove(position);
+        notifyItemRemoved(position);
     }
 
     @NonNull
@@ -118,7 +134,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             if(holder.subCommentRecyclerview.getVisibility() == View.GONE) {
                 holder.subCommentRecyclerview.setVisibility(View.VISIBLE);
                 // 대댓글 호출
-                ApiClient apiClient = new ApiClient(activity);
+                apiClient = new ApiClient(activity);
                 List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 10).getSubComments();
                 for(SubComment subComment : subCommentList) {
                     String subProfile = subComment.getUser().getProfile();
@@ -128,7 +144,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
                     subCommentItems.add(new DocsDetailSubCommentItem(subProfile, subName, subCreatedTime, subContent));
                 }
 
-                subAdapter.updateData(subCommentItems);
+                subAdapter.updateAllData(subCommentItems);
 
             } else {
                 holder.subCommentRecyclerview.setVisibility(View.GONE);
@@ -155,13 +171,13 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             inflater.inflate(R.menu.comment_menu, menu);
 
             menu.findItem(R.id.action_comment_update).setOnMenuItemClickListener(menuItem -> {
-                // 댓글 수정 동작
-
+                // 댓글 수정 동작 (버튼 상태 변경)
+                mainAdapter.setButtonStatus(BUTTON_COMMENT_SUB_UPDATE);
                 return true;
             });
             menu.findItem(R.id.action_comment_delete).setOnMenuItemClickListener(menuItem -> {
-               // 댓글 삭제 동작
-
+                // 댓글 삭제 동작
+                showBottomSheetDialog(commentItems.get(position).getCommentId(), position);
                 return true;
             });
         });
@@ -202,6 +218,25 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         }
     }
 
+    public void showBottomSheetDialog(String commentId, int position) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
+        View bottomSheetView = activity.getLayoutInflater().inflate(R.layout.dialog_delete_comment, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        TextView confirmBtn = bottomSheetView.findViewById(R.id.textview_delete_comment_confirm);
+        TextView cancelBtn = bottomSheetView.findViewById(R.id.textview_delete_comment_cancel);
+
+        confirmBtn.setOnClickListener(v -> {
+            removeItem(position);
+            apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
+            bottomSheetDialog.dismiss();
+        });
+        cancelBtn.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+        });
+        bottomSheetDialog.show();
+    }
+
     public static String convertGsToHttps(String gsUrl) {
         if (!gsUrl.startsWith("gs://")) {
             throw new IllegalArgumentException("Invalid gs:// URL");
@@ -230,4 +265,6 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         return httpsUrl;
     }
+
+
 }

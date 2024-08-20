@@ -1,4 +1,4 @@
-package team.y2k2.globa.notification.total;
+package team.y2k2.globa.notification.share;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,29 +22,29 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
 
-public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdapter.MyViewHolder> {
+public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdapter.MyViewHolder> {
 
     NotificationActivity activity;
-    List<TotalFragmentItem> items;
+    List<ShareFragmentItem> items;
     NotificationViewModel notificationViewModel;
 
-    public TotalFragmentAdapter(List<TotalFragmentItem> items, NotificationActivity activity) {
-        this.items = items;
+    public ShareFragmentAdapter(List<ShareFragmentItem> items, NotificationActivity activity) {
         this.activity = activity;
+        this.items = items;
         notificationViewModel = new ViewModelProvider(activity).get(NotificationViewModel.class);
     }
 
     @NonNull
     @Override
-    public TotalFragmentAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_total, parent, false);
+    public ShareFragmentAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_share, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TotalFragmentAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ShareFragmentAdapter.MyViewHolder holder, int position) {
 
-        TotalFragmentItem item = items.get(position);
+        ShareFragmentItem item = items.get(position);
 
         if(item.getProfile() != null && !item.getProfile().isEmpty()) {
             // 프로필이 있을 때
@@ -60,7 +60,7 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
                     .into(holder.profileImage);
             Log.d("알림 프로필", "알림 프로필 없음, 아이템 위치: " + position);
         }
-        
+
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
@@ -104,12 +104,13 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            profileImage = itemView.findViewById(R.id.imageview_item_notification_total);
-            title = itemView.findViewById(R.id.textview_item_notification_total_title);
-            content = itemView.findViewById(R.id.textview_item_notification_total_content);
-            createdTime = itemView.findViewById(R.id.textview_item_notification_total_createdtime);
-            confirmBtn = itemView.findViewById(R.id.button_item_notification_total_access);
-            cancelBtn = itemView.findViewById(R.id.button_item_notification_total_denied);
+            profileImage = itemView.findViewById(R.id.imageview_item_notification_share);
+            title = itemView.findViewById(R.id.textview_item_notification_share_title);
+            content = itemView.findViewById(R.id.textview_item_notification_share_content);
+            createdTime = itemView.findViewById(R.id.textview_item_notification_share_createdtime);
+            confirmBtn = itemView.findViewById(R.id.button_item_notification_share_access);
+            cancelBtn = itemView.findViewById(R.id.button_item_notification_share_denied);
+
         }
     }
 
