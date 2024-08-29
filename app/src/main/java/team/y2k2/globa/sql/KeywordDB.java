@@ -31,14 +31,14 @@ public class KeywordDB extends SQLiteOpenHelper {
     }
 
     public void onInsert(int record_id, String keyword) {
-        if (isKeywordExists(record_id, keyword)) {
-            String sql = "INSERT INTO keyword VALUES(" + record_id + "," + keyword + "');";
+        if (!isKeywordExists(record_id, keyword)) { // Insert only if record_id doesn't exist
+            String sql = "INSERT INTO keyword VALUES(" + record_id + ",'" + keyword + "');";
             sqlDB.execSQL(sql);
         }
     }
 
     private boolean isKeywordExists(int recordId, String keyword) {
-        Cursor cursor = sqlDB.rawQuery("SELECT * FROM keyword WHERE record_id = " + recordId +" AND keyword LIKE "+ keyword +";", null);
+        Cursor cursor = sqlDB.rawQuery("SELECT * FROM keyword WHERE record_id = " + recordId +" AND keyword LIKE '"+ keyword +"';", null);
 
         if(cursor.getCount() == 0)
             return true;

@@ -19,7 +19,6 @@ public class RecordDB extends SQLiteOpenHelper {
 
         sqlDB = this.getWritableDatabase();
     }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE record("

@@ -1,10 +1,16 @@
 package team.y2k2.globa.main.folder;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,14 +23,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.main.folder.inside.FolderInsideFragment;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterViewHolder> {
     ArrayList<FolderItem> items;
+    Activity activity;
 
-    public FolderAdapter(ArrayList<FolderItem> items) {
+    public FolderAdapter(ArrayList<FolderItem> items, Activity activity) {
         this.items = items;
+        this.activity = activity;
     }
 
     @NonNull
@@ -55,6 +68,22 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
                     .addToBackStack(null)
                     .commit();
         });
+
+        holder.layout.setOnLongClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("폴더 삭제");
+            builder.setMessage("폴더를 삭제하시겠습니까?");
+
+            builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteFolder(position);
+                    Toast.makeText(activity, "폴더를 삭제했습니다", Toast.LENGTH_LONG);
+                }
+            });
+
+            return true;
+        });
     }
     @Override
     public int getItemCount() {
@@ -72,6 +101,11 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
             datetime = itemView.findViewById(R.id.textview_folder_item_datetime);
             layout = itemView.findViewById(R.id.constraintlayout_folder_item);
         }
+    }
+
+    public void deleteFolder(int position) {
+        ApiClient client = new ApiClient(activity);
+        client.requestDeleteFolder(items.get(position).getFolderId());
     }
 
     public String getDateFormat(String datetime) {

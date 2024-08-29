@@ -57,8 +57,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         this.recordId = activity.getRecordId();
 
         // 댓글 레이아웃 bottomSheetBehavior 선언
-        FrameLayout bottomSheet = activity.findViewById(R.id.framelayout_docs_comment);
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+//        FrameLayout bottomSheet = activity.findViewById(R.id.framelayout_docs_comment);
+//        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
     }
 
     @NonNull

@@ -3,6 +3,7 @@ package team.y2k2.globa.main.docs.list;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,9 +117,6 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
         if(items.get(position).getKeywords().size() == 0) {
             // 아직 STT 트렌젝션이 완료되지 않았을 때.
-            holder.user_layout_1.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.user_layout_2.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.user_layout_3.setLayoutParams(new LinearLayout.LayoutParams(0,0));
         }
         else {
             holder.processing.setLayoutParams(new LinearLayout.LayoutParams(0,0));
@@ -143,10 +141,6 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         ConstraintLayout layout;
         TextView processing;
         LottieAnimationView lottieAnimationView;
-
-        LinearLayout user_layout_1;
-        LinearLayout user_layout_2;
-        LinearLayout user_layout_3;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

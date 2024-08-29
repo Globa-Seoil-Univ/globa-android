@@ -40,9 +40,7 @@ public class FolderAddAdapter extends RecyclerView.Adapter<FolderAddAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imageView;
-
         ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageview_folderadd_profile);

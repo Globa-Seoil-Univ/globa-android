@@ -14,10 +14,8 @@ import team.y2k2.globa.databinding.ActivityDocsUploadBinding;
 
 public class DocsUploadActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
-    String recordName;
     ActivityDocsUploadBinding binding;
     private static boolean isAudioPlayed;
-
     DocsUploadViewModel viewModel;
 
     @Override

@@ -62,16 +62,19 @@ public class DocsUploadViewModel extends ViewModel {
     }
 
 
-    public void uploadRecordFile(String path, String userId, String folderId, String extension) {
-        Log.d(getClass().getName(), "path 값 : " + path);
+    public void uploadRecordFile(String path, String folderId) {
         Instant instant = Instant.now();
         unixTime = instant.getEpochSecond();
 
         String oggPath = path.split("\\.")[0] + ".ogg";
         convertMp3ToOgg(path,oggPath);
-
+        this.folderId = folderId;
         firebasePath = folderId + "/" + unixTime + ".ogg";
         StorageReference audioRef = storageReference.child(firebasePath);
+
+        Log.d(getClass().getName(), "local path : " + path);
+        Log.d(getClass().getName(), "firebase path : " + firebasePath);
+
 
         Uri uri = Uri.fromFile(new File(oggPath));
 
@@ -101,7 +104,6 @@ public class DocsUploadViewModel extends ViewModel {
     }
 
     public void docsUpload() {
-
         if(model.getRecordName().length() == 0)
             model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString());
 
@@ -119,7 +121,7 @@ public class DocsUploadViewModel extends ViewModel {
             folderId = String.valueOf(folder.getFolderId());
         }
 
-        uploadRecordFile(model.getRecordPath(), userId, folderId, model.getRecordExtension());
+        uploadRecordFile(model.getRecordPath(), folderId);
         activity.finish();
     }
 

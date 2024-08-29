@@ -27,9 +27,6 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.docs.move.DocsMoveActivity;
-import team.y2k2.globa.main.docs.keyword.DocsKeywordAdapter;
-import team.y2k2.globa.main.docs.keyword.DocsKeywordModel;
-import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 
 public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDocsAdapter.AdapterViewHolder> {
     ArrayList<FolderInsideDocsItem> items;
@@ -61,9 +58,10 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
             // 저장소 참조
             StorageReference storageRef = storage.getReference();
 
-//            // 저장된 음악 파일 경로
-            String filePath = "users/9/folders/5/record/2024-05-15T16:54:26.559331Z.ogg";
-//            String filePath = "folders/" + items.get(position).getFolderId() +"/records/";
+            Log.d(getClass().getName(), items.get(position).getFolderId());
+
+            // 저장된 음악 파일 경로
+            String filePath = "folders/" + items.get(position).getFolderId()+"/" + "1724947418.ogg";
 
             // 해당 파일의 참조
             StorageReference audioRef = storageRef.child(filePath);
@@ -71,44 +69,30 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
             // Firebase Storage에서 MP3 파일 다운로드 및 준비
             // 다운로드 URL 가져오기
             audioRef.getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            // 다운로드 URL을 성공적으로 가져왔을 때의 처리
-                            String audioUrl = uri.toString();
-                            // 이제 downloadUrl을 사용하여 음악 파일을 재생하거나 처리할 수 있습니다.
-                            Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
+                    .addOnSuccessListener(uri -> {
+                        String audioUrl = uri.toString();
+                        // 이제 downloadUrl을 사용하여 음악 파일을 재생하거나 처리할 수 있습니다.
+                        Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
 
-                            intent.putExtra("title", items.get(position).getTitle());
-                            intent.putExtra("audioUrl", audioUrl);
-                            intent.putExtra("folderId", items.get(position).getFolderId());
-                            intent.putExtra("recordId", items.get(position).getRecordId());
+                        intent.putExtra("title", items.get(position).getTitle());
+                        intent.putExtra("audioUrl", audioUrl);
+                        intent.putExtra("folderId", items.get(position).getFolderId());
+                        intent.putExtra("recordId", items.get(position).getRecordId());
 
-                            holder.itemView.getContext().startActivity(intent);
-                        }
+                        holder.itemView.getContext().startActivity(intent);
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // 다운로드 URL을 가져오는 데 실패했을 때의 처리
-                            Log.e("FirebaseStorage", "다운로드 URL 가져오기 실패", exception);
-                        }
+                    .addOnFailureListener(e -> {
+                        Log.e("FirebaseStorage", "다운로드 URL 가져오기 실패", e);
                     });
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                viewRecordMore(holder, position);
-                return false;
-            }
+        holder.itemView.setOnLongClickListener(v -> {
+            viewRecordMore(holder, position);
+            return false;
         });
-
-//            viewRecordMore(holder, position);
     }
 
     public void viewRecordMore(AdapterViewHolder holder, int position) {
-
         moreBottomSheet.setContentView(R.layout.dialog_more_docs);
         bottomSheetDialog.setContentView(R.layout.dialog_delete_docs);
 

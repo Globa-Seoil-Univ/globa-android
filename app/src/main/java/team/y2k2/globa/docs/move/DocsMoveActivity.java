@@ -2,6 +2,7 @@ package team.y2k2.globa.docs.move;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,17 +27,17 @@ public class DocsMoveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsMoveBinding.inflate(getLayoutInflater());
 
+        loadFolder();
         setBundleParams();
         binding.textviewDocsAudioTitle.setText(title);
         setOnClickListeners();
-        loadFolder();
 
         setContentView(binding.getRoot());
     }
 
     public void loadFolder() {
         ApiClient apiClient = new ApiClient(this);
-        List<FolderResponse> responses = apiClient.requestGetFolders(1, 10);
+        responses = apiClient.requestGetFolders(1, 10);
 
         if (responses != null) {
             DocsUploadFolderAdapter adapter = new DocsUploadFolderAdapter(getApplicationContext(), R.layout.item_folder, responses);
@@ -47,11 +48,15 @@ public class DocsMoveActivity extends AppCompatActivity {
     }
 
     public void moveDocs() {
-        FolderResponse response = responses.get(binding.spinnerDocsMove.getSelectedItemPosition());
-        String targetFolderId = String.valueOf(response.getFolderId());
+        if (responses != null && !responses.isEmpty()) { // null 체크 및 리스트가 비어있는지 확인
+            FolderResponse response = responses.get(binding.spinnerDocsMove.getSelectedItemPosition());
+            String targetFolderId = String.valueOf(response.getFolderId());
 
-        ApiClient apiClient = new ApiClient(this);
-        apiClient.requestUpdateDocsMove(folderId, recordId, targetFolderId);
+            ApiClient apiClient = new ApiClient(this);
+            apiClient.requestUpdateDocsMove(folderId, recordId, targetFolderId);
+        } else {
+            Toast.makeText(this, "폴더 목록을 불러오는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void setOnClickListeners() {

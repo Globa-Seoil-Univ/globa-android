@@ -48,13 +48,16 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         // Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
 
         viewModel = new ViewModelProvider(this).get(DocsViewModel.class);
-        viewModel.setActivity(this);
-        viewModel.setBinding(binding);
-
         player = new SimpleExoPlayer.Builder(this).build();
 
-        binding.textviewDocsTitle.setText(viewModel.getTitle());
+
+        viewModel.setActivity(this);
+        viewModel.setIntent(getIntent());
+        viewModel.setPlayer(player);
+        viewModel.setBinding(binding);
         viewModel.getResponse();
+
+        binding.textviewDocsTitle.setText(viewModel.getTitle());
 
         binding.imagebuttonDocsBack.setOnClickListener(v -> {
             player.stop();

@@ -43,8 +43,6 @@ public class DocsViewModel extends ViewModel {
     DocsSummaryAdapter summaryAdapter;
     private SimpleExoPlayer player;
 
-
-
     public void setActivity(DocsActivity activity) {
         this.activity = activity;
     }
@@ -53,6 +51,10 @@ public class DocsViewModel extends ViewModel {
         title = intent.getStringExtra("title").toString();
         folderId = intent.getStringExtra("folderId").toString();
         recordId = intent.getStringExtra("recordId").toString();
+    }
+
+    public void setPlayer(SimpleExoPlayer player) {
+        this.player = player;
     }
 
     public void getResponse() {
