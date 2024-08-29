@@ -3,9 +3,7 @@ package team.y2k2.globa.main.folder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +21,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.main.folder.inside.FolderInsideFragment;
-
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterViewHolder> {
     ArrayList<FolderItem> items;
     Activity activity;
-
     public FolderAdapter(ArrayList<FolderItem> items, Activity activity) {
         this.items = items;
         this.activity = activity;

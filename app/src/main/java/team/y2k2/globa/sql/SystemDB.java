@@ -40,7 +40,10 @@ public class SystemDB extends SQLiteOpenHelper {
     }
 
     public void onDefault(){
-        String systemsSQL[] = { "INSERT INTO system VALUES(" + R.string.profile_alert_setting + "," + new AlertActivity().getClass().getName() + ");" };
+        String systemsSQL[] = {
+                "INSERT INTO system VALUES(" + R.string.profile_alert_setting + "," + new AlertActivity().getClass().getName() + ");",
+                "INSERT INTO system VALUES("
+        };
     }
 
     private boolean isSystemExists(String systemName) {

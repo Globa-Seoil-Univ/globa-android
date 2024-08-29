@@ -4,10 +4,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.api.model.entity.Keyword;
+import team.y2k2.globa.api.model.entity.Record;
 
 public class RecordDB extends SQLiteOpenHelper {
     SQLiteDatabase sqlDB;
@@ -19,6 +23,7 @@ public class RecordDB extends SQLiteOpenHelper {
 
         sqlDB = this.getWritableDatabase();
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE record("
@@ -36,6 +41,25 @@ public class RecordDB extends SQLiteOpenHelper {
 
         db.execSQL(sql);
         onCreate(db);
+    }
+
+    public List<Record> onSearch(String title) {
+        Cursor cursor = sqlDB.rawQuery("SELECT * FROM record WHERE title LIKE ?", new String[]{"%" + title + "%"});
+
+        List<Record> recordList = new ArrayList<>();
+
+        while (cursor.moveToNext()) { // 모든 레코드 순회
+            Record record = new Record();
+            record.setRecordId(String.valueOf(cursor.getInt(0)));
+            record.setFolderId(String.valueOf(cursor.getInt(1)));
+            record.setTitle(cursor.getString(2));
+            record.setCreatedTime(cursor.getString(3));
+
+            recordList.add(record);
+        }
+        cursor.close();
+
+        return recordList;
     }
 
     public void onInsert(int record_id, int folder_id, String title, String datetime, List<Keyword> keywords) {

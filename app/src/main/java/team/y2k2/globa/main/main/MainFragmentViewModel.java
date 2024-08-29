@@ -62,7 +62,6 @@ public class MainFragmentViewModel {
             String datetime = record.getCreatedTime();
             List<Keyword> keywords = record.getKeywords();
 
-
             recordDB.onInsert(Integer.valueOf(recordId), Integer.valueOf(folderId), title, datetime, keywords);
         }
 
