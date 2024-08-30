@@ -3,6 +3,7 @@ package team.y2k2.globa.notification;
 
 import android.os.Bundle;
 
+import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -22,8 +23,6 @@ public class NotificationActivity extends AppCompatActivity {
 
     ActivityNotificationBinding binding;
 
-    private LinearLayout[] linearLayouts = new LinearLayout[4];
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,24 +32,39 @@ public class NotificationActivity extends AppCompatActivity {
             finish();
         });
 
-        loadLinearlayouts();
         replaceFragment(new TotalFragment());
+        binding.linearlayoutNotificationTotalUnderline.setVisibility(View.VISIBLE);
+        binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.INVISIBLE);
+        binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+        binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
 
         binding.constraintlayoutNotificationTotal.setOnClickListener(v -> {
-            changeUnderlineColor(linearLayouts, 0);
             replaceFragment(new TotalFragment());
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.VISIBLE);
+            binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
         });
         binding.constraintlayoutNotificationAnnouncement.setOnClickListener(v -> {
-            changeUnderlineColor(linearLayouts, 1);
             replaceFragment(new NoticeFragment());
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.VISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
         });
         binding.constraintlayoutNotificationShare.setOnClickListener(v -> {
-            changeUnderlineColor(linearLayouts, 2);
             replaceFragment(new ShareFragment());
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.VISIBLE);
         });
         binding.constraintlayoutNotificationDocs.setOnClickListener(v -> {
-            changeUnderlineColor(linearLayouts, 3);
             replaceFragment(new DocsFragment());
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.VISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
         });
 
         setContentView(binding.getRoot());
@@ -63,20 +77,5 @@ public class NotificationActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    private void loadLinearlayouts() {
-        linearLayouts[0] = findViewById(R.id.constraintlayout_notification_total);
-        linearLayouts[1] = findViewById(R.id.constraintlayout_notification_announcement);
-        linearLayouts[2] = findViewById(R.id.constraintlayout_notification_share);
-        linearLayouts[3] = findViewById(R.id.constraintlayout_notification_docs);
-    }
-
-    private void changeUnderlineColor(LinearLayout[] linearLayouts, int selected) {
-        for(int i = 0; i < linearLayouts.length; i++) {
-            if(i == selected) {
-                linearLayouts[i].setBackgroundColor(ContextCompat.getColor(this, R.color.primary));
-            }
-            linearLayouts[i].setBackgroundColor(ContextCompat.getColor(this, R.color.white));
-        }
-    }
 
 }

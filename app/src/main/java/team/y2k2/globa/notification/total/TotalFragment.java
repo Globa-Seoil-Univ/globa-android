@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.api.model.entity.Notification;
@@ -23,8 +26,8 @@ public class TotalFragment extends Fragment {
 
     FragmentNotificationTotalBinding binding;
     private NotificationViewModel notificationViewModel;
-    private List<Notification> notificationList;
-    private List<TotalFragmentItem> totalFragmentItems;
+    private List<Notification> notificationList = new ArrayList<>();
+    private List<TotalFragmentItem> totalFragmentItems = new ArrayList<>();
     String notificationId, profile, title, content, createdTime;
     TotalFragmentAdapter adapter;
 
@@ -39,27 +42,28 @@ public class TotalFragment extends Fragment {
 
         notificationViewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
             if(notificationResponse != null) {
-
                 notificationList = notificationResponse.getNotifications();
                 for(Notification notification : notificationList) {
+                    Log.d("알림", "알림 : " + notification.getNotificationId());
                     String type = notification.getType();
+                    createdTime = notification.getCreatedTime().substring(0, 10);
                     switch (type) {
                         case "1" :
                             notificationId = notification.getNotificationId();
                             profile = "";
                             title = notification.getNotice().getTitle();
                             content = notification.getNotice().getContent();
-                            createdTime = notification.getCreatedTime();
+                            Log.d("1번 알림", "공지 사항 알림(1번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
                             totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "1"));
                             break;
                         case "2" :
                             notificationId = notification.getNotificationId();
                             profile = notification.getUser().getProfile();
-                            title = notification.getUser().getName() + "님이 " + notification.getFolder().getTitle() + " 폴더 공유 초대를 보냈습니다.";
-                            content = "";
-                            createdTime = notification.getCreatedTime();
+                            title = notification.getFolder().getTitle() + "폴더 공유 초대 알림";
+                            content = notification.getUser().getName() + "님이 " + notification.getFolder().getTitle() + " 폴더 공유 초대를 보냈습니다.";
                             String folderId = notification.getFolder().getFolderId();
                             String shareId = notification.getShare().getShareId();
+                            Log.d("2번 알림", "공유 초대 알림(2번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
                             totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, folderId, shareId, "2"));
                             break;
                         case "3" :
@@ -67,7 +71,7 @@ public class TotalFragment extends Fragment {
                             profile = notification.getUser().getProfile();
                             title = notification.getUser().getName() + "님이 공유 폴더에 문서를 추가하였습니다.";
                             content = notification.getRecord().getTitle() + "가 추가됨";
-                            createdTime = notification.getCreatedTime();
+                            Log.d("3번 알림", "공유 폴더 파일 추가 알림(3번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
                             totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "3"));
                             break;
                         case "4" :
@@ -75,7 +79,7 @@ public class TotalFragment extends Fragment {
                             profile = notification.getUser().getProfile();
                             title = notification.getFolder().getTitle() + "폴더에 " + notification.getUser().getName() + "님이 초대되었습니다.";
                             content = "";
-                            createdTime = notification.getCreatedTime();
+                            Log.d("4번 알림", "공유 폴더 사람 추가 알림(4번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
                             totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "4"));
                             break;
                         case "5" :
@@ -83,7 +87,7 @@ public class TotalFragment extends Fragment {
                             profile = notification.getUser().getProfile();
                             title = notification.getUser().getName() + "님이 " + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + "에 댓글을 추가하였습니다.";
                             content = notification.getComment().getContent();
-                            createdTime = notification.getCreatedTime();
+                            Log.d("5번 알림", "공유 폴더 댓글 추가 알림(5번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
                             totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "5"));
                             break;
                         case "6" :
@@ -92,6 +96,7 @@ public class TotalFragment extends Fragment {
                             title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
                             content = "";
                             createdTime = notification.getCreatedTime();
+                            Log.d("6번 알림", "업로드 완료 알림(6번): (ID: " + notificationId + ", title: " + title + ", createdTime: " + createdTime);
                             totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "6"));
                             break;
                         case "7" :
@@ -99,7 +104,7 @@ public class TotalFragment extends Fragment {
                             profile = "";
                             title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
                             content = "";
-                            createdTime = notification.getCreatedTime();
+                            Log.d("7번 알림", "업로드 실패 알림(7번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
                             totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "7"));
                             break;
                         case "8" :
@@ -107,7 +112,7 @@ public class TotalFragment extends Fragment {
                             profile = "";
                             title = "문의 답변이 도착하였습니다.";
                             content = notification.getInquiry().getTitle();
-                            createdTime = notification.getCreatedTime();
+                            Log.d("8번 알림", "문의 답변 알림(8번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
                             totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "8"));
                             break;
                         default :

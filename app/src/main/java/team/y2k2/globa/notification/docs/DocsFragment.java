@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
@@ -25,8 +26,8 @@ public class DocsFragment extends Fragment {
 
     FragmentNotificationDocsBinding binding;
     private NotificationViewModel notificationViewModel;
-    private List<Notification> notificationList;
-    private List<DocsFragmentItem> docsFragmentItems;
+    private List<Notification> notificationList = new ArrayList<>();
+    private List<DocsFragmentItem> docsFragmentItems = new ArrayList<>();
     String notificationId, profile, title, content, createdTime;
     DocsFragmentAdapter adapter;
 
@@ -40,25 +41,24 @@ public class DocsFragment extends Fragment {
 
         notificationViewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
             if(notificationResponse != null) {
-
                 notificationList = notificationResponse.getNotifications();
                 for(Notification notification : notificationList) {
+                    notificationId = notification.getNotificationId();
                     String type = notification.getType();
+                    createdTime = notification.getCreatedTime().substring(0, 10);
                     switch (type) {
                         case "6" :
-                            notificationId = notification.getNotificationId();
                             profile = "";
                             title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
                             content = "";
-                            createdTime = notification.getCreatedTime();
+                            Log.d("문서 알림", "문서 알림(6번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                             docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "6"));
                             break;
                         case "7" :
-                            notificationId = notification.getNotificationId();
                             profile = "";
                             title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
                             content = "";
-                            createdTime = notification.getCreatedTime();
+                            Log.d("문서 알림", "문서 알림(7번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                             docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "7"));
                             break;
                         default :

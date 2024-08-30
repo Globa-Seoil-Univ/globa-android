@@ -85,6 +85,12 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
             holder.cancelBtn.setVisibility(View.GONE);
         }
 
+        if(item.getContent().isEmpty()) {
+            holder.content.setVisibility(View.GONE);
+        } else {
+            holder.content.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

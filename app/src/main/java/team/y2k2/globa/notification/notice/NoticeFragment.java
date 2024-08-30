@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
@@ -23,8 +26,8 @@ public class NoticeFragment extends Fragment {
 
     FragmentNotificationNoticeBinding binding;
     private NotificationViewModel notificationViewModel;
-    private List<Notification> notificationList;
-    private List<NoticeFragmentItem> noticeFragmentItems;
+    private List<Notification> notificationList = new ArrayList<>();
+    private List<NoticeFragmentItem> noticeFragmentItems = new ArrayList<>();
     String notificationId, title, content, createdTime;
     NoticeFragmentAdapter adapter;
 
@@ -32,6 +35,8 @@ public class NoticeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNotificationNoticeBinding.inflate(getLayoutInflater());
+
+        Log.d("알림", "공지 사항 알림 시작");
 
         notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
 
@@ -44,9 +49,11 @@ public class NoticeFragment extends Fragment {
 
                 for(Notification notification : notificationList) {
                     notificationId = notification.getNotificationId();
+                    Log.d("알림", "ID: " + notificationId);
                     title = notification.getNotice().getTitle();
                     content = notification.getNotice().getContent();
-                    createdTime = notification.getCreatedTime();
+                    createdTime = notification.getCreatedTime().substring(0, 10);
+                    Log.d("공지 사항 알림", "공지 사항 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
                     noticeFragmentItems.add(new NoticeFragmentItem(notificationId, title, content, createdTime));
                 }
 

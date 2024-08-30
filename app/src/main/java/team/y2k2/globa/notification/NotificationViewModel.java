@@ -39,16 +39,16 @@ public class NotificationViewModel extends ViewModel {
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
                 if(response.isSuccessful()) {
                     NotificationLiveData.postValue(response.body());
-                    Log.d("알림", "전체 알림 수신 성공");
+                    Log.d("알림", "알림 수신 성공 : " + response.code());
                 } else {
-                    Log.d("알림", "전체 알림 수신 실패 : " + response.code() + ", " + response.message());
+                    Log.d("알림", "알림 수신 실패 : " + response.code() + ", " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<NotificationResponse> call, Throwable t) {
-                errorLiveData.postValue("전체 알림 송신 오류 : " + t.getMessage());
-                Log.d("알림", "전체 알림 송신 오류 : " + t.getMessage());
+                errorLiveData.postValue("알림 송신 오류 : " + t.getMessage());
+                Log.d("알림", "알림 송신 오류 : " + t.getMessage());
             }
         });
     }
