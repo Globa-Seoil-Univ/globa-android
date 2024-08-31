@@ -25,8 +25,6 @@ public class QuizActivity extends AppCompatActivity {
     private int currentIndex = 0;
     private List<Boolean> answerList = new ArrayList<>();
     private List<QuizResult> quizResultList = new ArrayList<>();
-    boolean isReceived = false;
-    private MutableLiveData<Boolean> isReceivedLiveData = new MutableLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +32,31 @@ public class QuizActivity extends AppCompatActivity {
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        initializeUI();
+
+    }
+
+    private void initializeUI() {
+
+        // 뒤로가기 버튼
         binding.buttonQuizBack.setOnClickListener(v -> {
             finish();
         });
 
+        loadData();
+
+        // O 버튼 선택
+        binding.layoutQuizCorrect.setOnClickListener(v -> {
+            fetchQuiz(1);
+        });
+
+        // X 버튼 선택
+        binding.layoutQuizWrong.setOnClickListener(v -> {
+            fetchQuiz(0);
+        });
+    }
+
+    private void loadData() {
         folderId = Integer.parseInt(getIntent().getStringExtra("folderId"));
         recordId = Integer.parseInt(getIntent().getStringExtra("recordId"));
 
@@ -48,31 +67,15 @@ public class QuizActivity extends AppCompatActivity {
             if(quiz != null) {
                 quizList = quiz;
                 Log.d("api 수신 여부", "수신 성공");
-                isReceivedLiveData.postValue(true);
-
+                Log.d("퀴즈 시작", "퀴즈 시작");
+                // 1번 문제 설정
+                binding.textviewQuizCount.setText("문제 1/" + quizList.size());
+                binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
+                Log.d("퀴즈 정답", String.valueOf(quizList.get(currentIndex).getAnswer()));
             } else {
                 Log.d("api 수신 여부", "수신 실패");
             }
         });
-
-        isReceivedLiveData.observe(this, quizReceived -> {
-            Log.d("퀴즈 시작", "퀴즈 시작");
-            // 1번 문제 설정
-            binding.textviewQuizCount.setText("문제 1/" + quizList.size());
-            binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
-            Log.d("퀴즈 정답", String.valueOf(quizList.get(currentIndex).getAnswer()));
-        });
-
-        // O 선택
-        binding.layoutQuizCorrect.setOnClickListener(v -> {
-            fetchQuiz(1);
-        });
-
-        // X 선택
-        binding.layoutQuizWrong.setOnClickListener(v -> {
-            fetchQuiz(0);
-        });
-
     }
 
     protected void fetchQuiz(int answer) {

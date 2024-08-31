@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.MediaController;
 
 import androidx.annotation.Nullable;
@@ -19,7 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
+import team.y2k2.globa.docs.detail.DocsDetailAdapter;
+import team.y2k2.globa.docs.more.DocsMoreViewModel;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
     public ActivityDocsBinding binding;
@@ -29,27 +34,31 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable updateSeekbarRunnable;
     private long startTime, endTime;
-    private String startDate;
-    private PreferencesHelper preferencesHelper;
+
+    DocsDetailAdapter detailAdapter;
+    DocsMoreViewModel docsMoreViewModel;
+    private String profile;
+    private String name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
 
-        // 프리퍼런스 헬퍼 호출
-        preferencesHelper = new PreferencesHelper(this);
+        ApiClient apiClient = new ApiClient(this);
+        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+
+        profile = userInfoResponse.getProfile();
+        name = userInfoResponse.getName();
 
         // 파일이 열리는 시간 측정
         startTime = System.currentTimeMillis();
         Date date = new Date(startTime);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        startDate = dateFormat.format(date);
         // Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
 
         viewModel = new ViewModelProvider(this).get(DocsViewModel.class);
         player = new SimpleExoPlayer.Builder(this).build();
-
 
         viewModel.setActivity(this);
         viewModel.setIntent(getIntent());
@@ -77,6 +86,16 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         });
 
         setContentView(binding.getRoot());
+
+
+        // 문서 삭제 시
+        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
+        docsMoreViewModel.getIsDeleted().observe(DocsActivity.this, isDeleted -> {
+            // 문서 더보기의 삭제여부 변수(LiveData) 관찰
+            if(isDeleted) {
+                finish();
+            }
+        });
     }
 
     public void setDuration(int second) {
@@ -229,15 +248,23 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         endTime = System.currentTimeMillis();
         long durationMilliSecond = endTime - startTime;
         int durationMinute = (int)(durationMilliSecond / 60000);
-//        Log.d("시간", "열려 있던 시간(분): " + durationMinute);
-        preferencesHelper.addData(startDate, durationMinute);
+        Log.d("시간", "열려 있던 시간(분): " + durationMinute);
+
+        // 댓글에 사용된 disposable 해제
+        detailAdapter.clearDisposable();
     }
 
     public String getFolderId() {
         return viewModel.getFolderId();
     }
-
     public String getRecordId() {
         return viewModel.getRecordId();
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+    public String getName() {
+        return name;
     }
 }

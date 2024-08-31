@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/document_background"
+    android:padding="16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageview_item_notification_notice"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textview_item_notification_notice_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전체 알림 제목입니다"
+        android:fontFamily="@font/notosans_regular"
+        android:textSize="@dimen/normal_light"
+        android:textColor="@color/black"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintTop_toTopOf="@+id/imageview_item_notification_notice"
+        app:layout_constraintStart_toEndOf="@+id/imageview_item_notification_notice"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/textview_item_notification_notice_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전체 알림 내용입니다."
+        android:fontFamily="@font/notosans_regular"
+        android:textSize="@dimen/small"
+        android:textColor="@color/gray"
+        app:layout_constraintTop_toBottomOf="@id/textview_item_notification_notice_title"
+        app:layout_constraintStart_toStartOf="@id/textview_item_notification_notice_title"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textview_item_notification_notice_createdtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20m"
+        android:fontFamily="@font/notosans_regular"
+        android:textSize="@dimen/small"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textview_item_notification_notice_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

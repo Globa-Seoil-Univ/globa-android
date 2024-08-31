@@ -26,6 +26,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Pair;
 import team.y2k2.globa.api.model.entity.Quizgrade;
@@ -53,186 +55,161 @@ public class StatisticsFragment extends Fragment {
     private LineChart timeLineChart, gradeLineChart;
     StatisticsViewModel statisticsViewModel;
     String userId;
-    private MutableLiveData<Boolean> isUserIdReceived = new MutableLiveData<>(false);
-    private PreferencesHelper preferencesHelper;
+    private List<Keyword> keywords;
+    private List<Studytime> studytimes;
+    private List<Quizgrade> quizgrades;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentStatisticsBinding.inflate(getLayoutInflater());
 
+        initializeUI();
+
+        return binding.getRoot();
+    }
+
+    private void initializeUI() {
+
+        // API Request를 통한 데이터 수집
+        requestData();
+
+        // API Response 데이터를 LiveData로 받아 관찰 및 차트 그리기 실행
+        receiveLiveData();
+
+    }
+
+    private void requestData() {
         statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
 
-        statisticsViewModel.getUserId();
-        statisticsViewModel.getUserInfoLiveData().observe(getViewLifecycleOwner(), userInfo -> {
-            if(userInfo != null) {
-                userId = userInfo.getUserId();
-                isUserIdReceived.setValue(true);
-                Log.d("userId 수신 성공", "userId : " + userId);
-            }
-        });
-
-        isUserIdReceived.observe(getViewLifecycleOwner(), isReceived -> {
-            statisticsViewModel.getStatistics(userId);
-        });
+        ApiClient apiClient = new ApiClient(getContext());
+        userId = apiClient.requestUserInfo().getUserId();
+        statisticsViewModel.getStatistics(userId);
 
         barChart = binding.wordBarChart;
         timeLineChart = binding.timeLineChart;
         gradeLineChart = binding.gradeLineChart;
+    }
 
+    private void receiveLiveData() {
         // 단어, 퀴즈 점수는 데이터베이스에서 데이터를 받아와 차트 그림 (공부 시간은 일단 주석 처리)
         statisticsViewModel.getStatisticsLiveData().observe(getViewLifecycleOwner(), statistics -> {
             if(statistics != null) {
-                List<Keyword> keywords = statistics.getKeywords();
-                List<Studytime> studytimes = statistics.getStudyTimes();
-                List<Quizgrade> quizgrades = statistics.getQuizGrades();
+                keywords = statistics.getKeywords();
+                studytimes = statistics.getStudyTimes();
+                quizgrades = statistics.getQuizGrades();
 
-                wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
-                doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
-                wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 100)).toArray();
+                // 단어 중요도 차트 그리기
+                drawKeywordsChart();
 
-                Pair[] pairs = new Pair[wordValues.length];
-                for(int i = 0; i < wordValues.length; i++) {
-                    pairs[i] = new Pair(wordValues[i], wordX[i]);
-                }
-                Arrays.sort(pairs);
-                for(int i = 0; i < pairs.length; i++) {
-                    wordValues[i] = pairs[i].getNumber();
-                    wordX[i] = pairs[i].getText();
-                }
+                // 공부 시간 차트 그리기
+                drawStudyTimeChart();
 
-                drawBarChart(barChart, wordX, wordValues);
-
-//                timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
-//                timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
-//                if(timeX.length < 10 && timeX.length > 0) {
-//                    List<String> timeXList = new ArrayList<>();
-//                    List<Integer> timeValuesList = new ArrayList<>();
-//                    for(int i = 0; i < timeX.length; i ++) {
-//                        timeXList.add(timeX[i]);
-//                        timeValuesList.add(timeValues[i]);
-//                    }
-//                    for(int i = 0; i < 10 - timeX.length; i++) {
-//                        timeXList.add("0");
-//                        timeValuesList.add(0);
-//                    }
-//                    String[] newTimeX = new String[10];
-//                    int[] newTimeValues = new int[10];
-//                    int i = 0, j = 0;
-//                    for(String s : timeXList) {
-//                        newTimeX[i] = s;
-//                        i++;
-//                    }
-//                    for(int n : timeValuesList) {
-//                        newTimeValues[j] = n;
-//                        j++;
-//                    }
-//                    drawLineChart(timeLineChart, newTimeX, newTimeValues, "공부시간");
-//                } else if (timeX.length == 0) {
-//                    String[] newTimeX = new String[10];
-//                    int[] newTimeValues = new int[10];
-//                    for(int i = 0; i < 10; i++) {
-//                        newTimeX[i] = "0";
-//                        newTimeValues[i] = 0;
-//                    }
-//                    drawLineChart(timeLineChart, newTimeX, newTimeValues, "공부시간");
-//                } else {
-//                    drawLineChart(timeLineChart, timeX, timeValues, "공부시간");
-//                }
-
-                gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
-                doubleGradeValues = quizgrades.stream().mapToDouble(Quizgrade::getScore).toArray();
-                gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
-                if(gradeX.length < 10 && gradeX.length > 0) {
-                    List<String> gradeXList = new ArrayList<>();
-                    List<Integer> gradeValuesList = new ArrayList<>();
-                    for(int i = 0; i < gradeX.length; i ++) {
-                        gradeXList.add(gradeX[i]);
-                        gradeValuesList.add(gradeValues[i]);
-                        Log.d("퀴즈 시각화", "날짜: " + gradeX[i] + ", 점수 : " + gradeValues[i]);
-                    }
-                    for(int i = 0; i < 10 - gradeX.length; i++) {
-                        gradeXList.add("0");
-                        gradeValuesList.add(0);
-                    }
-                    String[] newGradeX = new String[10];
-                    int[] newGradeValues = new int[10];
-                    int i = 0, j = 0;
-                    for(String s : gradeXList) {
-                        newGradeX[i] = s;
-                        i++;
-                    }
-                    for(int n : gradeValuesList) {
-                        newGradeValues[j] = n;
-                        j++;
-                    }
-                    drawLineChart(gradeLineChart, 100, newGradeX, newGradeValues, "퀴즈 점수");
-                } else if (gradeX.length == 0) {
-                    String[] newGradeX = new String[10];
-                    int[] newGradeValues = new int[10];
-                    for(int i = 0; i < 10; i++) {
-                        newGradeX[i] = "0";
-                        newGradeValues[i] = 0;
-                    }
-                    drawLineChart(gradeLineChart, 100, newGradeX, newGradeValues, "퀴즈 점수");
-                } else {
-                    drawLineChart(gradeLineChart, 100, gradeX, gradeValues, "퀴즈 점수");
-                }
+                // 퀴즈 점수 차트 그리기
+                drawQuizGradeChart();
 
             } else {
                 Log.e(getClass().getName(), "LiveData 오류 발생");
             }
         });
+    }
 
-        // 임시코드 -> 프리퍼런스로부터 값 받아오기
-        preferencesHelper = new PreferencesHelper(inflater.getContext());
-        JSONArray dataArray = preferencesHelper.getDataArray();
-        String[] date = new String[dataArray.length()];
-        int[] durationTime = new int[dataArray.length()];
-        for(int i = 0; i < dataArray.length(); i++) {
-            try {
-                JSONObject data = dataArray.getJSONObject(i);
-                date[i] = data.getString("date");
-                durationTime[i] = data.getInt("durationTime");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+    private void drawKeywordsChart() {
+        wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
+        doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
+        wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 100)).toArray();
+
+        Pair[] pairs = new Pair[wordValues.length];
+        for(int i = 0; i < wordValues.length; i++) {
+            pairs[i] = new Pair(wordValues[i], wordX[i]);
         }
-        // 그래프를 그리기 위해 배열변수 2개 가공
-        String[] dateX = new String[10];
-        int[] durationTimeValues = new int[10];
-        if(date.length < 10 && date.length > 0) {
-            List<String> tempDateList = new ArrayList<>();
-            List<Integer> tempTimeValueList = new ArrayList<>();
-            for(int i = 0; i < date.length; i++) {
-                tempDateList.add(date[i]);
-                tempTimeValueList.add(durationTime[i]);
+        Arrays.sort(pairs);
+        for(int i = 0; i < pairs.length; i++) {
+            wordValues[i] = pairs[i].getNumber();
+            wordX[i] = pairs[i].getText();
+        }
+
+        drawBarChart(barChart, wordX, wordValues);
+    }
+
+    private void drawStudyTimeChart() {
+        timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
+        timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
+        if(timeX.length < 10 && timeX.length > 0) {
+            List<String> timeXList = new ArrayList<>();
+            List<Integer> timeValuesList = new ArrayList<>();
+            for(int i = 0; i < timeX.length; i ++) {
+                timeXList.add(timeX[i]);
+                timeValuesList.add(timeValues[i]);
             }
-            for(int i = 0; i < 10 - date.length; i++) {
-                tempDateList.add("0");
-                tempTimeValueList.add(0);
+            for(int i = 0; i < 10 - timeX.length; i++) {
+                timeXList.add("0");
+                timeValuesList.add(0);
             }
+            String[] newTimeX = new String[10];
+            int[] newTimeValues = new int[10];
             int i = 0, j = 0;
-            for(String d : tempDateList) {
-                dateX[i] = d;
+            for(String s : timeXList) {
+                newTimeX[i] = s;
                 i++;
             }
-            for(int t : tempTimeValueList) {
-                durationTimeValues[j] = t;
+            for(int n : timeValuesList) {
+                newTimeValues[j] = n;
                 j++;
             }
-            drawLineChart(timeLineChart, 30, dateX, durationTimeValues, "공부 시간");
-        } else if(date.length == 0) {
-            for(int i = 0; i < dateX.length; i++) {
-                dateX[i] = "0";
-                durationTimeValues[i] = 0;
+            drawLineChart(timeLineChart, 60, newTimeX, newTimeValues, "공부시간");
+        } else if (timeX.length == 0) {
+            String[] newTimeX = new String[10];
+            int[] newTimeValues = new int[10];
+            for(int i = 0; i < 10; i++) {
+                newTimeX[i] = "0";
+                newTimeValues[i] = 0;
             }
-            drawLineChart(timeLineChart, 30, dateX, durationTimeValues, "공부 시간");
+            drawLineChart(timeLineChart, 60, newTimeX, newTimeValues, "공부시간");
         } else {
-            drawLineChart(timeLineChart, 30, date, durationTime, "공부 시간");
+            drawLineChart(timeLineChart, 60, timeX, timeValues, "공부시간");
         }
+    }
 
-        return binding.getRoot();
+    private void drawQuizGradeChart() {
+        gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
+        doubleGradeValues = quizgrades.stream().mapToDouble(Quizgrade::getScore).toArray();
+        gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
+        if(gradeX.length < 10 && gradeX.length > 0) {
+            List<String> gradeXList = new ArrayList<>();
+            List<Integer> gradeValuesList = new ArrayList<>();
+            for(int i = 0; i < gradeX.length; i ++) {
+                gradeXList.add(gradeX[i]);
+                gradeValuesList.add(gradeValues[i]);
+                Log.d("퀴즈 시각화", "날짜: " + gradeX[i] + ", 점수 : " + gradeValues[i]);
+            }
+            for(int i = 0; i < 10 - gradeX.length; i++) {
+                gradeXList.add("0");
+                gradeValuesList.add(0);
+            }
+            String[] newGradeX = new String[10];
+            int[] newGradeValues = new int[10];
+            int i = 0, j = 0;
+            for(String s : gradeXList) {
+                newGradeX[i] = s;
+                i++;
+            }
+            for(int n : gradeValuesList) {
+                newGradeValues[j] = n;
+                j++;
+            }
+            drawLineChart(gradeLineChart, 100, newGradeX, newGradeValues, "퀴즈 점수");
+        } else if (gradeX.length == 0) {
+            String[] newGradeX = new String[10];
+            int[] newGradeValues = new int[10];
+            for(int i = 0; i < 10; i++) {
+                newGradeX[i] = "0";
+                newGradeValues[i] = 0;
+            }
+            drawLineChart(gradeLineChart, 100, newGradeX, newGradeValues, "퀴즈 점수");
+        } else {
+            drawLineChart(gradeLineChart, 100, gradeX, gradeValues, "퀴즈 점수");
+        }
     }
 
     private void setBarData(String[] dayX, int[] values) {
@@ -281,20 +258,24 @@ public class StatisticsFragment extends Fragment {
         xAxis.setGranularity(1f);
         xAxis.setTextSize(12f);
         xAxis.setGridLineWidth(25f);
-        xAxis.setGridColor(Color.parseColor("#80E5E5E5"));
+        xAxis.setGridColor(Color.parseColor("#ffffffff"));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X 축 데이터 표시 위치
 
         // YAxis(Right) (수평 막대 기준 위쪽) - 사이즈, 선 유무
         YAxis axisRight = barChart.getAxisRight();
         axisRight.setTextSize(15f);
         axisRight.setDrawLabels(false); // label 삭제
-        axisRight.setDrawGridLines(false);
-        axisRight.setDrawAxisLine(false);
+        axisRight.setDrawGridLines(true);
+        axisRight.setDrawAxisLine(true);
+        axisRight.setAxisMinimum(0f);
+        axisRight.setAxisMaximum(100f);
+        axisRight.setGranularity(0.1f);
+
 
         // YAxis(Left) (수평 막대 기준 아래쪽) - 선 유무, 데이터 최솟값/최댓값, label 유무
         YAxis axisLeft = barChart.getAxisLeft();
-        axisLeft.setDrawGridLines(true); // 기준선 활성화
-        axisLeft.setDrawAxisLine(true); // 축선 활성화
+        axisLeft.setDrawGridLines(false); // 기준선 활성화
+        axisLeft.setDrawAxisLine(false); // 축선 활성화
         axisLeft.setAxisMinimum(0f); // 최솟값
         axisLeft.setAxisMaximum(100f); // 최댓값
         axisLeft.setGranularity(0.1f); // 기준선 간격 설정

@@ -17,6 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 
 public class MyinfoViewModel extends ViewModel {
@@ -27,10 +28,6 @@ public class MyinfoViewModel extends ViewModel {
 
     public MyinfoViewModel() {
         apiService = ApiClient.getApiService();
-    }
-
-    public LiveData<UserInfoResponse> getUserInfoResponseLiveData() {
-        return userInfoResponseLiveData;
     }
 
     public LiveData<String> getErrorLiveData() {

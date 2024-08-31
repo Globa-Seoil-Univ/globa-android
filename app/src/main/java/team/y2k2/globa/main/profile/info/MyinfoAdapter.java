@@ -50,19 +50,13 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
         holder.name.setText(item.getName());
         holder.image.setImageResource(item.getImage());
 
-        /*
-        if(item.getActivity() == null) {
-            // 임시 | null 값은 로그아웃으로 처리합니다.
-            return;
-        }
-         */
-
         holder.layout.setOnClickListener(v -> {
             if(item.getActivity() != null) {
 
                 if(item.getTitle().toString().equals("이름")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
                     intent.putExtra("current_name", item.getName().toString());
+                    intent.putExtra("userId",item.getUserId().toString());
                     nicknameEditLauncher.launch(intent);
                 } else if(item.getTitle().toString().equals("회원탈퇴")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
@@ -74,7 +68,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                 if(item.getTitle().toString().equals("계정 코드")) {
                     // 계정코드 클립보드 복사
                     copyToClipboard(context, item.getName().toString());
-                    Toast.makeText(context, "복사완료!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "코드 복사완료!", Toast.LENGTH_SHORT).show();
                     Log.d(getClass().getName(), "클립보드 복사 완료");
                 } else if(item.getTitle().toString().equals("로그아웃")) {
                     // 로그아웃 로직
@@ -85,17 +79,21 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                     editor.apply();
                     Log.d(getClass().getName(), "프리퍼런스 리셋 완료 : " + preferences.getString("accessToken", ""));
                     Intent logoutIntent = new Intent(context, IntroActivity.class);
+                    logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(logoutIntent);
                 }
 
             }
 
         });
+
+
+
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemList != null ? itemList.size() : 0;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

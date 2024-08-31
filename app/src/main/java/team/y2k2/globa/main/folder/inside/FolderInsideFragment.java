@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -48,6 +49,7 @@ import team.y2k2.globa.main.folder.share.FolderShareActivity;
 public class FolderInsideFragment extends Fragment {
     FragmentFolderInsideBinding binding;
     FolderInsideModel model;
+    FolderInsideViewModel folderInsideViewModel;
 
     int folderId;
     String folderTitle;
@@ -65,19 +67,22 @@ public class FolderInsideFragment extends Fragment {
         setBundleParams();
         loadFolderInside();
 
+        folderInsideViewModel = new ViewModelProvider(this).get(FolderInsideViewModel.class);
+
         binding.textviewFolderInsideTitle.setText(folderTitle);
 
         setPreferences();
 
         nameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if(result.getResultCode() == Activity.RESULT_OK) {
+            if(result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
-                if(data != null && data.hasExtra("name")) {
+                if (data != null && data.hasExtra("name")) {
                     String name = data.getStringExtra("name");
                     binding.textviewFolderInsideTitle.setText(name);
                     Toast.makeText(FolderInsideFragment.this.getContext(), "이름 변경 완료", Toast.LENGTH_SHORT).show();
                 }
-
+            } else if(result.getResultCode() == RESULT_CANCELED) {
+                Log.d("폴더 이름 변경", "이름변경 취소됨 (RESULT_CANCLED");
             }
         });
 
@@ -153,7 +158,7 @@ public class FolderInsideFragment extends Fragment {
         RelativeLayout deleteButton = bottomSheetView.findViewById(R.id.relativelayout_more_delete);
 
         nameEditButton.setOnClickListener(v -> {
-            // 이름 변경 클릭
+            // 이름 변경 버튼
             bottomSheetDialog.dismiss();
             Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
             intent.putExtra("folderTitle", binding.textviewFolderInsideTitle.getText().toString());
@@ -161,18 +166,21 @@ public class FolderInsideFragment extends Fragment {
             nameEditLauncher.launch(intent);
         });
         shareButton.setOnClickListener(v -> {
+            // 공유 버튼
             Intent toShareIntent = new Intent(getActivity(), FolderShareActivity.class);
             toShareIntent.putExtra("folderId", folderId);
             startActivity(toShareIntent);
             bottomSheetDialog.dismiss();
         });
         authorityButton.setOnClickListener(v -> {
+            // 권한 관리 버튼
             Intent toPermissionIntent = new Intent(getActivity(), FolderPermissionActivity.class);
             toPermissionIntent.putExtra("folderId", folderId);
             startActivity(toPermissionIntent);
             bottomSheetDialog.dismiss();
         });
         deleteButton.setOnClickListener(v -> {
+            // 삭제 버튼
             bottomSheetDialog.dismiss();
             showSecondBottomSheetDialog();
         });
@@ -193,53 +201,39 @@ public class FolderInsideFragment extends Fragment {
         });
 
         confirmButton.setOnClickListener(v -> {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(API_BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            apiService = retrofit.create(ApiService.class);
-
-            SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
-            String accessToken = "Bearer " + preferences.getString("accessToken", "");
-
-            apiService.requestDeleteFolder(folderId, "application/json", accessToken).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if(response.isSuccessful()) {
-                        Log.d(getClass().getName(), "폴더 삭제 성공");
-                    } else {
-                        Log.d(getClass().getName(), "폴더 삭제 실패 : " + response.code());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Log.d(getClass().getName(), "request 실패");
-                }
-            });
-
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .remove(FolderInsideFragment.this)
-                    .commit();
-
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    FolderFragment folderFragment = new FolderFragment();
-
-                    requireActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fcv_main, folderFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-            });
+            deleteFolder();
 
             bottomSheetDialog.dismiss();
         });
 
         bottomSheetDialog.show();
 
+    }
+
+    private void deleteFolder() {
+        folderInsideViewModel.deleteFolder(folderId);
+        folderInsideViewModel.getResponseCodeLiveData().observe(getViewLifecycleOwner(), responseCode -> {
+            if(responseCode == 200) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .remove(FolderInsideFragment.this)
+                        .commit();
+
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        FolderFragment folderFragment = new FolderFragment();
+
+                        requireActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fcv_main, folderFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+            } else {
+                Toast.makeText(getContext(), "폴더 삭제 실패", Toast.LENGTH_SHORT).show();
+                Log.d("폴더 삭제 실패", "폴더 삭제 실패 코드 : " + responseCode);
+            }
+        });
     }
 
 }

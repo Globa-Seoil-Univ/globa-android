@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -94,8 +95,8 @@
         android:id="@+id/textview_docs_more_docs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="문서"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
@@ -106,11 +107,10 @@
 
     <RelativeLayout
         android:id="@+id/relativelayout_docs_more_rename"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/textview_docs_more_docs"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_docs">
 
         <ImageButton
@@ -134,11 +134,10 @@
 
     <RelativeLayout
         android:id="@+id/relativelayout_docs_more_move"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_more_rename"
         app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_rename">
 
         <ImageButton
@@ -162,12 +161,10 @@
 
     <RelativeLayout
         android:id="@+id/relativelayout_docs_more_delete"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_more_move"
         app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_move">
 
         <ImageButton
@@ -193,7 +190,7 @@
         android:id="@+id/textview_docs_more_share_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:text="공유"
         android:textSize="@dimen/normal"
@@ -204,12 +201,10 @@
 
     <RelativeLayout
         android:id="@+id/relativelayout_docs_more_share"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/textview_docs_more_share_title"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_share_title">
 
         <ImageButton
@@ -234,7 +229,7 @@
         android:id="@+id/textview_docs_more_etc_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:text="기타"
         android:textSize="@dimen/normal"
@@ -245,12 +240,10 @@
 
     <RelativeLayout
         android:id="@+id/relativelayout_docs_more_statistics"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/textview_docs_more_etc_title"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_etc_title">
 
         <ImageButton
@@ -273,12 +266,10 @@
 
     <RelativeLayout
         android:id="@+id/relativelayout_docs_more_quiz"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_more_statistics"
         app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_statistics">
 
         <ImageButton

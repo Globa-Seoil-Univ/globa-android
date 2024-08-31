@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
@@ -23,18 +25,15 @@ import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerMod
 public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPermissionItemAdapter.AdapterViewHolder> {
     ArrayList<FolderPermissionItem> items;
     FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
-    private OnItemLongClickListener longClickListener;
+    private onItemLongClickListener longClickListener;
 
-    public interface OnItemLongClickListener {
-        void onItemLongClick(View view, int position);
+    public interface onItemLongClickListener {
+        void onItemLongClick(int position);
     }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
-        this.longClickListener = listener;
-    }
-
-    public FolderPermissionItemAdapter(ArrayList<FolderPermissionItem> items) {
+    public FolderPermissionItemAdapter(ArrayList<FolderPermissionItem> items, onItemLongClickListener longClickListener) {
         this.items = items;
+        this.longClickListener = longClickListener;
     }
 
     @NonNull
@@ -49,8 +48,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
         FolderPermissionItem item = items.get(position);
 
         Glide.with(holder.itemView.getContext())
-                .load(item.getProfileImageUrl())
-                .placeholder(R.mipmap.ic_launcher)
+                .load(convertGsToHttps(item.getProfileImageUrl()))
                 .error(R.mipmap.ic_launcher)
                 .into(holder.profileImage);
 
@@ -60,8 +58,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
         holder.itemView.setOnLongClickListener(v -> {
             Log.d("롱클릭", "롱클릭 발생!");
             if(longClickListener != null) {
-                longClickListener.onItemLongClick(v, position);
-                remove(position);
+                longClickListener.onItemLongClick(position);
             }
 
             return true;
@@ -122,5 +119,34 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
             return spinner.getSelectedItem().toString();
         }
 
+    }
+
+    public static String convertGsToHttps(String gsUrl) {
+        if (!gsUrl.startsWith("gs://")) {
+            throw new IllegalArgumentException("Invalid gs:// URL");
+        }
+
+        // Extract bucket name and path
+        int bucketEndIndex = gsUrl.indexOf("/", 5); // Find the end of bucket name
+        if (bucketEndIndex == -1 || bucketEndIndex == gsUrl.length() - 1) {
+            throw new IllegalArgumentException("Invalid gs:// URL format");
+        }
+
+        String bucketName = gsUrl.substring(5, bucketEndIndex);
+        String filePath = gsUrl.substring(bucketEndIndex + 1);
+
+        // URL encode the file path
+        String encodedFilePath;
+        try {
+            encodedFilePath = URLEncoder.encode(filePath, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("URL encoding failed", e);
+        }
+
+        // Construct the HTTPS URL
+        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
+                "/o/" + encodedFilePath + "?alt=media";
+
+        return httpsUrl;
     }
 }

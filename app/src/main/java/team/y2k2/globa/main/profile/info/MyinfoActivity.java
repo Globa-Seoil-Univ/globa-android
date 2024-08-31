@@ -51,9 +51,6 @@ public class MyinfoActivity extends AppCompatActivity {
     private MyinfoAdapter myinfoAdapter;
     private MyinfoViewModel myInfoViewModel;
     private ActivityResultLauncher<Intent> nicknameEditLauncher;
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference profileImageRef;
-    private byte[] imageBytes;
     private String userId;
 
     @Override
@@ -72,6 +69,13 @@ public class MyinfoActivity extends AppCompatActivity {
         loadUserInfoList(myInfoViewModel);
 
         userId = getIntent().getStringExtra("userId");
+
+        changeUserProfileImage(userId);
+
+    }
+
+    // 이미지 클릭시 변경
+    public void changeUserProfileImage(String userId) {
 
         // 이미지 선택 (PhotoPicker Android 14)
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -97,9 +101,9 @@ public class MyinfoActivity extends AppCompatActivity {
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                     .build());
         });
-
     }
 
+    // 초기 화면 구성
     public void loadUserInfoList(MyinfoViewModel myInfoViewModel) {
         // 리사이클러뷰 레이아웃 매니저 설정
         binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyinfoActivity.this));
@@ -112,7 +116,6 @@ public class MyinfoActivity extends AppCompatActivity {
 
         if(profile != null) {
             Glide.with(this).load(profile)
-                    //.placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(binding.imageviewMyinfoPhoto);
         } else {
@@ -123,10 +126,10 @@ public class MyinfoActivity extends AppCompatActivity {
             Log.d("이미지 로드 오류", "profile 값이 null입니다");
         }
 
-        itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, new NicknameEditActivity()));
-        itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));
-        itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, null));
-        itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, new WithdrawActivity()));
+        itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_forward, userId, new NicknameEditActivity()));
+        itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, "", null));
+        itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_forward, "", null));
+        itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_forward, "", new WithdrawActivity()));
 
         // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
         nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -137,6 +140,8 @@ public class MyinfoActivity extends AppCompatActivity {
                     itemList.get(0).setName(updatedName);
                     myinfoAdapter.notifyDataSetChanged();
                 }
+            } else {
+                Log.d("이름변경 오류", "registerForActivity 오류");
             }
         });
 
@@ -145,9 +150,11 @@ public class MyinfoActivity extends AppCompatActivity {
         // 라시아클러 뷰에 어뎁터 설정
         binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
 
-        // 에러 발생
+        // API 에러 발생
         myInfoViewModel.getErrorLiveData().observe(MyinfoActivity.this, errorMessge -> {
-            Toast.makeText(getApplicationContext(), errorMessge, Toast.LENGTH_SHORT).show();
+            if(errorMessge != null) {
+                Log.d("이미지 api 오류", "이미지 api Request 실패");
+            }
         });
 
     }

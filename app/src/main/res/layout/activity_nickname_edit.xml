@@ -51,7 +51,7 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_nicknameedit_header"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginLeft="16dp" />
 
     <EditText
         android:id="@+id/edittext_nicknameedit_inputname"
@@ -61,12 +61,13 @@
         android:textSize="@dimen/large"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
+        android:backgroundTint="@color/primary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_nicknameedit_announce"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/button_nickname_edit_cancel"

@@ -19,6 +19,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.api.model.entity.Quiz;
 import team.y2k2.globa.api.model.entity.QuizResult;
+import team.y2k2.globa.api.model.request.CommentRequest;
 import team.y2k2.globa.api.model.request.FirstCommentRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
@@ -30,6 +31,7 @@ import team.y2k2.globa.api.model.request.NicknameEditRequest;
 import team.y2k2.globa.api.model.request.NotificationRequest;
 import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
+import team.y2k2.globa.api.model.request.SubCommentRequest;
 import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.request.WithdrawRequest;
 import team.y2k2.globa.api.model.response.CommentResponse;
@@ -45,6 +47,7 @@ import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
+import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.response.UserSearchResponse;
@@ -55,8 +58,8 @@ public interface ApiService {
 
 //    String API_BASE_URL = "http://1.209.165.82:8080";
 //    String API_BASE_URL = "https://1.209.165.82:8080";
-    String API_BASE_URL = "http://192.168.219.111:8080";
-//    String API_BASE_URL = "https://globa.tetraplace.com";
+//    String API_BASE_URL = "http://192.168.219.111:8080";
+    String API_BASE_URL = "https://globa.tetraplace.com";
     /**
      * 토큰 갱신
      */
@@ -381,11 +384,16 @@ public interface ApiService {
             @Header("Authorization") String authorization
     );
 
-
+    /**
+     * 알림 가져오기
+     */
     @GET("/notification")
-    Call<NotificationResponse> requestGetAllNotification(
+    Call<NotificationResponse> requestGetNotification(
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
+            @Header("Authorization") String authorization,
+            @Query("page") int page,
+            @Query("count") int count,
+            @Query("type") String type
     );
 
 
@@ -427,8 +435,8 @@ public interface ApiService {
      */
     @GET("/folder/{folder_id}/record/{record_id}/analysis")
     Call<StatisticsResponse> requestDocStatistics(
-            @Path("folder_id") int folderId,
-            @Path("record_id") int recordId,
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
     );
@@ -446,18 +454,23 @@ public interface ApiService {
             @Body FirstCommentRequest request
     );
 
+    /**
+     * 댓글 작성 하기 (최초 X)
+     */
+    @POST("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment")
+    Call<Void> requestInsertComment(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Path("section_id") String sectionId,
+            @Path("highlight_id") String highlightId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body CommentRequest request
+    );
+
 
     /**
      * 댓글 읽기
-     * @param folderId
-     * @param recordId
-     * @param sectionId
-     * @param highlightId
-     * @param contentType
-     * @param authorization
-     * @param page
-     * @param count
-     * @return
      */
     @GET("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment")
     Call<CommentResponse> getComments(
@@ -473,12 +486,6 @@ public interface ApiService {
 
     /**
      * 댓글 삭제
-     * @param folderId
-     * @param recordId
-     * @param sectionId
-     * @param highlightId
-     * @param commentId
-     * @return
      */
     @DELETE("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{comment_id}")
     Call<Void> deleteComment(
@@ -489,6 +496,52 @@ public interface ApiService {
             @Path("comment_id") String commentId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
+    );
+
+    /**
+     * 댓글 수정
+     */
+    @PATCH("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{comment_id}")
+    Call<Void> updateComment(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Path("section_id") String sectionId,
+            @Path("highlight_id") String highlightId,
+            @Path("comment_id") String commentId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body CommentRequest request
+    );
+
+    /**
+     * 대댓글 작성하기
+     */
+    @POST("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{parent_id}")
+    Call<Void> requestInsertSubComment(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Path("section_id") String sectionId,
+            @Path("highlight_id") String highlightId,
+            @Path("parent_id") String parentId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body SubCommentRequest request
+    );
+
+    /**
+     * 대댓글 가져오기
+     */
+    @GET("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{parent_id}")
+    Call<SubCommentResponse> getSubComments(
+            @Path("folder_id") String folderId,
+            @Path("record_id") String recordId,
+            @Path("section_id") String sectionId,
+            @Path("highlight_id") String highlightId,
+            @Path("parent_id") String parentId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("page") int page,
+            @Query("count") int count
     );
 
     /**

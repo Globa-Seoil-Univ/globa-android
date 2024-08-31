@@ -20,11 +20,11 @@
             android:id="@+id/button_foldershare_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="24dp"
             android:background="@drawable/header_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp" />
 
         <TextView
             android:id="@+id/textview_foldershare_confirm"
@@ -32,12 +32,12 @@
             android:layout_height="wrap_content"
             android:text="적용"
             android:fontFamily="@font/notosans_regular"
-            android:textColor="@color/primary"
+            android:textColor="@color/gray"
             android:textSize="@dimen/large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginRight="20dp" />
+            android:layout_marginEnd="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -46,28 +46,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="공유할 멤버를 선택해주세요"
-        android:textSize="@dimen/big"
+        android:textSize="@dimen/large"
         android:fontFamily="@font/notosans_bold"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_foldershare_header"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginStart="16dp" />
 
     <EditText
         android:id="@+id/edittext_foldershare_inputname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="유저 코드 6글자 입력"
-        android:textColorHint="@color/gray"
-        android:textSize="@dimen/large"
+        android:textColorHint="@color/lightGray"
+        android:textSize="@dimen/normal"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_foldershare_announce"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"/>
 
     <Button
         android:id="@+id/button_foldershare_cancel"
@@ -79,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/edittext_foldershare_inputname"
         app:layout_constraintEnd_toEndOf="@+id/edittext_foldershare_inputname"
         android:layout_marginBottom="4dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginEnd="10dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintlayout_foldershare_search"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,4 +27,5 @@
         app:layout_constraintTop_toBottomOf="@id/textview_item_notification_inquiry_title"
         app:layout_constraintStart_toStartOf="@id/textview_item_notification_inquiry_title"
         tools:text="내용입니다."/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

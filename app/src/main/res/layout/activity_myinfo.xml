@@ -45,11 +45,11 @@
         android:id="@+id/imageview_myinfo_photo"
         android:layout_width="110dp"
         android:layout_height="110dp"
-        android:layout_marginTop="20dp"
         android:src="@mipmap/ic_launcher_round"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_myinfo_header"/>
+        app:layout_constraintTop_toBottomOf="@+id/layout_myinfo_header"
+        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/button_myinfo_changephoto"
@@ -65,14 +65,10 @@
         android:id="@+id/recyclerview_myinfo_items"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scrollbarFadeDuration="0"
-        android:scrollbarSize="5dp"
-        android:scrollbarThumbVertical="@android:color/darker_gray"
-        android:scrollbars="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageview_myinfo_photo"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
