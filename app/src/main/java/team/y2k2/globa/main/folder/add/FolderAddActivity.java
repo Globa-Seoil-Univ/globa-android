@@ -12,7 +12,6 @@ import team.y2k2.globa.databinding.ActivityFolderAddBinding;
 
 public class FolderAddActivity extends AppCompatActivity {
     ActivityFolderAddBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +27,7 @@ public class FolderAddActivity extends AppCompatActivity {
 
         binding.textviewFolderAddConfirm.setOnClickListener(v -> {
             ApiClient apiClient = new ApiClient(this);
-
             String title = binding.edittextFolderaddInputname.getText().toString();
-//            List<ShareTarget> shareTargetList = new ArrayList<>();
-//            shareTargetList.add(new ShareTarget(uid, "w"));
-
             apiClient.requestInsertFolder(title);
             finish();
         });

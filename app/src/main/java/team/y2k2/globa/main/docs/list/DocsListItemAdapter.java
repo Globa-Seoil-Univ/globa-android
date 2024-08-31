@@ -3,10 +3,10 @@ package team.y2k2.globa.main.docs.list;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,24 +40,20 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
     @NonNull
     @Override
-    public DocsListItemAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document, parent, false);
-        return new DocsListItemAdapter.AdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DocsListItemAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         String title = items.get(position).getTitle();
         String datetime = getDateFormat(items.get(position).getDatetime());
 
         holder.title.setText(title);
         holder.datetime.setText(datetime);
 
-        holder.user_1.setImageResource(items.get(position).getImage_1());
-        holder.user_2.setImageResource(items.get(position).getImage_2());
-        holder.user_3.setImageResource(items.get(position).getImage_3());
-
-        BottomSheetDialog moreBottomSheet = new BottomSheetDialog(holder.more.getContext());
+        BottomSheetDialog moreBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
 
         moreBottomSheet.setContentView(R.layout.dialog_more_docs);
@@ -89,7 +85,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             moreBottomSheet.show();
         });
 
-        holder.more.setOnClickListener(view -> {
+        holder.itemView.setOnLongClickListener(view -> {
             moreBottomSheet.show();
 
             RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
@@ -106,12 +102,12 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
                 intent.putExtra("title", items.get(position).getTitle());
                 holder.itemView.getContext().startActivity(intent);
             });
-//            RelativeLayout move = moreBottomSheet.findViewById(R.id.relativelayout_more_move);
             RelativeLayout delete = moreBottomSheet.findViewById(R.id.relativelayout_more_delete);
             delete.setOnClickListener(d1 -> {
                 moreBottomSheet.dismiss();
                 bottomSheetDialog.show();
             });
+            return true;
         });
 
         // 키워드 어뎁터
@@ -121,10 +117,6 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
         if(items.get(position).getKeywords().size() == 0) {
             // 아직 STT 트렌젝션이 완료되지 않았을 때.
-            holder.more.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.user_layout_1.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.user_layout_2.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.user_layout_3.setLayoutParams(new LinearLayout.LayoutParams(0,0));
         }
         else {
             holder.processing.setLayoutParams(new LinearLayout.LayoutParams(0,0));
@@ -147,17 +139,8 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         TextView datetime;
         RecyclerView keywordRecyclerView;
         ConstraintLayout layout;
-        ImageView more;
-
         TextView processing;
         LottieAnimationView lottieAnimationView;
-
-        LinearLayout user_layout_1;
-        LinearLayout user_layout_2;
-        LinearLayout user_layout_3;
-        ImageView user_1;
-        ImageView user_2;
-        ImageView user_3;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -167,19 +150,9 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             layout = itemView.findViewById(R.id.constraintlayout_item_main_document);
 
             keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
-            more = itemView.findViewById(R.id.imageview_folder_inside_more);
 
             processing = itemView.findViewById(R.id.textview_main_document_processing);
             lottieAnimationView = itemView.findViewById(R.id.lottie_main_document_record);
-
-
-            user_layout_1 = itemView.findViewById(R.id.linearlayout_document_user_1);
-            user_layout_2 = itemView.findViewById(R.id.linearlayout_document_user_2);
-            user_layout_3 = itemView.findViewById(R.id.linearlayout_document_user_3);
-
-            user_1 = itemView.findViewById(R.id.imageview_document_user_1);
-            user_2 = itemView.findViewById(R.id.imageview_document_user_2);
-            user_3 = itemView.findViewById(R.id.imageview_document_user_3);
         }
     }
 
@@ -193,9 +166,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         String outputDate = "";
 
         try {
-            // 입력 날짜 문자열을 Date 객체로 파싱
             date = inputFormat.parse(datetime);
-            // Date 객체를 원하는 출력 형식의 문자열로 변환
             outputDate = outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();

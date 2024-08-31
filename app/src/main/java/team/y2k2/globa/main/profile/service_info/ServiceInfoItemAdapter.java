@@ -23,13 +23,13 @@ public class ServiceInfoItemAdapter extends RecyclerView.Adapter<ServiceInfoItem
 
     @NonNull
     @Override
-    public ServiceInfoItemAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service_info,parent,false);
-        return new ServiceInfoItemAdapter.AdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ServiceInfoItemAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         holder.title.setText(items.get(position).getTitle());
         holder.description.setText(items.get(position).getDescription());
 

@@ -40,9 +40,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private static final int TYPE_UPLOAD_FAILED = 7;
     private static final int TYPE_INQUIRY_ANSWERED = 8;
 
-
     NotificationModel items;
-
 
     private int createViewHolderCount = 0; // 호출 횟수를 추적하는 변수
 
@@ -52,7 +50,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @NonNull
     @Override
-    public NotificationAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         Log.d(getClass().getName(), "onCreateViewHolder 시작" + viewType);
 
@@ -66,38 +64,38 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         switch (type) {
             case TYPE_NOTIFICATION:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_inquiry, parent, false);
-                return new NotificationAdapter.AdapterViewHolder(view, TYPE_NOTIFICATION);
+                return new AdapterViewHolder(view, TYPE_NOTIFICATION);
 
             case TYPE_SHARE_INVITE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_share, parent, false);
-                return new NotificationAdapter.AdapterViewHolder(view, TYPE_SHARE_INVITE);
+                return new AdapterViewHolder(view, TYPE_SHARE_INVITE);
             case TYPE_SHARED_FOLDER_ADD_RECORD:
                 break;
 
             case TYPE_SHARED_FOLDER_ADD_USER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_share, parent, false);
-                return new NotificationAdapter.AdapterViewHolder(view, TYPE_SHARED_FOLDER_ADD_USER);
+                return new AdapterViewHolder(view, TYPE_SHARED_FOLDER_ADD_USER);
             case TYPE_SHARED_FOLDER_ADD_COMMENT:
                 break;
 
             case TYPE_UPLOAD_SUCCESS:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_upload_success, parent, false);
-                return new NotificationAdapter.AdapterViewHolder(view, TYPE_UPLOAD_SUCCESS);
+                return new AdapterViewHolder(view, TYPE_UPLOAD_SUCCESS);
             case TYPE_UPLOAD_FAILED:
                 break;
 
             case TYPE_INQUIRY_ANSWERED:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_inquiry, parent, false);
-                return new NotificationAdapter.AdapterViewHolder(view, TYPE_INQUIRY_ANSWERED);
+                return new AdapterViewHolder(view, TYPE_INQUIRY_ANSWERED);
         }
 
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_inquiry, parent, false);
-        return new NotificationAdapter.AdapterViewHolder(view, TYPE_NOTIFICATION);
+        return new AdapterViewHolder(view, TYPE_NOTIFICATION);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotificationAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         Log.d(getClass().getName(),  "onBindViewHolder 시작 ");
 
         switch (holder.type) {

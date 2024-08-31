@@ -1,64 +1,30 @@
 package team.y2k2.globa.docs;
 
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.MediaController;
-import android.widget.SeekBar;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.util.Util;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
-import team.y2k2.globa.docs.detail.DocsDetailAdapter;
-import team.y2k2.globa.docs.more.DocsMoreActivity;
-import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
-import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
     public ActivityDocsBinding binding;
-    DocsModel docsModel;
-    DocsSummaryModel docsSummaryModel;
-    String title;
-    String folderId;
-    String recordId;
-    String folderTitle;
-
-    String audioUrl;
+    DocsViewModel viewModel;
     private SimpleExoPlayer player;
-
-    DocsDetailAdapter detailAdapter;
-    DocsSummaryAdapter summaryAdapter;
-    Boolean isMusicStarted;
 
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable updateSeekbarRunnable;
@@ -79,18 +45,19 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         Date date = new Date(startTime);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         startDate = dateFormat.format(date);
-        Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
+        // Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
 
+        viewModel = new ViewModelProvider(this).get(DocsViewModel.class);
         player = new SimpleExoPlayer.Builder(this).build();
 
-        Intent intent = getIntent();
 
-        title = intent.getStringExtra("title").toString();
-        folderId = intent.getStringExtra("folderId").toString();
-        recordId = intent.getStringExtra("recordId").toString();
+        viewModel.setActivity(this);
+        viewModel.setIntent(getIntent());
+        viewModel.setPlayer(player);
+        viewModel.setBinding(binding);
+        viewModel.getResponse();
 
-        binding.textviewDocsTitle.setText(title);
-        getResponse();
+        binding.textviewDocsTitle.setText(viewModel.getTitle());
 
         binding.imagebuttonDocsBack.setOnClickListener(v -> {
             player.stop();
@@ -98,13 +65,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         });
 
         binding.imageviewDocsMore.setOnClickListener(v -> {
-            Intent intent1 = new Intent(this, DocsMoreActivity.class);
-            intent1.putExtra("title", title);
-            intent1.putExtra("recordId", recordId);
-
-            intent1.putExtra("folderId", folderId);
-            intent1.putExtra("folderTitle", folderTitle);
-            startActivity(intent1);
+            startActivity(viewModel.getDocsMoreIntent());
         });
 
         binding.buttonDocsDescription.setOnClickListener(v -> {
@@ -118,108 +79,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         setContentView(binding.getRoot());
     }
 
-    public void loadAudio() {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-        StorageReference audioRef = storageRef.child(audioUrl);
-
-        audioRef.getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String audioUrl = uri.toString();
-
-                        player.setMediaItem(MediaItem.fromUri(audioUrl));
-                        player.prepare();
-
-                        player.addListener(new Player.Listener() {
-                            @Override
-                            public void onPlaybackStateChanged(int playbackState) {
-                                if (playbackState == Player.STATE_READY) {
-                                    Log.d(getClass().getName(), player.getDuration() + " sec");
-                                    binding.seekbarAudioProgress.setMax((int) player.getDuration());
-                                    binding.textviewDocumentAudioEndTime.setText(formatDuration((int) player.getDuration()));
-                                    binding.textviewDocumentAudioNowTime.setText(formatDuration(0));
-
-                                    binding.lottieAudioDownload.setVisibility(View.INVISIBLE);
-
-                                    binding.imagebuttonDocumentAudioPlay.setVisibility(View.VISIBLE);
-                                    binding.imageviewDocumentReplay.setVisibility(View.VISIBLE);
-                                    binding.imageviewDocumentForward.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        });
-
-                        isMusicStarted = false;
-
-                        binding.imagebuttonDocumentAudioPlay.setOnClickListener(v -> {
-                            if (!isMusicStarted) {
-                                isMusicStarted = true;
-                                binding.imagebuttonDocumentAudioPlay.setImageResource(R.drawable.docs_pause);
-                                player.play();
-                                startUpdatingSeekBar();
-
-                            } else {
-                                isMusicStarted = false;
-                                player.pause();
-                                binding.imagebuttonDocumentAudioPlay.setImageResource(R.drawable.docs_play);
-                                stopUpdatingSeekBar();
-                            }
-                        });
-
-                        binding.imageviewDocumentForward.setOnClickListener(v -> {
-                            int currentPosition = (int) player.getCurrentPosition();
-                            int forwardPosition = currentPosition + 5000;
-
-                            if (player.getDuration() <= forwardPosition) {
-                                forwardPosition = (int) player.getDuration();
-                            }
-
-                            binding.seekbarAudioProgress.setProgress(forwardPosition);
-                            binding.textviewDocumentAudioNowTime.setText(formatDuration(forwardPosition));
-                            player.seekTo(forwardPosition);
-                        });
-
-                        binding.imageviewDocumentReplay.setOnClickListener(v -> {
-                            int currentPosition = (int) player.getCurrentPosition();
-                            int replayPosition = currentPosition - 5000;
-
-                            if (replayPosition < 0) {
-                                replayPosition = 0;
-                            }
-
-                            binding.seekbarAudioProgress.setProgress(replayPosition);
-                            binding.textviewDocumentAudioNowTime.setText(formatDuration(replayPosition));
-                            player.seekTo(replayPosition);
-                        });
-
-                        binding.seekbarAudioProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                            @Override
-                            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                if (fromUser) {
-                                    binding.textviewDocumentAudioNowTime.setText(formatDuration(progress));
-                                    player.seekTo(progress);
-                                }
-                            }
-
-                            @Override
-                            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-                            @Override
-                            public void onStopTrackingTouch(SeekBar seekBar) {}
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.e("FirebaseStorage", "다운로드 URL 가져오기 실패", exception);
-                    }
-                });
-    }
-
     public void setDuration(int second) {
-
         int position = second * 1000;
 
         if (player.getDuration() <= position) {
@@ -237,7 +97,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         binding.buttonDocsDescription.setTextColor(Color.BLACK);
         binding.buttonDocsDescription.setBackgroundResource(R.drawable.main_button);
 
-        binding.recyclerviewDocsDetail.setAdapter(summaryAdapter);
+        binding.recyclerviewDocsDetail.setAdapter(viewModel.getSummaryAdapter());
         binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
     }
 
@@ -247,30 +107,11 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         binding.buttonDocsSummary.setTextColor(Color.BLACK);
         binding.buttonDocsSummary.setBackgroundResource(R.drawable.main_button);
 
-        binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
+        binding.recyclerviewDocsDetail.setAdapter(viewModel.getDetailAdapter());
         binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
     }
 
-    public void getResponse() {
-        ApiClient apiClient = new ApiClient(this);
 
-        DocsDetailResponse response = apiClient.requestGetDocumentDetail(folderId, recordId);
-
-        docsModel = new DocsModel(response.getSections());
-        detailAdapter = new DocsDetailAdapter(docsModel.getDetailItems(), DocsActivity.this);
-        folderTitle = response.getFolder().getTitle();
-
-
-        binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
-        binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-
-        docsSummaryModel = new DocsSummaryModel(response.getSections());
-        summaryAdapter = new DocsSummaryAdapter(docsSummaryModel.getItems());
-
-        audioUrl = response.getPath();
-
-        loadAudio();
-    }
 
     public static String formatDuration(int durationMillis) {
         int hours = (durationMillis / 1000) / 3600;
@@ -340,7 +181,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         return player.getAudioSessionId();
     }
 
-    private void startUpdatingSeekBar() {
+    public void startUpdatingSeekBar() {
         updateSeekbarRunnable = new Runnable() {
             @Override
             public void run() {
@@ -355,11 +196,9 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         handler.post(updateSeekbarRunnable);
     }
 
-    private void stopUpdatingSeekBar() {
+    public void stopUpdatingSeekBar() {
         handler.removeCallbacks(updateSeekbarRunnable);
     }
-
-
 
     @Override
     protected void onPause() {
@@ -390,15 +229,15 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         endTime = System.currentTimeMillis();
         long durationMilliSecond = endTime - startTime;
         int durationMinute = (int)(durationMilliSecond / 60000);
-        Log.d("시간", "열려 있던 시간(분): " + durationMinute);
+//        Log.d("시간", "열려 있던 시간(분): " + durationMinute);
         preferencesHelper.addData(startDate, durationMinute);
     }
 
     public String getFolderId() {
-        return folderId;
+        return viewModel.getFolderId();
     }
 
     public String getRecordId() {
-        return recordId;
+        return viewModel.getRecordId();
     }
 }

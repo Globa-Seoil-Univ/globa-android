@@ -132,6 +132,16 @@
                         android:textSize="28dp" />
 
                     <ImageButton
+                        android:id="@+id/imagebutton_main_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:src="@drawable/search"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginRight="60dp"
+                        android:layout_alignParentRight="true"/>
+
+                    <ImageButton
                         android:id="@+id/imagebutton_main_notification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

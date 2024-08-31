@@ -58,11 +58,11 @@ public class InquiryDetailActivity extends AppCompatActivity {
                     binding.textviewItemInquiryTitle.setText(inquiryDetailResponse.getTitle());
                     binding.textviewItemInquiryDescription.setText(inquiryDetailResponse.getContent());
                     binding.textviewItemInquiryDatetime.setText(inquiryDetailResponse.getCreatedTime());
-
-                    Log.d("Notification Inquiry", "성공 : " + response.code());
                 } else {
                     // 서버로부터 실패 응답을 받았을 때 처리할 내용
-                    Log.d("Notification", "실패 : " + response.code() + " | " + response);
+                    binding.textviewItemInquiryTitle.setText("Error code : 401");
+                    binding.textviewItemInquiryDescription.setText("잘못된 접근입니다.");
+                    binding.textviewItemInquiryDatetime.setText("");
                 }
             }
             @Override

@@ -21,13 +21,13 @@ public class DocsKeywordAdapter extends RecyclerView.Adapter<DocsKeywordAdapter.
 
     @NonNull
     @Override
-    public DocsKeywordAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_keyword, parent, false);
-        return new DocsKeywordAdapter.AdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DocsKeywordAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         holder.keyword.setText(items.get(position).getKeyword());
     }
 

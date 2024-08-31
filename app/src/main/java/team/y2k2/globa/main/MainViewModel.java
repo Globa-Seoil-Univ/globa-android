@@ -1,7 +1,10 @@
 package team.y2k2.globa.main;
 
+import static team.y2k2.globa.main.MainModel.PRF_RECORD_NAME;
+import static team.y2k2.globa.main.MainModel.PRF_RECORD_PATH;
 import static team.y2k2.globa.main.MainModel.REQUEST_CODE_PICK_RECORD;
 import static team.y2k2.globa.main.MainModel.REQUEST_CODE_UPLOAD_RECORD;
+import static team.y2k2.globa.main.MainModel.TYPE_AUDIO;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,8 +28,9 @@ public class MainViewModel extends ViewModel {
     MainActivity activity;
     MainModel model;
     MainFragment mainFragment;
-    int currentItem = R.id.item_main_main;
-
+    StatisticsFragment statisticsFragment;
+    ProfileFragment profileFragment;
+    FolderFragment folderFragment;
 
     public void setActivity(MainActivity activity) {
         this.activity = activity;
@@ -34,32 +38,32 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel() {
         mainFragment = new MainFragment();
+        statisticsFragment = new StatisticsFragment();
+        profileFragment = new ProfileFragment();
+        folderFragment = new FolderFragment();
+
+        model = new MainModel();
     }
 
-    public boolean viewFragment(int index) {
-        if (currentItem == index)
-            return true;
-
+    public void viewFragment(int index) {
         if(index == R.id.item_main_main)
             replaceFragment(mainFragment);
         else if(index == R.id.item_main_statistics)
-            replaceFragment(new StatisticsFragment());
+            replaceFragment(statisticsFragment);
         else if(index == R.id.item_main_upload)
             uploadAudio();
         else if(index == R.id.item_main_profile)
-            replaceFragment(new ProfileFragment());
+            replaceFragment(profileFragment);
         else if(index == R.id.item_main_folder)
-            replaceFragment(new FolderFragment());
-
-        return true;
+            replaceFragment(folderFragment);
     }
 
     private void uploadAudio() {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(mainFragment.getContext());
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity.getApplication().getApplicationContext());
         bottomSheetDialog.setContentView(R.layout.dialog_upload);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("audio/*"); // 탐색할 파일 MIME 타입 설정
+        intent.setType(TYPE_AUDIO);
         activity.startActivityForResult(intent, REQUEST_CODE_PICK_RECORD);
     }
 
@@ -70,14 +74,15 @@ public class MainViewModel extends ViewModel {
             String audioName = getFileNameFromURI(audioUri);
 
             Intent intent = new Intent(activity, DocsUploadActivity.class);
-            intent.putExtra("recordPath", audioPath);
-            intent.putExtra("recordName", audioName);
+            intent.putExtra(PRF_RECORD_PATH, audioPath);
+            intent.putExtra(PRF_RECORD_NAME, audioName);
             activity.startActivityForResult(intent, REQUEST_CODE_UPLOAD_RECORD);
         }
     }
 
     private void replaceFragment(Fragment fragment) {
-        mainFragment.getFragmentManager().beginTransaction()
+        androidx.fragment.app.FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fcv_main, fragment, null)
                 .commit();
@@ -93,7 +98,7 @@ public class MainViewModel extends ViewModel {
             cursor.close();
             return path;
         }
-        return uri.getPath(); // 기본적인 경로 반환
+        return uri.getPath();
     }
 
     private String getFileNameFromURI(Uri uri) {
@@ -105,6 +110,6 @@ public class MainViewModel extends ViewModel {
             cursor.close();
             return name;
         }
-        return uri.getLastPathSegment(); // 기본적인 이름 반환
+        return uri.getLastPathSegment();
     }
 }

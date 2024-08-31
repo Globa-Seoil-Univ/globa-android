@@ -27,7 +27,6 @@ public class Record {
     public String getTitle() {
         return title;
     }
-
     public List<Keyword> getKeywords() {
         return keywords;
     }
@@ -38,5 +37,24 @@ public class Record {
 
     public String getRecordId() {
         return recordId;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public void setFolderId(String folderId) {
+        this.folderId = folderId;
+    }
+    public void setKeywords(List<Keyword> keywords) {
+        this.keywords = keywords;
+    }
+
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
