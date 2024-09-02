@@ -46,6 +46,7 @@ import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
+import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
@@ -552,6 +553,20 @@ public interface ApiService {
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("keyword") String keyword
+    );
+
+    /**
+     * 문의내역 목록 조회
+     *
+     * @return
+     */
+    @GET("/inquiry")
+    Call<SearchResponse> requestGetSearch(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("keyword") String keyword,
+            @Query("page") int page,
+            @Query("number") int number
     );
 
 }

@@ -20,6 +20,9 @@ public class Record {
     @SerializedName("createdTime")
     private String createdTime;
 
+    @SerializedName("uploader")
+    private List<Uploader> uploaderList;
+
     public String getCreatedTime() {
         return createdTime;
     }
@@ -56,5 +59,13 @@ public class Record {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<Uploader> getUploaderList() {
+        return uploaderList;
+    }
+
+    public void setUploaderList(List<Uploader> uploaderList) {
+        this.uploaderList = uploaderList;
     }
 }
