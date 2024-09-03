@@ -14,6 +14,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -29,6 +30,7 @@ import team.y2k2.globa.api.model.request.FolderShareAddRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.NicknameEditRequest;
 import team.y2k2.globa.api.model.request.NotificationRequest;
+import team.y2k2.globa.api.model.request.NotificationTokenRequest;
 import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.SubCommentRequest;
@@ -552,6 +554,26 @@ public interface ApiService {
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("keyword") String keyword
+    );
+
+    /**
+     * 알림 등록 토큰 저장
+     */
+    @POST("/user/{user_id}/notification/token")
+    Call<Void> requestFirstNotificationToken(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body NotificationTokenRequest tokenRequest
+    );
+
+    /**
+     * 알림 등록 토큰 업데이트
+     */
+    @PUT("/user/{user_id}/notification/token")
+    Call<Void> updateToken(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body NotificationTokenRequest tokenRequest
     );
 
 }

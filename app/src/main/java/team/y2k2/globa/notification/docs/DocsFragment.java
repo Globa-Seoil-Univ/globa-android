@@ -30,12 +30,19 @@ public class DocsFragment extends Fragment {
     private List<DocsFragmentItem> docsFragmentItems = new ArrayList<>();
     String notificationId, profile, title, content, createdTime;
     DocsFragmentAdapter adapter;
+    private String notificationType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNotificationDocsBinding.inflate(getLayoutInflater());
 
+        initializeUI();
+
+        return binding.getRoot();
+    }
+
+    private void initializeUI() {
         notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
         notificationViewModel.getNotification("r");
 
@@ -43,27 +50,9 @@ public class DocsFragment extends Fragment {
             if(notificationResponse != null) {
                 notificationList = notificationResponse.getNotifications();
                 for(Notification notification : notificationList) {
-                    notificationId = notification.getNotificationId();
-                    String type = notification.getType();
-                    createdTime = notification.getCreatedTime().substring(0, 10);
-                    switch (type) {
-                        case "6" :
-                            profile = "";
-                            title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
-                            content = "";
-                            Log.d("문서 알림", "문서 알림(6번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
-                            docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "6"));
-                            break;
-                        case "7" :
-                            profile = "";
-                            title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
-                            content = "";
-                            Log.d("문서 알림", "문서 알림(7번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
-                            docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "7"));
-                            break;
-                        default :
-                            break;
-                    }
+
+                    settingNotification(notification);
+
                 }
 
                 adapter = new DocsFragmentAdapter(docsFragmentItems, (NotificationActivity) requireActivity());
@@ -75,7 +64,29 @@ public class DocsFragment extends Fragment {
                 Log.d("오류", "알림 수신 오류");
             }
         });
+    }
 
-        return binding.getRoot();
+    private void settingNotification(Notification notification) {
+        notificationId = notification.getNotificationId();
+        notificationType = notification.getType();
+        createdTime = notification.getCreatedTime().substring(0, 10);
+        switch (notificationType) {
+            case "6" :
+                profile = "";
+                title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
+                content = "";
+                Log.d("문서 알림", "문서 알림(6번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
+                docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "6"));
+                break;
+            case "7" :
+                profile = "";
+                title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
+                content = "";
+                Log.d("문서 알림", "문서 알림(7번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
+                docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "7"));
+                break;
+            default :
+                break;
+        }
     }
 }

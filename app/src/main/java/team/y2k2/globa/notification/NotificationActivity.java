@@ -23,51 +23,53 @@ public class NotificationActivity extends AppCompatActivity {
 
     ActivityNotificationBinding binding;
 
+    private final LinearLayout[] underLines = new LinearLayout[4];
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
 
+        initializeUI();
+
+        setContentView(binding.getRoot());
+    }
+
+    private void initializeUI() {
+        underLines[0] = binding.linearlayoutNotificationTotalUnderline;
+        underLines[1] = binding.linearlayoutNotificationAnnouncementUnderline;
+        underLines[2] = binding.linearlayoutNotificationShareUnderline;
+        underLines[3] = binding.linearlayoutNotificationDocsUnderline;
+
+        replaceFragment(new TotalFragment());
+        settingUnderline(0);
+
+        buttonClickEvent();
+    }
+
+    private void buttonClickEvent() {
+
         binding.imagebuttonNotificationBack.setOnClickListener(v -> {
             finish();
         });
 
-        replaceFragment(new TotalFragment());
-        binding.linearlayoutNotificationTotalUnderline.setVisibility(View.VISIBLE);
-        binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.INVISIBLE);
-        binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
-        binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
-
         binding.constraintlayoutNotificationTotal.setOnClickListener(v -> {
             replaceFragment(new TotalFragment());
-            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.VISIBLE);
-            binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
+            settingUnderline(0);
         });
         binding.constraintlayoutNotificationAnnouncement.setOnClickListener(v -> {
             replaceFragment(new NoticeFragment());
-            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.VISIBLE);
-            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
+            settingUnderline(1);
         });
         binding.constraintlayoutNotificationShare.setOnClickListener(v -> {
             replaceFragment(new ShareFragment());
-            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationShareUnderline.setVisibility(View.VISIBLE);
+            settingUnderline(2);
         });
         binding.constraintlayoutNotificationDocs.setOnClickListener(v -> {
             replaceFragment(new DocsFragment());
-            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationAnnouncementUnderline.setVisibility(View.INVISIBLE);
-            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.VISIBLE);
-            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
+            settingUnderline(3);
         });
 
-        setContentView(binding.getRoot());
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -77,5 +79,13 @@ public class NotificationActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    private void settingUnderline(int index) {
+        for(int i = 0; i < 4; i++) {
+            if(i == index) {
+                underLines[i].setVisibility(View.VISIBLE);
+            }
+            underLines[i].setVisibility(View.INVISIBLE);
+        }
+    }
 
 }

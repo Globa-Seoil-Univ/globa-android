@@ -36,8 +36,12 @@ public class NoticeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentNotificationNoticeBinding.inflate(getLayoutInflater());
 
-        Log.d("알림", "공지 사항 알림 시작");
+        initializeUI();
 
+        return binding.getRoot();
+    }
+
+    private void initializeUI() {
         notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
 
         notificationViewModel.getNotification("n");
@@ -48,13 +52,9 @@ public class NoticeFragment extends Fragment {
                 notificationList = notificationResponse.getNotifications();
 
                 for(Notification notification : notificationList) {
-                    notificationId = notification.getNotificationId();
-                    Log.d("알림", "ID: " + notificationId);
-                    title = notification.getNotice().getTitle();
-                    content = notification.getNotice().getContent();
-                    createdTime = notification.getCreatedTime().substring(0, 10);
-                    Log.d("공지 사항 알림", "공지 사항 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
-                    noticeFragmentItems.add(new NoticeFragmentItem(notificationId, title, content, createdTime));
+
+                    settingNotification(notification);
+
                 }
 
                 adapter = new NoticeFragmentAdapter(noticeFragmentItems, (NotificationActivity) requireActivity());
@@ -66,7 +66,15 @@ public class NoticeFragment extends Fragment {
                 Log.d("오류", "알림 수신 오류");
             }
         });
+    }
 
-        return binding.getRoot();
+    private void settingNotification(Notification notification) {
+        notificationId = notification.getNotificationId();
+        Log.d("알림", "ID: " + notificationId);
+        title = notification.getNotice().getTitle();
+        content = notification.getNotice().getContent();
+        createdTime = notification.getCreatedTime().substring(0, 10);
+        Log.d("공지 사항 알림", "공지 사항 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime);
+        noticeFragmentItems.add(new NoticeFragmentItem(notificationId, title, content, createdTime));
     }
 }

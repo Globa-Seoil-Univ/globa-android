@@ -3,6 +3,7 @@ package team.y2k2.globa.notification;
 import static team.y2k2.globa.api.ApiClient.authorization;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -12,12 +13,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
-import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.api.model.request.NotificationRequest;
+import team.y2k2.globa.api.model.request.NotificationTokenRequest;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 
 public class NotificationViewModel extends ViewModel {
 
+    private NotificationActivity activity;
     private ApiService apiService;
     private MutableLiveData<NotificationResponse> NotificationLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
@@ -41,13 +43,14 @@ public class NotificationViewModel extends ViewModel {
                     NotificationLiveData.postValue(response.body());
                     Log.d("알림", "알림 수신 성공 : " + response.code());
                 } else {
-                    Log.d("알림", "알림 수신 실패 : " + response.code() + ", " + response.message());
+                    NotificationLiveData.postValue(response.body());
+                    Log.d("알림", "알림 수신 실패 : " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<NotificationResponse> call, Throwable t) {
-                errorLiveData.postValue("알림 송신 오류 : " + t.getMessage());
+                errorLiveData.postValue(t.getMessage());
                 Log.d("알림", "알림 송신 오류 : " + t.getMessage());
             }
         });
@@ -60,6 +63,7 @@ public class NotificationViewModel extends ViewModel {
                 if(response.isSuccessful()) {
                     Log.d("공유 초대", "공유 초대 수락 완료");
                 } else {
+                    Toast.makeText(activity, "공유 초대 수락 실패", Toast.LENGTH_SHORT).show();
                     Log.d("공유 초대", "공유 초대 수락 실패 : " + response.code() + ", " + response.message());
                 }
             }
@@ -79,6 +83,7 @@ public class NotificationViewModel extends ViewModel {
                 if(response.isSuccessful()) {
                     Log.d("공유 초대", "공유 초대 거절 완료");
                 } else {
+                    Toast.makeText(activity, "공유 초대 거절 실패", Toast.LENGTH_SHORT).show();
                     Log.d("공유 초대", "공유 초대 거절 실패 : " + response.code() + ", " + response.message());
                 }
             }
@@ -86,6 +91,44 @@ public class NotificationViewModel extends ViewModel {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.d("공유 초대", "공유 초대 거절 요청 오류 : " + t.getMessage());
+            }
+        });
+    }
+
+    public void registerFirstToken(String token) {
+        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
+        apiService.requestFirstNotificationToken("application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                    Log.d("알림 토큰", "알림 토큰 최초 등록 완료");
+                } else {
+                    Log.d("알림 토큰", "알림 토큰 등록 실패 : " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("알림 토큰", "알림 토큰 등록 요청 실패 : " + t.getMessage());
+            }
+        });
+    }
+
+    public void updateToken(String token) {
+        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
+        apiService.updateToken("application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                    Log.d("알림 토큰", "알림 토큰 업데이트 완료");
+                } else {
+                    Log.d("알림 토큰", "알림 토큰 업데이트 실패 : " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("알림 토큰", "알림 토큰 업데이트 요청 실패 : " + t.getMessage());
             }
         });
     }
