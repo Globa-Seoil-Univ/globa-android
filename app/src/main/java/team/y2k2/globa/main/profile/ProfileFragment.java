@@ -29,6 +29,7 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
+import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.main.profile.info.MyinfoActivity;
 
 public class ProfileFragment extends Fragment {
@@ -37,8 +38,11 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
 
+    private ProfileImage profileImage;
+
     public ProfileFragment() {
         model = new ProfileModel();
+        profileImage = new ProfileImage();
     }
 
     @Override
@@ -68,7 +72,10 @@ public class ProfileFragment extends Fragment {
         String httpProfileUrl;
         if(response.getProfile() != null) {
             profileImageRef = storage.getReference().child(profile);
-            httpProfileUrl = convertGsToHttps(String.valueOf(profileImageRef));
+            //httpProfileUrl = convertGsToHttps(String.valueOf(profileImageRef));
+
+            httpProfileUrl = profileImage.convertGsToHttps(String.valueOf(profileImageRef));
+
         } else {
             httpProfileUrl = null;
         }
