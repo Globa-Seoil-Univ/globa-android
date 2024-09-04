@@ -65,7 +65,6 @@ public class MainFragmentViewModel {
             recordDB.onInsert(Integer.valueOf(recordId), Integer.valueOf(folderId), title, datetime, keywords);
         }
 
-
         model = new MainFragmentModel(records);
 
         listItems.addItems(model.records);

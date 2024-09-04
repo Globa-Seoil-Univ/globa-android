@@ -6,6 +6,7 @@ import java.util.List;
 
 import team.y2k2.globa.api.model.entity.Comment;
 import team.y2k2.globa.api.model.entity.Record;
+import team.y2k2.globa.api.model.entity.Uploader;
 
 public class SearchResponse {
 
@@ -22,4 +23,5 @@ public class SearchResponse {
     public int getTotal() {
         return total;
     }
+
 }

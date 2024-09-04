@@ -76,6 +76,15 @@ public class RecordDB extends SQLiteOpenHelper {
         }
     }
 
+    public void onInsert(int record_id, int folder_id, String title, String datetime) {
+        if (isRecordIdExists(record_id)) {
+            String sql = "INSERT INTO Record VALUES(" + record_id + "," + folder_id + ",'" + title + "','" + datetime + "');";
+            KeywordDB keywordDB = new KeywordDB(context);
+
+            sqlDB.execSQL(sql);
+        }
+    }
+
     private boolean isRecordIdExists(int recordId) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM Record WHERE record_id = " + recordId +";", null);
 

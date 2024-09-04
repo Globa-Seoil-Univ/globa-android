@@ -146,12 +146,10 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             super(itemView);
             title = itemView.findViewById(R.id.textview_document_main_docs_name);
             datetime = itemView.findViewById(R.id.textview_item_document_docs_time);
-
             layout = itemView.findViewById(R.id.constraintlayout_item_main_document);
 
-            keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
-
             processing = itemView.findViewById(R.id.textview_main_document_processing);
+            keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
             lottieAnimationView = itemView.findViewById(R.id.lottie_main_document_record);
         }
     }

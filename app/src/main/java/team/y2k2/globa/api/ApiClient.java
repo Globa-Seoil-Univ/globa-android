@@ -32,6 +32,7 @@ import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
+import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
@@ -724,6 +725,33 @@ public class ApiClient {
         return null;
     }
 
+
+    public SearchResponse searchForKeyword(String keyword) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<SearchResponse> call = apiService.searchRecordForKeyword(APPLICATION_JSON, authorization, keyword, 1, 20);
+                Response<SearchResponse> response;
+
+                try {
+                    response = call.execute();
+
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        return null;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     private boolean handleErrorCode(int code) {
         switch (code) {

@@ -2,8 +2,12 @@ package team.y2k2.globa.main.search;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Record;
+import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.databinding.ActivitySearchBinding;
 import team.y2k2.globa.sql.RecordDB;
 
@@ -32,24 +38,25 @@ public class SearchActivity extends AppCompatActivity {
 
         binding.edittextSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 List<Record> records = recordDB.onSearch(String.valueOf(s));
                 ArrayList<SearchDocsItem> docsItems = new ArrayList<>();
 
-                for(int i = 0; i < records.size(); i++) {
-                    Record record = records.get(i);
-                    String folderId = record.getFolderId();
-                    String recordId = record.getRecordId();
-                    String title = record.getTitle();
-                    String datetime = record.getCreatedTime();
+                if(docsItems.size() != 0)
+                    for(int i = 0; i < records.size(); i++) {
+                        Record record = records.get(i);
+                        String folderId = record.getFolderId();
+                        String recordId = record.getRecordId();
+                        String title = record.getTitle();
+                        String datetime = record.getCreatedTime();
 
-                    SearchDocsItem item = new SearchDocsItem(folderId, recordId, title, datetime);
-                    docsItems.add(item);
-                }
+                        SearchDocsItem item = new SearchDocsItem(folderId, recordId, title, datetime);
+                        docsItems.add(item);
+                    }
+
                 Log.d(getClass().getName(), docsItems.size() + "개 확인됨");
 
                 SearchDocsAdapter adapter = new SearchDocsAdapter(docsItems);
@@ -59,12 +66,10 @@ public class SearchActivity extends AppCompatActivity {
 
                 binding.recyclerviewSearchHistory.setAdapter(adapter);
                 binding.recyclerviewSearchHistory.setLayoutManager(layoutManager);
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-//
 //                if (s.length() > 32) {
 //                    binding.edittextFolderNameInputname.removeTextChangedListener(this);
 //                    String text = s.toString().substring(0, 32);
@@ -81,9 +86,68 @@ public class SearchActivity extends AppCompatActivity {
 //                if (s.length() == 0) {
 //                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
 //                }
+
+            }
+        });
+
+        binding.edittextSearch.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        // 사용자가 확인 동작을 실행 시
+        binding.edittextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if(actionId == EditorInfo.IME_ACTION_DONE) {
+                    ArrayList<SearchDocsItem> docsItems = getRecordSearchResultToAPI(v.getText().toString());
+
+                    Log.d(getClass().getName(), docsItems.size() + "개 확인됨");
+
+                    SearchDocsAdapter adapter = new SearchDocsAdapter(docsItems);
+
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(binding.getRoot().getContext());
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+                    binding.recyclerviewSearchHistory.setAdapter(adapter);
+                    binding.recyclerviewSearchHistory.setLayoutManager(layoutManager);
+                }
+
+                return false;
             }
         });
 
         setContentView(binding.getRoot());
+    }
+
+
+    public ArrayList<SearchDocsItem> getRecordSearchResultToAPI(String keyword) {
+        ArrayList<SearchDocsItem> docsItems = new ArrayList<>();
+
+        ApiClient apiClient = new ApiClient(this);
+        SearchResponse response = apiClient.searchForKeyword(keyword);
+
+        if(response.getRecords() != null) {
+
+            List<Record> records = response.getRecords();
+
+            for(int i = 0; i < records.size(); i ++) {
+                Record record = records.get(i);
+
+                String recordId = record.getRecordId();
+                String folderId = record.getFolderId();
+                String title = record.getTitle();
+                String datetime = record.getCreatedTime();
+
+//            String userName = record.getUploaderList().get(0).getName();
+//            String profile = record.getUploaderList().get(0).getProfile();
+//            String userId = record.getUploaderList().get(0).getUserId();
+
+                SearchDocsItem item = new SearchDocsItem(folderId, recordId, title, datetime);
+                docsItems.add(item);
+
+//            RecordDB recordDB = new RecordDB(this);
+//            recordDB.onInsert(Integer.valueOf(recordId), Integer.valueOf(folderId), title, datetime);
+            }
+
+        }
+        return docsItems;
     }
 }

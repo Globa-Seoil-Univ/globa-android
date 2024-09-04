@@ -21,7 +21,7 @@ public class Record {
     private String createdTime;
 
     @SerializedName("uploader")
-    private List<Uploader> uploaderList;
+    private Uploader uploader;
 
     public String getCreatedTime() {
         return createdTime;
@@ -61,11 +61,11 @@ public class Record {
         this.title = title;
     }
 
-    public List<Uploader> getUploaderList() {
-        return uploaderList;
+    public void setUploader(Uploader uploader) {
+        this.uploader = uploader;
     }
 
-    public void setUploaderList(List<Uploader> uploaderList) {
-        this.uploaderList = uploaderList;
+    public Uploader getUploader() {
+        return uploader;
     }
 }

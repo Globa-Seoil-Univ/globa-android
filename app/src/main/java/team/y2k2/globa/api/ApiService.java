@@ -555,6 +555,22 @@ public interface ApiService {
             @Query("keyword") String keyword
     );
 
+
+    /**
+     *  문서 검색
+     */
+    @GET("/record/search")
+    Call<SearchResponse> searchRecordForKeyword(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("keyword") String keyword,
+            @Query("page") int page,
+            @Query("count") int count
+    );
+
+
+
+
     /**
      * 문의내역 목록 조회
      *
