@@ -753,6 +753,43 @@ public class ApiClient {
         }
     }
 
+    // 댓글 삭제
+    public Response<Void> deleteRecord(String folderId, String recordId) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.requestDeleteRecord(folderId, recordId, APPLICATION_JSON, authorization);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
+                            break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
+                            break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
+                            break;
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+                return response;
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private boolean handleErrorCode(int code) {
         switch (code) {
                 // 400 Bad Request 관련 에러: 잘못된 요청, 필요한 인자 누락 등

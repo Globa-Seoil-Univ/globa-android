@@ -139,19 +139,19 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         switch (buttonFilterType) {
             case RECORDS_FILTER_CURRENTLY:
-                adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords());
+                adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords(), getActivity());
                 break;
             case RECORDS_FILTER_MOST_VIEWED:
-                adapter = new DocsListItemAdapter(viewModel.getMostViewedRecords());
+                adapter = new DocsListItemAdapter(viewModel.getMostViewedRecords(), getActivity());
                 break;
             case RECORDS_FILTER_SHARED:
-                adapter = new DocsListItemAdapter(viewModel.getSharedRecords());
+                adapter = new DocsListItemAdapter(viewModel.getSharedRecords(), getActivity());
                 break;
             case RECORDS_FILTER_RECEIVED:
-                adapter = new DocsListItemAdapter(viewModel.getReceivedRecords());
+                adapter = new DocsListItemAdapter(viewModel.getReceivedRecords(), getActivity());
                 break;
             default:
-                adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords());
+                adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords(), getActivity());
         }
 
         int numColumns = calculateNoOfColumns(binding.getRoot().getContext());

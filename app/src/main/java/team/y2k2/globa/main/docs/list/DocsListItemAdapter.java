@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import retrofit2.Response;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.main.docs.keyword.DocsKeywordAdapter;
@@ -33,9 +35,11 @@ import team.y2k2.globa.main.docs.keyword.DocsKeywordModel;
 
 public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapter.AdapterViewHolder> {
     ArrayList<DocsListItem> items;
+    Activity activity;
 
-    public DocsListItemAdapter(ArrayList<DocsListItem> items) {
+    public DocsListItemAdapter(ArrayList<DocsListItem> items, Activity activity) {
         this.items = items;
+        this.activity = activity;
     }
 
     @NonNull
@@ -79,6 +83,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         // 버튼 클릭 리스너를 별도의 메서드로 분리
         confirm.setOnClickListener(d2 -> {
             bottomSheetDialog.dismiss();
+            deleteDocs(items.get(position).getFolderId(), items.get(position).getRecordId());
         });
         cancel.setOnClickListener(d2 -> {
             bottomSheetDialog.dismiss();
@@ -172,4 +177,17 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
         return outputDate;
     }
+
+    public void deleteDocs(String folderId, String recordId) {
+        ApiClient apiClient = new ApiClient(activity);
+        Response<Void> response = apiClient.deleteRecord(folderId, recordId);
+
+        if (response.isSuccessful()) {
+            Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());
+        } else {
+            Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
+        }
+    }
+
+
 }

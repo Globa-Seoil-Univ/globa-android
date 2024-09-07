@@ -1,14 +1,20 @@
 package team.y2k2.globa.main.main;
 
+import static team.y2k2.globa.api.ApiClient.authorization;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
@@ -150,4 +156,6 @@ public class MainFragmentViewModel {
 
         return docsList.getItems();
     }
+
+
 }
