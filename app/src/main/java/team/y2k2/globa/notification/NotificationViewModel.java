@@ -1,5 +1,6 @@
 package team.y2k2.globa.notification;
 
+import static team.y2k2.globa.api.ApiClient.apiService;
 import static team.y2k2.globa.api.ApiClient.authorization;
 
 import android.util.Log;
@@ -7,6 +8,8 @@ import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import org.checkerframework.checker.units.qual.C;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -16,12 +19,14 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.request.NotificationRequest;
 import team.y2k2.globa.api.model.request.NotificationTokenRequest;
 import team.y2k2.globa.api.model.response.NotificationResponse;
+import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
 
 public class NotificationViewModel extends ViewModel {
 
     private NotificationActivity activity;
     private ApiService apiService;
-    private MutableLiveData<NotificationResponse> NotificationLiveData = new MutableLiveData<>();
+    private MutableLiveData<NotificationResponse> notificationLiveData = new MutableLiveData<>();
+    private MutableLiveData<UnreadNotificationCountResponse> unreadCount = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public NotificationViewModel() {
@@ -29,21 +34,28 @@ public class NotificationViewModel extends ViewModel {
     }
 
     public MutableLiveData<NotificationResponse> getNotificationLiveData() {
-        return NotificationLiveData;
+        return notificationLiveData;
+    }
+    public MutableLiveData<UnreadNotificationCountResponse> getUnreadCount() {
+        return unreadCount;
     }
     public MutableLiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
 
     public void getNotification(String type) {
+        Log.d("알림 API", "알림 API 요청 타입: " + type);
         apiService.requestGetNotification("application/json", authorization, 1, 10, type).enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
                 if(response.isSuccessful()) {
-                    NotificationLiveData.postValue(response.body());
+                    for(int i = 0; i < response.body().getNotifications().size(); i++) {
+                        Log.d(getClass().getSimpleName(), "ID: " + response.body().getNotifications().get(i).getNotificationId());
+                    }
+                    notificationLiveData.postValue(response.body());
                     Log.d("알림", "알림 수신 성공 : " + response.code());
                 } else {
-                    NotificationLiveData.postValue(response.body());
+                    notificationLiveData.postValue(response.body());
                     Log.d("알림", "알림 수신 실패 : " + response.code());
                 }
             }
@@ -95,40 +107,39 @@ public class NotificationViewModel extends ViewModel {
         });
     }
 
-    public void registerFirstToken(String token) {
-        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
-        apiService.requestFirstNotificationToken("application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
+    public void getUnreadNotificationCount() {
+        apiService.getUnreadNotificationCount("application/json", authorization).enqueue(new Callback<UnreadNotificationCountResponse>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<UnreadNotificationCountResponse> call, Response<UnreadNotificationCountResponse> response) {
                 if(response.isSuccessful()) {
-                    Log.d("알림 토큰", "알림 토큰 최초 등록 완료");
+                    unreadCount.postValue(response.body());
+                    Log.d("안 읽은 알림 개수", "안 읽은 알림 개수 가져오기 성공");
                 } else {
-                    Log.d("알림 토큰", "알림 토큰 등록 실패 : " + response.code());
+                    Log.d("안 읽은 알림 개수", "안 읽은 알림 개수 가져오기 실패 : " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("알림 토큰", "알림 토큰 등록 요청 실패 : " + t.getMessage());
+            public void onFailure(Call<UnreadNotificationCountResponse> call, Throwable t) {
+                Log.d("안 읽은 알림 개수", "안 읽은 알림 개수 가져오기 요청 실패");
             }
         });
     }
 
-    public void updateToken(String token) {
-        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
-        apiService.updateToken("application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
+    public void readNotification(String notificationId) {
+        apiService.readNotification(notificationId, "application/json", authorization).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
-                    Log.d("알림 토큰", "알림 토큰 업데이트 완료");
+                    Log.d("알림 읽기", "알림 읽기 요청 완료");
                 } else {
-                    Log.d("알림 토큰", "알림 토큰 업데이트 실패 : " + response.code());
+                    Log.d("알림 읽기", "알림 읽기 요청 실패 : " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("알림 토큰", "알림 토큰 업데이트 요청 실패 : " + t.getMessage());
+                Log.d("알림 읽기", "알림 읽기 요청 실패 : " + t.getMessage());
             }
         });
     }

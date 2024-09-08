@@ -1,30 +1,28 @@
-package team.y2k2.globa.notification.docs;
+package team.y2k2.globa.notification.inquiry;
 
-public class DocsFragmentItem {
+public class InquiryFragmentItem {
 
     private String notificationId;
-    private String profile;
+    private String inquiryId;
     private String title;
     private String content;
     private String createdTime;
-    private String type;
     private boolean isRead;
 
-    public DocsFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String type, boolean isRead) {
+    public InquiryFragmentItem(String notificationId, String inquiryId, String title, String content, String createdTime, boolean isRead) {
         this.notificationId = notificationId;
-        this.profile = profile;
+        this.inquiryId = inquiryId;
         this.title = title;
         this.content = content;
         this.createdTime = createdTime;
-        this.type = type;
         this.isRead = isRead;
     }
 
     public String getNotificationId() {
         return notificationId;
     }
-    public String getProfile() {
-        return profile;
+    public String getInquiryId() {
+        return inquiryId;
     }
     public String getTitle() {
         return title;
@@ -34,9 +32,6 @@ public class DocsFragmentItem {
     }
     public String getCreatedTime() {
         return createdTime;
-    }
-    public String getType() {
-        return type;
     }
     public boolean isRead() {
         return isRead;

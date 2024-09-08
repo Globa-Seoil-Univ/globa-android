@@ -10,8 +10,9 @@ public class TotalFragmentItem {
     private String folderId;
     private String shareId;
     private String type;
+    private boolean isRead;
 
-    public TotalFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String type) {
+    public TotalFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String type, boolean isRead) {
         this.notificationId = notificationId;
         this.profile = profile;
         this.title = title;
@@ -20,6 +21,7 @@ public class TotalFragmentItem {
         this.folderId = folderId;
         this.shareId = shareId;
         this.type = type;
+        this.isRead = isRead;
     }
 
     public String getNotificationId() {
@@ -45,6 +47,9 @@ public class TotalFragmentItem {
     }
     public String getType() {
         return type;
+    }
+    public boolean isRead() {
+        return isRead;
     }
 
 }

@@ -35,7 +35,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private Runnable updateSeekbarRunnable;
     private long startTime, endTime;
 
-    DocsDetailAdapter detailAdapter;
     DocsMoreViewModel docsMoreViewModel;
     private String profile;
     private String name;
@@ -250,8 +249,8 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         int durationMinute = (int)(durationMilliSecond / 60000);
         Log.d("시간", "열려 있던 시간(분): " + durationMinute);
 
-        // 댓글에 사용된 disposable 해제
-        detailAdapter.clearDisposable();
+        // detailAdapter에 생성된 disposable 메모리 해제
+        viewModel.clearDisposable();
     }
 
     public String getFolderId() {

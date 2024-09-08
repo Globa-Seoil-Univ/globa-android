@@ -95,6 +95,8 @@ public class LoginViewModel extends ViewModel {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
 
+            Log.d("엑세스 토큰", "AT : " + accessToken);
+
             SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("accessToken", accessToken);

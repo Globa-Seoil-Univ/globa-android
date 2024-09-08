@@ -51,6 +51,8 @@ import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
+import team.y2k2.globa.api.model.response.UnreadNotificationCheckResponse;
+import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.response.UserSearchResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
@@ -557,23 +559,42 @@ public interface ApiService {
     );
 
     /**
-     * 알림 등록 토큰 저장
+     * 알림 등록 토큰 업데이트
      */
-    @POST("/user/{user_id}/notification/token")
-    Call<Void> requestFirstNotificationToken(
+    @PUT("/user/{user_id}/notification/token")
+    Call<Void> updateToken(
+            @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body NotificationTokenRequest tokenRequest
     );
 
     /**
-     * 알림 등록 토큰 업데이트
+     * 안 읽은 알림 여부 가져오기
      */
-    @PUT("/user/{user_id}/notification/token")
-    Call<Void> updateToken(
+    @GET("/notification/unread/check")
+    Call<UnreadNotificationCheckResponse> getUnreadNotificationCheck(
             @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization,
-            @Body NotificationTokenRequest tokenRequest
+            @Header("Authorization") String authorization
+    );
+
+    /**
+     * 안 읽은 알림 개수 가져오기
+     */
+    @GET("/notification/unread/count")
+    Call<UnreadNotificationCountResponse> getUnreadNotificationCount(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
+    );
+
+    /**
+     * 알림 읽기
+     */
+    @POST("/notification/{notification_id}")
+    Call<Void> readNotification(
+            @Path("notification_id") String notificationId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
     );
 
 }

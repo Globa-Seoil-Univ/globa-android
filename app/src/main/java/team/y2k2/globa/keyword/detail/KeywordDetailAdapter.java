@@ -14,9 +14,12 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 
 public class KeywordDetailAdapter extends RecyclerView.Adapter<KeywordDetailAdapter.AdapterViewHolder> {
+
+    KeywordDetailActivity activity;
     ArrayList<KeywordDetailItem> items;
 
-    public KeywordDetailAdapter(ArrayList<KeywordDetailItem> items) {
+    public KeywordDetailAdapter(ArrayList<KeywordDetailItem> items, KeywordDetailActivity activity) {
+        this.activity = activity;
         this.items = items;
     }
 

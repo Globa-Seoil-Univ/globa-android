@@ -219,5 +219,10 @@ public class DocsViewModel extends ViewModel {
             return String.format("%02d:%02d", minutes, seconds);
     }
 
+    public void clearDisposable() {
+
+        detailAdapter.clearDisposable();
+
+    }
 
 }

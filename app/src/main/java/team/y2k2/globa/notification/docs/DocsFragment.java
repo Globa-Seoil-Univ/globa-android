@@ -21,16 +21,15 @@ import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
 import team.y2k2.globa.notification.total.TotalFragmentItem;
 
-
 public class DocsFragment extends Fragment {
 
     FragmentNotificationDocsBinding binding;
     private NotificationViewModel notificationViewModel;
     private List<Notification> notificationList = new ArrayList<>();
     private List<DocsFragmentItem> docsFragmentItems = new ArrayList<>();
-    String notificationId, profile, title, content, createdTime;
+    String notificationId, profile, title, content, createdTime, notificationType;
+    boolean isRead;
     DocsFragmentAdapter adapter;
-    private String notificationType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,19 +48,20 @@ public class DocsFragment extends Fragment {
         notificationViewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
             if(notificationResponse != null) {
                 notificationList = notificationResponse.getNotifications();
+                docsFragmentItems.clear();
                 for(Notification notification : notificationList) {
 
                     settingNotification(notification);
 
                 }
 
-                adapter = new DocsFragmentAdapter(docsFragmentItems, (NotificationActivity) requireActivity());
+                adapter = new DocsFragmentAdapter(docsFragmentItems, (NotificationActivity) requireActivity(), this);
 
                 binding.recyclerviewNotificationDocsContent.setAdapter(adapter);
                 binding.recyclerviewNotificationDocsContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
 
             } else {
-                Log.d("오류", "알림 수신 오류");
+                Log.d("오류", "문서 알림 수신 오류 : notificationResponse = null");
             }
         });
     }
@@ -70,20 +70,21 @@ public class DocsFragment extends Fragment {
         notificationId = notification.getNotificationId();
         notificationType = notification.getType();
         createdTime = notification.getCreatedTime().substring(0, 10);
+        isRead = notification.isRead();
         switch (notificationType) {
             case "6" :
                 profile = "";
                 title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
                 content = "";
                 Log.d("문서 알림", "문서 알림(6번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
-                docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "6"));
+                docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "6", isRead));
                 break;
             case "7" :
                 profile = "";
                 title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
                 content = "";
                 Log.d("문서 알림", "문서 알림(7번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
-                docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "7"));
+                docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "7", isRead));
                 break;
             default :
                 break;

@@ -3,6 +3,7 @@ package team.y2k2.globa.notification;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -12,6 +13,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityNotificationBinding;
 import team.y2k2.globa.notification.notice.NoticeFragment;
@@ -22,13 +27,29 @@ import team.y2k2.globa.notification.total.TotalFragment;
 public class NotificationActivity extends AppCompatActivity {
 
     ActivityNotificationBinding binding;
-
-    private final LinearLayout[] underLines = new LinearLayout[4];
+    NotificationViewModel notificationViewModel;
+    String unreadAll, unreadNotice, unreadShare, unreadDocument, unreadInquiry;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
+
+        FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(task -> {
+           if(task.isSuccessful()) {
+               Log.d("FCM 토큰", "FCM 토큰 삭제 완료");
+           } else {
+               Log.d("FCM 토큰", "FCM 토큰 삭제 실패");
+           }
+        });
+
+//        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+//           if(task.isSuccessful()) {
+//               Log.d("FCM 토큰", "FCM 토큰 수령 성공 : " + task.getResult());
+//           } else {
+//               Log.d("FCM 토큰", "FCM 토큰 수령 실패 : " + task.getException());
+//           }
+//        });
 
         initializeUI();
 
@@ -36,13 +57,35 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        underLines[0] = binding.linearlayoutNotificationTotalUnderline;
-        underLines[1] = binding.linearlayoutNotificationAnnouncementUnderline;
-        underLines[2] = binding.linearlayoutNotificationShareUnderline;
-        underLines[3] = binding.linearlayoutNotificationDocsUnderline;
 
         replaceFragment(new TotalFragment());
-        settingUnderline(0);
+
+        binding.linearlayoutNotificationTotalUnderline.setVisibility(View.VISIBLE);
+        binding.linearlayoutNotificationNoticeUnderline.setVisibility(View.INVISIBLE);
+        binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
+        binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+        binding.linearlayoutNotificationInquiryUnderline.setVisibility(View.INVISIBLE);
+
+        notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
+        notificationViewModel.getUnreadNotificationCount();
+        notificationViewModel.getUnreadCount().observe(this, unreadCount -> {
+            if(unreadCount != null) {
+                unreadAll = unreadCount.getAll();
+                unreadNotice = unreadCount.getNotice();
+                unreadShare = unreadCount.getShare();
+                unreadDocument = unreadCount.getDocument();
+                unreadInquiry = unreadCount.getInquiry();
+                Log.d("안 읽은 알림 개수", "total: " + unreadAll + ", notice: " + unreadNotice + ", share: " + unreadShare +
+                        ", docs: " + unreadDocument + ", inquiry: " + unreadInquiry);
+                binding.textviewNotificationTotalCount.setText(unreadAll);
+                binding.textviewNotificationNoticeCount.setText(unreadNotice);
+                binding.textviewNotificationShareCount.setText(unreadShare);
+                binding.textviewNotificationDocsCount.setText(unreadDocument);
+                binding.textviewNotificationInquiryCount.setText(unreadInquiry);
+            } else {
+                Log.d(getClass().getName(), "안 읽은 알림 개수 가져오기 오류 unreadCount = null");
+            }
+        });
 
         buttonClickEvent();
     }
@@ -55,19 +98,43 @@ public class NotificationActivity extends AppCompatActivity {
 
         binding.constraintlayoutNotificationTotal.setOnClickListener(v -> {
             replaceFragment(new TotalFragment());
-            settingUnderline(0);
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.VISIBLE);
+            binding.linearlayoutNotificationNoticeUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationInquiryUnderline.setVisibility(View.INVISIBLE);
         });
-        binding.constraintlayoutNotificationAnnouncement.setOnClickListener(v -> {
+        binding.constraintlayoutNotificationNotice.setOnClickListener(v -> {
             replaceFragment(new NoticeFragment());
-            settingUnderline(1);
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationNoticeUnderline.setVisibility(View.VISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationInquiryUnderline.setVisibility(View.INVISIBLE);
         });
         binding.constraintlayoutNotificationShare.setOnClickListener(v -> {
             replaceFragment(new ShareFragment());
-            settingUnderline(2);
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationNoticeUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.VISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationInquiryUnderline.setVisibility(View.INVISIBLE);
         });
         binding.constraintlayoutNotificationDocs.setOnClickListener(v -> {
             replaceFragment(new DocsFragment());
-            settingUnderline(3);
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationNoticeUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.VISIBLE);
+            binding.linearlayoutNotificationInquiryUnderline.setVisibility(View.INVISIBLE);
+        });
+        binding.constraintlayoutNotificationInquiry.setOnClickListener(v -> {
+
+            binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationNoticeUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
+            binding.linearlayoutNotificationInquiryUnderline.setVisibility(View.VISIBLE);
         });
 
     }
@@ -77,15 +144,6 @@ public class NotificationActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.framelayout_notification_content, fragment);
         fragmentTransaction.commit();
-    }
-
-    private void settingUnderline(int index) {
-        for(int i = 0; i < 4; i++) {
-            if(i == index) {
-                underLines[i].setVisibility(View.VISIBLE);
-            }
-            underLines[i].setVisibility(View.INVISIBLE);
-        }
     }
 
 }

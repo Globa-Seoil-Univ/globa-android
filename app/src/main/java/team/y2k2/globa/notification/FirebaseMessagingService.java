@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import com.google.firebase.messaging.RemoteMessage;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.intro.IntroActivity;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
@@ -26,28 +28,23 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private static final String CHANNEL_ID = "firebase_channel";
 
     private NotificationViewModel notificationViewModel;
-    private SharedPreferences tokenPreferences = getSharedPreferences("notificationToken", MODE_PRIVATE);
-    private SharedPreferences.Editor tokenEditor = tokenPreferences.edit();
 
     public FirebaseMessagingService() {
-        this.notificationViewModel = new ViewModelProvider((ViewModelStoreOwner) getApplicationContext()).get(NotificationViewModel.class);
+        this.notificationViewModel = new NotificationViewModel();
     }
 
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
 
-        // 새로운 토큰 호스트로 전송
-        String storedToken = tokenPreferences.getString("fcm_token", null);
-        if(storedToken == null) {
-            tokenEditor.putString("fcm_token", token);
-            tokenEditor.apply();
-            notificationViewModel.registerFirstToken(token);
-        } else {
-            tokenEditor.putString("fcm_token", token);
-            tokenEditor.apply();
-            notificationViewModel.updateToken(token);
-        }
+        Log.d("FCM 토큰", "새로운 토큰 발급 : onNewToken() 실행");
+        Log.d("FCM 토큰", "FCM 토큰 : " + token);
+
+        // FCM 토큰 프리퍼런스에 저장
+        SharedPreferences fcmPref = getSharedPreferences("fcm_token", MODE_PRIVATE);
+        SharedPreferences.Editor fcmPrefEditor = fcmPref.edit();
+        fcmPrefEditor.putString("fcm_token", token);
+        fcmPrefEditor.apply();
 
     }
 

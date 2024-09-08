@@ -6,12 +6,14 @@ public class NoticeFragmentItem {
     private String title;
     private String content;
     private String createdTime;
+    private boolean isRead;
 
-    public NoticeFragmentItem(String notificationId, String title, String content, String createdTime) {
+    public NoticeFragmentItem(String notificationId, String title, String content, String createdTime, boolean isRead) {
         this.notificationId = notificationId;
         this.title = title;
         this.content = content;
         this.createdTime = createdTime;
+        this.isRead = isRead;
     }
 
     public String getNotificationId() {
@@ -26,5 +28,7 @@ public class NoticeFragmentItem {
     public String getCreatedTime() {
         return createdTime;
     }
-
+    public boolean isRead() {
+        return isRead;
+    }
 }
