@@ -116,8 +116,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             activity.setDuration(startTime);
         });
 
-        String description = detailItems.get(position).getDescription();
-        SpannableString highlightString = new SpannableString(description);
+
+
+
         holder.description.setOnTouchListener(new View.OnTouchListener() {
             int startIdx = 0;
             int endIdx = 0;
@@ -152,11 +153,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             }
         });
 
+        String description = detailItems.get(position).getDescription();
         List<Highlight> highlights = detailItems.get(position).getHighlights();
-        for (int i = 0; i < highlights.size(); i++) {
-            Highlight highlight = highlights.get(i);
-            applyHighlightAndClick(holder, highlightString, sectionId, highlight, i);
-        }
+        SpannableString highlightString = setSpannableStringHighlight(description, highlights, holder, sectionId);
 
         holder.description.setText(highlightString);
         holder.description.setMovementMethod(LinkMovementMethod.getInstance());
@@ -317,6 +316,17 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             }
         });
         popupMenu.show();
+    }
+
+    public SpannableString setSpannableStringHighlight(String description, List<Highlight> highlights, AdapterViewHolder holder, String sectionId){
+        SpannableString highlightString = new SpannableString(description);
+
+        for (int i = 0; i < highlights.size(); i++) {
+            Highlight highlight = highlights.get(i);
+            applyHighlightAndClick(holder, highlightString, sectionId, highlight, i);
+        }
+
+        return highlightString;
     }
 
     private void updateSelection(TextView textView, int start, int end) {
