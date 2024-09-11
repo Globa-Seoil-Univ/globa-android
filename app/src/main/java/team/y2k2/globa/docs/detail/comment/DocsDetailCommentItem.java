@@ -13,7 +13,6 @@ public class DocsDetailCommentItem {
     private String content;
     private String commentId;
     private boolean hasReply;
-    private List<DocsDetailSubCommentItem> subCommentItemList = new ArrayList<>();
 
     public DocsDetailCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean hasReply) {
         this.profile = profile;
@@ -41,9 +40,6 @@ public class DocsDetailCommentItem {
     }
     public boolean isHasSubComment() {
         return hasReply;
-    }
-    public List<DocsDetailSubCommentItem> getSubCommentItemList() {
-        return subCommentItemList;
     }
 
     public void setProfile(String profile) {

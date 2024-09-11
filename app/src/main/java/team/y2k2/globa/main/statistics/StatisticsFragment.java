@@ -119,17 +119,40 @@ public class StatisticsFragment extends Fragment {
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
         wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 100)).toArray();
 
-        Pair[] pairs = new Pair[wordValues.length];
-        for(int i = 0; i < wordValues.length; i++) {
-            pairs[i] = new Pair(wordValues[i], wordX[i]);
+        if(wordX.length < 10 && wordX.length > 0) {
+            List<String> wordXList = new ArrayList<>();
+            List<Integer> wordValuesList = new ArrayList<>();
+            for(int i = 0; i < wordX.length; i++) {
+                wordXList.add(wordX[i]);
+                wordValuesList.add(wordValues[i]);
+            }
+            for(int i = 0; i < 10 - wordX.length; i++) {
+                wordXList.add(" ");
+                wordValuesList.add(0);
+            }
+            String[] newWordX = new String[10];
+            int[] newWordValue = new int[10];
+            int i = 0, j = 0;
+            for(String s : wordXList) {
+                newWordX[i] = s;
+                i++;
+            }
+            for(int n : wordValuesList) {
+                newWordValue[j] = n;
+                j++;
+            }
+            drawBarChart(barChart, newWordX, newWordValue);
+        } else if(wordX.length == 0) {
+            String[] newWordX = new String[10];
+            int[] newWordValue = new int[10];
+            for(int i = 0; i < 10; i++) {
+                newWordX[i] = " ";
+                newWordValue[i] = 0;
+            }
+            drawBarChart(barChart, newWordX, newWordValue);
+        } else {
+            drawBarChart(barChart, wordX, wordValues);
         }
-        Arrays.sort(pairs);
-        for(int i = 0; i < pairs.length; i++) {
-            wordValues[i] = pairs[i].getNumber();
-            wordX[i] = pairs[i].getText();
-        }
-
-        drawBarChart(barChart, wordX, wordValues);
     }
 
     private void drawStudyTimeChart() {

@@ -6,12 +6,14 @@ public class DocsDetailSubCommentItem {
     private String name;
     private String createdTime;
     private String content;
+    private String commentId;
 
-    public DocsDetailSubCommentItem(String profile, String name, String createdTime, String content) {
+    public DocsDetailSubCommentItem(String profile, String name, String createdTime, String content, String commentId) {
         this.profile = profile;
         this.name = name;
         this.createdTime = createdTime;
         this.content = content;
+        this.commentId = commentId;
     }
 
     public String getProfile() {
@@ -25,6 +27,9 @@ public class DocsDetailSubCommentItem {
     }
     public String getContent() {
         return content;
+    }
+    public String getCommentId() {
+        return commentId;
     }
 
     public void setProfile(String profile) {

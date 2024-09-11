@@ -20,11 +20,11 @@
             android:id="@+id/button_folderadd_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="16dp"
             android:background="@drawable/header_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/textview_folder_add_confirm"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginRight="16dp" />
+            android:layout_marginEnd="20dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,7 +51,7 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_folderadd_header"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginStart="20dp" />
 
     <EditText
         android:id="@+id/edittext_folderadd_inputname"
@@ -65,9 +65,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_folderadd_announce"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/button_folderadd_cancel"
@@ -75,10 +75,10 @@
         android:layout_height="17dp"
         android:background="@drawable/cancel"
         android:backgroundTint="@color/gray"
-        app:layout_constraintTop_toTopOf="@id/edittext_folderadd_inputname"
         app:layout_constraintEnd_toEndOf="@id/edittext_folderadd_inputname"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="16dp" />
+        app:layout_constraintTop_toTopOf="@id/edittext_folderadd_inputname"
+        app:layout_constraintBottom_toBottomOf="@id/edittext_folderadd_inputname"
+        android:layout_marginEnd="16dp" />
 
     <TextView
         android:id="@+id/textview_folderadd_count"
@@ -91,25 +91,5 @@
         app:layout_constraintEnd_toEndOf="@id/button_folderadd_cancel"
         app:layout_constraintStart_toStartOf="@id/button_folderadd_cancel"
         app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname" />
-
-    <TextView
-        android:id="@+id/textview_folderadd_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="공유"
-        android:fontFamily="@font/notosans_bold"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@+id/edittext_folderadd_inputname"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
-        android:layout_marginTop="10dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_folderadd_addlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/textview_folderadd_share"
-        app:layout_constraintTop_toBottomOf="@+id/textview_folderadd_share" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -66,8 +66,14 @@ public class FolderPermissionActivity extends AppCompatActivity{
                     Log.d(getClass().getName(), "사용자 이름: " + name);
                     String profilePath = "";
                     if(profile != null) {
-                        storageRef = storage.getReference().child(profile);
-                        profilePath = storageRef.getPath();
+                        if(profile.startsWith("http")) {
+                            profilePath = profile;
+                        } else {
+                            storageRef = storage.getReference().child(profile);
+                            profilePath = storageRef.getPath();
+                        }
+                    } else {
+                        profilePath = "";
                     }
                     int shareId = userRole.getShareId();
                     int userId = user.getUserId();

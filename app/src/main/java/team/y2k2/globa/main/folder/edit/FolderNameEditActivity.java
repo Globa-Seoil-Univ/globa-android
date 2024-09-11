@@ -29,10 +29,6 @@ public class FolderNameEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityFolderNameEditBinding.inflate(getLayoutInflater());
 
-//        String folderTitle = intent.getStringExtra("folderTitle");
-//
-//        binding.textviewFolderNameTitle.setText(folderTitle);
-
         initializeUI();
 
         setContentView(binding.getRoot());
@@ -69,6 +65,7 @@ public class FolderNameEditActivity extends AppCompatActivity {
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.textviewFolderNameCount.setText(s.length() + "/32");
                 binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.darkGray));
             }
             @Override

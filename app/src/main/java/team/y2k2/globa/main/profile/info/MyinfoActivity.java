@@ -82,7 +82,7 @@ public class MyinfoActivity extends AppCompatActivity {
             if(uri != null) {
                 Log.d("PhotoPicker", "Selected URI: " + uri);
                 Glide.with(this).load(uri)
-                        .error(R.mipmap.ic_launcher)
+                        .error(R.drawable.profile_user)
                         .placeholder(R.mipmap.ic_launcher)
                         .into(binding.imageviewMyinfoPhoto);
 
@@ -116,12 +116,11 @@ public class MyinfoActivity extends AppCompatActivity {
 
         if(profile != null) {
             Glide.with(this).load(profile)
-                    .error(R.mipmap.ic_launcher)
+                    .error(R.drawable.profile_user)
                     .into(binding.imageviewMyinfoPhoto);
         } else {
-            Glide.with(this).load(R.mipmap.ic_launcher)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
+            Glide.with(this).load(R.drawable.profile_user)
+                    .error(R.drawable.profile_user)
                     .into(binding.imageviewMyinfoPhoto);
             Log.d("이미지 로드 오류", "profile 값이 null입니다");
         }

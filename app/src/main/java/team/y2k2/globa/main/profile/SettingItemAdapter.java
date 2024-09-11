@@ -20,10 +20,13 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 
 public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.AdapterViewHolder> {
+
+    ProfileFragment fragment;
     ArrayList<SettingItem> items;
 
-    public SettingItemAdapter(ArrayList<SettingItem> items) {
+    public SettingItemAdapter(ArrayList<SettingItem> items, ProfileFragment fragment) {
         this.items = items;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -49,8 +52,9 @@ public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.
         }
 
         holder.layout.setOnClickListener(view -> {
-            Intent intent = new Intent(holder.itemView.getContext(), items.get(position).getActivity().getClass());
-            holder.itemView.getContext().startActivity(intent);
+            Intent intent = new Intent(fragment.getContext(), items.get(position).getActivity().getClass());
+            intent.putExtra("userId", fragment.getUserId());
+            fragment.startActivity(intent);
         });
     }
 

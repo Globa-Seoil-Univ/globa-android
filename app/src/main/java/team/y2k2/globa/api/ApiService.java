@@ -20,6 +20,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.api.model.entity.Quiz;
 import team.y2k2.globa.api.model.entity.QuizResult;
+import team.y2k2.globa.api.model.request.AlertRequest;
 import team.y2k2.globa.api.model.request.CommentRequest;
 import team.y2k2.globa.api.model.request.FirstCommentRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
@@ -36,6 +37,7 @@ import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.SubCommentRequest;
 import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.request.WithdrawRequest;
+import team.y2k2.globa.api.model.response.AlertResponse;
 import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
@@ -595,6 +597,17 @@ public interface ApiService {
             @Path("notification_id") String notificationId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
+    );
+
+    /**
+     * 알림 수정
+     */
+    @PUT("/user/{user_id}/notification")
+    Call<AlertResponse> requestAlertStatus(
+            @Path("user_id") String userId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body AlertRequest alertRequest
     );
 
 }
