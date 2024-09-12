@@ -52,10 +52,10 @@ public class NoticeFragment extends Fragment {
             if(notificationResponse != null) {
                 notificationList = notificationResponse.getNotifications();
                 noticeFragmentItems.clear();
+
                 for(Notification notification : notificationList) {
-
-                    settingNotification(notification);
-
+                    if(notification.getNotice() != null)
+                        settingNotification(notification);
                 }
 
                 adapter = new NoticeFragmentAdapter(noticeFragmentItems, (NotificationActivity) requireActivity(), this);
