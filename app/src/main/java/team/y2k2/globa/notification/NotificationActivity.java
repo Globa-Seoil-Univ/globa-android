@@ -19,6 +19,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityNotificationBinding;
+import team.y2k2.globa.notification.inquiry.InquiryFragment;
 import team.y2k2.globa.notification.notice.NoticeFragment;
 import team.y2k2.globa.notification.docs.DocsFragment;
 import team.y2k2.globa.notification.share.ShareFragment;
@@ -130,6 +131,7 @@ public class NotificationActivity extends AppCompatActivity {
         });
         binding.constraintlayoutNotificationInquiry.setOnClickListener(v -> {
 
+            replaceFragment(new InquiryFragment());
             binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
             binding.linearlayoutNotificationNoticeUnderline.setVisibility(View.INVISIBLE);
             binding.linearlayoutNotificationShareUnderline.setVisibility(View.INVISIBLE);

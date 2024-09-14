@@ -31,6 +31,7 @@ import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
+import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
@@ -711,6 +712,35 @@ public class ApiClient {
         return null;
     }
 
+    // 알림 가져오기
+    public NotificationResponse requestNotification(String type) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+
+                Call<NotificationResponse> call = apiService.requestGetNotification(APPLICATION_JSON, authorization, 1, 10, type);
+                Response<NotificationResponse> response;
+                try {
+                    response = call.execute();
+
+                    if(response.isSuccessful()) {
+                        Log.d(getClass().getSimpleName(), "알림 가져오기 성공: " + response.code());
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        Log.d(getClass().getSimpleName(), "알림 가져오기 실패: " + response.code());
+                        return null;
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.d(getClass().getSimpleName(), "알림 오류: " + e.getMessage());
+            return null;
+        }
+    }
 
     private void handleErrorCode(int code) {
         switch (code) {

@@ -17,6 +17,7 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationInquiryBinding;
 import team.y2k2.globa.notification.NotificationActivity;
@@ -32,6 +33,7 @@ public class InquiryFragment extends Fragment {
     String notificationId, inquiryId, title, content, createdTime;
     boolean isRead;
     InquiryFragmentAdapter adapter;
+    ApiClient apiClient;
 
     @Nullable
     @Override
@@ -46,29 +48,50 @@ public class InquiryFragment extends Fragment {
 
     private void initializeUI() {
 
-        notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
+//        notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
+//
+//        notificationViewModel.getNotification("i");
+//
+//        notificationViewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
+//            if(notificationResponse != null) {
+//                notificationList = notificationResponse.getNotifications();
+//                inquiryFragmentItems.clear();
+//                for(Notification notification : notificationList) {
+//
+//                    settingNotification(notification);
+//
+//                }
+//
+//                adapter = new InquiryFragmentAdapter(inquiryFragmentItems, (NotificationActivity) requireActivity(), this);
+//
+//                binding.recyclerviewNotificationInquiryContent.setAdapter(adapter);
+//                binding.recyclerviewNotificationInquiryContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+//
+//            } else {
+//                Log.d("오류", "문의사항 알림 수신 오류 : notificationResponse = null");
+//            }
+//        });
 
-        notificationViewModel.getNotification("i");
+        apiClient = new ApiClient(this.getContext());
 
-        notificationViewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
-            if(notificationResponse != null) {
-                notificationList = notificationResponse.getNotifications();
-                inquiryFragmentItems.clear();
-                for(Notification notification : notificationList) {
+        notificationList = apiClient.requestNotification("i").getNotifications();
+        inquiryFragmentItems.clear();
 
-                    settingNotification(notification);
+        if(notificationList != null) {
+            for(Notification notification : notificationList) {
 
-                }
+                settingNotification(notification);
 
-                adapter = new InquiryFragmentAdapter(inquiryFragmentItems, (NotificationActivity) requireActivity(), this);
-
-                binding.recyclerviewNotificationInquiryContent.setAdapter(adapter);
-                binding.recyclerviewNotificationInquiryContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-
-            } else {
-                Log.d("오류", "문의사항 알림 수신 오류 : notificationResponse = null");
             }
-        });
+
+            adapter = new InquiryFragmentAdapter(inquiryFragmentItems, (NotificationActivity) requireActivity(), this);
+
+            binding.recyclerviewNotificationInquiryContent.setAdapter(adapter);
+            binding.recyclerviewNotificationInquiryContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+
+        } else {
+            Log.d(getClass().getSimpleName(), "문의 알림 오류 : notificationResponse = null");
+        }
 
     }
 
