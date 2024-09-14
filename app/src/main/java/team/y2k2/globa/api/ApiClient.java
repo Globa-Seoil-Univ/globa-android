@@ -24,6 +24,7 @@ import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.FolderDeleteRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
+import team.y2k2.globa.api.model.request.StudyTimeRequest;
 import team.y2k2.globa.api.model.request.SubCommentRequest;
 import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
@@ -740,6 +741,44 @@ public class ApiClient {
             Log.d(getClass().getSimpleName(), "알림 오류: " + e.getMessage());
             return null;
         }
+    }
+
+    // 공부시간 수정
+    public Response<Void> updateStudyTime(String folderId, String recordId, String studyTime, String createdTime) {
+        StudyTimeRequest studyTimeRequest = new StudyTimeRequest(studyTime, createdTime);
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.requestStudyTime(folderId, recordId, APPLICATION_JSON, authorization, studyTimeRequest);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                        default: {
+                            Log.d("댓글 수정", "댓글 수정 ResponseCode: " + response.code());
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+                return response;
+            }).get();
+        }catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void handleErrorCode(int code) {

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +31,7 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
 import team.y2k2.globa.main.ProfileImage;
+import team.y2k2.globa.main.profile.edit.NicknameEditViewModel;
 import team.y2k2.globa.main.profile.info.MyinfoActivity;
 
 public class ProfileFragment extends Fragment {
@@ -40,6 +42,8 @@ public class ProfileFragment extends Fragment {
 
     private String userId;
 
+    private NicknameEditViewModel nicknameEditViewModel;
+
     public ProfileFragment() {
         model = new ProfileModel();
     }
@@ -47,6 +51,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(getLayoutInflater());
+
+        nicknameEditViewModel = new ViewModelProvider(this).get(NicknameEditViewModel.class);
 
         SettingItemAdapter adapter = new SettingItemAdapter(model.getItems(), this);
 
@@ -107,6 +113,12 @@ public class ProfileFragment extends Fragment {
             intent.putExtra("userId", response.getUserId());
             startActivity(intent);
 
+        });
+
+        nicknameEditViewModel.getNameLiveData().observe(getViewLifecycleOwner(), name -> {
+            if(name != null) {
+                binding.textviewProfileAccountUsername.setText(name);
+            }
         });
 
         return binding.getRoot();

@@ -20,10 +20,15 @@ import team.y2k2.globa.api.model.request.NicknameEditRequest;
 public class NicknameEditViewModel extends ViewModel {
 
     private ApiService apiService;
+    private MutableLiveData<String> nameLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public NicknameEditViewModel() {
         apiService = ApiClient.getApiService();
+    }
+
+    public MutableLiveData<String> getNameLiveData() {
+        return nameLiveData;
     }
 
     public MutableLiveData<String> getErrorLiveData() {
@@ -43,6 +48,7 @@ public class NicknameEditViewModel extends ViewModel {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("name", newNickname);
                         editor.commit();
+                        nameLiveData.setValue(newNickname);
                     } else {
                         Log.d(getClass().getName(), "닉네임 업데이트 실패 : " + response.code());
                     }
@@ -55,7 +61,7 @@ public class NicknameEditViewModel extends ViewModel {
                 }
             });
         } catch(Exception e) {
-            Log.d(getClass().getName(), "서버 오류 발생: " + e.getMessage());
+            Log.d(getClass().getName(), "Retrofit 오류 발생: " + e.getMessage());
         }
     }
 }

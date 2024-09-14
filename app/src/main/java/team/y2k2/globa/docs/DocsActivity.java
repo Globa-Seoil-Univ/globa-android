@@ -39,12 +39,16 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private String profile;
     private String name;
 
+    ApiClient apiClient;
+
+    SimpleDateFormat dateFormat;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
 
-        ApiClient apiClient = new ApiClient(this);
+        apiClient = new ApiClient(this);
         UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
 
         profile = userInfoResponse.getProfile();
@@ -52,8 +56,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         // 파일이 열리는 시간 측정
         startTime = System.currentTimeMillis();
-        Date date = new Date(startTime);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         // Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
 
         viewModel = new ViewModelProvider(this).get(DocsViewModel.class);
@@ -248,6 +251,9 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         long durationMilliSecond = endTime - startTime;
         int durationMinute = (int)(durationMilliSecond / 60000);
         Log.d("시간", "열려 있던 시간(분): " + durationMinute);
+
+        // durationMinute, dateFormat으로 공부시간 API 수정 필요
+        apiClient.updateStudyTime(viewModel.getFolderId(), viewModel.getRecordId(), String.valueOf(durationMinute), dateFormat.toString());
 
         // detailAdapter에 생성된 disposable 메모리 해제
         viewModel.clearDisposable();

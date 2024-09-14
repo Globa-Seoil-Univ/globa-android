@@ -28,17 +28,18 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     private List<MyinfoItem> itemList;
     private Context context;
     private ActivityResultLauncher<Intent> nicknameEditLauncher;
+    private MyinfoActivity activity;
 
-
-    public MyinfoAdapter(List<MyinfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher) {
+    public MyinfoAdapter(List<MyinfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher, MyinfoActivity activity) {
         this.itemList = itemList;
         this.nicknameEditLauncher = nicknameEditLauncher;
+        this.activity = activity;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.item_my_info, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_myinfo, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -56,7 +57,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                 if(item.getTitle().toString().equals("이름")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
                     intent.putExtra("current_name", item.getName().toString());
-                    intent.putExtra("userId",item.getUserId().toString());
+                    intent.putExtra("userId", activity.getUserId());
                     nicknameEditLauncher.launch(intent);
                 } else if(item.getTitle().toString().equals("회원탈퇴")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());

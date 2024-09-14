@@ -38,10 +38,10 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         FolderShareItem item = itemList.get(position);
-        if(!item.getImage().equals("")) {
-            Glide.with(context).load(item.getImage()).into(holder.image);
+        if(!item.getImage().isEmpty()) {
+            Glide.with(context).load(item.getImage()).error(R.drawable.profile_user).into(holder.image);
         } else {
-            Glide.with(context).load(R.mipmap.ic_launcher).into(holder.image);
+            Glide.with(context).load(R.mipmap.ic_launcher).error(R.drawable.profile_user).into(holder.image);
         }
 
         holder.layout.setOnClickListener(v -> {

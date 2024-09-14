@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="20dp" />
 
         <TextView
             android:id="@+id/textview_foldershare_confirm"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="20dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,7 +51,8 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_foldershare_header"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp" />
 
     <EditText
         android:id="@+id/edittext_foldershare_inputname"
@@ -65,9 +66,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_foldershare_announce"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/button_foldershare_cancel"
@@ -89,10 +90,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edittext_foldershare_inputname"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:padding="10dp">
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="16dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageview_foldershare_search"
@@ -101,8 +102,7 @@
             android:src="@mipmap/ic_launcher"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="5dp" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             android:id="@+id/textview_foldershare_search"
@@ -115,7 +115,7 @@
             app:layout_constraintStart_toEndOf="@+id/imageview_foldershare_search"
             app:layout_constraintTop_toTopOf="@+id/imageview_foldershare_search"
             app:layout_constraintBottom_toBottomOf="@+id/imageview_foldershare_search"
-            android:layout_marginStart="15dp" />
+            android:layout_marginStart="12dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
