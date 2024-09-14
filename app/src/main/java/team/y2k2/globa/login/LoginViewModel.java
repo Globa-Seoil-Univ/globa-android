@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.kakao.sdk.user.model.User;
 
 import java.util.ArrayList;
@@ -56,8 +57,8 @@ public class LoginViewModel extends ViewModel {
             apiClient = new ApiClient(context);
         }
 
-        public void KakaoLogin() {
-            LoginRequest request = new LoginRequest(model, true);
+        public void KakaoLogin(String token) {
+            LoginRequest request = new LoginRequest(model, true, token);
             LoginResponse response = apiClient.requestSignIn(request);
 
             userPreferences(request, response);
@@ -73,18 +74,28 @@ public class LoginViewModel extends ViewModel {
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
                 // Firebase 로그인 성공
-                model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE);
 
-                LoginRequest request = new LoginRequest(model, true);
+                FirebaseUser user = mAuth.getCurrentUser();
+                user.getIdToken(false).addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        String idToken = task2.getResult().getToken();
+                        // 여기에서 새로운 ID 토큰을 처리합니다.
+                        Log.d("ID_TOKEN", "ID Token: " + idToken);
 
-                LoginResponse response = apiClient.requestSignIn(request);
-                userPreferences(request, response);
-                sendLogMessage(request,response);
+                        model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE, idToken);
+                        LoginRequest request = new LoginRequest(model, true, idToken);
 
-                Intent intent = new Intent(context, MainActivity.class);
-                context.startActivity(intent);
+                        LoginResponse response = apiClient.requestSignIn(request);
+                        userPreferences(request, response);
+                        sendLogMessage(request,response);
 
-                Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, MainActivity.class);
+                        context.startActivity(intent);
+
+                        Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
             else {
                 Toast.makeText(context, "로그인 실패 : " + task.getResult(), Toast.LENGTH_SHORT).show();
@@ -94,6 +105,8 @@ public class LoginViewModel extends ViewModel {
         public void userPreferences(LoginRequest request, LoginResponse response) {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
+
+            Log.d("엑세스 토큰", "AT : " + accessToken);
 
             SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();

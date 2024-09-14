@@ -22,12 +22,14 @@ public class LoginModel {
     String name;
     String profileImageUrl;
     int snsKind;
+    String token;
 
-    public LoginModel(FirebaseUser user, int snsKind) {
+    public LoginModel(FirebaseUser user, int snsKind, String token) {
         uid = user.getUid();
         name = user.getDisplayName();
         profileImageUrl = user.getPhotoUrl().toString();
         this.snsKind = snsKind;
+        this.token = token;
     }
 
     public LoginModel(User user, int snsKind) {

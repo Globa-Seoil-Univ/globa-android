@@ -69,11 +69,11 @@ public class LoginActivity extends AppCompatActivity {
             startActivityForResult(signInIntent, RC_GOOGLE);
         }
         else if(SIGN_IN_TYPE == KAKAO) {
-
             UserApiClient userApiClient = UserApiClient.getInstance();
             // 카카오톡 설치 여부 확인
             if (userApiClient.isKakaoTalkLoginAvailable(this)) {
                 userApiClient.loginWithKakaoTalk(this, signInKakaoOfCallback);
+
             } else {
                 userApiClient.loginWithKakaoAccount(this, signInKakaoOfCallback);
             }
@@ -164,13 +164,15 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new LoginViewModel.LoginListener(this, mAuth, accessToken));
     }
 
-    private void signInKakao() {
-        UserApiClient.getInstance().me((user, meError) -> {
+    private void signInKakao(String token) {
+        UserApiClient userApiClient = UserApiClient.getInstance();
+
+        userApiClient.me((user, meError) -> {
             if (meError != null) {
                 Toast.makeText(this, LOGIN_ERR_MSG + ":" + meError.getMessage(), Toast.LENGTH_LONG);
             } else {
                 LoginViewModel.LoginListener listener = new LoginViewModel.LoginListener(user, this);
-                listener.KakaoLogin();
+                listener.KakaoLogin(token);
             }
             return null;
         });
@@ -181,7 +183,9 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, LOGIN_ERR_MSG +":"+ error.getMessage(), Toast.LENGTH_LONG);
         }
         else if (token != null) {
-            signInKakao();
+            Log.d(getClass().getName(), token.getIdToken());
+            Log.d(getClass().getName(), token.getAccessToken());
+            signInKakao(token.getAccessToken());
         }
         return null;
     };

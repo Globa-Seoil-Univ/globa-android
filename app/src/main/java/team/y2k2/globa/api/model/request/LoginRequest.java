@@ -21,13 +21,21 @@ public class LoginRequest {
     @SerializedName("notification")
     private boolean notification;
 
+    @SerializedName("token")
+    private String token;
 
-    public LoginRequest(LoginModel model, boolean notification) {
+
+    public LoginRequest(LoginModel model, boolean notification, String token) {
         this.snsKind = model.getSnsKind();
         this.snsId = model.getUid();
         this.name = model.getName();
         this.profile = model.getProfileImageUrl();
         this.notification = notification;
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public String getProfile() {
