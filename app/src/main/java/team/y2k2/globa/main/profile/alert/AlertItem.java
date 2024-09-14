@@ -5,28 +5,24 @@ import android.app.Activity;
 public class AlertItem {
     private final int title;
     private final int description;
+    private boolean isChecked;
 
-    private Activity activity;
-
-
-    AlertItem(int title, int description) {
+    AlertItem(int title, int description, boolean isChecked) {
         this.title = title;
         this.description = description;
+        this.isChecked = isChecked;
     }
-    AlertItem(int title, int description, Activity activity) {
-        this.title = title;
-        this.description = description;
-        this.activity = activity;
-    }
+
     public int getDescription() {
         return description;
     }
-
     public int getTitle() {
         return title;
     }
-
-    public Activity getActivity() {
-        return activity;
+    public boolean isChecked() {
+        return isChecked;
+    }
+    public void setChecked(boolean isChecked) {
+        this.isChecked = isChecked;
     }
 }
