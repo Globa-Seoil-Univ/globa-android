@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/item_main_main"
-        android:icon="@drawable/main"
+        android:icon="@drawable/nav_item_main"
         android:title="메인" />
 
     <item
@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/item_main_upload"
-        android:icon="@drawable/add_circle"
+        android:icon="@drawable/upload"
         android:title="업로드" />
 
     <item
@@ -23,7 +23,7 @@
 
     <item
         android:id="@+id/item_main_profile"
-        android:icon="@drawable/info"
+        android:icon="@drawable/nav_item_info"
         android:title="내 정보" />
 
 </menu>
