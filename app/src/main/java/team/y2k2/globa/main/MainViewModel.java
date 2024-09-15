@@ -1,5 +1,7 @@
 package team.y2k2.globa.main;
 
+import static team.y2k2.globa.api.ApiClient.apiService;
+import static team.y2k2.globa.api.ApiClient.authorization;
 import static team.y2k2.globa.main.MainModel.PRF_RECORD_NAME;
 import static team.y2k2.globa.main.MainModel.PRF_RECORD_PATH;
 import static team.y2k2.globa.main.MainModel.REQUEST_CODE_PICK_RECORD;
@@ -7,17 +9,25 @@ import static team.y2k2.globa.main.MainModel.REQUEST_CODE_UPLOAD_RECORD;
 import static team.y2k2.globa.main.MainModel.TYPE_AUDIO;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.request.NotificationTokenRequest;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.upload.DocsUploadActivity;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.main.MainFragment;
@@ -43,6 +53,7 @@ public class MainViewModel extends ViewModel {
         folderFragment = new FolderFragment();
 
         model = new MainModel();
+
     }
 
     public void viewFragment(int index) {
@@ -112,4 +123,37 @@ public class MainViewModel extends ViewModel {
         }
         return uri.getLastPathSegment();
     }
+
+    public void getUserIdUpdateToken() {
+        SharedPreferences fcmPref = activity.getSharedPreferences("fcm_token", activity.MODE_PRIVATE);
+        String fcmToken = fcmPref.getString("fcm_token", null);
+        String userId = getUserInfo();
+        updateToken(userId, fcmToken);
+    }
+
+    public String getUserInfo() {
+        ApiClient apiClient = new ApiClient(activity);
+        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+        return userInfoResponse.getUserId();
+    }
+
+    public void updateToken(String userId, String token) {
+        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
+        apiService.updateToken(userId, "application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                    Log.d("알림 토큰", "알림 토큰 업데이트 완료");
+                } else {
+                    Log.d("알림 토큰", "알림 토큰 업데이트 실패 : " + response.code() + ", errorMessage: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("알림 토큰", "알림 토큰 업데이트 요청 실패 : " + t.getMessage());
+            }
+        });
+    }
+
 }

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/item_profile_items"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="10dp">
+    android:padding="20dp">
 
 
     <LinearLayout
@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageview_item_comment_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -106,6 +106,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textview_item_comment_visible"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

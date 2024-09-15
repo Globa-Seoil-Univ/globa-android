@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentItem;
 import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
+import team.y2k2.globa.main.ProfileImage;
 
 public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.AdapterViewHolder> {
 
@@ -55,13 +57,12 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     String folderId;
     String recordId;
-    String DocsSectionId;
-    String DocsHighlightId;
 
     String myProfile;
     String myName;
 
     int selectedPosition;
+    String selectedId;
 
     TextView commentTv;
     RecyclerView commentRv;
@@ -71,7 +72,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private Disposable disposable;
     private DocsDetailCommentAdapter commentAdapter;
 
-    ArrayList<DocsDetailCommentItem> commentItems;
+    ArrayList<DocsDetailCommentItem> commentItems = new ArrayList<>();
 
     private final int BUTTON_COMMENT_CONFIRM = 0;
     private final int BUTTON_COMMENT_SUB_CONFIRM = 1;
@@ -79,13 +80,18 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private final int BUTTON_COMMENT_SUB_UPDATE = 3;
     private int buttonStatus = BUTTON_COMMENT_CONFIRM;
 
+    ProfileImage profileImage;
+
+    String parentId;
+
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
+        this.profileImage = new ProfileImage();
         this.detailItems = detailItems;
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
         this.apiClient = new ApiClient(activity);
-        this.myProfile = activity.getProfile();
+        this.myProfile = profileImage.convertGsToHttps(FirebaseStorage.getInstance().getReference().child(activity.getProfile()).toString());
         this.myName = activity.getName();
     }
 
@@ -110,8 +116,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             activity.setDuration(startTime);
         });
 
-        String description = detailItems.get(position).getDescription();
-        SpannableString highlightString = new SpannableString(description);
+
+
+
         holder.description.setOnTouchListener(new View.OnTouchListener() {
             int startIdx = 0;
             int endIdx = 0;
@@ -146,11 +153,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             }
         });
 
+        String description = detailItems.get(position).getDescription();
         List<Highlight> highlights = detailItems.get(position).getHighlights();
-        for (int i = 0; i < highlights.size(); i++) {
-            Highlight highlight = highlights.get(i);
-            applyHighlightAndClick(holder, highlightString, sectionId, highlight, i);
-        }
+        SpannableString highlightString = setSpannableStringHighlight(description, highlights, holder, sectionId);
 
         holder.description.setText(highlightString);
         holder.description.setMovementMethod(LinkMovementMethod.getInstance());
@@ -161,9 +166,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         String highlightId = String.valueOf(highlight.getHighlightId());
         int startIdx = highlight.getStartIndex();
         int endIdx = highlight.getEndIndex();
-
-        DocsSectionId = sectionId;
-        DocsHighlightId = highlightId;
+        String selectedString = highlightString.toString().substring(startIdx, endIdx);
 
         GestureDetector gestureDetector = new GestureDetector(holder.itemView.getContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -180,6 +183,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                 commentBottomSheet.show();
                  */
 
+                Log.d(getClass().getSimpleName(), "folderId: " + folderId + ", recordId: " + recordId + ", sectionId: " + sectionId + ", highlightId: " + highlightId);
                 List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
                 commentItems = new ArrayList<>();
                 for(Comment comment : comments) {
@@ -192,7 +196,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                     commentItems.add(new DocsDetailCommentItem(profile, name, createdTime, content, commentId, hasReply));
                 }
 
-                showCommentSheetDialog(commentItems, highlightString.toString(), sectionId, null, null, highlightId);
+                Log.d(getClass().getSimpleName(), "선택 단어(highlightString) : " + selectedString);
+                showCommentSheetDialog(commentItems, selectedString, sectionId, null, null, highlightId);
 
                 return true;
             }
@@ -313,6 +318,17 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         popupMenu.show();
     }
 
+    public SpannableString setSpannableStringHighlight(String description, List<Highlight> highlights, AdapterViewHolder holder, String sectionId){
+        SpannableString highlightString = new SpannableString(description);
+
+        for (int i = 0; i < highlights.size(); i++) {
+            Highlight highlight = highlights.get(i);
+            applyHighlightAndClick(holder, highlightString, sectionId, highlight, i);
+        }
+
+        return highlightString;
+    }
+
     private void updateSelection(TextView textView, int start, int end) {
         int startIdx = start;
         int endIdx = end;
@@ -351,7 +367,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             return String.format("%02d:%02d", minutes, seconds);
     }
 
-    private void showCommentSheetDialog(ArrayList<DocsDetailCommentItem> commentItems, String name, String sectionId, String startIdx, String endIdx, String highlightId) {
+    private void showCommentSheetDialog(ArrayList<DocsDetailCommentItem> commentItems, String name, String sectionId,
+                                        String startIdx, String endIdx, String highlightId) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
         View bottomSheetView = activity.getLayoutInflater().inflate(R.layout.dialog_comment, null);
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -361,11 +378,19 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         commentEt = bottomSheetView.findViewById(R.id.edittext_comment);
         commentBtn = bottomSheetView.findViewById(R.id.imagebutton_comment_confirm);
 
+        Log.d("댓글 창", "버튼 상태 buttonStatus: " + buttonStatus);
+        /* buttonStatus
+            0: 댓글 작성 상태
+            1: 대댓글 작성 상태
+            2: 댓글 수정 상태
+            3: 대댓글 수정 상태
+         */
+
         // 선택된 단어 표시
         commentTv.setText(name);
 
         // null처리 관련 작업 필요...?
-        commentAdapter = new DocsDetailCommentAdapter(commentItems, activity);
+        commentAdapter = new DocsDetailCommentAdapter(commentItems, activity, sectionId, highlightId, this);
         commentRv.setLayoutManager(new LinearLayoutManager(activity));
         commentRv.setAdapter(commentAdapter);
 
@@ -380,6 +405,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                     if(!text.isEmpty()) {
                         if(buttonStatus == BUTTON_COMMENT_CONFIRM) {
                             // 댓글 아이템 리스트 추가
+                            Log.d("댓글 추가", "내 프로필 경로: " + myProfile);
+                            Log.d("댓글 추가", "내 이름: " + myName + ", 작성 내용: " + text);
                             commentAdapter.addNewItem(new DocsDetailCommentItem(myProfile, myName, "방금전", text, "commentId", false));
                             // API Request 필요
                             if(commentItems == null) {
@@ -393,12 +420,14 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                             // 대댓글 아이템 리스트 추가
                             commentAdapter.addItemToSubCommentRecyclerView(selectedPosition, new DocsDetailSubCommentItem(myProfile, myName, "방금전", text));
                             // API Request 필요
-                            apiClient.requestInsertSubComment(folderId, recordId, sectionId, highlightId, "parentId", text);
+                            apiClient.requestInsertSubComment(folderId, recordId, sectionId, highlightId, parentId, text);
+                            // 버튼 Status 변경
+                            buttonStatus = BUTTON_COMMENT_CONFIRM;
                         } else if(buttonStatus == BUTTON_COMMENT_UPDATE) {
                             // 댓글 아이템 수정 (수정 필요)
-                            commentAdapter.updateItem(text, 0);
+                            commentAdapter.updateItem(text, selectedPosition);
                             // API Request 필요
-                            apiClient.updateComment(folderId, recordId, sectionId, highlightId, "commentId", text);
+                            apiClient.updateComment(folderId, recordId, sectionId, highlightId, selectedId, text);
                         } else if(buttonStatus == BUTTON_COMMENT_SUB_UPDATE) {
                             // 대댓글 아이템 수정 (수정 필요)
                             commentAdapter.updateItemToSubCommentRecyclerView(text, 0, 0);
@@ -410,7 +439,12 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                     } else {
                         Toast.makeText(activity, "댓글을 입력해주세요", Toast.LENGTH_SHORT).show();
                     }
-                });
+                },
+                error -> {
+                    Log.d("RxJavaError", "RxJavaError 오류 내용: " + error);
+                    Toast.makeText(activity, "댓글 처리중 오류 발생", Toast.LENGTH_SHORT).show();
+                }
+            );
 
         bottomSheetDialog.show();
 
@@ -418,6 +452,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     public void clearDisposable() {
         if(disposable != null && !disposable.isDisposed()) {
+            Log.d("댓글", "댓글 disposable 해제 시작");
             disposable.dispose();
         }
     }
@@ -432,11 +467,14 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     public void setSelectedPosition(int position) {
         this.selectedPosition = position;
     }
-
-    public String getDocsHighlightId() {
-        return DocsHighlightId;
+    public void setSelectedId(String selectedId) {
+        this.selectedId = selectedId;
     }
-    public String getDocsSectionId() {
-        return DocsSectionId;
+
+    public String getParentId() {
+        return parentId;
+    }
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

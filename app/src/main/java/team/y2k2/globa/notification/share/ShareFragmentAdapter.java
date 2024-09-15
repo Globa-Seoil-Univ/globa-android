@@ -1,5 +1,6 @@
 package team.y2k2.globa.notification.share;
 
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
 
@@ -27,11 +33,16 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
     NotificationActivity activity;
     List<ShareFragmentItem> items;
     NotificationViewModel notificationViewModel;
+    ProfileImage profileImage;
+    int whiteColor, primaryColor;
 
-    public ShareFragmentAdapter(List<ShareFragmentItem> items, NotificationActivity activity) {
+    public ShareFragmentAdapter(List<ShareFragmentItem> items, NotificationActivity activity, ShareFragment fragment) {
         this.activity = activity;
         this.items = items;
-        notificationViewModel = new ViewModelProvider(activity).get(NotificationViewModel.class);
+        notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
+        this.whiteColor = ContextCompat.getColor(activity, R.color.white);
+        this.primaryColor = ContextCompat.getColor(activity, R.color.primary_1);
+        this.profileImage = new ProfileImage();
     }
 
     @NonNull
@@ -49,7 +60,7 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
         if(item.getProfile() != null && !item.getProfile().isEmpty()) {
             // 프로필이 있을 때
             Glide.with(holder.itemView.getContext())
-                    .load(convertGsToHttps(item.getProfile()))
+                    .load(item.getProfile())
                     .error(R.mipmap.ic_launcher)
                     .into(holder.profileImage);
         } else {
@@ -65,6 +76,21 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
 
+        if(!item.isRead()) {
+            holder.layout.setBackgroundColor(primaryColor);
+        } else {
+            holder.layout.setBackgroundColor(whiteColor);
+        }
+
+        holder.layout.setOnClickListener(v -> {
+            // 알림 읽음 표시
+            if(!item.isRead()){
+                Log.d("알림 읽음", "공유 알림 읽음 표시 및 API 전송");
+                holder.layout.setBackgroundColor(whiteColor);
+                notificationViewModel.readNotification(item.getNotificationId());
+            }
+        });
+
         if(item.getType().equals("2")) {
             // 공유 초대 알림
             holder.confirmBtn.setOnClickListener(v -> {
@@ -72,12 +98,18 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
                 Log.d("수락 버튼", "공유 초대 수락 버튼 클릭");
                 Log.d("수락 버튼", "folder_id : " + item.getFolderId() + " share_id : " + item.getShareId());
                 notificationViewModel.acceptInvite(item.getFolderId(), item.getShareId());
+                holder.confirmBtn.setVisibility(View.GONE);
+                holder.cancelBtn.setVisibility(View.GONE);
+                holder.layout.setBackgroundColor(whiteColor);
             });
             holder.cancelBtn.setOnClickListener(v -> {
                 // 공유 거절 버튼 이벤트
                 Log.d("거절 버튼", "공유 초대 거절 버튼 클릭");
                 Log.d("거절 버튼", "folder_id : " + item.getFolderId() + " share_id : " + item.getShareId() + " notification_id : " + item.getNotificationId());
                 notificationViewModel.denyInvite(item.getFolderId(), item.getShareId(), item.getNotificationId());
+                holder.confirmBtn.setVisibility(View.GONE);
+                holder.cancelBtn.setVisibility(View.GONE);
+                holder.layout.setBackgroundColor(whiteColor);
             });
         } else {
             // 공유 초대 알림이 아닌 경우 버튼 숨기기
@@ -94,6 +126,7 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
+        ConstraintLayout layout;
         ImageView profileImage;
         TextView title;
         TextView content;
@@ -104,6 +137,7 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            layout = itemView.findViewById(R.id.constraintlayout_item_notification_share);
             profileImage = itemView.findViewById(R.id.imageview_item_notification_share);
             title = itemView.findViewById(R.id.textview_item_notification_share_title);
             content = itemView.findViewById(R.id.textview_item_notification_share_content);
@@ -114,32 +148,4 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
         }
     }
 
-    public static String convertGsToHttps(String gsUrl) {
-        if (!gsUrl.startsWith("gs://")) {
-            throw new IllegalArgumentException("Invalid gs:// URL");
-        }
-
-        // Extract bucket name and path
-        int bucketEndIndex = gsUrl.indexOf("/", 5); // Find the end of bucket name
-        if (bucketEndIndex == -1 || bucketEndIndex == gsUrl.length() - 1) {
-            throw new IllegalArgumentException("Invalid gs:// URL format");
-        }
-
-        String bucketName = gsUrl.substring(5, bucketEndIndex);
-        String filePath = gsUrl.substring(bucketEndIndex + 1);
-
-        // URL encode the file path
-        String encodedFilePath;
-        try {
-            encodedFilePath = URLEncoder.encode(filePath, "UTF-8").replace("+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("URL encoding failed", e);
-        }
-
-        // Construct the HTTPS URL
-        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
-                "/o/" + encodedFilePath + "?alt=media";
-
-        return httpsUrl;
-    }
 }

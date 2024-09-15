@@ -1,5 +1,6 @@
 package team.y2k2.globa.docs.detail.comment.subcomment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Observable;
 import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
@@ -37,17 +39,20 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
 
     private DocsDetailAdapter mainAdapter;
 
-    public DocsDetailSubCommentAdapter(List<DocsDetailSubCommentItem> subCommentItems, DocsActivity activity) {
+    public DocsDetailSubCommentAdapter(List<DocsDetailSubCommentItem> subCommentItems, DocsActivity activity, String sectionId, String highlightId) {
         this.subCommentItems = subCommentItems;
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
-        this.sectionId = mainAdapter.getDocsSectionId();
-        this.highlightId = mainAdapter.getDocsHighlightId();
+        this.sectionId = sectionId;
+        this.highlightId = highlightId;
     }
 
     public void updateAllData(List<DocsDetailSubCommentItem> subCommentItemList) {
+        Log.d("대댓글 어댑터", "대댓글 어댑터 updateAllData() 시작");
         this.subCommentItems = subCommentItemList;
+        Log.d("대댓글 어댑터", "대댓글 아이템: " + this.subCommentItems.get(0).getContent());
+
         notifyDataSetChanged();
     }
 
@@ -70,15 +75,13 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         String createdTime = subCommentItems.get(position).getCreatedTime();
         String content = subCommentItems.get(position).getContent();
 
-        String newProfile;
         if(profile != null) {
-            profileImageRef = storage.getReference().child(profile);
-            newProfile = convertGsToHttps(String.valueOf(profileImageRef));
+            Glide.with(activity).load(profile).error(R.mipmap.ic_launcher).into(holder.profileImage);
         } else {
-            newProfile = null;
+            Glide.with(activity).load(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.profileImage);
         }
 
-        Glide.with(activity).load(newProfile).error(R.mipmap.ic_launcher).into(holder.profileImage);
+
         holder.name.setText(name);
         holder.createdTime.setText(createdTime);
         holder.content.setText(content);
@@ -106,34 +109,4 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         }
     }
 
-
-
-    public static String convertGsToHttps(String gsUrl) {
-        if (!gsUrl.startsWith("gs://")) {
-            throw new IllegalArgumentException("Invalid gs:// URL");
-        }
-
-        // Extract bucket name and path
-        int bucketEndIndex = gsUrl.indexOf("/", 5); // Find the end of bucket name
-        if (bucketEndIndex == -1 || bucketEndIndex == gsUrl.length() - 1) {
-            throw new IllegalArgumentException("Invalid gs:// URL format");
-        }
-
-        String bucketName = gsUrl.substring(5, bucketEndIndex);
-        String filePath = gsUrl.substring(bucketEndIndex + 1);
-
-        // URL encode the file path
-        String encodedFilePath;
-        try {
-            encodedFilePath = URLEncoder.encode(filePath, "UTF-8").replace("+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("URL encoding failed", e);
-        }
-
-        // Construct the HTTPS URL
-        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
-                "/o/" + encodedFilePath + "?alt=media";
-
-        return httpsUrl;
-    }
 }

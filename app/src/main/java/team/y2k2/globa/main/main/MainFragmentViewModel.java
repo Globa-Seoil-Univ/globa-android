@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,17 +18,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
+import team.y2k2.globa.api.model.response.UnreadNotificationCheckResponse;
 import team.y2k2.globa.main.docs.list.DocsListItem;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
 import team.y2k2.globa.sql.RecordDB;
 
 public class MainFragmentViewModel {
     ApiClient apiClient;
+    ApiService apiService;
     Context context;
 
     MainFragmentModel model;
@@ -34,9 +39,16 @@ public class MainFragmentViewModel {
     RecordResponse recordResponse;
     List<FolderResponse> folderResponse;
 
+    private MutableLiveData<UnreadNotificationCheckResponse> notificationCheckLiveData = new MutableLiveData<>();
+
     public MainFragmentViewModel(Context context) {
         this.context = context;
         apiClient = new ApiClient(context);
+        apiService = ApiClient.getApiService();
+    }
+
+    public MutableLiveData<UnreadNotificationCheckResponse> getNotificationCheckLiveData() {
+        return notificationCheckLiveData;
     }
 
     public String[] getPromotionsImage() {
@@ -157,5 +169,23 @@ public class MainFragmentViewModel {
         return docsList.getItems();
     }
 
+    public void getUnreadNotificationCheck() {
+        apiService.getUnreadNotificationCheck("application/json", authorization).enqueue(new Callback<UnreadNotificationCheckResponse>() {
+            @Override
+            public void onResponse(Call<UnreadNotificationCheckResponse> call, Response<UnreadNotificationCheckResponse> response) {
+                if(response.isSuccessful()) {
+                    notificationCheckLiveData.postValue(response.body());
+                    Log.d("안 읽은 알림 여부", "알림 여부 가져오기 성공");
+                } else {
+                    Log.d("안 읽은 알림 여부", "알림 여부 가져오기 실패 : " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UnreadNotificationCheckResponse> call, Throwable t) {
+                Log.d("안 읽은 알림 여부", "알림 여부 가져오기 요청 실패 : " + t.getMessage());
+            }
+        });
+    }
 
 }

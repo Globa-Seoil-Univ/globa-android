@@ -14,6 +14,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -29,6 +30,7 @@ import team.y2k2.globa.api.model.request.FolderShareAddRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.NicknameEditRequest;
 import team.y2k2.globa.api.model.request.NotificationRequest;
+import team.y2k2.globa.api.model.request.NotificationTokenRequest;
 import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.SubCommentRequest;
@@ -50,6 +52,8 @@ import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
+import team.y2k2.globa.api.model.response.UnreadNotificationCheckResponse;
+import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.response.UserSearchResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
@@ -555,7 +559,6 @@ public interface ApiService {
             @Query("keyword") String keyword
     );
 
-
     /**
      *  문서 검색
      */
@@ -567,9 +570,6 @@ public interface ApiService {
             @Query("page") int page,
             @Query("count") int count
     );
-
-
-
 
     /**
      * 문의내역 목록 조회
@@ -583,6 +583,45 @@ public interface ApiService {
             @Query("keyword") String keyword,
             @Query("page") int page,
             @Query("number") int number
+    );
+
+    /**
+     * 알림 등록 토큰 업데이트
+     */
+    @PUT("/user/{user_id}/notification/token")
+    Call<Void> updateToken(
+            @Path("user_id") String userId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Body NotificationTokenRequest tokenRequest
+    );
+
+    /**
+     * 안 읽은 알림 여부 가져오기
+     */
+    @GET("/notification/unread/check")
+    Call<UnreadNotificationCheckResponse> getUnreadNotificationCheck(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
+    );
+
+    /**
+     * 안 읽은 알림 개수 가져오기
+     */
+    @GET("/notification/unread/count")
+    Call<UnreadNotificationCountResponse> getUnreadNotificationCount(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
+    );
+
+    /**
+     * 알림 읽기
+     */
+    @POST("/notification/{notification_id}")
+    Call<Void> readNotification(
+            @Path("notification_id") String notificationId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
     );
 
 }

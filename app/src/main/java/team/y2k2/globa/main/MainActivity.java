@@ -1,13 +1,16 @@
 package team.y2k2.globa.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.setActivity(this);
+        // 꼽사리....
+        viewModel.getUserIdUpdateToken();
         setContentView(binding.getRoot());
         setNavigationView(binding.navigationMainBottom);
     }

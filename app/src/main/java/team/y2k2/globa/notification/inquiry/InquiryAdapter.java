@@ -53,7 +53,7 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.AdapterV
             super(itemView);
 
             title = itemView.findViewById(R.id.textview_item_notification_inquiry_title);
-            description = itemView.findViewById(R.id.textview_item_notification_inquiry_description);
+            // description = itemView.findViewById(R.id.textview_item_notification_inquiry_description);
         }
     }
 }

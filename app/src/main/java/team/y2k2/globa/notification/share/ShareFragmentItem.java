@@ -10,8 +10,9 @@ public class ShareFragmentItem {
     private String folderId;
     private String shareId;
     private String type;
+    private boolean isRead;
 
-    public ShareFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String type) {
+    public ShareFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String type, boolean isRead) {
         this.notificationId = notificationId;
         this.profile = profile;
         this.title = title;
@@ -20,6 +21,7 @@ public class ShareFragmentItem {
         this.folderId = folderId;
         this.shareId = shareId;
         this.type = type;
+        this.isRead = isRead;
     }
 
     public String getNotificationId() {
@@ -46,5 +48,7 @@ public class ShareFragmentItem {
     public String getType() {
         return type;
     }
-
+    public boolean isRead() {
+        return isRead;
+    }
 }

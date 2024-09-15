@@ -5,25 +5,22 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.SubComment;
@@ -42,9 +39,6 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     String sectionId;
     String highlightId;
 
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference profileImageRef;
-
     ArrayList<DocsDetailSubCommentItem> subCommentItems = new ArrayList<>();
 
     private DocsDetailAdapter mainAdapter;
@@ -57,13 +51,14 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
     ApiClient apiClient;
 
-    public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity) {
+    public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailAdapter mainAdapter) {
         this.commentItems = commentItems;
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
-        this.sectionId = mainAdapter.getDocsSectionId();
-        this.highlightId = mainAdapter.getDocsHighlightId();
+        this.sectionId = sectionId;
+        this.highlightId = highlightId;
+        this.mainAdapter = mainAdapter;
     }
 
     public void addItemToSubCommentRecyclerView(int position, DocsDetailSubCommentItem item) {
@@ -72,8 +67,11 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     }
 
     public void addNewItem(DocsDetailCommentItem newItem) {
+        if(commentItems == null) {
+            commentItems = new ArrayList<>();
+        }
         commentItems.add(newItem);
-        notifyItemInserted(commentItems.size() - 1);
+        notifyDataSetChanged();
     }
 
     public void updateItemToSubCommentRecyclerView(String text, int parentPosition, int position) {
@@ -110,15 +108,13 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         String commentId = commentItems.get(position).getCommentId();
         boolean isHasSubComment = commentItems.get(position).isHasSubComment();
 
-        String newProfile;
         if(profile != null) {
-            profileImageRef = storage.getReference().child(profile);
-            newProfile = convertGsToHttps(String.valueOf(profileImageRef));
+            Glide.with(activity).load(profile).error(R.mipmap.ic_launcher).into(holder.profileImage);
         } else {
-            newProfile = null;
+            Glide.with(activity).load(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.profileImage);
         }
 
-        Glide.with(activity).load(newProfile).error(R.mipmap.ic_launcher).into(holder.profileImage);
+
         holder.name.setText(name);
         holder.createdTime.setText(createdTime);
         holder.content.setText(content);
@@ -133,6 +129,9 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             // 답글 더보기 클릭 이벤트
             if(holder.subCommentRecyclerview.getVisibility() == View.GONE) {
                 holder.subCommentRecyclerview.setVisibility(View.VISIBLE);
+
+                Log.d("대댓글 보기", "대댓글 보기 클릭 이벤트 시작");
+
                 // 대댓글 호출
                 apiClient = new ApiClient(activity);
                 List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 10).getSubComments();
@@ -141,6 +140,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
                     String subName = subComment.getUser().getName();
                     String subCreatedTime = subComment.getCreatedTime();
                     String subContent = subComment.getContent();
+                    Log.d("대댓글 호출", "subProfile: " + subProfile + ", subName: " + subName + ", subCreatedTime: " + subCreatedTime +
+                            ", subContent: " + subContent);
                     subCommentItems.add(new DocsDetailSubCommentItem(subProfile, subName, subCreatedTime, subContent));
                 }
 
@@ -151,12 +152,21 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             }
 
         });
+
         holder.writeSubComment.setOnClickListener(v -> {
+            mainAdapter.setParentId(commentItems.get(position).getCommentId());
+            Log.d("대댓글 작성", "parentId 설정 완료 ID: " + mainAdapter.getParentId());
             // 답글 달기 클릭 이벤트 (대댓글 달기 활성화)
             if(mainAdapter.getButtonStatus() == BUTTON_COMMENT_CONFIRM) {
+                Log.d("댓글 버튼 상태", "댓글 버튼 상태 대댓글 작성을 전환 시작");
                 mainAdapter.setButtonStatus(BUTTON_COMMENT_SUB_CONFIRM);
+                Log.d("댓글 버튼 상태", "댓글 버튼 상태 buttonStatus: " + mainAdapter.getButtonStatus());
             } else if(mainAdapter.getButtonStatus() == BUTTON_COMMENT_SUB_CONFIRM) {
+                Log.d("댓글 버튼 상태", "댓글 버튼 상태 댓글 작성을 전환 시작");
                 mainAdapter.setButtonStatus(BUTTON_COMMENT_CONFIRM);
+                Log.d("댓글 버튼 상태", "댓글 버튼 상태 buttonStatus: " + mainAdapter.getButtonStatus());
+            } else {
+                Log.d("댓글 버튼 상태", "댓글 버튼 상태 : 수정 상태");
             }
             mainAdapter.setSelectedPosition(position);
         });
@@ -172,7 +182,12 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
             menu.findItem(R.id.action_comment_update).setOnMenuItemClickListener(menuItem -> {
                 // 댓글 수정 동작 (버튼 상태 변경)
-                mainAdapter.setButtonStatus(BUTTON_COMMENT_SUB_UPDATE);
+                Log.d("댓글 버튼 상태", "댓글 버튼 상태 수정 상태로 전환 시작");
+                mainAdapter.setButtonStatus(BUTTON_COMMENT_UPDATE);
+                mainAdapter.setSelectedPosition(position);
+                mainAdapter.setSelectedId(commentItems.get(position).getCommentId());
+                Log.d("선택한 댓글", "선택한 댓글 위치: " + position);
+                Log.d("댓글 버튼 상태", "댓글 버튼 상태 buttonStatus: " + mainAdapter.getButtonStatus());
                 return true;
             });
             menu.findItem(R.id.action_comment_delete).setOnMenuItemClickListener(menuItem -> {
@@ -211,7 +226,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             writeSubComment = itemView.findViewById(R.id.textview_item_comment_add);
 
             subCommentRecyclerview = itemView.findViewById(R.id.recyclerview_docs_comment_sub);
-            subAdapter = new DocsDetailSubCommentAdapter(subCommentItems, (DocsActivity) itemView.getContext());
+            subAdapter = new DocsDetailSubCommentAdapter(subCommentItems, (DocsActivity) itemView.getContext(), sectionId, highlightId);
             subCommentRecyclerview.setAdapter(subAdapter);
 
 
@@ -228,6 +243,9 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         confirmBtn.setOnClickListener(v -> {
             removeItem(position);
+            if(apiClient == null) {
+                apiClient = new ApiClient(activity);
+            }
             apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
             bottomSheetDialog.dismiss();
         });
@@ -236,35 +254,5 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         });
         bottomSheetDialog.show();
     }
-
-    public static String convertGsToHttps(String gsUrl) {
-        if (!gsUrl.startsWith("gs://")) {
-            throw new IllegalArgumentException("Invalid gs:// URL");
-        }
-
-        // Extract bucket name and path
-        int bucketEndIndex = gsUrl.indexOf("/", 5); // Find the end of bucket name
-        if (bucketEndIndex == -1 || bucketEndIndex == gsUrl.length() - 1) {
-            throw new IllegalArgumentException("Invalid gs:// URL format");
-        }
-
-        String bucketName = gsUrl.substring(5, bucketEndIndex);
-        String filePath = gsUrl.substring(bucketEndIndex + 1);
-
-        // URL encode the file path
-        String encodedFilePath;
-        try {
-            encodedFilePath = URLEncoder.encode(filePath, "UTF-8").replace("+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("URL encoding failed", e);
-        }
-
-        // Construct the HTTPS URL
-        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
-                "/o/" + encodedFilePath + "?alt=media";
-
-        return httpsUrl;
-    }
-
 
 }

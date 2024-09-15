@@ -16,6 +16,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         showPromotions();
         showRecords(RECORDS_FILTER_CURRENTLY);
+
+        checkNotification();
+
         return binding.getRoot();
     }
 
@@ -180,4 +184,22 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             return 1; // 모바일의 경우 1 컬럼
         }
     }
+
+    private void checkNotification() {
+        viewModel.getUnreadNotificationCheck();
+        viewModel.getNotificationCheckLiveData().observe(this, checkResponse -> {
+            if(checkResponse != null) {
+                if(checkResponse.isHasUnRead()) {
+                    Log.d("안 읽은 알림 여부", "안 읽은 알림 있음");
+                    binding.linearlayoutMainNotificationCheck.setVisibility(View.VISIBLE);
+                } else {
+                    Log.d("안 읽은 알림 여부", "안 읽은 알림 없음");
+                    binding.linearlayoutMainNotificationCheck.setVisibility(View.GONE);
+                }
+            } else {
+                Log.d("안 읽은 알림 여부", "안 읽은 알림 여부 오류 : checkResponse = null");
+            }
+        });
+    }
+
 }

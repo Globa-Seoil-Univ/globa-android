@@ -45,6 +45,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-storage'
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-messaging:24.0.1")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     implementation "com.kakao.sdk:v2-user-rx:2.20.1" // 카카오 로그인 API 모듈
@@ -69,8 +70,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.arthenica:mobile-ffmpeg-full:4.4.LTS'
 
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.2'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'com.google.android.exoplayer:exoplayer:2.15.1'
 
     implementation 'com.google.android.material:material:1.4.0'

@@ -39,9 +39,9 @@ public class KeywordDetailViewModel extends ViewModel {
             public void onResponse(Call<KeywordDetailResponse> call, Response<KeywordDetailResponse> response) {
                 if(response.isSuccessful()) {
                     keywordDetailResponseLiveData.setValue(response.body());
-                    Log.d("api 통신 성공", "api 수신 성공" + response.code());
+                    Log.d("api 통신 성공", "api 수신 성공 : " + response.code());
                 } else {
-                    Log.d("api 통신 실패", "api 수신 실패" + response.code());
+                    Log.d("api 통신 실패", "api 수신 실패 : " + response.code());
                 }
             }
 

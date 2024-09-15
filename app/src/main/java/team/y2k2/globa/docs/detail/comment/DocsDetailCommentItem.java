@@ -1,5 +1,6 @@
 package team.y2k2.globa.docs.detail.comment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
@@ -12,7 +13,7 @@ public class DocsDetailCommentItem {
     private String content;
     private String commentId;
     private boolean hasReply;
-    private List<DocsDetailSubCommentItem> subCommentItemList;
+    private List<DocsDetailSubCommentItem> subCommentItemList = new ArrayList<>();
 
     public DocsDetailCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean hasReply) {
         this.profile = profile;

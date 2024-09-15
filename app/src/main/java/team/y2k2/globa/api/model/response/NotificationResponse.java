@@ -20,4 +20,5 @@ public class NotificationResponse {
     public int getTotal() {
         return total;
     }
+
 }

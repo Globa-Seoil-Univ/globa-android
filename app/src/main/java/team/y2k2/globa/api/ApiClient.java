@@ -546,6 +546,9 @@ public class ApiClient {
                             response = Response.error(500, ResponseBody.create(null, "서버 에러"));
                             break;
                         }
+                        default: {
+                            Log.d("대댓글 API", "대댓글 API 응답 code: " + response.code()); break;
+                        }
                     }
                 } catch (IOException e) {
                     response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
@@ -613,6 +616,7 @@ public class ApiClient {
                         handleErrorCode(response.code());
                         return null;
                     }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     return null;
@@ -633,14 +637,17 @@ public class ApiClient {
                 try {
                     response = call.execute();
 
-                    if (response.isSuccessful()) {
+                    if(response.isSuccessful()) {
+                        Log.d("대댓글 가져오기", "대댓글 가져오기 Code: " + response.code());
                         return response.body();
                     } else {
                         handleErrorCode(response.code());
+                        Log.d("대댓글 가져오기", "대댓글 가져오기 Code: " + response.code());
                         return null;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Log.d("대댓글 가져오기", "ApiClient IOException 발생");
                     return null;
                 }
             }).get();
@@ -673,6 +680,9 @@ public class ApiClient {
                         case 500: {
                             response = Response.error(500, ResponseBody.create(null, "서버 에러"));
                             break;
+                        }
+                        default: {
+                            Log.d("댓글 삭제", "댓글 삭제 responseCode: " + response.code()); break;
                         }
                     }
                 } catch (IOException e) {
@@ -711,6 +721,9 @@ public class ApiClient {
                         case 500: {
                             response = Response.error(500, ResponseBody.create(null, "서버 에러"));
                             break;
+                        }
+                        default: {
+                            Log.d("댓글 수정", "댓글 수정 ResponseCode: " + response.code());
                         }
                     }
                 } catch (IOException e) {
