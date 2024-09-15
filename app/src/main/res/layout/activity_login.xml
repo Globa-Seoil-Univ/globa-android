@@ -76,8 +76,7 @@
         <LinearLayout
             android:id="@+id/button_sign_in_naver"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="0dp"
             android:layout_above="@+id/button_sign_in_twitter"
             android:background="@drawable/login_button_naver"
             android:gravity="center"
@@ -104,11 +103,10 @@
         <LinearLayout
             android:id="@+id/button_sign_in_twitter"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
             android:layout_above="@+id/button_sign_in_google"
             android:background="@drawable/login_button_twitter"
             android:gravity="center"
-            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             android:onClick="onSignInClick">
 
