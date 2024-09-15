@@ -24,6 +24,7 @@ import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.FolderDeleteRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
+import team.y2k2.globa.api.model.request.StudyTimeRequest;
 import team.y2k2.globa.api.model.request.SubCommentRequest;
 import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
@@ -31,6 +32,7 @@ import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
+import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
@@ -738,6 +740,73 @@ public class ApiClient {
         return null;
     }
 
+    // 알림 가져오기
+    public NotificationResponse requestNotification(String type) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+
+                Call<NotificationResponse> call = apiService.requestGetNotification(APPLICATION_JSON, authorization, 1, 10, type);
+                Response<NotificationResponse> response;
+                try {
+                    response = call.execute();
+
+                    if(response.isSuccessful()) {
+                        Log.d(getClass().getSimpleName(), "알림 가져오기 성공: " + response.code());
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        Log.d(getClass().getSimpleName(), "알림 가져오기 실패: " + response.code());
+                        return null;
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.d(getClass().getSimpleName(), "알림 오류: " + e.getMessage());
+            return null;
+        }
+    }
+
+    // 공부시간 수정
+    public Response<Void> updateStudyTime(String folderId, String recordId, String studyTime, String createdTime) {
+        StudyTimeRequest studyTimeRequest = new StudyTimeRequest(studyTime, createdTime);
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.requestStudyTime(folderId, recordId, APPLICATION_JSON, authorization, studyTimeRequest);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+
+                    switch (response.code()) {
+                        case 40110: {
+                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
+                        }
+                        case 40120: {
+                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
+                        }
+                        case 500: {
+                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
+                        }
+                        default: {
+                            Log.d("댓글 수정", "댓글 수정 ResponseCode: " + response.code());
+                        }
+                    }
+                } catch (IOException e) {
+                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    e.printStackTrace();
+                }
+                return response;
+            }).get();
+        }catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public SearchResponse searchForKeyword(String keyword) {
         try {

@@ -3,6 +3,7 @@ package team.y2k2.globa.main.profile.alert;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +16,13 @@ import team.y2k2.globa.R;
 
 public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.AdapterViewHolder> {
     ArrayList<AlertItem> items;
+    AlertActivity activity;
 
-    public AlertItemAdapter(ArrayList<AlertItem> items) {
+    private boolean newUploadNofi, newShareNofi, newEventNofi;
+
+    public AlertItemAdapter(ArrayList<AlertItem> items, AlertActivity activity) {
         this.items = items;
+        this.activity = activity;
     }
 
     @NonNull
@@ -29,16 +34,27 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
+
+        AlertItem item = items.get(position);
+
         holder.title.setText(items.get(position).getTitle());
         holder.description.setText(items.get(position).getDescription());
+        holder.toggle.setChecked(item.isChecked());
 
-        if(items.get(position).getActivity() == null)
-            return;
+        holder.toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            switch (position) {
+                case 0:
+                    activity.setNewUploadNofi(isChecked);
+                    break;
+                case 1:
+                    activity.setNewShareNofi(isChecked);
+                    break;
+                case 2:
+                    activity.setNewEventNofi(isChecked);
+                    break;
+            }
+        });
 
-//        holder.layout.setOnClickListener(view -> {
-//            Intent intent = new Intent(holder.itemView.getContext(), items.get(position).getActivity().getClass());
-//            holder.itemView.getContext().startActivity(intent);
-//        });
     }
 
     @Override
@@ -47,17 +63,18 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+
         TextView title;
         TextView description;
-
-        ConstraintLayout layout;
+        Switch toggle;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.textview_item_alert_title);
             description = itemView.findViewById(R.id.textview_item_alert_description);
-//            layout = itemView.findViewById(R.id.item_profile_items);
+            toggle = itemView.findViewById(R.id.switch_alert);
+
         }
     }
 }

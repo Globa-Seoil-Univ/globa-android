@@ -102,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
         //Google의 로그인 구성을 설정해준다.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(this.getString(R.string.default_web_client_id))
+                .requestServerAuthCode(this.getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -151,12 +152,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signInGoogleOfFirebaseAuth(GoogleSignInAccount acct) {
         String accessToken = acct.getIdToken();
+        String authCode = acct.getServerAuthCode();
 
         if (accessToken == null) {
             String e = "액세스 토큰 없음";
             Toast.makeText(this,  LOGIN_ERR_MSG + ":" + e, Toast.LENGTH_SHORT).show();
             return;
         }
+
+        Log.d(getClass().getSimpleName(), "구글 AT: " + accessToken);
+        Log.d(getClass().getSimpleName(), "구글 Code: " + authCode);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(accessToken, null);
 

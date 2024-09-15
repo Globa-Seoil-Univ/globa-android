@@ -61,7 +61,7 @@ public class NicknameEditActivity extends AppCompatActivity {
                 // 텍스트 변경
                 int color = ContextCompat.getColor(NicknameEditActivity.this, R.color.primary);
                 binding.textviewNicknameeditChange.setTextColor(color);
-                binding.textviewNicknameeditCount.setText(count + "/32");
+                binding.textviewNicknameeditCount.setText(s.length() + "/32");
                 isChanged = true;
             }
 

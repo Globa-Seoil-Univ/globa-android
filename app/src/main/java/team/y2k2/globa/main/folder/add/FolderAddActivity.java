@@ -18,12 +18,9 @@ public class FolderAddActivity extends AppCompatActivity {
         binding = ActivityFolderAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.recyclerviewFolderaddAddlist.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        int[] images = {R.mipmap.ic_launcher, R.mipmap.ic_launcher};
-
-        FolderAddAdapter adapter = new FolderAddAdapter(this, images);
-        binding.recyclerviewFolderaddAddlist.setAdapter(adapter);
+        binding.buttonFolderaddBack.setOnClickListener(v -> {
+            finish();
+        });
 
         binding.textviewFolderAddConfirm.setOnClickListener(v -> {
             ApiClient apiClient = new ApiClient(this);

@@ -20,7 +20,7 @@
             android:id="@+id/button_myinfo_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/header_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
         app:layout_constraintStart_toStartOf="@+id/imageview_myinfo_photo"
         app:layout_constraintEnd_toEndOf="@id/imageview_myinfo_photo"
         app:layout_constraintBottom_toBottomOf="@id/imageview_myinfo_photo"
-        android:layout_marginLeft="70dp" />
+        android:layout_marginStart="70dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_myinfo_items"

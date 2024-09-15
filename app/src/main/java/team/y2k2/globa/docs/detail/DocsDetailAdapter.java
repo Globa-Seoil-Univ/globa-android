@@ -1,6 +1,7 @@
 package team.y2k2.globa.docs.detail;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.Spannable;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,12 +75,12 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private Disposable disposable;
     private DocsDetailCommentAdapter commentAdapter;
 
+    private MutableLiveData<Boolean> commentEtFocus = new MutableLiveData<>();
+
     ArrayList<DocsDetailCommentItem> commentItems = new ArrayList<>();
 
     private final int BUTTON_COMMENT_CONFIRM = 0;
-    private final int BUTTON_COMMENT_SUB_CONFIRM = 1;
-    private final int BUTTON_COMMENT_UPDATE = 2;
-    private final int BUTTON_COMMENT_SUB_UPDATE = 3;
+    private final int BUTTON_COMMENT_UPDATE = 1;
     private int buttonStatus = BUTTON_COMMENT_CONFIRM;
 
     ProfileImage profileImage;
@@ -389,7 +392,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         // 선택된 단어 표시
         commentTv.setText(name);
 
-        // null처리 관련 작업 필요...?
         commentAdapter = new DocsDetailCommentAdapter(commentItems, activity, sectionId, highlightId, this);
         commentRv.setLayoutManager(new LinearLayoutManager(activity));
         commentRv.setAdapter(commentAdapter);
@@ -416,23 +418,11 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                                 // 댓글 추가 (최초X)
                                 apiClient.requestInsertComment(folderId, recordId, sectionId, highlightId, text);
                             }
-                        } else if(buttonStatus == BUTTON_COMMENT_SUB_CONFIRM) {
-                            // 대댓글 아이템 리스트 추가
-                            commentAdapter.addItemToSubCommentRecyclerView(selectedPosition, new DocsDetailSubCommentItem(myProfile, myName, "방금전", text));
-                            // API Request 필요
-                            apiClient.requestInsertSubComment(folderId, recordId, sectionId, highlightId, parentId, text);
-                            // 버튼 Status 변경
-                            buttonStatus = BUTTON_COMMENT_CONFIRM;
                         } else if(buttonStatus == BUTTON_COMMENT_UPDATE) {
                             // 댓글 아이템 수정 (수정 필요)
                             commentAdapter.updateItem(text, selectedPosition);
                             // API Request 필요
                             apiClient.updateComment(folderId, recordId, sectionId, highlightId, selectedId, text);
-                        } else if(buttonStatus == BUTTON_COMMENT_SUB_UPDATE) {
-                            // 대댓글 아이템 수정 (수정 필요)
-                            commentAdapter.updateItemToSubCommentRecyclerView(text, 0, 0);
-                            // API Request 필요
-                            apiClient.updateComment(folderId, recordId, sectionId, highlightId, "commentId", text);
                         }
 
                         commentEt.setText("");
@@ -446,15 +436,30 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                 }
             );
 
+        commentEt.setOnFocusChangeListener((v, hasFocus) -> {
+            // 포커스를 얻으면 true, 잃으면 false;
+            commentEtFocus.setValue(hasFocus);
+        });
+
         bottomSheetDialog.show();
 
     }
 
     public void clearDisposable() {
         if(disposable != null && !disposable.isDisposed()) {
-            Log.d("댓글", "댓글 disposable 해제 시작");
+            Log.d("댓글", "댓글 disposable 메모리 해제 시작");
             disposable.dispose();
         }
+        commentAdapter.clearSubDisposable();
+    }
+
+    public void focusOnCommentEt() {
+        commentEt.requestFocus();
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(commentEt, InputMethodManager.SHOW_IMPLICIT);
+    }
+    public MutableLiveData<Boolean> getCommentEtFocus() {
+        return commentEtFocus;
     }
 
     public void setButtonStatus(int status) {
@@ -471,10 +476,4 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         this.selectedId = selectedId;
     }
 
-    public String getParentId() {
-        return parentId;
-    }
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
 }

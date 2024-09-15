@@ -9,6 +9,10 @@ import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import org.checkerframework.checker.units.qual.C;
 
 import retrofit2.Call;
@@ -49,9 +53,19 @@ public class NotificationViewModel extends ViewModel {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
                 if(response.isSuccessful()) {
-                    for(int i = 0; i < response.body().getNotifications().size(); i++) {
+                    // Gson 객체 생성
+                    // response.body()를 JSON 문자열로 변환
+                    // 변환된 JSON 문자열 출력
+
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    String jsonResponse = gson.toJson(response.body());
+
+                    Log.d(getClass().getSimpleName(), "Raw Response: " + jsonResponse);
+
+                    for(int i = 0; i < response.body().getTotal(); i++) {
                         Log.d(getClass().getSimpleName(), "ID: " + response.body().getNotifications().get(i).getNotificationId());
                     }
+
                     notificationLiveData.postValue(response.body());
                     Log.d("알림", "알림 수신 성공 : " + response.code());
                 } else {

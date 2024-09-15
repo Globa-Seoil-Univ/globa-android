@@ -43,7 +43,6 @@ public class FolderPermissionViewModel extends ViewModel {
                     usersLiveData.setValue(response.body());
                     Log.d("API 수신 성공", "응답 코드 : " + response.code());
                 } else {
-                    errorLiveData.setValue("Response failed");
                     Log.d("API 수신 오류", "오류 코드 : " + response.code());
                 }
             }
@@ -62,10 +61,8 @@ public class FolderPermissionViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
-                    Log.d(getClass().getName(), "Success");
                     Log.d("API 수신 완료", "응답 코드 : " + response.code());
                 } else {
-                    errorLiveData.setValue("Response failed");
                     Log.d("API 수신 오류", "오류코드 : " + response.code() + ", 오류 메시지 : " + response.message());
                 }
             }

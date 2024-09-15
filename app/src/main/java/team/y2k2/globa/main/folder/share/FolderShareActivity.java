@@ -28,6 +28,7 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityFolderShareBinding;
+import team.y2k2.globa.main.ProfileImage;
 
 public class FolderShareActivity extends AppCompatActivity {
 
@@ -36,6 +37,7 @@ public class FolderShareActivity extends AppCompatActivity {
     boolean isSearched = false;
     private FolderShareAdapter adapter;
     private List<FolderShareItem> itemList = new ArrayList<>();
+    private String profile;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
     private String lastImageUrl;
@@ -105,12 +107,28 @@ public class FolderShareActivity extends AppCompatActivity {
                     folderShareViewModel.getUserSearchLiveData().observe(FolderShareActivity.this, userInfoResponse -> {
                         if(userInfoResponse != null) {
                             binding.textviewFoldershareSearch.setText(userInfoResponse.getName());
-                            profileImageRef = storage.getReference().child(userInfoResponse.getProfile());
-                            String firebaseImageUrl = profileImageRef.toString();
-                            lastImageUrl = firebaseImageUrl;
-                            Glide.with(FolderShareActivity.this).load(convertGsToHttps(lastImageUrl))
-                                    .error(R.mipmap.ic_launcher)
-                                    .into(binding.imageviewFoldershareSearch);
+                            profile = userInfoResponse.getProfile();
+                            if(profile != null) {
+                                if(profile.startsWith("http")) {
+                                    Glide.with(FolderShareActivity.this).load(profile)
+                                            .error(R.drawable.profile_user)
+                                            .into(binding.imageviewFoldershareSearch);
+                                    lastImageUrl = profile;
+                                } else {
+                                    profileImageRef = storage.getReference().child(profile);
+                                    String firebaseImageUrl = profileImageRef.toString();
+                                    lastImageUrl = ProfileImage.convertGsToHttps(firebaseImageUrl);
+                                    Glide.with(FolderShareActivity.this).load(lastImageUrl)
+                                            .error(R.mipmap.ic_launcher)
+                                            .into(binding.imageviewFoldershareSearch);
+                                }
+                            } else {
+                                Glide.with(FolderShareActivity.this).load(R.drawable.profile_user)
+                                        .error(R.drawable.profile_user)
+                                        .into(binding.imageviewFoldershareSearch);
+                                lastImageUrl = "";
+                            }
+
                             tempUserId = userInfoResponse.getUserId();
                             isSearched = true;
                         }
@@ -193,35 +211,6 @@ public class FolderShareActivity extends AppCompatActivity {
                 .into(binding.imageviewFoldershareSearch);
         binding.textviewFoldershareSearch.setText("");
         lastImageUrl = null;
-    }
-
-    private String convertGsToHttps(String gsUrl) {
-        if (!gsUrl.startsWith("gs://")) {
-            throw new IllegalArgumentException("Invalid gs:// URL");
-        }
-
-        // Extract bucket name and path
-        int bucketEndIndex = gsUrl.indexOf("/", 5); // Find the end of bucket name
-        if (bucketEndIndex == -1 || bucketEndIndex == gsUrl.length() - 1) {
-            throw new IllegalArgumentException("Invalid gs:// URL format");
-        }
-
-        String bucketName = gsUrl.substring(5, bucketEndIndex);
-        String filePath = gsUrl.substring(bucketEndIndex + 1);
-
-        // URL encode the file path
-        String encodedFilePath;
-        try {
-            encodedFilePath = URLEncoder.encode(filePath, "UTF-8").replace("+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("URL encoding failed", e);
-        }
-
-        // Construct the HTTPS URL
-        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
-                "/o/" + encodedFilePath + "?alt=media";
-
-        return httpsUrl;
     }
 
 }

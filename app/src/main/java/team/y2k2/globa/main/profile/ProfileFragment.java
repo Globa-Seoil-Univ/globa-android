@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +31,7 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
 import team.y2k2.globa.main.ProfileImage;
+import team.y2k2.globa.main.profile.edit.NicknameEditViewModel;
 import team.y2k2.globa.main.profile.info.MyinfoActivity;
 
 public class ProfileFragment extends Fragment {
@@ -38,18 +40,21 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
 
-    private ProfileImage profileImage;
+    private String userId;
+
+    private NicknameEditViewModel nicknameEditViewModel;
 
     public ProfileFragment() {
         model = new ProfileModel();
-        profileImage = new ProfileImage();
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(getLayoutInflater());
 
-        SettingItemAdapter adapter = new SettingItemAdapter(model.getItems());
+        nicknameEditViewModel = new ViewModelProvider(this).get(NicknameEditViewModel.class);
+
+        SettingItemAdapter adapter = new SettingItemAdapter(model.getItems(), this);
 
         binding.recyclerviewProfileSetting.setAdapter(adapter);
         binding.recyclerviewProfileSetting.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
@@ -61,6 +66,8 @@ public class ProfileFragment extends Fragment {
         //Log.d("IMAGETEST", response.getProfile());
         Log.d("IMAGETEST", response.getName());
 
+        userId = response.getUserId();
+
         userPreferences(response);
         showLogMessages(response);
 
@@ -68,23 +75,30 @@ public class ProfileFragment extends Fragment {
         binding.textviewProfileAccountUsercode.setText(response.getCode());
 
         String profile = response.getProfile();
+        String intentProfile;
 
-        String httpProfileUrl;
-        if(response.getProfile() != null) {
-            profileImageRef = storage.getReference().child(profile);
-            //httpProfileUrl = convertGsToHttps(String.valueOf(profileImageRef));
-
-            httpProfileUrl = profileImage.convertGsToHttps(String.valueOf(profileImageRef));
-
+        if(profile != null) {
+            if(profile.startsWith("http")) {
+                Glide.with(inflater.getContext())
+                        .load(profile)
+                        .error(R.drawable.profile_user)
+                        .into(binding.imageviewProfileAccountImage);
+                intentProfile = profile;
+            } else {
+                profileImageRef = storage.getReference().child(profile);
+                Glide.with(inflater.getContext())
+                        .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
+                        .error(R.drawable.profile_user)
+                        .into(binding.imageviewProfileAccountImage);
+                intentProfile = ProfileImage.convertGsToHttps(profileImageRef.toString());
+            }
         } else {
-            httpProfileUrl = null;
+            Glide.with(inflater.getContext())
+                    .load(R.drawable.profile_user)
+                    .error(R.drawable.profile_user)
+                    .into(binding.imageviewProfileAccountImage);
+            intentProfile = null;
         }
-
-
-        Glide.with(inflater.getContext())
-                .load(httpProfileUrl) // 임시로 로드
-                .error(R.mipmap.ic_launcher)
-                .into(binding.imageviewProfileAccountImage);
 
         binding.imageviewProfileAccountImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         binding.imageviewProfileAccountImage.setBackground(new ShapeDrawable(new OvalShape()));
@@ -93,12 +107,18 @@ public class ProfileFragment extends Fragment {
         binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
 
             Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
-            intent.putExtra("profile", httpProfileUrl);
+            intent.putExtra("profile", intentProfile);
             intent.putExtra("name", response.getName());
             intent.putExtra("code", response.getCode());
             intent.putExtra("userId", response.getUserId());
             startActivity(intent);
 
+        });
+
+        nicknameEditViewModel.getNameLiveData().observe(getViewLifecycleOwner(), name -> {
+            if(name != null) {
+                binding.textviewProfileAccountUsername.setText(name);
+            }
         });
 
         return binding.getRoot();
@@ -128,32 +148,8 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public static String convertGsToHttps(String gsUrl) {
-        if (!gsUrl.startsWith("gs://")) {
-            throw new IllegalArgumentException("Invalid gs:// URL");
-        }
-
-        // Extract bucket name and path
-        int bucketEndIndex = gsUrl.indexOf("/", 5); // Find the end of bucket name
-        if (bucketEndIndex == -1 || bucketEndIndex == gsUrl.length() - 1) {
-            throw new IllegalArgumentException("Invalid gs:// URL format");
-        }
-
-        String bucketName = gsUrl.substring(5, bucketEndIndex);
-        String filePath = gsUrl.substring(bucketEndIndex + 1);
-
-        // URL encode the file path
-        String encodedFilePath;
-        try {
-            encodedFilePath = URLEncoder.encode(filePath, "UTF-8").replace("+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("URL encoding failed", e);
-        }
-
-        // Construct the HTTPS URL
-        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
-                "/o/" + encodedFilePath + "?alt=media";
-
-        return httpsUrl;
+    public String getUserId() {
+        return userId;
     }
+
 }
