@@ -2,10 +2,14 @@ package team.y2k2.globa.docs.upload;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
 
 import com.arthenica.mobileffmpeg.FFmpeg;
@@ -63,6 +67,15 @@ public class DocsUploadViewModel extends ViewModel {
 
 
     public void uploadRecordFile(String path, String folderId) {
+        View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_loading, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog.show();
+
         Instant instant = Instant.now();
         unixTime = instant.getEpochSecond();
 
@@ -81,12 +94,14 @@ public class DocsUploadViewModel extends ViewModel {
         audioRef.putFile(uri)
                 .addOnSuccessListener(taskSnapshot -> {
                     // 업로드 성공 시
+                    dialog.dismiss();
                     Toast.makeText(activity, "파일 업로드 성공", Toast.LENGTH_SHORT).show();
                     requestCreateRecord(model.getRecordName());
 
                 })
                 .addOnFailureListener(e -> {
                     // 업로드 실패 시
+                    dialog.dismiss();
                     Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show();
                 });
     }

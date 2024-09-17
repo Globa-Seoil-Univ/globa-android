@@ -2,7 +2,11 @@ package team.y2k2.globa.login;
 
 import static team.y2k2.globa.login.LoginModel.*;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -12,9 +16,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,12 +39,16 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityLoginBinding;
+import team.y2k2.globa.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     public int GOOGLE = R.id.button_sign_in_google;
     public int KAKAO = R.id.button_sign_in_kakao;
+
+    AlertDialog.Builder builder;
+    public AlertDialog dialog;
 
     public final String LOGIN_ERR_MSG = "로그인 오류가 발생했습니다." ;
 
@@ -51,17 +61,43 @@ public class LoginActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
 
-        setContentView(binding.getRoot());
+        autoLogin();
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_loading, null);
+
+        builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+
+        dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         setFirstCharColorPrimary();
 
         initKakaoSdk();
         initGoogleSdk();
+        setContentView(binding.getRoot());
+    }
+
+    public void autoLogin() {
+        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
+        String refreshToken = preferences.getString("refreshToken", "");
+
+        if(refreshToken.equalsIgnoreCase(""))
+            return;
+
+        LoginViewModel.LoginListener listener = new LoginViewModel.LoginListener(this, mAuth, refreshToken);
+
+        listener.autoLogin();
+
+
     }
 
     /**
      * LGN-1. SNS 로그인 종류에 따라 실행될 메서드를 지정합니다.
      */
     public void onSignInClick(View v) {
+        dialog.show();
+
         final int SIGN_IN_TYPE = v.getId();
 
         if(SIGN_IN_TYPE == GOOGLE) {
@@ -126,7 +162,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case RC_KAKAO:
                 break;

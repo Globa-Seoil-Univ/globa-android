@@ -47,7 +47,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
 
-        if (items.get(0).getRecordId().equals(""))
+        if (items.get(0).getRecordId().equalsIgnoreCase(""))
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document_null, parent, false);
         else
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document, parent, false);

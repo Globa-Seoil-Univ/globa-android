@@ -26,6 +26,7 @@ import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.StudyTimeRequest;
 import team.y2k2.globa.api.model.request.SubCommentRequest;
+import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
@@ -36,6 +37,7 @@ import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
+import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.edit.DocsNameEditRequest;
 
@@ -97,6 +99,33 @@ public class ApiClient {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<RecordResponse> call = apiService.requestGetRecords(APPLICATION_JSON, authorization, count);
                 Response<RecordResponse> response = null;
+
+                try {
+                    response = call.execute();
+
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        return null;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public TokenResponse requestToken(TokenRequest request) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<TokenResponse> call = apiService.getRequestToken(APPLICATION_JSON, authorization, request);
+                Response<TokenResponse> response;
 
                 try {
                     response = call.execute();
