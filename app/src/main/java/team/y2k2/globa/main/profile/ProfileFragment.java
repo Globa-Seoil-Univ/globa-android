@@ -45,15 +45,19 @@ public class ProfileFragment extends Fragment {
 
     private String userId;
 
+    String profile;
+    String myName;
+
     private ActivityResultLauncher<Intent> activityProfileResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if(result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     if(data != null) {
-                        String value = data.getStringExtra("newName");
-
-                        refreshData(value);
+                        String newName = data.getStringExtra("newName");
+                        String newProfile = data.getStringExtra("newProfile");
+                        Uri uri = Uri.parse(newProfile);
+                        refreshData(newName, uri);
                     }
                 }
             }
@@ -84,11 +88,12 @@ public class ProfileFragment extends Fragment {
         userPreferences(response);
         showLogMessages(response);
 
-        binding.textviewProfileAccountUsername.setText(response.getName());
+        myName = response.getName();
+
+        binding.textviewProfileAccountUsername.setText(myName);
         binding.textviewProfileAccountUsercode.setText(response.getCode());
 
-        String profile = response.getProfile();
-        String intentProfile;
+        profile = response.getProfile();
 
         if(profile != null) {
             if(profile.startsWith("http")) {
@@ -96,21 +101,18 @@ public class ProfileFragment extends Fragment {
                         .load(profile)
                         .error(R.drawable.profile_user)
                         .into(binding.imageviewProfileAccountImage);
-                intentProfile = profile;
             } else {
                 profileImageRef = storage.getReference().child(profile);
                 Glide.with(inflater.getContext())
                         .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
                         .error(R.drawable.profile_user)
                         .into(binding.imageviewProfileAccountImage);
-                intentProfile = ProfileImage.convertGsToHttps(profileImageRef.toString());
             }
         } else {
             Glide.with(inflater.getContext())
                     .load(R.drawable.profile_user)
                     .error(R.drawable.profile_user)
                     .into(binding.imageviewProfileAccountImage);
-            intentProfile = null;
         }
 
         binding.imageviewProfileAccountImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -120,10 +122,6 @@ public class ProfileFragment extends Fragment {
         binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
 
             Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
-            intent.putExtra("profile", intentProfile);
-            intent.putExtra("name", response.getName());
-            intent.putExtra("code", response.getCode());
-            intent.putExtra("userId", response.getUserId());
             activityProfileResultLauncher.launch(intent);
 
         });
@@ -159,13 +157,63 @@ public class ProfileFragment extends Fragment {
         return userId;
     }
 
-    private void refreshData(String value, Uri uri) {
-        Log.d(getClass().getSimpleName(), "refreshData() 실행 newName: " + value);
+    private void refreshData(String newName, Uri uri) {
+        Log.d(getClass().getSimpleName(), "refreshData() 실행 newName: " + newName);
         Log.d(getClass().getSimpleName(), "refreshData() 실행 newProfile: " + uri);
-        binding.textviewProfileAccountUsername.setText(value);
-        Glide.with(requireActivity()).load(uri)
-                .error(R.drawable.profile_user)
-                .into(binding.imageviewProfileAccountImage);
+        if(newName != null && uri != null) {
+            binding.textviewProfileAccountUsername.setText(newName);
+            Glide.with(requireActivity()).load(uri)
+                    .error(R.drawable.profile_user)
+                    .into(binding.imageviewProfileAccountImage);
+        } else if(newName != null) {
+            binding.textviewProfileAccountUsername.setText(newName);
+            if(profile != null) {
+                if(profile.startsWith("http")) {
+                    Glide.with(requireActivity())
+                            .load(profile)
+                            .error(R.drawable.profile_user)
+                            .into(binding.imageviewProfileAccountImage);
+                } else {
+                    profileImageRef = storage.getReference().child(profile);
+                    Glide.with(requireActivity())
+                            .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
+                            .error(R.drawable.profile_user)
+                            .into(binding.imageviewProfileAccountImage);
+                }
+            } else {
+                Glide.with(requireActivity())
+                        .load(R.drawable.profile_user)
+                        .error(R.drawable.profile_user)
+                        .into(binding.imageviewProfileAccountImage);
+            }
+        } else if(uri != null) {
+            binding.textviewProfileAccountUsername.setText(myName);
+            Glide.with(requireActivity()).load(uri)
+                    .error(R.drawable.profile_user)
+                    .into(binding.imageviewProfileAccountImage);
+        } else {
+            binding.textviewProfileAccountUsername.setText(myName);
+            if(profile != null) {
+                if(profile.startsWith("http")) {
+                    Glide.with(requireActivity())
+                            .load(profile)
+                            .error(R.drawable.profile_user)
+                            .into(binding.imageviewProfileAccountImage);
+                } else {
+                    profileImageRef = storage.getReference().child(profile);
+                    Glide.with(requireActivity())
+                            .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
+                            .error(R.drawable.profile_user)
+                            .into(binding.imageviewProfileAccountImage);
+                }
+            } else {
+                Glide.with(requireActivity())
+                        .load(R.drawable.profile_user)
+                        .error(R.drawable.profile_user)
+                        .into(binding.imageviewProfileAccountImage);
+            }
+        }
+
     }
 
     @Override

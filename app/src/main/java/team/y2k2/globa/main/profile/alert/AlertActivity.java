@@ -27,8 +27,7 @@ public class AlertActivity extends AppCompatActivity {
 
     private ArrayList<AlertItem> alertItems = new ArrayList<>();
 
-    private SharedPreferences nofiPref;
-    private SharedPreferences.Editor nofiEditor;
+    AlertItemAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,22 +37,13 @@ public class AlertActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(AlertViewModel.class);
 
-        loadNofiPref();
-
-        loadToggleList();
-
         userId = getIntent().getStringExtra("userId");
         Log.d(getClass().getSimpleName(), "userId: " + userId);
 
-        AlertItemAdapter adapter = new AlertItemAdapter(alertItems, this);
-
-        binding.recyclerviewAlert.setAdapter(adapter);
-        binding.recyclerviewAlert.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+        loadNofiStatus();
 
         binding.imagebuttonAlertBack.setOnClickListener(v -> {
             Log.d(getClass().getSimpleName(), "뒤로가기 버튼 클릭 newUploadNofi: " + newUploadNofi + ", newShareNofi: " + newShareNofi + ", newEventNofi: " + newEventNofi);
-
-            setNofiPref();
 
             viewModel.requestAlertStatus(userId, newUploadNofi, newShareNofi, newEventNofi);
 
@@ -68,20 +58,27 @@ public class AlertActivity extends AppCompatActivity {
         alertItems.add(new AlertItem(R.string.profile_alert_3_title, R.string.profile_alert_3_description, eventNofi));
     }
 
-    private void loadNofiPref() {
-        nofiPref = getSharedPreferences("alert", MODE_PRIVATE);
-        nofiEditor = nofiPref.edit();
-        uploadNofi = nofiPref.getBoolean("uploadNofi", false);
-        shareNofi = nofiPref.getBoolean("shareNofi", false);
-        eventNofi = nofiPref.getBoolean("eventNofi", false);
-        Log.d(getClass().getSimpleName(), "Pref 로드 (uploadNofi: " + uploadNofi + ", shareNofi: " + shareNofi + ", eventNofi: " + eventNofi + ")");
-    }
+    private void loadNofiStatus() {
 
-    private void setNofiPref() {
-        nofiEditor.putBoolean("uploadNofi", newUploadNofi);
-        nofiEditor.putBoolean("shareNofi", newShareNofi);
-        nofiEditor.putBoolean("eventNofi", newEventNofi);
-        nofiEditor.apply();
+        Log.d(getClass().getSimpleName(), "alertStatus 요청 시작");
+        viewModel.requestMyAlertStatus(userId);
+        Log.d(getClass().getSimpleName(), "alertStatus 옵저버 시작");
+        viewModel.getAlertLiveData().observe(this, alertResponse -> {
+            uploadNofi = alertResponse.isUploadNofi();
+            shareNofi = alertResponse.isShareNofi();
+            eventNofi = alertResponse.isEventNofi();
+
+            Log.d(getClass().getSimpleName(), "@GET 로드 (uploadNofi: " + uploadNofi + ", shareNofi: " + shareNofi + ", eventNofi: " + eventNofi + ")");
+
+            loadToggleList();
+
+            adapter = new AlertItemAdapter(alertItems, this);
+
+            binding.recyclerviewAlert.setAdapter(adapter);
+            binding.recyclerviewAlert.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+
+        });
+        
     }
 
     public void setNewUploadNofi(boolean newUploadNofi) {

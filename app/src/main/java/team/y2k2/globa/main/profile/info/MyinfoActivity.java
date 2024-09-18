@@ -64,7 +64,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private ApiClient apiClient;
     private String profile, name, code;
     private String newName;
-    private Uri newProfile;
+    private String newProfile;
 
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileRef;
@@ -81,6 +81,12 @@ public class MyinfoActivity extends AppCompatActivity {
             Intent resultIntent = new Intent();
             if(newName != null && newProfile != null) {
                 resultIntent.putExtra("newName", newName);
+                resultIntent.putExtra("newProfile", newProfile);
+                setResult(Activity.RESULT_OK, resultIntent);
+            } else if(newName != null) {
+                resultIntent.putExtra("newName", newName);
+                setResult(Activity.RESULT_OK, resultIntent);
+            } else if(newProfile != null) {
                 resultIntent.putExtra("newProfile", newProfile);
                 setResult(Activity.RESULT_OK, resultIntent);
             } else {
@@ -121,7 +127,7 @@ public class MyinfoActivity extends AppCompatActivity {
                             .error(R.drawable.profile_user)
                             .into(binding.imageviewMyinfoPhoto);
 
-                    newProfile = uri;
+                    newProfile = uri.toString();
 
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -627,6 +627,16 @@ public interface ApiService {
     );
 
     /**
+     * 내 알림 설정 가져오기
+     */
+    @GET("/user/{user_id}/notification")
+    Call<AlertResponse> requestMyAlertStatus(
+            @Path("user_id") String userId,
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization
+    );
+
+    /**
      * 알림 수정
      */
     @PUT("/user/{user_id}/notification")
