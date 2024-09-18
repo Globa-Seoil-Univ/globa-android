@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,13 +45,14 @@ public class ProfileFragment extends Fragment {
 
     private String userId;
 
-    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+    private ActivityResultLauncher<Intent> activityProfileResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if(result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     if(data != null) {
                         String value = data.getStringExtra("newName");
+
                         refreshData(value);
                     }
                 }
@@ -122,7 +124,7 @@ public class ProfileFragment extends Fragment {
             intent.putExtra("name", response.getName());
             intent.putExtra("code", response.getCode());
             intent.putExtra("userId", response.getUserId());
-            activityResultLauncher.launch(intent);
+            activityProfileResultLauncher.launch(intent);
 
         });
 
@@ -157,9 +159,13 @@ public class ProfileFragment extends Fragment {
         return userId;
     }
 
-    private void refreshData(String value) {
+    private void refreshData(String value, Uri uri) {
         Log.d(getClass().getSimpleName(), "refreshData() 실행 newName: " + value);
+        Log.d(getClass().getSimpleName(), "refreshData() 실행 newProfile: " + uri);
         binding.textviewProfileAccountUsername.setText(value);
+        Glide.with(requireActivity()).load(uri)
+                .error(R.drawable.profile_user)
+                .into(binding.imageviewProfileAccountImage);
     }
 
     @Override

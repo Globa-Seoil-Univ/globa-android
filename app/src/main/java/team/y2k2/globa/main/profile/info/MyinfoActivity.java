@@ -40,6 +40,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -50,6 +51,7 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.ActivityMyinfoBinding;
 import team.y2k2.globa.main.MainActivity;
+import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.main.profile.edit.NicknameEditActivity;
 import team.y2k2.globa.withdraw.WithdrawActivity;
 
@@ -62,6 +64,10 @@ public class MyinfoActivity extends AppCompatActivity {
     private ApiClient apiClient;
     private String profile, name, code;
     private String newName;
+    private Uri newProfile;
+
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference profileRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +79,9 @@ public class MyinfoActivity extends AppCompatActivity {
 
         binding.buttonMyinfoBack.setOnClickListener(v -> {
             Intent resultIntent = new Intent();
-            if(newName != null) {
+            if(newName != null && newProfile != null) {
                 resultIntent.putExtra("newName", newName);
+                resultIntent.putExtra("newProfile", newProfile);
                 setResult(Activity.RESULT_OK, resultIntent);
             } else {
                 setResult(Activity.RESULT_CANCELED, resultIntent);
@@ -87,8 +94,6 @@ public class MyinfoActivity extends AppCompatActivity {
         myInfoViewModel = new ViewModelProvider(MyinfoActivity.this).get(MyinfoViewModel.class);
 
         loadUserInfoList(myInfoViewModel);
-
-        userId = getIntent().getStringExtra("userId");
 
         changeUserProfileImage(userId);
 
@@ -104,7 +109,8 @@ public class MyinfoActivity extends AppCompatActivity {
 
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
-                    byte[] fileBytes = IOUtils.toByteArray(inputStream);
+                    byte[] fileBytes = getBytes(inputStream);
+                    Log.d(getClass().getSimpleName(), "바이트 파일 크기: " + fileBytes.length);
                     RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileBytes);
 
                     MultipartBody.Part profilePart = MultipartBody.Part.createFormData("profile", "filename.jpg", requestBody);
@@ -114,6 +120,8 @@ public class MyinfoActivity extends AppCompatActivity {
                     Glide.with(this).load(uri)
                             .error(R.drawable.profile_user)
                             .into(binding.imageviewMyinfoPhoto);
+
+                    newProfile = uri;
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -148,11 +156,24 @@ public class MyinfoActivity extends AppCompatActivity {
         profile = userInfoResponse.getProfile();
         name = userInfoResponse.getName();
         code = userInfoResponse.getCode();
+        userId = userInfoResponse.getUserId();
+
+        Log.d(getClass().getSimpleName(), "프로필: " + profile);
+        Log.d(getClass().getSimpleName(), "이름: " + name);
+        Log.d(getClass().getSimpleName(), "유저 코드: " + code);
+        Log.d(getClass().getSimpleName(), "아이디: " + userId);
 
         if(profile != null) {
-            Glide.with(this).load(profile)
-                    .error(R.drawable.profile_user)
-                    .into(binding.imageviewMyinfoPhoto);
+            if(profile.startsWith("http")) {
+                Glide.with(this).load(profile)
+                        .error(R.drawable.profile_user)
+                        .into(binding.imageviewMyinfoPhoto);
+            } else {
+                profileRef = storage.getReference().child(profile);
+                Glide.with(this).load(ProfileImage.convertGsToHttps(profileRef.toString()))
+                        .error(R.drawable.profile_user)
+                        .into(binding.imageviewMyinfoPhoto);
+            }
         } else {
             Glide.with(this).load(R.drawable.profile_user)
                     .error(R.drawable.profile_user)
@@ -189,6 +210,18 @@ public class MyinfoActivity extends AppCompatActivity {
 
     public String getUserId() {
         return userId;
+    }
+
+    private byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
 }

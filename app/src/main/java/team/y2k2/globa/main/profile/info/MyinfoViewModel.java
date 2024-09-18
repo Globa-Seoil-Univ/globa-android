@@ -1,6 +1,7 @@
 package team.y2k2.globa.main.profile.info;
 
 import static team.y2k2.globa.api.ApiClient.authorization;
+import static team.y2k2.globa.api.ApiModel.MULTIPART_FORM_DATA;
 
 import android.net.Uri;
 import android.util.Log;
@@ -38,13 +39,13 @@ public class MyinfoViewModel extends ViewModel {
 
     public void uploadImage(MultipartBody.Part profilePart, String userId) {
 
-        apiService.requestUpdateProfileImage(userId, "multipart/form-data", authorization, profilePart).enqueue(new Callback<Void>() {
+        apiService.requestUpdateProfileImage(userId, authorization, profilePart).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
                     Log.d(getClass().getSimpleName(), "이미지 업로드 완료: " + response.code());
                 } else {
-                    Log.d(getClass().getSimpleName(), "이미지 업로드 실패: " + response.code());
+                    Log.d(getClass().getSimpleName(), "이미지 업로드 실패: " + response.code() + ", 메시지: " + response.errorBody());
                 }
             }
 

@@ -109,7 +109,7 @@ public interface ApiService {
     @PATCH("/user/{user_id}/profile")
     Call<Void> requestUpdateProfileImage(
             @Path("user_id") String userId,
-            @Header("Content-Type") String contentType, // "multipart/form-data"
+            //@Header("Content-Type") String contentType, // "multipart/form-data"
             @Header("Authorization") String authorization,
             @Part MultipartBody.Part profile
     );
