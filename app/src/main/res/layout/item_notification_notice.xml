@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/textview_item_notification_notice_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="전체 알림 제목입니다"
         android:fontFamily="@font/notosans_regular"
@@ -26,9 +26,11 @@
         android:textColor="@color/black"
         android:maxLines="2"
         android:ellipsize="end"
-        app:layout_constraintTop_toTopOf="@+id/imageview_item_notification_notice"
         app:layout_constraintStart_toEndOf="@+id/imageview_item_notification_notice"
+        app:layout_constraintEnd_toStartOf="@+id/textview_item_notification_notice_createdtime"
+        app:layout_constraintTop_toTopOf="@+id/imageview_item_notification_notice"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="50dp"
         android:layout_marginTop="4dp"/>
 
     <TextView

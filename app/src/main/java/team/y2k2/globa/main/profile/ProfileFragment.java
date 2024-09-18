@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,7 +44,18 @@ public class ProfileFragment extends Fragment {
 
     private String userId;
 
-    private NicknameEditViewModel nicknameEditViewModel;
+    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if(data != null) {
+                        String value = data.getStringExtra("newName");
+                        refreshData(value);
+                    }
+                }
+            }
+    );
 
     public ProfileFragment() {
         model = new ProfileModel();
@@ -51,8 +64,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(getLayoutInflater());
-
-        nicknameEditViewModel = new ViewModelProvider(this).get(NicknameEditViewModel.class);
 
         SettingItemAdapter adapter = new SettingItemAdapter(model.getItems(), this);
 
@@ -111,14 +122,8 @@ public class ProfileFragment extends Fragment {
             intent.putExtra("name", response.getName());
             intent.putExtra("code", response.getCode());
             intent.putExtra("userId", response.getUserId());
-            startActivity(intent);
+            activityResultLauncher.launch(intent);
 
-        });
-
-        nicknameEditViewModel.getNameLiveData().observe(getViewLifecycleOwner(), name -> {
-            if(name != null) {
-                binding.textviewProfileAccountUsername.setText(name);
-            }
         });
 
         return binding.getRoot();
@@ -152,4 +157,14 @@ public class ProfileFragment extends Fragment {
         return userId;
     }
 
+    private void refreshData(String value) {
+        Log.d(getClass().getSimpleName(), "refreshData() 실행 newName: " + value);
+        binding.textviewProfileAccountUsername.setText(value);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 }

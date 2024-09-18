@@ -39,6 +39,8 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private String profile;
     private String name;
 
+    DocsDetailAdapter detailAdapter;
+
     ApiClient apiClient;
 
     SimpleDateFormat dateFormat;

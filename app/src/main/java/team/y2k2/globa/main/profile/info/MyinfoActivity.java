@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.common.util.IOUtils;
 import com.google.android.gms.fido.fido2.api.common.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,7 +42,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.ActivityMyinfoBinding;
 import team.y2k2.globa.main.MainActivity;
 import team.y2k2.globa.main.profile.edit.NicknameEditActivity;
@@ -53,6 +59,9 @@ public class MyinfoActivity extends AppCompatActivity {
     private MyinfoViewModel myInfoViewModel;
     private ActivityResultLauncher<Intent> nicknameEditLauncher;
     private String userId;
+    private ApiClient apiClient;
+    private String profile, name, code;
+    private String newName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +69,17 @@ public class MyinfoActivity extends AppCompatActivity {
         binding = ActivityMyinfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        apiClient = new ApiClient(this);
+
         binding.buttonMyinfoBack.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            if(newName != null) {
+                resultIntent.putExtra("newName", newName);
+                setResult(Activity.RESULT_OK, resultIntent);
+            } else {
+                setResult(Activity.RESULT_CANCELED, resultIntent);
+            }
+
             finish();
         });
 
@@ -81,17 +100,30 @@ public class MyinfoActivity extends AppCompatActivity {
         // 이미지 선택 (PhotoPicker Android 14)
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             if(uri != null) {
-                Log.d("PhotoPicker", "Selected URI: " + uri);
-                Glide.with(this).load(uri)
-                        .error(R.drawable.profile_user)
-                        .placeholder(R.mipmap.ic_launcher)
-                        .into(binding.imageviewMyinfoPhoto);
+                Log.d("PhotoPicker", "선택 이미지 URI: " + uri);
 
-                File imageFile = new File(uri.getPath());
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
+                    byte[] fileBytes = IOUtils.toByteArray(inputStream);
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileBytes);
 
-                myInfoViewModel.uploadImage(imageFile, userId);
+                    MultipartBody.Part profilePart = MultipartBody.Part.createFormData("profile", "filename.jpg", requestBody);
+
+                    myInfoViewModel.uploadImage(profilePart, userId);
+
+                    Glide.with(this).load(uri)
+                            .error(R.drawable.profile_user)
+                            .into(binding.imageviewMyinfoPhoto);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.d(getClass().getSimpleName(), "이미지 선택 오류: " + e.getMessage());
+                }
+
+
 
             } else {
+                Toast.makeText(this, "이미지가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
                 Log.d("PhotoPicker", "No media selected");
             }
         });
@@ -111,9 +143,11 @@ public class MyinfoActivity extends AppCompatActivity {
         // 리사이클러 뷰에 넣을 아이템 리스트
         List<MyinfoItem> itemList = new ArrayList<>();
 
-        String profile = getIntent().getStringExtra("profile");
-        String name = getIntent().getStringExtra("name");
-        String code = getIntent().getStringExtra("code");
+        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+
+        profile = userInfoResponse.getProfile();
+        name = userInfoResponse.getName();
+        code = userInfoResponse.getCode();
 
         if(profile != null) {
             Glide.with(this).load(profile)
@@ -139,6 +173,7 @@ public class MyinfoActivity extends AppCompatActivity {
                     String updatedName = data.getStringExtra("updated_name");
                     itemList.get(0).setName(updatedName);
                     myinfoAdapter.notifyDataSetChanged();
+                    newName = updatedName;
                 }
             } else {
                 Log.d("이름변경 오류", "registerForActivity 오류");
@@ -149,13 +184,6 @@ public class MyinfoActivity extends AppCompatActivity {
         myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher, this);
         // 라시아클러 뷰에 어뎁터 설정
         binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
-
-        // API 에러 발생
-        myInfoViewModel.getErrorLiveData().observe(MyinfoActivity.this, errorMessge -> {
-            if(errorMessge != null) {
-                Log.d("이미지 api 오류", "이미지 api Request 실패");
-            }
-        });
 
     }
 
