@@ -53,7 +53,6 @@ public class MainViewModel extends ViewModel {
         folderFragment = new FolderFragment();
 
         model = new MainModel();
-
     }
 
     public void viewFragment(int index) {

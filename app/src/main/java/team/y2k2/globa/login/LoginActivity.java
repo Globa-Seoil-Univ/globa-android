@@ -61,8 +61,6 @@ public class LoginActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
 
-        autoLogin();
-
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_loading, null);
 
         builder = new AlertDialog.Builder(this);
@@ -81,15 +79,17 @@ public class LoginActivity extends AppCompatActivity {
     public void autoLogin() {
         SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
         String refreshToken = preferences.getString("refreshToken", "");
+        String accessToken = preferences.getString("accessToken", "");
 
         if(refreshToken.equalsIgnoreCase(""))
             return;
 
-        LoginViewModel.LoginListener listener = new LoginViewModel.LoginListener(this, mAuth, refreshToken);
+        if(accessToken.equalsIgnoreCase(""))
+            return;
+
+        LoginViewModel.LoginListener listener = new LoginViewModel.LoginListener(this, accessToken, refreshToken);
 
         listener.autoLogin();
-
-
     }
 
     /**

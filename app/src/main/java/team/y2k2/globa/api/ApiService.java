@@ -70,7 +70,7 @@ public interface ApiService {
     /**
      * 토큰 갱신
      */
-    @POST("/auth")
+    @POST("/user/auth")
     Call<TokenResponse> getRequestToken(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,

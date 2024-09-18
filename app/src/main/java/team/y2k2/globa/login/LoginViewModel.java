@@ -37,10 +37,6 @@ public class LoginViewModel extends ViewModel {
         this.activity = activity;
     }
 
-    public void autoLogin(String refreshToken) {
-
-    }
-
     public static class LoginListener implements OnCompleteListener<AuthResult> {
         ApiClient apiClient;
         LoginModel model;
@@ -57,10 +53,10 @@ public class LoginViewModel extends ViewModel {
             apiClient = new ApiClient(activity);
         }
 
-        public LoginListener(LoginActivity activity, String refreshToken) {
+        public LoginListener(LoginActivity activity, String accessToken, String refreshToken) {
             this.activity = activity;
             this.refreshToken = refreshToken;
-
+            this.accessToken = accessToken;
             apiClient = new ApiClient(activity);
         }
 
@@ -72,21 +68,23 @@ public class LoginViewModel extends ViewModel {
         }
 
         public void autoLogin() {
-            TokenRequest request = new TokenRequest(refreshToken);
-            TokenResponse response = apiClient.requestToken(request);
+//            TokenRequest request = new TokenRequest(refreshToken);
+//            TokenResponse response = apiClient.requestToken(request, activity);
+//
+//            if(response == null)
+//                return;
+//            else {
+//                Toast.makeText(activity, "at:" + response.getAccessToken() +", rt : " + response.getRefreshToken(), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            userPreferences(response);
+//            sendLogMessage(response);
+//
+//            activity.dialog.dismiss();
 
-            if(response == null)
-                return;
 
-            userPreferences(request, response);
-            sendLogMessage(request,response);
-
-            activity.dialog.dismiss();
             Intent intent = new Intent(activity, MainActivity.class);
             activity.startActivity(intent);
-
-            Toast.makeText(activity, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-
         }
 
         public void KakaoLogin(String token) {
@@ -136,7 +134,7 @@ public class LoginViewModel extends ViewModel {
             }
         }
 
-        public void userPreferences(TokenRequest request, TokenResponse response) {
+        public void userPreferences(TokenResponse response) {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
 
@@ -165,7 +163,7 @@ public class LoginViewModel extends ViewModel {
             editor.commit();
         }
 
-        public void sendLogMessage(TokenRequest request, TokenResponse response) {
+        public void sendLogMessage(TokenResponse response) {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
 

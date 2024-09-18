@@ -64,7 +64,7 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getCurrentlyRecords() {
-        recordResponse = apiClient.requestGetRecords(20);
+        recordResponse = apiClient.requestGetRecords(context, 20);
         folderResponse = apiClient.requestGetFolders(1, 20);
 
         DocsListItemModel listItems = new DocsListItemModel();
@@ -90,7 +90,7 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getMostViewedRecords() {
-        recordResponse = apiClient.requestGetRecords(20);
+        recordResponse = apiClient.requestGetRecords(context, 20);
         folderResponse = apiClient.requestGetFolders(1, 20);
 
         DocsListItemModel listItems = new DocsListItemModel();
@@ -116,7 +116,7 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getSharedRecords() {
-        recordResponse = apiClient.requestGetRecords(20);
+        recordResponse = apiClient.requestGetRecords(context, 20);
         folderResponse = apiClient.requestGetFolders(1, 20);
 
         DocsListItemModel docsList = new DocsListItemModel();
@@ -142,7 +142,7 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getReceivedRecords() {
-        recordResponse = apiClient.requestGetRecords(20);
+        recordResponse = apiClient.requestGetRecords(context,20);
         folderResponse = apiClient.requestGetFolders(1, 20);
 
         DocsListItemModel docsList = new DocsListItemModel();
