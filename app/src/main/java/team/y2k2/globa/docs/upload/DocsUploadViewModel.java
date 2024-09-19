@@ -2,11 +2,11 @@ package team.y2k2.globa.docs.upload;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -37,6 +37,9 @@ public class DocsUploadViewModel extends ViewModel {
 
     FolderResponse response;
 
+    private HandlerThread handlerThread;
+    private Handler handler;
+
 
     public void setActivity(DocsUploadActivity activity) {
         this.activity = activity;
@@ -66,19 +69,11 @@ public class DocsUploadViewModel extends ViewModel {
         }
     }
 
-
-    public void uploadRecordFile(String path, String folderId) {
-        Instant instant = Instant.now();
-        unixTime = instant.getEpochSecond();
-
-        String oggPath = path.replace(".tmp", ".ogg");
-        convertMp3ToOgg(path,oggPath);
-
+    public void uploadRecordFile(String oggPath, String folderId) {
         this.folderId = folderId;
         firebasePath = folderId + "/" + unixTime + ".ogg";
         StorageReference audioRef = storageReference.child(firebasePath);
 
-        Log.d(getClass().getName(), "local path : " + path);
         Log.d(getClass().getName(), "firebase path : " + firebasePath);
 
         Uri uri = Uri.fromFile(new File(oggPath));
@@ -88,25 +83,57 @@ public class DocsUploadViewModel extends ViewModel {
                     // 업로드 성공 시
                     Toast.makeText(activity, "파일 업로드 성공", Toast.LENGTH_SHORT).show();
                     requestCreateRecord(model.getRecordName());
+
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show();
                 });
     }
 
-    public static void convertMp3ToOgg(String mp3FilePath, String oggFilePath) {
-        String[] cmd = new String[]{"-i", mp3FilePath, "-vn", "-map_metadata", "-1", "-ac", "1", "-c:a", "libopus", "-b:a", "12k", "-application", "voip", oggFilePath};
-        int rc = FFmpeg.execute(cmd);
-        if (rc == 0) {
-            // 변환 성공
-            Log.d("AudioConverter", "변환 성공");
-        } else {
-            // 변환 실패
-            Log.e("AudioConverter", "변환 실패");
-        }
+    // MP3 to OGG 변환 함수 호출
+    private void convertAudio(String path, String folderId) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Instant instant = Instant.now();
+                unixTime = instant.getEpochSecond();
+
+                String oggPath = path.replace(".tmp", ".ogg");
+
+                String[] cmd = new String[]{"-i", path, "-vn", "-map_metadata", "-1", "-ac", "1", "-c:a", "libopus", "-b:a", "12k", "-application", "voip", oggPath};
+                int rc = FFmpeg.execute(cmd);
+                if (rc == 0) {
+                    // 변환 성공
+                    Log.d("AudioConverter", "변환 성공");
+                } else {
+                    // 변환 실패
+                    Log.e("AudioConverter", "변환 실패");
+                }
+
+                uploadRecordFile(oggPath, folderId);
+
+                // 변환 완료 후 UI 업데이트 (필요시)
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // UI 업데이트 (예: ProgressBar 숨기기, 변환 완료 메시지 표시)
+                        activity.dialog.dismiss();
+                        activity.finish();
+                    }
+                });
+            }
+        });
     }
 
+
     public void docsUpload() {
+        handlerThread = new HandlerThread("FFmpegThread");
+        handlerThread.start();
+
+        // Handler 생성 및 연결
+        handler = new Handler(handlerThread.getLooper());
+
+
         if(model.getRecordName().length() == 0)
             model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString());
 
@@ -124,8 +151,7 @@ public class DocsUploadViewModel extends ViewModel {
             folderId = String.valueOf(folder.getFolderId());
         }
 
-        uploadRecordFile(model.getRecordPath(), folderId);
-        activity.finish();
+        convertAudio(model.getRecordPath(), folderId);
     }
 
     public String getRecordPath() {
