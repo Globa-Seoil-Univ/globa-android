@@ -67,20 +67,12 @@ public class DocsUploadViewModel extends ViewModel {
 
 
     public void uploadRecordFile(String path, String folderId) {
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_loading, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        dialog.show();
-
         Instant instant = Instant.now();
         unixTime = instant.getEpochSecond();
 
-        String oggPath = path.split("\\.")[0] + ".ogg";
+        String oggPath = path.replace(".tmp", ".ogg");
         convertMp3ToOgg(path,oggPath);
+
         this.folderId = folderId;
         firebasePath = folderId + "/" + unixTime + ".ogg";
         StorageReference audioRef = storageReference.child(firebasePath);
@@ -88,20 +80,15 @@ public class DocsUploadViewModel extends ViewModel {
         Log.d(getClass().getName(), "local path : " + path);
         Log.d(getClass().getName(), "firebase path : " + firebasePath);
 
-
         Uri uri = Uri.fromFile(new File(oggPath));
 
         audioRef.putFile(uri)
                 .addOnSuccessListener(taskSnapshot -> {
                     // 업로드 성공 시
-                    dialog.dismiss();
                     Toast.makeText(activity, "파일 업로드 성공", Toast.LENGTH_SHORT).show();
                     requestCreateRecord(model.getRecordName());
-
                 })
                 .addOnFailureListener(e -> {
-                    // 업로드 실패 시
-                    dialog.dismiss();
                     Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show();
                 });
     }
