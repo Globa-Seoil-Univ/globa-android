@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.FolderResponse;
@@ -37,7 +38,7 @@ public class MainFragmentViewModel {
     MainFragmentModel model;
 
     RecordResponse recordResponse;
-    List<FolderResponse> folderResponse;
+    FolderResponse folderResponse;
 
     private MutableLiveData<UnreadNotificationCheckResponse> notificationCheckLiveData = new MutableLiveData<>();
 
@@ -129,8 +130,8 @@ public class MainFragmentViewModel {
             String datetime = record.getCreatedTime();
             List<Keyword> keywords = record.getKeywords();
 
-            for(FolderResponse folder : folderResponse) {
-                int myFolderId = Integer.parseInt(folder.getFolders().getFolderId());
+            for(Folder folder : folderResponse.getFolders()) {
+                int myFolderId = Integer.parseInt(folder.getFolderId());
                 int targetFolderId = Integer.parseInt(folderId);
 
                 if(myFolderId == targetFolderId) {
@@ -150,8 +151,8 @@ public class MainFragmentViewModel {
 
         ArrayList<Integer> folderIds = new ArrayList<>();
 
-        for(FolderResponse folder : folderResponse) {
-            folderIds.add(Integer.parseInt(folder.getFolders().getFolderId()));
+        for(Folder folder : folderResponse.getFolders()) {
+            folderIds.add(Integer.parseInt(folder.getFolderId()));
         }
 
         for(Record record : records) {

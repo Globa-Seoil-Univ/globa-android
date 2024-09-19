@@ -18,6 +18,7 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class DocsUploadViewModel extends ViewModel {
@@ -30,7 +31,7 @@ public class DocsUploadViewModel extends ViewModel {
     String firebasePath;
     long unixTime;
 
-    List<FolderResponse> response;
+    FolderResponse response;
 
 
     public void setActivity(DocsUploadActivity activity) {
@@ -41,7 +42,7 @@ public class DocsUploadViewModel extends ViewModel {
     private void requestCreateRecord(String title) {
         // 네트워크 요청 보내기
         String path = "folders/" + folderId + "/" + unixTime + ".ogg";
-        String folderId = Integer.toString(Integer.parseInt(response.get(activity.binding.spinnerDocsUpload.getSelectedItemPosition()).getFolders().getFolderId()));
+        String folderId = Integer.toString(Integer.parseInt(response.getFolders().get(activity.binding.spinnerDocsUpload.getSelectedItemPosition()).getFolderId()));
 
         ApiClient apiClient = new ApiClient(activity);
 
@@ -51,10 +52,10 @@ public class DocsUploadViewModel extends ViewModel {
 
     public void loadFolder() {
         ApiClient apiClient = new ApiClient(activity);
-        response = apiClient.requestGetFolders(1, 10);
+        response = apiClient.requestGetFolders(1, 100);
 
         if (response != null) {
-            adapter = new DocsUploadFolderAdapter(activity, R.layout.item_folder, response);
+            adapter = new DocsUploadFolderAdapter(activity, R.layout.item_folder, response.getFolders());
             adapter.setDropDownViewResource(R.layout.item_folder);
             activity.binding.spinnerDocsUpload.setAdapter(adapter);
             activity.binding.spinnerDocsUpload.setSelection(0);
@@ -117,8 +118,8 @@ public class DocsUploadViewModel extends ViewModel {
         }
 
         if(preferences.getString("publicFolderId", "").length() != 0) {
-            FolderResponse folder = adapter.getItems().get(activity.binding.spinnerDocsUpload.getSelectedItemPosition());
-            folderId = String.valueOf(folder.getFolders().getFolderId());
+            Folder folder = adapter.getItems().get(activity.binding.spinnerDocsUpload.getSelectedItemPosition());
+            folderId = String.valueOf(folder.getFolderId());
         }
 
         uploadRecordFile(model.getRecordPath(), folderId);

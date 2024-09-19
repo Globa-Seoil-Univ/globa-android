@@ -10,6 +10,7 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.databinding.ActivityDocsMoveBinding;
 import team.y2k2.globa.docs.upload.DocsUploadFolderAdapter;
 import team.y2k2.globa.api.model.response.FolderResponse;
@@ -20,7 +21,7 @@ public class DocsMoveActivity extends AppCompatActivity {
     String title;
     String folderId;
 
-    List<FolderResponse> responses;
+    FolderResponse response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,10 @@ public class DocsMoveActivity extends AppCompatActivity {
 
     public void loadFolder() {
         ApiClient apiClient = new ApiClient(this);
-        responses = apiClient.requestGetFolders(1, 10);
+        response = apiClient.requestGetFolders(1, 10);
 
-        if (responses != null) {
-            DocsUploadFolderAdapter adapter = new DocsUploadFolderAdapter(getApplicationContext(), R.layout.item_folder, responses);
+        if (response != null) {
+            DocsUploadFolderAdapter adapter = new DocsUploadFolderAdapter(getApplicationContext(), R.layout.item_folder, response.getFolders());
             adapter.setDropDownViewResource(R.layout.item_folder);
             binding.spinnerDocsMove.setAdapter(adapter);
             binding.spinnerDocsMove.setSelection(0);
@@ -48,9 +49,9 @@ public class DocsMoveActivity extends AppCompatActivity {
     }
 
     public void moveDocs() {
-        if (responses != null && !responses.isEmpty()) { // null 체크 및 리스트가 비어있는지 확인
-            FolderResponse response = responses.get(binding.spinnerDocsMove.getSelectedItemPosition());
-            String targetFolderId = String.valueOf(response.getFolders().getFolderId());
+        if (response != null) { // null 체크 및 리스트가 비어있는지 확인
+            Folder folder = response.getFolders().get(binding.spinnerDocsMove.getSelectedItemPosition());
+            String targetFolderId = String.valueOf(folder.getFolderId());
 
             ApiClient apiClient = new ApiClient(this);
             apiClient.requestUpdateDocsMove(folderId, recordId, targetFolderId);

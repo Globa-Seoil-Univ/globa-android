@@ -2,6 +2,7 @@ package team.y2k2.globa.main.profile.info;
 
 import static team.y2k2.globa.api.ApiClient.authorization;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -9,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.io.File;
+import java.io.InputStream;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -34,21 +36,15 @@ public class MyinfoViewModel extends ViewModel {
         return errorLiveData;
     }
 
-    public void uploadImage(File imageFile, String userId) {
-        // ByteArray를 RequestBody로 변환
-        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
+    public void uploadImage(MultipartBody.Part multipartBody, String userId) {
 
-        // MultipartBody.Part로 변환
-        MultipartBody.Part profilePart = MultipartBody.Part.createFormData("profile", imageFile.getName(), requestFile);
-
-        apiService.requestUpdateProfileImage(userId, "multipart/form-data", authorization, profilePart).enqueue(new Callback<Void>() {
+        apiService.requestUpdateProfileImage(userId, authorization, multipartBody).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
                     Log.d(getClass().getName(), "이미지 업로드 완료");
                 } else {
                     Log.d(getClass().getName(), "이미지 업로드 실패: " + response.code() + ", " + response.message());
-                    Log.d(getClass().getName(), "파일: " + profilePart);
                 }
             }
 

@@ -259,12 +259,12 @@ public class ApiClient {
         return null;
     }
 
-    public List<FolderResponse> requestGetFolders(int page, int count) {
+    public FolderResponse requestGetFolders(int page, int count) {
         try {
             return CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
-                Call<List<FolderResponse>> call = apiService.requestGetFolders(APPLICATION_JSON, authorization, page, count);
-                Response<List<FolderResponse>> response;
+                Call<FolderResponse> call = apiService.requestGetFolders(APPLICATION_JSON, authorization, page, count);
+                Response<FolderResponse> response;
 
                 try {
                     response = call.execute();

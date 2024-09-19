@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.databinding.FragmentFolderBinding;
 import team.y2k2.globa.main.folder.add.FolderAddActivity;
@@ -51,7 +52,7 @@ public class FolderFragment extends Fragment {
 
     public void loadFolder() {
         ApiClient apiClient = new ApiClient(getContext());
-        List<FolderResponse> response = apiClient.requestGetFolders(1, 10);
+        FolderResponse response = apiClient.requestGetFolders(1, 10);
 
         model = new FolderModel();
         currentlyModel = new FolderCurrentlyModel();
@@ -60,14 +61,14 @@ public class FolderFragment extends Fragment {
             Log.d(getClass().getSimpleName(), "response = null");
         }
 
-        for(int i = 0; i < response.size(); i++) {
-            FolderResponse folder = response.get(i);
+        for(int i = 0; i < response.getFolders().size(); i++) {
+            Folder folder = response.getFolders().get(i);
 
-            model.addItem(folder.getFolders().getTitle(), folder.getFolders().getCreatedTime(), Integer.parseInt(folder.getFolders().getFolderId()));
-            currentlyModel.addItem(folder.getFolders().getTitle(), folder.getFolders().getCreatedTime(), Integer.parseInt(folder.getFolders().getFolderId()));
+            model.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
+            currentlyModel.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
 
             // 각 폴더에 대한 처리 작업 수행
-            Log.d("FOLDER_TEST", folder.getFolders().getTitle()+" | " + folder.getFolders().getCreatedTime() + " | " + folder.getFolders().getFolderId());
+            Log.d("FOLDER_TEST", folder.getTitle()+" | " + folder.getCreatedTime() + " | " + folder.getFolderId());
         }
 
         FolderAdapter adapter = new FolderAdapter(model.getItems(), this.getActivity());
