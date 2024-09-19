@@ -42,6 +42,8 @@
         android:fontFamily="@font/notosans_regular"
         android:textSize="@dimen/small"
         android:textColor="@color/gray"
+        android:maxLines="2"
+        android:ellipsize="end"
         app:layout_constraintTop_toBottomOf="@id/textview_item_notification_total_title"
         app:layout_constraintStart_toStartOf="@id/textview_item_notification_total_title"
         android:layout_marginTop="8dp"/>

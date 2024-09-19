@@ -507,6 +507,10 @@ public class ApiClient {
                             response = Response.error(500, ResponseBody.create(null, "서버 에러"));
                             break;
                         }
+                        default: {
+                            Log.d("댓글 추가 API", "댓글 추가 API 응답 코드: " + response.code());
+                            break;
+                        }
                     }
                 } catch (IOException e) {
                     response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
@@ -549,7 +553,7 @@ public class ApiClient {
                             break;
                         }
                         default: {
-                            Log.d("대댓글 API", "대댓글 API 응답 code: " + response.code()); break;
+                            Log.d("대댓글 추가 API", "대댓글 추가 API 응답 코드: " + response.code()); break;
                         }
                     }
                 } catch (IOException e) {
@@ -589,15 +593,21 @@ public class ApiClient {
                             response = Response.error(500, ResponseBody.create(null, "서버 에러"));
                             break;
                         }
+                        default: {
+                            Log.d("댓글 최초 추가 API", "댓글 최초 추가 API 응답 코드: " + response.code());
+                            break;
+                        }
                     }
                 } catch (IOException e) {
                     response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
                     e.printStackTrace();
+                    Log.d("댓글 최초 추가 API", "댓글 최초 추가 IOException 오류 e: " + e.getMessage());
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            Log.d("댓글 최초 추가 API", "댓글 최초 추가 InterruptedException/ExecutionException 오류 e: " + e.getMessage());
         }
         return null;
     }
@@ -615,6 +625,7 @@ public class ApiClient {
                     if (response.isSuccessful()) {
                         return response.body();
                     } else {
+                        Log.d("댓글 가져오기 API", "댓글 가져오기 API 응답 코드: " + response.code());
                         handleErrorCode(response.code());
                         return null;
                     }
@@ -684,7 +695,8 @@ public class ApiClient {
                             break;
                         }
                         default: {
-                            Log.d("댓글 삭제", "댓글 삭제 responseCode: " + response.code()); break;
+                            Log.d("댓글 삭제 API", "댓글 삭제 API 응답 코드: " + response.code()); 
+                            break;
                         }
                     }
                 } catch (IOException e) {
@@ -725,7 +737,7 @@ public class ApiClient {
                             break;
                         }
                         default: {
-                            Log.d("댓글 수정", "댓글 수정 ResponseCode: " + response.code());
+                            Log.d("댓글 수정 API", "댓글 수정 API 응답 코드: " + response.code());
                         }
                     }
                 } catch (IOException e) {
@@ -793,7 +805,7 @@ public class ApiClient {
                             response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
                         }
                         default: {
-                            Log.d("댓글 수정", "댓글 수정 ResponseCode: " + response.code());
+                            Log.d("공부 시간 수정 API", "공부 시간 수정 API 응답 코드: " + response.code());
                         }
                     }
                 } catch (IOException e) {

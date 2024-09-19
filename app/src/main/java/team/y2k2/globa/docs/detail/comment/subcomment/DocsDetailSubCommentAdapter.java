@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +29,7 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;
+import team.y2k2.globa.docs.detail.comment.FocusViewModel;
 import team.y2k2.globa.main.ProfileImage;
 
 public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetailSubCommentAdapter.AdapterViewHolder> {
@@ -50,6 +52,8 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
 
+    private FocusViewModel focusViewModel;
+
     public DocsDetailSubCommentAdapter(List<DocsDetailSubCommentItem> subCommentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailCommentAdapter commentAdapter) {
         this.subCommentItems = subCommentItems;
         this.activity = activity;
@@ -59,6 +63,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         this.highlightId = highlightId;
         this.commentAdapter = commentAdapter;
         this.apiClient = new ApiClient(activity);
+        focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);
     }
 
     public void addNewItem(DocsDetailSubCommentItem newItem) {
@@ -122,7 +127,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
 
                 commentAdapter.focusOnSubCommentEt();
 
-                commentAdapter.getSubCommentEtFocus().observe(activity, hasFocus -> {
+                focusViewModel.getSubCommentFocusLiveData().observe(activity, hasFocus -> {
                     if(hasFocus) {
                         // 대댓글 수정 동작 (버튼 상태 변경)
                         Log.d("대댓글 버튼 상태", "대댓글 버튼 상태 수정 상태로 번환 시작");
@@ -163,10 +168,10 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            profileImage = itemView.findViewById(R.id.imageview_item_comment_icon);
-            name = itemView.findViewById(R.id.textview_item_comment_username);
-            createdTime = itemView.findViewById(R.id.textview_item_comment_datetime);
-            content = itemView.findViewById(R.id.textview_item_comment_content);
+            profileImage = itemView.findViewById(R.id.imageview_item_comment_sub_icon);
+            name = itemView.findViewById(R.id.textview_item_comment_sub_username);
+            createdTime = itemView.findViewById(R.id.textview_item_comment_sub_datetime);
+            content = itemView.findViewById(R.id.textview_item_comment_sub_content);
         }
     }
 

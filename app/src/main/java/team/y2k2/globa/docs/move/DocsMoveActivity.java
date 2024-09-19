@@ -50,7 +50,7 @@ public class DocsMoveActivity extends AppCompatActivity {
     public void moveDocs() {
         if (responses != null && !responses.isEmpty()) { // null 체크 및 리스트가 비어있는지 확인
             FolderResponse response = responses.get(binding.spinnerDocsMove.getSelectedItemPosition());
-            String targetFolderId = String.valueOf(response.getFolderId());
+            String targetFolderId = String.valueOf(response.getFolders().getFolderId());
 
             ApiClient apiClient = new ApiClient(this);
             apiClient.requestUpdateDocsMove(folderId, recordId, targetFolderId);

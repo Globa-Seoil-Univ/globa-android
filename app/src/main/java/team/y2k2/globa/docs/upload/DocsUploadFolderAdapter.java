@@ -67,8 +67,8 @@ public class DocsUploadFolderAdapter extends ArrayAdapter<String> implements Spi
         TextView title = view.findViewById(R.id.textview_folder_item_title);
         TextView datetime = view.findViewById(R.id.textview_folder_item_datetime);
 
-        title.setText(items.get(position).getTitle());
-        datetime.setText(items.get(position).getCreatedTime());
+        title.setText(items.get(position).getFolders().getTitle());
+        datetime.setText(items.get(position).getFolders().getCreatedTime());
 
         return view;
     }
@@ -78,8 +78,8 @@ public class DocsUploadFolderAdapter extends ArrayAdapter<String> implements Spi
         TextView title = view.findViewById(R.id.textview_folder_item_title);
         TextView datetime = view.findViewById(R.id.textview_folder_item_datetime);
 
-        title.setText(items.get(position).getTitle());
-        datetime.setText(items.get(position).getCreatedTime());
+        title.setText(items.get(position).getFolders().getTitle());
+        datetime.setText(items.get(position).getFolders().getCreatedTime());
 
         return view;
     }

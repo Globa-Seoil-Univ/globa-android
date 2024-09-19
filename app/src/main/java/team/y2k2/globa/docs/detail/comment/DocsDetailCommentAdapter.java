@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,6 +84,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
     ApiClient apiClient;
 
+    private FocusViewModel focusViewModel;
+
     public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailAdapter mainAdapter) {
         this.commentItems = commentItems;
         this.activity = activity;
@@ -91,6 +94,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         this.sectionId = sectionId;
         this.highlightId = highlightId;
         this.mainAdapter = mainAdapter;
+        focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);
     }
 
     public void addNewItem(DocsDetailCommentItem newItem) {
@@ -128,7 +132,6 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         String commentId = commentItems.get(position).getCommentId();
 
         if(profile != null) {
-            Log.d(getClass().getSimpleName(), "프로필 경로: " + profile);
             if(profile.startsWith("http")) {
                 Glide.with(activity).load(profile).error(R.mipmap.ic_launcher).into(holder.profileImage);
             } else {
@@ -151,6 +154,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             // 대댓글 호출
             apiClient = new ApiClient(activity);
             List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 10).getSubComments();
+            subCommentItems.clear();
             for(SubComment subComment : subCommentList) {
                 String subProfile = subComment.getUser().getProfile();
                 String subName = subComment.getUser().getName();
@@ -186,7 +190,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
                 // 댓글 수정 동작
                 mainAdapter.focusOnCommentEt();
 
-                mainAdapter.getCommentEtFocus().observe(activity, hasFocus -> {
+                focusViewModel.getCommentFocusLiveData().observe(activity, hasFocus -> {
                     if(hasFocus) {
                         // 댓글 수정 동작 (버튼 상태 변경)
                         Log.d("댓글 버튼 상태", "댓글 버튼 상태 수정 상태로 전환 시작");
@@ -278,6 +282,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
                 .subscribe(event -> {
                     String text = subCommentEt.getText().toString();
                     if(!text.isEmpty()) {
+                        Log.d(getClass().getSimpleName(), "대댓글 버튼 상태: " + subButtonStatus);
                         if(subButtonStatus == BUTTON_COMMENT_SUB_CONFIRM) {
                             Log.d("대댓글 추가", "내 프로필: " + myProfile + ", 내 이름: " + myName + ", 작성 내용: " + text);
                             // 대댓글 아이템 리스트 추가
@@ -307,6 +312,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         subCommentEt.setOnFocusChangeListener((v, hasFocus) -> {
             // 포커스를 얻으면 true, 읽으면 false;
             subCommentEtFocus.setValue(hasFocus);
+            focusViewModel.setSubCommentFocusLiveData(hasFocus);
         });
 
         bottomSheetDialog.show();
@@ -347,9 +353,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(subCommentEt, InputMethodManager.SHOW_IMPLICIT);
     }
-    public MutableLiveData<Boolean> getSubCommentEtFocus() {
-        return subCommentEtFocus;
-    }
+
 
     public void setSubButtonStatus(int subButtonStatus) {
         this.subButtonStatus = subButtonStatus;

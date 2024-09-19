@@ -56,14 +56,18 @@ public class FolderFragment extends Fragment {
         model = new FolderModel();
         currentlyModel = new FolderCurrentlyModel();
 
+        if(response == null) {
+            Log.d(getClass().getSimpleName(), "response = null");
+        }
+
         for(int i = 0; i < response.size(); i++) {
             FolderResponse folder = response.get(i);
-            model.addItem(folder.getTitle(), folder.getCreatedTime(), folder.getFolderId());
-            currentlyModel.addItem(folder.getTitle(), folder.getCreatedTime(), folder.getFolderId());
 
+            model.addItem(folder.getFolders().getTitle(), folder.getFolders().getCreatedTime(), Integer.parseInt(folder.getFolders().getFolderId()));
+            currentlyModel.addItem(folder.getFolders().getTitle(), folder.getFolders().getCreatedTime(), Integer.parseInt(folder.getFolders().getFolderId()));
 
             // 각 폴더에 대한 처리 작업 수행
-            Log.d("FOLDER_TEST", folder.getTitle()+" | " + folder.getCreatedTime() + " | " + folder.getFolderId());
+            Log.d("FOLDER_TEST", folder.getFolders().getTitle()+" | " + folder.getFolders().getCreatedTime() + " | " + folder.getFolders().getFolderId());
         }
 
         FolderAdapter adapter = new FolderAdapter(model.getItems(), this.getActivity());

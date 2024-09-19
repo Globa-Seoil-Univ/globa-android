@@ -130,7 +130,7 @@ public class MainFragmentViewModel {
             List<Keyword> keywords = record.getKeywords();
 
             for(FolderResponse folder : folderResponse) {
-                int myFolderId = folder.getFolderId();
+                int myFolderId = Integer.parseInt(folder.getFolders().getFolderId());
                 int targetFolderId = Integer.parseInt(folderId);
 
                 if(myFolderId == targetFolderId) {
@@ -151,7 +151,7 @@ public class MainFragmentViewModel {
         ArrayList<Integer> folderIds = new ArrayList<>();
 
         for(FolderResponse folder : folderResponse) {
-            folderIds.add(folder.getFolderId());
+            folderIds.add(Integer.parseInt(folder.getFolders().getFolderId()));
         }
 
         for(Record record : records) {

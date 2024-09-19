@@ -41,7 +41,7 @@ public class DocsUploadViewModel extends ViewModel {
     private void requestCreateRecord(String title) {
         // 네트워크 요청 보내기
         String path = "folders/" + folderId + "/" + unixTime + ".ogg";
-        String folderId = Integer.toString(response.get(activity.binding.spinnerDocsUpload.getSelectedItemPosition()).getFolderId());
+        String folderId = Integer.toString(Integer.parseInt(response.get(activity.binding.spinnerDocsUpload.getSelectedItemPosition()).getFolders().getFolderId()));
 
         ApiClient apiClient = new ApiClient(activity);
 
@@ -118,7 +118,7 @@ public class DocsUploadViewModel extends ViewModel {
 
         if(preferences.getString("publicFolderId", "").length() != 0) {
             FolderResponse folder = adapter.getItems().get(activity.binding.spinnerDocsUpload.getSelectedItemPosition());
-            folderId = String.valueOf(folder.getFolderId());
+            folderId = String.valueOf(folder.getFolders().getFolderId());
         }
 
         uploadRecordFile(model.getRecordPath(), folderId);
