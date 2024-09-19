@@ -26,6 +26,7 @@ import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.main.MainActivity;
 
 public class LoginViewModel extends ViewModel {
@@ -94,11 +95,31 @@ public class LoginViewModel extends ViewModel {
             userPreferences(request, response);
             sendLogMessage(request,response);
 
+
+            ApiClient apiNewClient = new ApiClient(activity);
+            UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
+            userProfilePreferences(userInfoResponse);
+            showLogMessages(userInfoResponse);
+
             activity.dialog.dismiss();
             Intent intent = new Intent(activity, MainActivity.class);
             activity.startActivity(intent);
 
             Toast.makeText(activity, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+        }
+
+        public void showLogMessages(UserInfoResponse response) {
+            Log.d(getClass().getName(), "프로필 조회 성공");
+            ArrayList<String> logs = new ArrayList();
+            logs.add("userName      :" + response.getName());
+            logs.add("userId        :" + response.getUserId());
+            logs.add("publicFolderId:" + response.getPublicFolderId());
+            logs.add("userCode      :" + response.getCode());
+
+            for(int i = 0; i < logs.toArray().length; i++) {
+                Log.d(getClass().getName(), logs.get(i));
+            }
+
         }
 
         @Override
@@ -117,8 +138,15 @@ public class LoginViewModel extends ViewModel {
                         LoginRequest request = new LoginRequest(model, true, idToken);
 
                         LoginResponse response = apiClient.requestSignIn(request);
+
                         userPreferences(request, response);
                         sendLogMessage(request,response);
+
+                        ApiClient apiNewClient = new ApiClient(activity);
+                        UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
+                        userProfilePreferences(userInfoResponse);
+                        showLogMessages(userInfoResponse);
+
 
                         activity.dialog.dismiss();
                         Intent intent = new Intent(activity, MainActivity.class);
@@ -144,6 +172,16 @@ public class LoginViewModel extends ViewModel {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("accessToken", accessToken);
             editor.putString("refreshToken", refreshToken);
+            editor.commit();
+        }
+
+        public void userProfilePreferences(UserInfoResponse response) {
+            SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("userName", response.getName());
+            editor.putString("userId", response.getUserId());
+            editor.putString("publicFolderId", response.getPublicFolderId());
+            editor.putString("userCode", response.getCode());
             editor.commit();
         }
 
@@ -184,6 +222,8 @@ public class LoginViewModel extends ViewModel {
             list.add("profile     : " + request.getProfile());
         }
     }
+
+
 
     public String getAppKeyForKakao() {
         return model.APP_KEY_KAKAO;
