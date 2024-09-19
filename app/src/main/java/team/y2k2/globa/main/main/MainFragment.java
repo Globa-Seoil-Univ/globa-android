@@ -42,6 +42,7 @@ import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.databinding.FragmentMainBinding;
+import team.y2k2.globa.main.docs.list.DocsListItem;
 import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
 import team.y2k2.globa.main.notice.NoticeAutoScrollHandler;
@@ -156,6 +157,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
             default:
                 adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords(), getActivity());
+        }
+
+        if(adapter.getItemCount() == 0) {
+            ArrayList<DocsListItem> items = new ArrayList<>();
+            items.add(new DocsListItem("","","",""));
+            adapter = new DocsListItemAdapter(items, getActivity());
         }
 
         int numColumns = calculateNoOfColumns(binding.getRoot().getContext());

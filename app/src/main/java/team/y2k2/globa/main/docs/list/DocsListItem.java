@@ -15,7 +15,7 @@ public class DocsListItem {
     private int image_2;
     private int image_3;
 
-    DocsListItem(String recordId, String folderId, String title, String datetime) {
+    public DocsListItem(String recordId, String folderId, String title, String datetime) {
         this.title = title;
         this.datetime = datetime;
         this.recordId = recordId;

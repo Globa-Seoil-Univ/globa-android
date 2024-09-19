@@ -41,12 +41,24 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_docs, parent, false);
+        View view;
+        if (items.get(0).getFolderId().equals(""))
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_docs_null, parent, false);
+        else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_docs, parent, false);
+        }
+
         return new AdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
+        if(items.get(0).getFolderId().equals("")) {
+            holder.title.setText("문서를 찾을 수 없습니다.");
+            return;
+        }
+
+
         holder.title.setText(items.get(position).getTitle());
         holder.datetime.setText(items.get(position).getDatetime());
 

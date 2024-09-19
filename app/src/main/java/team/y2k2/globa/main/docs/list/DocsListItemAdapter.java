@@ -45,12 +45,21 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document, parent, false);
+        View view;
+
+        if (items.get(0).getRecordId().equalsIgnoreCase(""))
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document_null, parent, false);
+        else
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document, parent, false);
+
         return new AdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
+        if(items.get(0).getRecordId().equals(""))
+            return;
+
         String title = items.get(position).getTitle();
         String datetime = getDateFormat(items.get(position).getDatetime());
 

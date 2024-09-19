@@ -28,6 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,6 +42,8 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.entity.FolderInsideRecord;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.databinding.FragmentFolderInsideBinding;
+import team.y2k2.globa.main.docs.list.DocsListItem;
+import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.edit.FolderNameEditActivity;
 import team.y2k2.globa.main.folder.permission.FolderPermissionActivity;
@@ -122,6 +125,10 @@ public class FolderInsideFragment extends Fragment {
                 String path = record.getPath();
 
                 model.addItem(Integer.toString(folderId), recordId, title, path);
+            }
+
+            if(model.getItems().size() == 0) {
+                model.addItem("", "", "", "");
             }
 
             FolderInsideDocsAdapter adapter = new FolderInsideDocsAdapter(model.getItems());

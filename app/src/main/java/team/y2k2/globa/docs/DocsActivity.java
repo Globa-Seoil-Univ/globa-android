@@ -89,8 +89,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
             showSummary();
         });
 
-        detailAdapter = viewModel.getDetailAdapter();
-
         setContentView(binding.getRoot());
 
         // 문서 삭제 시

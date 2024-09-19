@@ -2,10 +2,14 @@ package team.y2k2.globa.docs.upload;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
 
 import com.arthenica.mobileffmpeg.FFmpeg;
@@ -66,15 +70,15 @@ public class DocsUploadViewModel extends ViewModel {
         Instant instant = Instant.now();
         unixTime = instant.getEpochSecond();
 
-        String oggPath = path.split("\\.")[0] + ".ogg";
+        String oggPath = path.replace(".tmp", ".ogg");
         convertMp3ToOgg(path,oggPath);
+
         this.folderId = folderId;
         firebasePath = folderId + "/" + unixTime + ".ogg";
         StorageReference audioRef = storageReference.child(firebasePath);
 
         Log.d(getClass().getName(), "local path : " + path);
         Log.d(getClass().getName(), "firebase path : " + firebasePath);
-
 
         Uri uri = Uri.fromFile(new File(oggPath));
 
@@ -83,10 +87,8 @@ public class DocsUploadViewModel extends ViewModel {
                     // 업로드 성공 시
                     Toast.makeText(activity, "파일 업로드 성공", Toast.LENGTH_SHORT).show();
                     requestCreateRecord(model.getRecordName());
-
                 })
                 .addOnFailureListener(e -> {
-                    // 업로드 실패 시
                     Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show();
                 });
     }

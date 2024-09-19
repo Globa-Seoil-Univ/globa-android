@@ -71,8 +71,8 @@ public interface ApiService {
     /**
      * 토큰 갱신
      */
-    @POST("/auth")
-    Call<TokenResponse> getRefreshToken(
+    @POST("/user/auth")
+    Call<TokenResponse> getRequestToken(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Body TokenRequest refreshToken
