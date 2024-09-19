@@ -14,15 +14,16 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class DocsUploadFolderAdapter extends ArrayAdapter<String> implements SpinnerAdapter {
-    List<FolderResponse> items;
+    List<Folder> items;
     LayoutInflater inflater;
     int dropResource;
     int topResources;
 
-    public DocsUploadFolderAdapter(@NonNull Context context, int resource, @Nullable List<FolderResponse> folders) {
+    public DocsUploadFolderAdapter(@NonNull Context context, int resource, @Nullable List<Folder> folders) {
         super(context, resource);
         this.topResources = resource;
         this.items = folders;
@@ -40,7 +41,7 @@ public class DocsUploadFolderAdapter extends ArrayAdapter<String> implements Spi
         return super.getItem(position);
     }
 
-    public List<FolderResponse> getItems() {
+    public List<Folder> getItems() {
         return items;
     }
 

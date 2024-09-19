@@ -29,28 +29,28 @@ public class AlertViewModel extends ViewModel {
         return alertLiveData;
     }
 
-    public void requestMyAlertStatus(String userId) {
-        apiService.requestMyAlertStatus(userId, APPLICATION_JSON, authorization).enqueue(new Callback<AlertResponse>() {
+    public void getMyAlertStatus(String userId) {
+        apiService.getMyAlertStatus(userId, APPLICATION_JSON, authorization).enqueue(new Callback<AlertResponse>() {
             @Override
             public void onResponse(Call<AlertResponse> call, Response<AlertResponse> response) {
                 if(response.isSuccessful()) {
-                    alertLiveData.postValue(response.body());
-                    Log.d(getClass().getSimpleName(), "내 알림 설정 가져오기 성공: " + response.code());
+                    alertLiveData.setValue(response.body());
+                    Log.d(getClass().getSimpleName(), "내 알림 정보 요청 결과: " + response.code());
                 } else {
-                    Log.d(getClass().getSimpleName(), "내 알림 설정 가져오기 실패: " + response.code());
+                    Log.d(getClass().getSimpleName(), "내 알림 정보 요청 결과: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<AlertResponse> call, Throwable t) {
-                Log.d(getClass().getSimpleName(), "내 알림 설정 가져오기 요청 실패: " + t.getMessage());
+                Log.d(getClass().getSimpleName(), "내 알림 정보 요청 실패: " + t.getMessage());
             }
         });
     }
 
     public void requestAlertStatus(String userId, boolean uploadNofi, boolean shareNofi, boolean eventNofi) {
         AlertRequest alertRequest = new AlertRequest(uploadNofi, shareNofi, eventNofi);
-        apiService.requestAlertStatus(userId, "application/json", authorization, alertRequest).enqueue(new Callback<AlertResponse>() {
+        apiService.requestAlertStatus(userId, APPLICATION_JSON, authorization, alertRequest).enqueue(new Callback<AlertResponse>() {
             @Override
             public void onResponse(Call<AlertResponse> call, Response<AlertResponse> response) {
                 if(response.isSuccessful()) {

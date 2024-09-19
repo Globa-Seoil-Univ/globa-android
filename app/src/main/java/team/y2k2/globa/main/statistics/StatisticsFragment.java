@@ -1,17 +1,16 @@
 package team.y2k2.globa.main.statistics;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -26,24 +25,17 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
-import org.checkerframework.checker.units.qual.A;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Keyword;
-import team.y2k2.globa.api.model.entity.Pair;
 import team.y2k2.globa.api.model.entity.Quizgrade;
 import team.y2k2.globa.api.model.entity.Studytime;
-import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentStatisticsBinding;
-import team.y2k2.globa.docs.PreferencesHelper;
 
 public class StatisticsFragment extends Fragment {
     //String[] dayX = { "딥러닝", "학습", "지능", "데이터", "예측", "인공신경망", "사용", "입력", "패턴", "이미지" };
@@ -239,10 +231,23 @@ public class StatisticsFragment extends Fragment {
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
 
-        // 데이터 및 라벨 생성
-        for (int i = 0; i < 10; i++) {
-            entries.add(new BarEntry(i, values[i]));
-            labels.add(dayX[i]); // 막대 이름 설정
+        ArrayList<Pair<Integer, String>> sortedList = new ArrayList<>();
+        for (int i = 0; i < values.length; i++) {
+            sortedList.add(new Pair<>(values[i], dayX[i]));
+        }
+
+        // 내림차순으로 정렬 (values를 기준으로)
+        Collections.sort(sortedList, new Comparator<Pair<Integer, String>>() {
+            @Override
+            public int compare(Pair<Integer, String> o1, Pair<Integer, String> o2) {
+                return o1.first - o2.first; // 내림차순 정렬
+            }
+        });
+
+        // 정렬된 값을 entries와 labels에 추가
+        for (int i = 0; i < sortedList.size(); i++) {
+            entries.add(new BarEntry(i, sortedList.get(i).first));
+            labels.add(sortedList.get(i).second); // dayX도 정렬된 값에 맞춤
         }
 
         // 데이터셋 생성

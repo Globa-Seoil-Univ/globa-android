@@ -35,12 +35,28 @@ public class AlertActivity extends AppCompatActivity {
         binding = ActivityAlertBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        viewModel = new ViewModelProvider(this).get(AlertViewModel.class);
-
         userId = getIntent().getStringExtra("userId");
         Log.d(getClass().getSimpleName(), "userId: " + userId);
 
-        loadNofiStatus();
+        viewModel = new ViewModelProvider(this).get(AlertViewModel.class);
+
+        viewModel.getMyAlertStatus(userId);
+        viewModel.getAlertLiveData().observe(this, alertResponse -> {
+            if(alertResponse != null) {
+                uploadNofi = alertResponse.isUploadNofi();
+                shareNofi = alertResponse.isShareNofi();
+                eventNofi = alertResponse.isEventNofi();
+                Log.d(getClass().getSimpleName(), "업로드 알림: " + uploadNofi + ", 공유 알림: " + shareNofi + ", 이벤트 알림: " + eventNofi);
+            }
+
+            loadToggleList();
+
+            AlertItemAdapter adapter = new AlertItemAdapter(alertItems, this);
+
+            binding.recyclerviewAlert.setAdapter(adapter);
+            binding.recyclerviewAlert.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+
+        });
 
         binding.imagebuttonAlertBack.setOnClickListener(v -> {
             Log.d(getClass().getSimpleName(), "뒤로가기 버튼 클릭 newUploadNofi: " + newUploadNofi + ", newShareNofi: " + newShareNofi + ", newEventNofi: " + newEventNofi);
@@ -56,29 +72,6 @@ public class AlertActivity extends AppCompatActivity {
         alertItems.add(new AlertItem(R.string.profile_alert_1_title, R.string.profile_alert_1_description, uploadNofi));
         alertItems.add(new AlertItem(R.string.profile_alert_2_title, R.string.profile_alert_2_description, shareNofi));
         alertItems.add(new AlertItem(R.string.profile_alert_3_title, R.string.profile_alert_3_description, eventNofi));
-    }
-
-    private void loadNofiStatus() {
-
-        Log.d(getClass().getSimpleName(), "alertStatus 요청 시작");
-        viewModel.requestMyAlertStatus(userId);
-        Log.d(getClass().getSimpleName(), "alertStatus 옵저버 시작");
-        viewModel.getAlertLiveData().observe(this, alertResponse -> {
-            uploadNofi = alertResponse.isUploadNofi();
-            shareNofi = alertResponse.isShareNofi();
-            eventNofi = alertResponse.isEventNofi();
-
-            Log.d(getClass().getSimpleName(), "@GET 로드 (uploadNofi: " + uploadNofi + ", shareNofi: " + shareNofi + ", eventNofi: " + eventNofi + ")");
-
-            loadToggleList();
-
-            adapter = new AlertItemAdapter(alertItems, this);
-
-            binding.recyclerviewAlert.setAdapter(adapter);
-            binding.recyclerviewAlert.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-
-        });
-        
     }
 
     public void setNewUploadNofi(boolean newUploadNofi) {

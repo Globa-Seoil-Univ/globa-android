@@ -3,6 +3,7 @@ package team.y2k2.globa.docs.statistics;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,11 +26,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.model.entity.Keyword;
-import team.y2k2.globa.api.model.entity.Pair;
 import team.y2k2.globa.api.model.entity.Quizgrade;
 import team.y2k2.globa.api.model.entity.Studytime;
 import team.y2k2.globa.databinding.ActivityDocsStatisticsBinding;
@@ -114,16 +116,6 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
         wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 10)).toArray();
-
-        Pair[] pairs = new Pair[wordValues.length];
-        for(int i = 0; i < wordValues.length; i++) {
-            pairs[i] = new Pair(wordValues[i], wordX[i]);
-        }
-        Arrays.sort(pairs);
-        for(int i = 0; i < pairs.length; i++) {
-            wordValues[i] = pairs[i].getNumber();
-            wordX[i] = pairs[i].getText();
-        }
 
         drawBarChart(docsBarChart, wordX, wordValues);
     }
@@ -215,10 +207,23 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
 
-        // 데이터 및 라벨 생성
-        for (int i = 0; i < 10; i++) {
-            entries.add(new BarEntry(i, values[i]));
-            labels.add(dayX[i]); // 막대 이름 설정
+        ArrayList<Pair<Integer, String>> sortedList = new ArrayList<>();
+        for (int i = 0; i < values.length; i++) {
+            sortedList.add(new Pair<>(values[i], dayX[i]));
+        }
+
+        // 내림차순으로 정렬 (values를 기준으로)
+        Collections.sort(sortedList, new Comparator<Pair<Integer, String>>() {
+            @Override
+            public int compare(Pair<Integer, String> o1, Pair<Integer, String> o2) {
+                return o1.first - o2.first; // 내림차순 정렬
+            }
+        });
+
+        // 정렬된 값을 entries와 labels에 추가
+        for (int i = 0; i < sortedList.size(); i++) {
+            entries.add(new BarEntry(i, sortedList.get(i).first));
+            labels.add(sortedList.get(i).second); // dayX도 정렬된 값에 맞춤
         }
 
         // 데이터셋 생성

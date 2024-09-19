@@ -60,14 +60,13 @@ public class MyinfoActivity extends AppCompatActivity {
     private MyinfoAdapter myinfoAdapter;
     private MyinfoViewModel myInfoViewModel;
     private ActivityResultLauncher<Intent> nicknameEditLauncher;
-    private String userId;
-    private ApiClient apiClient;
-    private String profile, name, code;
-    private String newName;
-    private String newProfile;
+    private String profile, name, code, userId;
+    private String newName, newProfile;
 
     private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference profileRef;
+    private StorageReference imageRef;
+
+    private ApiClient apiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,22 +76,18 @@ public class MyinfoActivity extends AppCompatActivity {
 
         apiClient = new ApiClient(this);
 
-        binding.buttonMyinfoBack.setOnClickListener(v -> {
-            Intent resultIntent = new Intent();
-            if(newName != null && newProfile != null) {
-                resultIntent.putExtra("newName", newName);
-                resultIntent.putExtra("newProfile", newProfile);
-                setResult(Activity.RESULT_OK, resultIntent);
-            } else if(newName != null) {
-                resultIntent.putExtra("newName", newName);
-                setResult(Activity.RESULT_OK, resultIntent);
-            } else if(newProfile != null) {
-                resultIntent.putExtra("newProfile", newProfile);
-                setResult(Activity.RESULT_OK, resultIntent);
-            } else {
-                setResult(Activity.RESULT_CANCELED, resultIntent);
-            }
+        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+        profile = userInfoResponse.getProfile();
+        name = userInfoResponse.getName();
+        code = userInfoResponse.getCode();
+        userId = userInfoResponse.getUserId();
 
+        binding.buttonMyinfoBack.setOnClickListener(v -> {
+
+            Intent intent = new Intent();
+            intent.putExtra("newName", newName);
+            intent.putExtra("newProfile", newProfile);
+            setResult(RESULT_OK, intent);
             finish();
         });
 
@@ -111,30 +106,26 @@ public class MyinfoActivity extends AppCompatActivity {
         // 이미지 선택 (PhotoPicker Android 14)
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             if(uri != null) {
-                Log.d("PhotoPicker", "선택 이미지 URI: " + uri);
+                Log.d("PhotoPicker", "Selected URI: " + uri);
+                Glide.with(this).load(uri)
+                        .error(R.drawable.profile_user)
+                        .into(binding.imageviewMyinfoPhoto);
 
-                try {
+                try{
                     InputStream inputStream = getContentResolver().openInputStream(uri);
-                    byte[] fileBytes = getBytes(inputStream);
-                    Log.d(getClass().getSimpleName(), "바이트 파일 크기: " + fileBytes.length);
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileBytes);
+                    byte[] fileBytes = IOUtils.toByteArray(inputStream);
+
+                    RequestBody requestBody = RequestBody.create(fileBytes, MediaType.parse("image/*"));
 
                     MultipartBody.Part profilePart = MultipartBody.Part.createFormData("profile", "filename.jpg", requestBody);
 
                     myInfoViewModel.uploadImage(profilePart, userId);
 
-                    Glide.with(this).load(uri)
-                            .error(R.drawable.profile_user)
-                            .into(binding.imageviewMyinfoPhoto);
-
-                    newProfile = uri.toString();
-
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.d(getClass().getSimpleName(), "이미지 선택 오류: " + e.getMessage());
                 }
 
-
+                newProfile = uri.toString();
 
             } else {
                 Toast.makeText(this, "이미지가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
@@ -157,26 +148,14 @@ public class MyinfoActivity extends AppCompatActivity {
         // 리사이클러 뷰에 넣을 아이템 리스트
         List<MyinfoItem> itemList = new ArrayList<>();
 
-        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
-
-        profile = userInfoResponse.getProfile();
-        name = userInfoResponse.getName();
-        code = userInfoResponse.getCode();
-        userId = userInfoResponse.getUserId();
-
-        Log.d(getClass().getSimpleName(), "프로필: " + profile);
-        Log.d(getClass().getSimpleName(), "이름: " + name);
-        Log.d(getClass().getSimpleName(), "유저 코드: " + code);
-        Log.d(getClass().getSimpleName(), "아이디: " + userId);
-
         if(profile != null) {
             if(profile.startsWith("http")) {
                 Glide.with(this).load(profile)
                         .error(R.drawable.profile_user)
                         .into(binding.imageviewMyinfoPhoto);
             } else {
-                profileRef = storage.getReference().child(profile);
-                Glide.with(this).load(ProfileImage.convertGsToHttps(profileRef.toString()))
+                imageRef = storage.getReference().child(profile);
+                Glide.with(this).load(ProfileImage.convertGsToHttps(imageRef.toString()))
                         .error(R.drawable.profile_user)
                         .into(binding.imageviewMyinfoPhoto);
             }

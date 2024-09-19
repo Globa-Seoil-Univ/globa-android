@@ -32,7 +32,8 @@ public class KeywordDetailAdapter extends RecyclerView.Adapter<KeywordDetailAdap
 
     @Override
     public void onBindViewHolder(@NonNull KeywordDetailAdapter.AdapterViewHolder holder, int position) {
-        holder.index.setText(String.valueOf(position + 1));
+        holder.index.setText((position + 1) + ".");
+        holder.keyword.setText(items.get(position).getKeyword());
         holder.tag.setText(items.get(position).getTag());
         holder.description.setText(items.get(position).getDescription());
     }
@@ -44,6 +45,7 @@ public class KeywordDetailAdapter extends RecyclerView.Adapter<KeywordDetailAdap
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         TextView index;
+        TextView keyword;
         TextView tag;
         TextView description;
 
@@ -51,6 +53,7 @@ public class KeywordDetailAdapter extends RecyclerView.Adapter<KeywordDetailAdap
             super(itemView);
 
             index = itemView.findViewById(R.id.textview_keyword_detail_number);
+            keyword = itemView.findViewById(R.id.textview_keyword_detail_item_word);
             tag = itemView.findViewById(R.id.textview_keyword_detail_tag);
             description = itemView.findViewById(R.id.textview_keyword_detail_description);
         }

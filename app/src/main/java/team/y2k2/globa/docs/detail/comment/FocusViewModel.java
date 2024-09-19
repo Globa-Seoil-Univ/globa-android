@@ -4,22 +4,20 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class FocusViewModel extends ViewModel {
+    private MutableLiveData<Boolean> commentFocusLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> subCommentFocusLiveData = new MutableLiveData<>();
 
-    private MutableLiveData<Boolean> commentBtnFocusLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> subCommentBtnFocusLiveData = new MutableLiveData<>();
-
-    public MutableLiveData<Boolean> getCommentBtnFocusLiveData() {
-        return commentBtnFocusLiveData;
+    public MutableLiveData<Boolean> getCommentFocusLiveData() {
+        return commentFocusLiveData;
     }
-    public MutableLiveData<Boolean> getSubCommentBtnFocusLiveData() {
-        return subCommentBtnFocusLiveData;
-    }
-
-    public void setCommentBtnFocusLiveData(boolean hasFocus) {
-        commentBtnFocusLiveData.setValue(hasFocus);
-    }
-    public void setSubCommentBtnFocusLiveData(boolean hasFocus) {
-        subCommentBtnFocusLiveData.setValue(hasFocus);
+    public MutableLiveData<Boolean> getSubCommentFocusLiveData() {
+        return subCommentFocusLiveData;
     }
 
+    public void setCommentFocusLiveData(boolean hasFocus) {
+        commentFocusLiveData.setValue(hasFocus);
+    }
+    public void setSubCommentFocusLiveData(boolean hasFocus) {
+        subCommentFocusLiveData.setValue(hasFocus);
+    }
 }

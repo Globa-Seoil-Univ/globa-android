@@ -37,15 +37,15 @@ public class MyinfoViewModel extends ViewModel {
         return errorLiveData;
     }
 
-    public void uploadImage(MultipartBody.Part profilePart, String userId) {
+    public void uploadImage(MultipartBody.Part multipartBody, String userId) {
 
-        apiService.requestUpdateProfileImage(userId, authorization, profilePart).enqueue(new Callback<Void>() {
+        apiService.requestUpdateProfileImage(userId, authorization, multipartBody).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
                     Log.d(getClass().getSimpleName(), "이미지 업로드 완료: " + response.code());
                 } else {
-                    Log.d(getClass().getSimpleName(), "이미지 업로드 실패: " + response.code() + ", 메시지: " + response.errorBody());
+                    Log.d(getClass().getName(), "이미지 업로드 실패: " + response.code() + ", " + response.message());
                 }
             }
 

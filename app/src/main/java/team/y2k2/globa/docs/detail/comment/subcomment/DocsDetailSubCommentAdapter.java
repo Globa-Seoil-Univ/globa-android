@@ -127,7 +127,8 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
 
                 commentAdapter.focusOnSubCommentEt();
 
-                focusViewModel.getSubCommentBtnFocusLiveData().observe(activity, hasFocus -> {
+
+                focusViewModel.getSubCommentFocusLiveData().observe(activity, hasFocus -> {
                     if(hasFocus) {
                         // 대댓글 수정 동작 (버튼 상태 변경)
                         Log.d("대댓글 버튼 상태", "대댓글 버튼 상태 수정 상태로 번환 시작");
@@ -168,10 +169,10 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            profileImage = itemView.findViewById(R.id.imageview_item_comment_icon);
-            name = itemView.findViewById(R.id.textview_item_comment_username);
-            createdTime = itemView.findViewById(R.id.textview_item_comment_datetime);
-            content = itemView.findViewById(R.id.textview_item_comment_content);
+            profileImage = itemView.findViewById(R.id.imageview_item_comment_sub_icon);
+            name = itemView.findViewById(R.id.textview_item_comment_sub_username);
+            createdTime = itemView.findViewById(R.id.textview_item_comment_sub_datetime);
+            content = itemView.findViewById(R.id.textview_item_comment_sub_content);
         }
     }
 

@@ -174,7 +174,7 @@ public interface ApiService {
      * 폴더 가져오기
      */
     @GET("/folder")
-    Call<List<FolderResponse>> requestGetFolders(
+    Call<FolderResponse> requestGetFolders(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("page") int page,
@@ -631,7 +631,7 @@ public interface ApiService {
      * 내 알림 설정 가져오기
      */
     @GET("/user/{user_id}/notification")
-    Call<AlertResponse> requestMyAlertStatus(
+    Call<AlertResponse> getMyAlertStatus(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization

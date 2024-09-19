@@ -120,7 +120,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             activity.setDuration(startTime);
         });
 
-
         holder.description.setOnTouchListener(new View.OnTouchListener() {
             int startIdx = 0;
             int endIdx = 0;
@@ -408,13 +407,16 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                             // 댓글 아이템 리스트 추가
                             Log.d("댓글 추가", "내 프로필 경로: " + myProfile);
                             Log.d("댓글 추가", "내 이름: " + myName + ", 작성 내용: " + text);
+                            Log.d(getClass().getSimpleName(), "댓글 버튼 상태: " + buttonStatus);
                             commentAdapter.addNewItem(new DocsDetailCommentItem(myProfile, myName, "방금전", text, "commentId", false));
                             // API Request 필요
                             if(commentItems == null) {
                                 // 댓글 최초 추가
+                                Log.d(getClass().getSimpleName(), "댓글 최초 추가 시작");
                                 apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, text);
                             } else {
                                 // 댓글 추가 (최초X)
+                                Log.d(getClass().getSimpleName(), "댓글 추가 시작");
                                 apiClient.requestInsertComment(folderId, recordId, sectionId, highlightId, text);
                             }
                         } else if(buttonStatus == BUTTON_COMMENT_UPDATE) {
@@ -437,7 +439,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
         commentEt.setOnFocusChangeListener((v, hasFocus) -> {
             // 포커스를 얻으면 true, 잃으면 false;
-            focusViewModel.setCommentBtnFocusLiveData(hasFocus);
+            focusViewModel.setCommentFocusLiveData(hasFocus);
         });
 
         bottomSheetDialog.show();
@@ -452,7 +454,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         if(commentAdapter != null) {
             commentAdapter.clearSubDisposable();
         }
-
     }
 
     public void focusOnCommentEt() {
