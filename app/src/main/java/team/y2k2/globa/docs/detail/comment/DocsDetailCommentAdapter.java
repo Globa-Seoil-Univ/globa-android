@@ -251,7 +251,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         subCommentEt = bottomSheetDialog.findViewById(R.id.edittext_comment_sub);
         subCommentBtn = bottomSheetDialog.findViewById(R.id.imagebutton_comment_sub_confirm);
 
-        Log.d("대댓글 창", "대댓글 창 열림 subButtonStatus: ");
+        Log.d("대댓글 창", "대댓글 창 열림 subButtonStatus: " + subButtonStatus);
 
         if(profile != null) {
             if(profile.startsWith("http")) {
