@@ -59,7 +59,7 @@ import team.y2k2.globa.api.model.response.UnreadNotificationCheckResponse;
 import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.response.UserSearchResponse;
-import team.y2k2.globa.docs.edit.DocsNameEditRequest;
+import team.y2k2.globa.api.model.request.DocsNameEditRequest;
 import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 
 public interface ApiService {

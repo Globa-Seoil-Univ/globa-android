@@ -60,13 +60,12 @@ public class FolderNameEditActivity extends AppCompatActivity {
                     binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 }
                 else {
-                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.darkGray));
+                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 binding.textviewFolderNameCount.setText(s.length() + "/32");
-                binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.darkGray));
             }
             @Override
             public void afterTextChanged(Editable s) {

@@ -22,6 +22,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
     KeywordDetailAdapter adapter;
 
     String keyword;
+    String pronunciation;
 
     ArrayList<KeywordDetailItem> itemList = new ArrayList<>();
 
@@ -56,6 +57,10 @@ public class KeywordDetailActivity extends AppCompatActivity {
             if(response != null) {
 
                 List<KeywordDetail> keywordDetailList = response.getDictionary();
+
+                pronunciation = keywordDetailList.get(0).getPronunciation();
+
+                binding.textviewKeywordDetailPronunciation.setText(pronunciation);
 
                 for(KeywordDetail keywordDetail : keywordDetailList) {
 

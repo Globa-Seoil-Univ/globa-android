@@ -37,7 +37,7 @@ import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
-import team.y2k2.globa.docs.edit.DocsNameEditRequest;
+import team.y2k2.globa.api.model.request.DocsNameEditRequest;
 
 public class ApiClient {
     public static ApiService apiService;

@@ -33,11 +33,11 @@ public class DocsNameEditActivity extends AppCompatActivity {
         title = intent.getStringExtra("title");
         folderId = intent.getStringExtra("folderId");
 
-        binding.edittextFolderNameInputname.setHint(title);
+        binding.edittextDocsNameInputname.setText(title);
 
-        binding.textviewFolderNameChangeConfirm.setOnClickListener(v -> {
-            String newName = binding.edittextFolderNameInputname.getText().toString();
-            if(binding.edittextFolderNameInputname.getText().toString().length() == 0) {
+        binding.textviewDocsNameChangeConfirm.setOnClickListener(v -> {
+            String newName = binding.edittextDocsNameInputname.getText().toString();
+            if(binding.edittextDocsNameInputname.getText().toString().length() == 0) {
                 Toast.makeText(this, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -45,38 +45,40 @@ public class DocsNameEditActivity extends AppCompatActivity {
             updateDocsName(newName);
         });
 
-        binding.buttonFolderNameCancel.setOnClickListener(v -> {
-            binding.edittextFolderNameInputname.setText("");
+        binding.buttonDocsNameCancel.setOnClickListener(v -> {
+            binding.edittextDocsNameInputname.setText("");
         });
 
-        binding.edittextFolderNameInputname.addTextChangedListener(new TextWatcher() {
+        binding.edittextDocsNameInputname.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.textviewDocsNameCount.setText(s.length() + "/32");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                binding.textviewDocsNameCount.setText(s.length() + "/32");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
                 if (s.length() > 32) {
-                    binding.edittextFolderNameInputname.removeTextChangedListener(this);
+                    binding.edittextDocsNameInputname.removeTextChangedListener(this);
                     String text = s.toString().substring(0, 32);
-                    binding.edittextFolderNameInputname.setText(text);
-                    binding.edittextFolderNameInputname.setSelection(text.length());
-                    binding.edittextFolderNameInputname.addTextChangedListener(this);
+                    binding.edittextDocsNameInputname.setText(text);
+                    binding.edittextDocsNameInputname.setSelection(text.length());
+                    binding.edittextDocsNameInputname.addTextChangedListener(this);
                 }
 
                 if (s.length() <= 32) {
-                    binding.textviewFolderNameCount.setText(s.length() + "/32");
-                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                    binding.textviewDocsNameCount.setText(s.length() + "/32");
+                    binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 }
 
                 if (s.length() == 0) {
-                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
             }
         });
