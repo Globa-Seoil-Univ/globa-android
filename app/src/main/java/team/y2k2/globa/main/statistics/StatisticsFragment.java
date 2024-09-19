@@ -150,6 +150,11 @@ public class StatisticsFragment extends Fragment {
     private void drawStudyTimeChart() {
         timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
         timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
+
+        for(int i = 0; i < timeX.length; i++) {
+            timeX[i] = timeX[i].substring(0, 10);
+        }
+
         if(timeX.length < 10 && timeX.length > 0) {
             List<String> timeXList = new ArrayList<>();
             List<Integer> timeValuesList = new ArrayList<>();
