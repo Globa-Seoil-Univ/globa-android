@@ -21,6 +21,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,16 +105,28 @@ public class MainViewModel extends ViewModel {
     }
 
     private String getRealPathFromURI(Uri uri) {
-        String[] projection = { MediaStore.Audio.Media.DATA };
-        Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
-        if (cursor != null) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-            cursor.moveToFirst();
-            String path = cursor.getString(column_index);
-            cursor.close();
-            return path;
+        try {
+            InputStream inputStream = activity.getContentResolver().openInputStream(uri);
+            File tempFile = File.createTempFile("downloadedFile", ".tmp", activity.getCacheDir());
+
+            try (OutputStream outputStream = new FileOutputStream(tempFile)) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+
+            return tempFile.getAbsolutePath();
+        } catch (IOException e) {
+            Log.e("Error : ", e.getMessage());
         }
-        return uri.getPath();
+
+        return null;
     }
 
     private String getFileNameFromURI(Uri uri) {

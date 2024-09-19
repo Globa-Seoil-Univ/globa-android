@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
@@ -313,7 +314,7 @@ public interface ApiService {
     /**
      * 공유 초대 거절
      */
-    @DELETE("/folder/{folder_id}/share/{share_id}")
+    @HTTP(method = "DELETE", path = "/folder/{folder_id}/share/{share_id}", hasBody = true)
     Call<Void> requestDeniedShareInvite(
             @Path("folder_id") String folderId,
             @Path("share_id") String shareId,
