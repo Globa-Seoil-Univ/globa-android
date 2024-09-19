@@ -449,7 +449,10 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             Log.d("댓글", "댓글 disposable 메모리 해제 시작");
             disposable.dispose();
         }
-        commentAdapter.clearSubDisposable();
+        if(commentAdapter != null) {
+            commentAdapter.clearSubDisposable();
+        }
+
     }
 
     public void focusOnCommentEt() {
