@@ -124,9 +124,6 @@ public class MyinfoActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
-
-
                 newProfile = uri.toString();
 
             } else {
