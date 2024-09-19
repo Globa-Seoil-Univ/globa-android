@@ -31,13 +31,15 @@ public class QuizResultActivity extends AppCompatActivity {
     private String percentString;
     private Map<String, ?> allEntries;
 
-    int color = ContextCompat.getColor(this, R.color.primary);
+    int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityQuizResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        color = ContextCompat.getColor(this, R.color.primary);
 
         initializeUI();
 
