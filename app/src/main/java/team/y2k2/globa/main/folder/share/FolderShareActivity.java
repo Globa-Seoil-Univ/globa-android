@@ -149,6 +149,11 @@ public class FolderShareActivity extends AppCompatActivity {
     private void initializeConfirmBtn() {
         binding.textviewFoldershareConfirm.setOnClickListener(v -> {
 
+            if(adapter.getItemCount() == 0) {
+                Toast.makeText(this, "사용자를 추가해주십시오", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             // 리사이클러뷰를 순회하면서 하나씩 API Request
             LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFoldershareSelected.getLayoutManager();
             if(collectNewUserManager != null) {

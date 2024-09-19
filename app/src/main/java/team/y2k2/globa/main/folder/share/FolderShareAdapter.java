@@ -52,7 +52,7 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return (itemList != null ? itemList.size() : 0);
     }
 
     public FolderShareItem getItem(int position) {
