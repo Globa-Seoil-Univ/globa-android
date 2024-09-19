@@ -33,6 +33,9 @@ public class InquiryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityInquiryBinding.inflate(getLayoutInflater());
 
+        binding.imageviewInquiryTopBack.setOnClickListener(v -> {
+            finish();
+        });
 
         binding.textviewInquiryTopConfirm.setOnClickListener(v -> {
             String title = binding.edittextInquiryTitle.getText().toString();
