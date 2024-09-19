@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,6 +48,7 @@ import team.y2k2.globa.api.model.entity.Highlight;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentItem;
+import team.y2k2.globa.docs.detail.comment.FocusViewModel;
 import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
 import team.y2k2.globa.main.ProfileImage;
@@ -75,8 +77,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private Disposable disposable;
     private DocsDetailCommentAdapter commentAdapter;
 
-    private MutableLiveData<Boolean> commentEtFocus = new MutableLiveData<>();
-
     ArrayList<DocsDetailCommentItem> commentItems = new ArrayList<>();
 
     private final int BUTTON_COMMENT_CONFIRM = 0;
@@ -85,7 +85,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     ProfileImage profileImage;
 
-    String parentId;
+    private FocusViewModel focusViewModel;
 
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
         this.profileImage = new ProfileImage();
@@ -96,6 +96,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         this.apiClient = new ApiClient(activity);
         this.myProfile = profileImage.convertGsToHttps(FirebaseStorage.getInstance().getReference().child(activity.getProfile()).toString());
         this.myName = activity.getName();
+        focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);
     }
 
     @NonNull
@@ -118,8 +119,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             int startTime = Integer.parseInt(detailItems.get(position).getTime());
             activity.setDuration(startTime);
         });
-
-
 
 
         holder.description.setOnTouchListener(new View.OnTouchListener() {
@@ -438,7 +437,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
         commentEt.setOnFocusChangeListener((v, hasFocus) -> {
             // 포커스를 얻으면 true, 잃으면 false;
-            commentEtFocus.setValue(hasFocus);
+            focusViewModel.setCommentBtnFocusLiveData(hasFocus);
         });
 
         bottomSheetDialog.show();
@@ -457,9 +456,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         commentEt.requestFocus();
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(commentEt, InputMethodManager.SHOW_IMPLICIT);
-    }
-    public MutableLiveData<Boolean> getCommentEtFocus() {
-        return commentEtFocus;
     }
 
     public void setButtonStatus(int status) {
