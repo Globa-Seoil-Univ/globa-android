@@ -58,14 +58,15 @@ public class KeywordDetailActivity extends AppCompatActivity {
 
                 List<KeywordDetail> keywordDetailList = response.getDictionary();
 
-                pronunciation = keywordDetailList.get(0).getPronunciation();
+                if(keywordDetailList.size() != 0)
+                    pronunciation = keywordDetailList.get(0).getPronunciation();
+                else
+                    pronunciation = "입력된 정보가 없습니다.";
 
                 binding.textviewKeywordDetailPronunciation.setText(pronunciation);
 
                 for(KeywordDetail keywordDetail : keywordDetailList) {
-
                     addItem(keywordDetail);
-
                 }
 
                 adapter = new KeywordDetailAdapter(itemList, this);
