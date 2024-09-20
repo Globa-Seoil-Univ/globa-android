@@ -20,11 +20,14 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
     ArrayList<AlertItem> items;
     AlertActivity activity;
 
-    private boolean newUploadNofi, newShareNofi, newEventNofi;
+    private boolean isUploadChecked, isShareChecked, isEventChecked;
 
     public AlertItemAdapter(ArrayList<AlertItem> items, AlertActivity activity) {
         this.items = items;
         this.activity = activity;
+        this.isUploadChecked = items.get(0).isChecked();
+        this.isShareChecked = items.get(1).isChecked();
+        this.isEventChecked = items.get(2).isChecked();
     }
 
     @NonNull
@@ -46,17 +49,17 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
         holder.toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             switch (position) {
                 case 0:
-                    activity.setNewUploadNofi(isChecked);
+                    isUploadChecked = isChecked;
                     if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("notification");
                     else FirebaseMessaging.getInstance().unsubscribeFromTopic("notification");
                     break;
                 case 1:
-                    activity.setNewShareNofi(isChecked);
+                    isShareChecked = isChecked;
                     if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("notification");
                     else FirebaseMessaging.getInstance().unsubscribeFromTopic("notification");
                     break;
                 case 2:
-                    activity.setNewEventNofi(isChecked);
+                    isEventChecked = isChecked;
                     if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("event");
                     else FirebaseMessaging.getInstance().unsubscribeFromTopic("event");
                     break;
@@ -84,5 +87,15 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
             toggle = itemView.findViewById(R.id.switch_alert);
 
         }
+    }
+
+    public boolean isUploadChecked() {
+        return isUploadChecked;
+    }
+    public boolean isShareChecked() {
+        return isShareChecked;
+    }
+    public boolean isEventChecked() {
+        return isEventChecked;
     }
 }

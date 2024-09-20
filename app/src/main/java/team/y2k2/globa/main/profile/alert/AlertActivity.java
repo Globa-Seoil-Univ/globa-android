@@ -29,7 +29,7 @@ public class AlertActivity extends AppCompatActivity {
 
     private ArrayList<AlertItem> alertItems = new ArrayList<>();
 
-    AlertItemAdapter adapter;
+    private AlertItemAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class AlertActivity extends AppCompatActivity {
 
             loadToggleList();
 
-            AlertItemAdapter adapter = new AlertItemAdapter(alertItems, this);
+            adapter = new AlertItemAdapter(alertItems, this);
 
             binding.recyclerviewAlert.setAdapter(adapter);
             binding.recyclerviewAlert.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
@@ -69,6 +69,11 @@ public class AlertActivity extends AppCompatActivity {
         });
 
         binding.imagebuttonAlertBack.setOnClickListener(v -> {
+
+            newUploadNofi = adapter.isUploadChecked();
+            newShareNofi = adapter.isShareChecked();
+            newEventNofi = adapter.isEventChecked();
+
             Log.d(getClass().getSimpleName(), "뒤로가기 버튼 클릭 newUploadNofi: " + newUploadNofi + ", newShareNofi: " + newShareNofi + ", newEventNofi: " + newEventNofi);
 
             viewModel.requestAlertStatus(userId, newUploadNofi, newShareNofi, newEventNofi);
