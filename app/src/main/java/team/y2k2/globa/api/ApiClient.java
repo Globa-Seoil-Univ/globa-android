@@ -1,7 +1,5 @@
 package team.y2k2.globa.api;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-import static androidx.core.content.ContextCompat.startActivity;
 import static team.y2k2.globa.api.ApiModel.*;
 
 import android.app.Activity;
@@ -11,8 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +20,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import team.y2k2.globa.R;
 import team.y2k2.globa.api.model.request.CommentRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.FirstCommentRequest;
@@ -53,9 +48,10 @@ import team.y2k2.globa.intro.IntroActivity;
 public class ApiClient {
     public static ApiService apiService;
     public static String authorization;
-    private Activity activity;
+    private Context context;
 
     public ApiClient(Context context) {
+        this.context = context;
         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         authorization = "Bearer " + preferences.getString("accessToken", "");
         apiService = getApiService();
@@ -130,7 +126,7 @@ public class ApiClient {
         }
     }
 
-    public TokenResponse requestToken(TokenRequest request, Activity activity) {
+    public TokenResponse requestToken(TokenRequest request) {
         try {
             return CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
@@ -152,7 +148,7 @@ public class ApiClient {
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            copyToClipboard(activity, e.getMessage() + request.getRefreshToken());
+            copyToClipboard(context, e.getMessage() + request.getRefreshToken());
             e.printStackTrace();
             return null;
         }
@@ -936,12 +932,29 @@ public class ApiClient {
     private boolean handleErrorCode(int code) {
         switch (code) {
                 // 400 Bad Request 관련 에러: 잘못된 요청, 필요한 인자 누락 등
-            case ERR_BAD_REQUEST:
-            case ERR_EXPIRED_ACCESS_TOKEN: {
-                Intent intent = new Intent(activity, IntroActivity.class);
+            case ERR_BAD_REQUEST: {
+                Intent intent = new Intent(context, IntroActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                activity.startActivity(intent);
-                break;
+                context.startActivity(intent);
+            }
+            case ERR_EXPIRED_ACCESS_TOKEN: {
+                SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
+                String refreshToken = preferences.getString("refreshToken", "");
+                String accessToken = preferences.getString("accessToken", "");
+
+                if(! refreshToken.equalsIgnoreCase("") && ! accessToken.equalsIgnoreCase("")) {
+                    TokenRequest request = new TokenRequest(refreshToken);
+                    TokenResponse response = requestToken(request);
+
+                    String newAccessToken = response.getAccessToken();
+                    String newRefreshToken = response.getRefreshToken();
+
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("accessToken", newAccessToken);
+                    editor.putString("refreshToken", newRefreshToken);
+                    editor.commit();
+                    break;
+                }
             }
             case ERR_ACTIVE_REFRESH_TOKEN:
             case ERR_NOT_MATCH_REFRESH_TOKEN:
