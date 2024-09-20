@@ -36,14 +36,6 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
 
-        FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(task -> {
-           if(task.isSuccessful()) {
-               Log.d("FCM 토큰", "FCM 토큰 삭제 완료");
-           } else {
-               Log.d("FCM 토큰", "FCM 토큰 삭제 실패");
-           }
-        });
-
 //        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
 //           if(task.isSuccessful()) {
 //               Log.d("FCM 토큰", "FCM 토큰 수령 성공 : " + task.getResult());

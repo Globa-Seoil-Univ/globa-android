@@ -49,7 +49,6 @@
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/darkGray"
         app:layout_constraintStart_toStartOf="@+id/textview_folder_item_title"
-        app:layout_constraintTop_toBottomOf="@+id/textview_folder_item_title"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/textview_folder_item_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,7 @@ import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
+import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.main.MainActivity;
 
 public class LoginViewModel extends ViewModel {
@@ -89,7 +90,7 @@ public class LoginViewModel extends ViewModel {
         }
 
         public void KakaoLogin(String token) {
-            LoginRequest request = new LoginRequest(model, true, token);
+            LoginRequest request = new LoginRequest(model, IntroActivity.isNofiGranted(), token);
             LoginResponse response = apiClient.requestSignIn(request);
 
             userPreferences(request, response);
@@ -135,7 +136,7 @@ public class LoginViewModel extends ViewModel {
                         Log.d("ID_TOKEN", "ID Token: " + idToken);
 
                         model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE, idToken);
-                        LoginRequest request = new LoginRequest(model, true, idToken);
+                        LoginRequest request = new LoginRequest(model, IntroActivity.isNofiGranted(), idToken);
 
                         LoginResponse response = apiClient.requestSignIn(request);
 

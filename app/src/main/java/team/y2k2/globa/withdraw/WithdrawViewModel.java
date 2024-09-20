@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +27,6 @@ import team.y2k2.globa.intro.IntroActivity;
 public class WithdrawViewModel extends ViewModel {
 
     private ApiService apiService;
-    private ApiClient apiClient;
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
@@ -45,6 +46,9 @@ public class WithdrawViewModel extends ViewModel {
                     Intent withDrawIntent = new Intent(context, IntroActivity.class);
                     withDrawIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(withDrawIntent);
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("notification");
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("notice");
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("event");
                     Toast.makeText(context, "로그아웃 성공", Toast.LENGTH_SHORT).show();
                     Log.d(getClass().getName(), "로그아웃 성공");
                 } else {

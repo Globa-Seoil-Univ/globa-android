@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,14 @@ public class AlertActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAlertBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                Log.d("FCM 토큰", "FCM 토큰 삭제 완료");
+            } else {
+                Log.d("FCM 토큰", "FCM 토큰 삭제 실패");
+            }
+        });
 
         userId = getIntent().getStringExtra("userId");
         Log.d(getClass().getSimpleName(), "userId: " + userId);

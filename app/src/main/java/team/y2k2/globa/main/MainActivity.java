@@ -1,11 +1,16 @@
 package team.y2k2.globa.main;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,5 +54,6 @@ public class MainActivity extends AppCompatActivity {
             viewModel.mainFragment.showRecords(0);
         }
     }
+
 }
 

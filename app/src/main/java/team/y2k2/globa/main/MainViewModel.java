@@ -8,14 +8,19 @@ import static team.y2k2.globa.main.MainModel.REQUEST_CODE_PICK_RECORD;
 import static team.y2k2.globa.main.MainModel.REQUEST_CODE_UPLOAD_RECORD;
 import static team.y2k2.globa.main.MainModel.TYPE_AUDIO;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 
@@ -144,8 +149,8 @@ public class MainViewModel extends ViewModel {
 
     public void getUserIdUpdateToken() {
 //        SharedPreferences fcmPref = activity.getSharedPreferences("fcm_token", activity.MODE_PRIVATE);
-//        String fcmToken = fcmPref.getString("fcm_token", null);
-//        Log.d("FCM 토큰", "FCM 토큰: " + fcmToken);
+//        String fcmPrefToken = fcmPref.getString("fcm_token", null);
+//        Log.d("FCM 토큰", "프리퍼런스 FCM 토큰: " + fcmPrefToken);
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
