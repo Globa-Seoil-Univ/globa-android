@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -142,10 +143,21 @@ public class MainViewModel extends ViewModel {
     }
 
     public void getUserIdUpdateToken() {
-        SharedPreferences fcmPref = activity.getSharedPreferences("fcm_token", activity.MODE_PRIVATE);
-        String fcmToken = fcmPref.getString("fcm_token", null);
-        String userId = getUserInfo();
-        updateToken(userId, fcmToken);
+//        SharedPreferences fcmPref = activity.getSharedPreferences("fcm_token", activity.MODE_PRIVATE);
+//        String fcmToken = fcmPref.getString("fcm_token", null);
+//        Log.d("FCM 토큰", "FCM 토큰: " + fcmToken);
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                String fcmToken = task.getResult();
+
+                Log.d("FCM 토큰", "메인 액티비티 FCM 토큰: " + fcmToken);
+
+                String userId = getUserInfo();
+                updateToken(userId, fcmToken);
+            }
+        });
+
     }
 
     public String getUserInfo() {

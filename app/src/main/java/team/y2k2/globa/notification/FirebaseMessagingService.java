@@ -54,7 +54,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         if(!remoteMessage.getData().isEmpty()) {
             String title = remoteMessage.getData().get("title");
-            String message = remoteMessage.getData().get("message");
+            String message = remoteMessage.getData().get("body");
 
             sendNotification(title, message);
         }

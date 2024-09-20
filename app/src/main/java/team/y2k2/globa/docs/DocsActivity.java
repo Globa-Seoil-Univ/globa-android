@@ -254,7 +254,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         // durationMinute, dateFormat으로 공부시간 API 수정 필요
         Log.d(getClass().getSimpleName(), "공부 시간 수정 요청 (folderId: " + viewModel.getFolderId() + ", recordId: " + viewModel.getRecordId() +
                 ", 분: " + String.valueOf(durationMinute) + ", dateFormat: " + dateFormat.format(new Date()) + ")");
-        apiClient.updateStudyTime(viewModel.getFolderId(), viewModel.getRecordId(), String.valueOf(durationMinute), dateFormat.format(new Date()).toString());
+        apiClient.updateStudyTime(viewModel.getFolderId(), viewModel.getRecordId(), String.valueOf(durationMinute));
 
         // detailAdapter에 생성된 disposable 메모리 해제
         viewModel.clearDisposable();

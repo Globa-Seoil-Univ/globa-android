@@ -66,36 +66,13 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
         bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
 
         holder.itemView.setOnClickListener(v -> {
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            // 저장소 참조
-            StorageReference storageRef = storage.getReference();
+            Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
 
-            Log.d(getClass().getName(), items.get(position).getFolderId());
+            intent.putExtra("title", items.get(position).getTitle());
+            intent.putExtra("folderId", items.get(position).getFolderId());
+            intent.putExtra("recordId", items.get(position).getRecordId());
 
-            // 저장된 음악 파일 경로
-            String filePath = "folders/" + items.get(position).getFolderId()+"/" + "1724947418.ogg";
-
-            // 해당 파일의 참조
-            StorageReference audioRef = storageRef.child(filePath);
-
-            // Firebase Storage에서 MP3 파일 다운로드 및 준비
-            // 다운로드 URL 가져오기
-            audioRef.getDownloadUrl()
-                    .addOnSuccessListener(uri -> {
-                        String audioUrl = uri.toString();
-                        // 이제 downloadUrl을 사용하여 음악 파일을 재생하거나 처리할 수 있습니다.
-                        Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
-
-                        intent.putExtra("title", items.get(position).getTitle());
-                        intent.putExtra("audioUrl", audioUrl);
-                        intent.putExtra("folderId", items.get(position).getFolderId());
-                        intent.putExtra("recordId", items.get(position).getRecordId());
-
-                        holder.itemView.getContext().startActivity(intent);
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e("FirebaseStorage", "다운로드 URL 가져오기 실패", e);
-                    });
+            holder.itemView.getContext().startActivity(intent);
         });
 
         holder.itemView.setOnLongClickListener(v -> {

@@ -45,7 +45,7 @@ public class MyinfoViewModel extends ViewModel {
                 if(response.isSuccessful()) {
                     Log.d(getClass().getSimpleName(), "이미지 업로드 완료: " + response.code());
                 } else {
-                    Log.d(getClass().getName(), "이미지 업로드 실패: " + response.code() + ", " + response.message());
+                    Log.d(getClass().getSimpleName(), "이미지 업로드 실패: " + response.code() + ", " + response.message());
                 }
             }
 

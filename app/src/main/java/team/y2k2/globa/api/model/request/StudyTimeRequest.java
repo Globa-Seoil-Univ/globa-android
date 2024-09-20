@@ -6,12 +6,10 @@ public class StudyTimeRequest {
 
     @SerializedName("studyTime")
     private String studyTime;
-    @SerializedName("createdTime")
-    private String createdTime;
 
-    public StudyTimeRequest(String studyTime, String createdTime) {
+
+    public StudyTimeRequest(String studyTime) {
         this.studyTime = studyTime;
-        this.createdTime = createdTime;
     }
 
 }

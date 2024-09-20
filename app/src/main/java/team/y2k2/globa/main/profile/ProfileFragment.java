@@ -148,6 +148,7 @@ public class ProfileFragment extends Fragment {
 
     private void refreshData(String newName, String newProfile) {
         if(newName != null && newProfile != null) {
+            Log.d(getClass().getSimpleName(), "newName, newProfile 둘다 옴");
             binding.textviewProfileAccountUsername.setText(newName);
             if(newProfile.startsWith("http")) {
                 Glide.with(getContext())
@@ -162,6 +163,7 @@ public class ProfileFragment extends Fragment {
                         .into(binding.imageviewProfileAccountImage);
             }
         } else if(newName != null){
+            Log.d(getClass().getSimpleName(), "newName만 옴");
             binding.textviewProfileAccountUsername.setText(newName);
             if(profile != null) {
                 if(profile.startsWith("http")) {
@@ -177,6 +179,7 @@ public class ProfileFragment extends Fragment {
                         .into(binding.imageviewProfileAccountImage);
             }
         } else if(newProfile != null) {
+            Log.d(getClass().getSimpleName(), "newProfile만 옴: " + newProfile);
             binding.textviewProfileAccountUsername.setText(name);
             if(newProfile.startsWith("http")) {
                 Glide.with(getContext())
@@ -184,13 +187,13 @@ public class ProfileFragment extends Fragment {
                         .error(R.drawable.profile_user)
                         .into(binding.imageviewProfileAccountImage);
             } else {
-                profileImageRef = storage.getReference().child(newProfile);
                 Glide.with(getContext())
-                        .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
+                        .load(newProfile)
                         .error(R.drawable.profile_user)
                         .into(binding.imageviewProfileAccountImage);
             }
         } else {
+            Log.d(getClass().getSimpleName(), "둘다 안 옴");
             binding.textviewProfileAccountUsername.setText(name);
             if(profile != null) {
                 if(profile.startsWith("http")) {

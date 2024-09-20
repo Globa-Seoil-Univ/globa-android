@@ -1,5 +1,6 @@
 package team.y2k2.globa.notification.total;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
+import team.y2k2.globa.notification.inquiry.InquiryDetailActivity;
 
 public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdapter.MyViewHolder> {
 
@@ -77,12 +79,19 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
 
         holder.layout.setOnClickListener(v -> {
 
-            Log.d("아이템 클릭", "아이템 클릭");
+            Log.d("아이템 클릭", "아이템 클릭 타입: " + item.getType());
             // 알림 읽음 표시
             if(!item.isRead()) {
                 Log.d("알림 읽음", "전체 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
                 notificationViewModel.readNotification(item.getNotificationId());
+            }
+
+            if(item.getType() == "8") {
+                Intent intent = new Intent(activity, InquiryDetailActivity.class);
+                Log.d(getClass().getSimpleName(), "문의 아이디: " + item.getInquiryId());
+                intent.putExtra("inquiryId", item.getInquiryId());
+                activity.startActivity(intent);
             }
 
         });

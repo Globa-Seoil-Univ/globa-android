@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
@@ -45,12 +47,18 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
             switch (position) {
                 case 0:
                     activity.setNewUploadNofi(isChecked);
+                    if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("notification");
+                    else FirebaseMessaging.getInstance().unsubscribeFromTopic("notification");
                     break;
                 case 1:
                     activity.setNewShareNofi(isChecked);
+                    if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("notification");
+                    else FirebaseMessaging.getInstance().unsubscribeFromTopic("notification");
                     break;
                 case 2:
                     activity.setNewEventNofi(isChecked);
+                    if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("event");
+                    else FirebaseMessaging.getInstance().unsubscribeFromTopic("event");
                     break;
             }
         });

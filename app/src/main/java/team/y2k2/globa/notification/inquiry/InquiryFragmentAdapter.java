@@ -73,7 +73,6 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
                 notificationViewModel.readNotification(item.getNotificationId());
             }
 
-
             Intent intent = new Intent(activity, InquiryDetailActivity.class);
             intent.putExtra("inquiryId", item.getInquiryId());
             activity.startActivity(intent);

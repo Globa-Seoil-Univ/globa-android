@@ -832,8 +832,8 @@ public class ApiClient {
     }
 
     // 공부시간 수정
-    public Response<Void> updateStudyTime(String folderId, String recordId, String studyTime, String createdTime) {
-        StudyTimeRequest studyTimeRequest = new StudyTimeRequest(studyTime, createdTime);
+    public Response<Void> updateStudyTime(String folderId, String recordId, String studyTime) {
+        StudyTimeRequest studyTimeRequest = new StudyTimeRequest(studyTime);
         try {
             return CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
