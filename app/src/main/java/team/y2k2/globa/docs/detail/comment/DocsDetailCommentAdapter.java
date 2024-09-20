@@ -153,6 +153,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
             // 대댓글 호출
             apiClient = new ApiClient(activity);
+            myProfile = apiClient.requestUserInfo().getProfile();
+            myName = apiClient.requestUserInfo().getName();
             List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 10).getSubComments();
             subCommentItems.clear();
             for(SubComment subComment : subCommentList) {
