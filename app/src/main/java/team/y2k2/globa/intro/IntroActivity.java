@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityIntroBinding;
 import team.y2k2.globa.login.LoginActivity;
@@ -81,6 +83,9 @@ public class IntroActivity extends AppCompatActivity {
                 // 알림을 보내는 기능을 구현
                 Log.d("알림 수락 여부", "알림 수신 수락됨");
                 isNofiGranted = true;
+                FirebaseMessaging.getInstance().subscribeToTopic("notification");
+                FirebaseMessaging.getInstance().subscribeToTopic("notice");
+                FirebaseMessaging.getInstance().subscribeToTopic("event");
             } else {
                 // 권한이 거부된 경우
                 Log.d("알림 수락 여부", "알림 수신 거부됨");

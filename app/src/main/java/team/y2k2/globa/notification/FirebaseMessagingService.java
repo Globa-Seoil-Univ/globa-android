@@ -26,6 +26,7 @@ import team.y2k2.globa.intro.IntroActivity;
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
     private static final String CHANNEL_ID = "firebase_channel";
+    private static final int NOTIFICATION_ID = 1001;
 
     private NotificationViewModel notificationViewModel;
 
@@ -52,12 +53,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        if(!remoteMessage.getData().isEmpty()) {
-            String title = remoteMessage.getData().get("title");
-            String message = remoteMessage.getData().get("body");
+        Log.d(getClass().getSimpleName(), "알림 리시버 시작");
 
-            sendNotification(title, message);
-        }
+        String title = remoteMessage.getNotification().getTitle();
+        String message = remoteMessage.getNotification().getBody();
+
+        sendNotification(title, message);
+
 
     }
 
@@ -71,6 +73,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         // 알림 채널 생성
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Firebase Notification", NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("Default Discription");
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
 
@@ -85,11 +88,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent);
 
         // 알림을 시스템에 표시
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
 
     }
 }
