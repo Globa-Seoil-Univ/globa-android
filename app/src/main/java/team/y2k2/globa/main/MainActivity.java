@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel.setActivity(this);
         // 꼽사리....
         viewModel.getUserIdUpdateToken();
+        viewModel.getUserAccount();
         setContentView(binding.getRoot());
         setNavigationView(binding.navigationMainBottom);
     }

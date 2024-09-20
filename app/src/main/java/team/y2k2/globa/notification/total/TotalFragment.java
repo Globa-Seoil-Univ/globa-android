@@ -16,6 +16,7 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.databinding.FragmentNotificationTotalBinding;
@@ -31,12 +32,15 @@ public class TotalFragment extends Fragment {
     String notificationId, profile, title, content, createdTime, notificationType;
     boolean isRead;
     TotalFragmentAdapter adapter;
-
+    private String myProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNotificationTotalBinding.inflate(getLayoutInflater());
+
+        ApiClient apiClient = new ApiClient(getContext());
+        myProfile = apiClient.requestUserInfo().getProfile();
 
         initializeUI();
 
@@ -79,7 +83,7 @@ public class TotalFragment extends Fragment {
         isRead = notification.isRead();
         switch (notificationType) {
             case "1" :
-                profile = "";
+                profile = notification.getNotice().getThumbnail();
                 title = notification.getNotice().getTitle();
                 content = notification.getNotice().getContent();
                 Log.d("1번 알림", "공지 사항 알림(1번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
@@ -121,7 +125,7 @@ public class TotalFragment extends Fragment {
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "5", isRead));
                 break;
             case "6" :
-                profile = "";
+                profile = myProfile;
                 title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
                 content = "";
                 createdTime = notification.getCreatedTime();
@@ -129,7 +133,7 @@ public class TotalFragment extends Fragment {
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "6", isRead));
                 break;
             case "7" :
-                profile = "";
+                profile = myProfile;
                 title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
                 content = "";
                 Log.d("7번 알림", "업로드 실패 알림(7번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
@@ -137,7 +141,7 @@ public class TotalFragment extends Fragment {
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "7", isRead));
                 break;
             case "8" :
-                profile = "";
+                profile = myProfile;
                 title = "문의 답변이 도착하였습니다.";
                 content = notification.getInquiry().getTitle();
                 String inquiryId = notification.getInquiry().getInquiryId();

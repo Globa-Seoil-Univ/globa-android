@@ -30,7 +30,7 @@ public class NoticeFragment extends Fragment {
     private NotificationViewModel notificationViewModel;
     private List<Notification> notificationList = new ArrayList<>();
     private List<NoticeFragmentItem> noticeFragmentItems = new ArrayList<>();
-    String notificationId, title, content, createdTime;
+    String notificationId, profile, title, content, createdTime;
     boolean isRead;
     NoticeFragmentAdapter adapter;
     ApiClient apiClient;
@@ -95,14 +95,13 @@ public class NoticeFragment extends Fragment {
 
     private void settingNotification(Notification notification) {
         notificationId = notification.getNotificationId();
-        Log.d("공지사항 알림", "공지사항 알림 id: " + notificationId);
+        profile = notification.getNotice().getThumbnail();
         createdTime = notification.getCreatedTime().substring(0, 10);
-        Log.d("공지사항 알림", "공지사항 알림 날짜 : " + createdTime);
         title = notification.getNotice().getTitle();
         content = notification.getNotice().getContent();
         isRead = notification.isRead();
         Log.d("공지 사항 알림", "공지 사항 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content +
                 ", createdTime: " + createdTime + ", isRead: " + isRead);
-        noticeFragmentItems.add(new NoticeFragmentItem(notificationId, title, content, createdTime, isRead));
+        noticeFragmentItems.add(new NoticeFragmentItem(notificationId, profile, title, content, createdTime, isRead));
     }
 }

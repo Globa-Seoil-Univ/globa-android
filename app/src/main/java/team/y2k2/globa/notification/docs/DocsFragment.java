@@ -33,6 +33,7 @@ public class DocsFragment extends Fragment {
     boolean isRead;
     DocsFragmentAdapter adapter;
     ApiClient apiClient;
+    String myProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +70,7 @@ public class DocsFragment extends Fragment {
 //        });
 
         apiClient = new ApiClient(this.getContext());
+        myProfile = apiClient.requestUserInfo().getProfile();
 
         notificationList = apiClient.requestNotification("r").getNotifications();
         docsFragmentItems.clear();
@@ -97,14 +99,14 @@ public class DocsFragment extends Fragment {
         isRead = notification.isRead();
         switch (notificationType) {
             case "6" :
-                profile = "";
+                profile = myProfile;
                 title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
                 content = "";
                 Log.d("문서 알림", "문서 알림(6번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                 docsFragmentItems.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, "6", isRead));
                 break;
             case "7" :
-                profile = "";
+                profile = myProfile;
                 title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
                 content = "";
                 Log.d("문서 알림", "문서 알림(7번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);

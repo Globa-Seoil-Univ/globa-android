@@ -15,11 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Collection;
 import java.util.List;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
 
@@ -29,6 +32,9 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
     NotificationActivity activity;
     NotificationViewModel notificationViewModel;
     int whiteColor, primaryColor;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference imageRef;
 
     public DocsFragmentAdapter(List<DocsFragmentItem> items, NotificationActivity activity, DocsFragment fragment) {
         this.items = items;
@@ -50,10 +56,19 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
 
         DocsFragmentItem item = items.get(position);
 
-        Glide.with(holder.itemView.getContext())
-                .load(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .into(holder.profileImage);
+        if(item.getProfile().startsWith("http")) {
+            Glide.with(holder.itemView.getContext())
+                    .load(item.getProfile())
+                    .error(R.mipmap.ic_launcher)
+                    .into(holder.profileImage);
+        } else {
+            imageRef = storage.getReference().child(item.getProfile());
+            Glide.with(holder.itemView.getContext())
+                    .load(ProfileImage.convertGsToHttps(imageRef.toString()))
+                    .error(R.mipmap.ic_launcher)
+                    .into(holder.profileImage);
+        }
+
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());

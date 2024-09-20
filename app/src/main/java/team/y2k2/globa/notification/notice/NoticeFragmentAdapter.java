@@ -15,10 +15,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
 
@@ -28,6 +31,9 @@ public class NoticeFragmentAdapter extends RecyclerView.Adapter<NoticeFragmentAd
     List<NoticeFragmentItem> items;
     NotificationViewModel notificationViewModel;
     int whiteColor, primaryColor;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference imageRef;
 
     public NoticeFragmentAdapter(List<NoticeFragmentItem> items, NotificationActivity activity, NoticeFragment fragment) {
         this.items = items;
@@ -49,8 +55,10 @@ public class NoticeFragmentAdapter extends RecyclerView.Adapter<NoticeFragmentAd
 
         NoticeFragmentItem item = items.get(position);
 
+        imageRef = storage.getReference().child(item.getProfile());
+
         Glide.with(holder.itemView.getContext())
-                .load(R.mipmap.ic_launcher)
+                .load(ProfileImage.convertGsToHttps(imageRef.toString()))
                 .error(R.mipmap.ic_launcher)
                 .into(holder.profileImage);
         holder.title.setText(item.getTitle());

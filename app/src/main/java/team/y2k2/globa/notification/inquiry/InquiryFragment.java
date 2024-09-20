@@ -30,7 +30,7 @@ public class InquiryFragment extends Fragment {
     private NotificationViewModel notificationViewModel;
     private List<Notification> notificationList = new ArrayList<>();
     private List<InquiryFragmentItem> inquiryFragmentItems = new ArrayList<>();
-    String notificationId, inquiryId, title, content, createdTime;
+    String notificationId, profile, inquiryId, title, content, createdTime;
     boolean isRead;
     InquiryFragmentAdapter adapter;
     ApiClient apiClient;
@@ -73,6 +73,7 @@ public class InquiryFragment extends Fragment {
 //        });
 
         apiClient = new ApiClient(this.getContext());
+        profile = apiClient.requestUserInfo().getProfile();
 
         notificationList = apiClient.requestNotification("i").getNotifications();
         inquiryFragmentItems.clear();
@@ -102,9 +103,8 @@ public class InquiryFragment extends Fragment {
         content = notification.getInquiry().getTitle();
         createdTime = notification.getCreatedTime().substring(0, 10);
         isRead = notification.isRead();
-        Log.d("알림", "ID: " + notificationId + ", title: " + title);
-        Log.d("공지 사항 알림", "공지 사항 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content +
+        Log.d("문의 알림", "문의 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content +
                 ", createdTime: " + createdTime + ", isRead: " + isRead);
-        inquiryFragmentItems.add(new InquiryFragmentItem(notificationId, inquiryId, title, content, createdTime, isRead));
+        inquiryFragmentItems.add(new InquiryFragmentItem(notificationId, profile, inquiryId, title, content, createdTime, isRead));
     }
 }

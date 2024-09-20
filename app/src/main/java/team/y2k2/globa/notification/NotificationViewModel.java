@@ -62,10 +62,6 @@ public class NotificationViewModel extends ViewModel {
 
                     Log.d(getClass().getSimpleName(), "Raw Response: " + jsonResponse);
 
-                    for(int i = 0; i < response.body().getTotal(); i++) {
-                        Log.d(getClass().getSimpleName(), "ID: " + response.body().getNotifications().get(i).getNotificationId());
-                    }
-
                     notificationLiveData.postValue(response.body());
                     Log.d("알림", "알림 수신 성공 : " + response.code());
                 } else {

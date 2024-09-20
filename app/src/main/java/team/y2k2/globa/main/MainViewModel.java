@@ -190,4 +190,10 @@ public class MainViewModel extends ViewModel {
         });
     }
 
+    public void getUserAccount() {
+        SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
+        String accessToken = preferences.getString("accessToken", "");
+        Log.d(getClass().getSimpleName(), "AT: " + accessToken);
+    }
+
 }

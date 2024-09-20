@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -35,6 +37,9 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
     NotificationViewModel notificationViewModel;
     ProfileImage profileImage;
     int whiteColor, primaryColor;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference imageRef;
 
     public TotalFragmentAdapter(List<TotalFragmentItem> items, NotificationActivity activity, TotalFragment fragment) {
         this.items = items;
@@ -57,18 +62,32 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
 
         TotalFragmentItem item = items.get(position);
 
-        if(item.getProfile() != null && !item.getProfile().isEmpty()) {
-            // 프로필이 있을 때
+        if(item.getProfile() != null) {
             Log.d("이미지 경로", "이미지 경로: " + item.getProfile());
-            Glide.with(holder.itemView.getContext())
-                    .load(item.getProfile())
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+            if(item.getProfile().startsWith("http")) {
+                Glide.with(holder.itemView.getContext())
+                        .load(item.getProfile())
+                        .error(R.drawable.profile_user)
+                        .into(holder.profileImage);
+            } else {
+                if(!item.getProfile().isEmpty()) {
+                    imageRef = storage.getReference().child(item.getProfile());
+                    Glide.with(holder.itemView.getContext())
+                            .load(ProfileImage.convertGsToHttps(imageRef.toString()))
+                            .error(R.drawable.profile_user)
+                            .into(holder.profileImage);
+                } else {
+                    Glide.with(holder.itemView.getContext())
+                            .load(R.drawable.profile_user)
+                            .error(R.drawable.profile_user)
+                            .into(holder.profileImage);
+                }
+            }
         } else {
             // 프로필이 없을 때
             Glide.with(holder.itemView.getContext())
-                    .load(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
+                    .load(R.drawable.profile_user)
+                    .error(R.drawable.profile_user)
                     .into(holder.profileImage);
             Log.d("알림 프로필", "알림 프로필 없음, 아이템 위치: " + position);
         }
