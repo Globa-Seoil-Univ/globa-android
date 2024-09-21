@@ -117,9 +117,8 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         // 단어 중요도 차트
         wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
-        wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 10)).toArray();
 
-        drawBarChart(docsBarChart, wordX, wordValues);
+        drawBarChart(docsBarChart, wordX, doubleWordValues);
     }
 
     private void drawStudyTimeChart() {
@@ -210,26 +209,21 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         }
     }
 
-    private void setBarData(String[] dayX, int[] values) {
+    private void setBarData(String[] dayX, double[] values) {
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
 
-        ArrayList<Pair<Integer, String>> sortedList = new ArrayList<>();
+        ArrayList<Pair<Double, String>> sortedList = new ArrayList<>();
         for (int i = 0; i < values.length; i++) {
             sortedList.add(new Pair<>(values[i], dayX[i]));
         }
 
         // 내림차순으로 정렬 (values를 기준으로)
-        Collections.sort(sortedList, new Comparator<Pair<Integer, String>>() {
-            @Override
-            public int compare(Pair<Integer, String> o1, Pair<Integer, String> o2) {
-                return o1.first - o2.first; // 내림차순 정렬
-            }
-        });
+        Collections.sort(sortedList, (o1, o2) -> Double.compare(o1.first, o2.first));
 
         // 정렬된 값을 entries와 labels에 추가
         for (int i = 0; i < sortedList.size(); i++) {
-            entries.add(new BarEntry(i, sortedList.get(i).first));
+            entries.add(new BarEntry(i, sortedList.get(i).first.floatValue()));
             labels.add(sortedList.get(i).second); // dayX도 정렬된 값에 맞춤
         }
 
@@ -239,12 +233,6 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         // 각 막대의 색상 설정
         int[] barColors = new int[]{Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#B4622F")};
         dataSet.setColors(barColors);
-        dataSet.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.format(Locale.getDefault(), "%d", (int) value);
-            }
-        });
 
         // 데이터 객체 생성
         BarData data = new BarData(dataSet);
@@ -260,12 +248,15 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         docsBarChart.invalidate(); // 차트 갱신
     }
 
-    private void drawBarChart(HorizontalBarChart barChart, String[] dayX, int[] values) {
+    private void drawBarChart(HorizontalBarChart barChart, String[] dayX, double[] values) {
         barChart.getDescription().setEnabled(false); // chart 밑에 description 표시 유무
         barChart.setTouchEnabled(false); // 터치 유무
         barChart.getLegend().setEnabled(false); // Legend는 차트의 범례
         barChart.setExtraOffsets(10f, 0f, 40f, 0f);
         barChart.setFitBars(true);
+
+        List<String> list = Arrays.asList(dayX);
+        Collections.reverse(list);
 
         setBarData(dayX, values); // 데이터 설정
 
@@ -290,13 +281,13 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         axisLeft.setDrawGridLines(true); // 기준선 활성화
         axisLeft.setDrawAxisLine(true); // 축선 활성화
         axisLeft.setAxisMinimum(0f); // 최솟값
-        axisLeft.setAxisMaximum(8f); // 최댓값
+        axisLeft.setAxisMaximum(1f); // 최댓값
         axisLeft.setGranularity(0.1f); // 기준선 간격 설정
         axisLeft.setDrawLabels(false); // label 삭제
 
         // 기준선에 원하는 위치의 값을 추가합니다.
         axisLeft.setDrawLabels(true);
-        axisLeft.setLabelCount(6, true); // 기준선의 개수를 설정합니다.
+        axisLeft.setLabelCount(11, true); // 기준선의 개수를 설정합니다.
         axisLeft.setAxisLineColor(Color.parseColor("#FFFFFFFF")); // 축선 색상 설정
         axisLeft.setAxisLineWidth(2f); // 축선의 두께를 설정합니다.
         axisLeft.setGridColor(Color.parseColor("#DDDDDD")); // 기준선 색상 설정
