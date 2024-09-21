@@ -54,18 +54,17 @@ public class KeywordDetailActivity extends AppCompatActivity {
         keywordDetailViewModel.searchKeyword(keyword);
 
         keywordDetailViewModel.getKeywordDetailResponseLiveData().observe(KeywordDetailActivity.this, response -> {
-            if(response != null) {
-
+            if(!response.getDictionary().isEmpty()) {
                 List<KeywordDetail> keywordDetailList = response.getDictionary();
 
-                pronunciation = keywordDetailList.get(0).getPronunciation();
+                if (keywordDetailList.isEmpty()) {
+                    pronunciation = keywordDetailList.get(0).getPronunciation();
 
-                binding.textviewKeywordDetailPronunciation.setText(pronunciation);
+                    binding.textviewKeywordDetailPronunciation.setText(pronunciation);
 
-                for(KeywordDetail keywordDetail : keywordDetailList) {
-
-                    addItem(keywordDetail);
-
+                    for(KeywordDetail keywordDetail : keywordDetailList) {
+                        addItem(keywordDetail);
+                    }
                 }
 
                 adapter = new KeywordDetailAdapter(itemList, this);

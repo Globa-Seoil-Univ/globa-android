@@ -1,5 +1,6 @@
 package team.y2k2.globa.docs.detail;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -106,6 +108,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         return new AdapterViewHolder(view);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         String title = detailItems.get(position).getTitle();
@@ -121,35 +124,14 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         });
 
         holder.description.setOnTouchListener(new View.OnTouchListener() {
-            int startIdx = 0;
-            int endIdx = 0;
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d(getClass().getName(), "S:" + startIdx + " | E:" + endIdx);
-
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Log.d(getClass().getName(), "ACTION_UP | S:" + startIdx + " | E:" + endIdx);
-
-                    if (startIdx >= endIdx) {
-                        int temp = startIdx;
-                        startIdx = endIdx;
-                        endIdx = temp;
-                    }
-
-                    if (startIdx != -1 && endIdx != -1) {
-                        updateSelection(holder.description, startIdx, endIdx);
-                        String selectedText = holder.description.getText().subSequence(startIdx, endIdx).toString();
-                        Toast.makeText(holder.itemView.getContext(), "선택한 텍스트: " + selectedText, Toast.LENGTH_SHORT).show();
-                        showPopupMenu(v, activity.getFolderId(), activity.getRecordId(), detailItems.get(position).getSectionId(), String.valueOf(startIdx), String.valueOf(endIdx), selectedText);
-                    }
-                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    endIdx = holder.description.getOffsetForPosition(event.getX(), event.getY());
-                    updateSelection(holder.description, startIdx, endIdx);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    startIdx = holder.description.getOffsetForPosition(event.getX(), event.getY());
-                    endIdx = startIdx;
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        showPopupMenu(v, holder, activity.getFolderId(), activity.getRecordId(), detailItems.get(position).getSectionId());
+                        break;
                 }
+
                 return false;
             }
         });
@@ -272,47 +254,30 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     }
 
     // 새로운 하이라이트 생성 시 작동
-    public void showPopupMenu(View v, String folderId, String recordId, String sectionId, String startIdx, String endIdx, String selectedText) {
+    public void showPopupMenu(View v, AdapterViewHolder holder, String folderId, String recordId, String sectionId) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.getMenuInflater().inflate(R.menu.highlight_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                int startIdx = holder.description.getSelectionStart();
+                int endIdx = holder.description.getSelectionEnd();
+                String selectedText = holder.description.getText().subSequence(startIdx, endIdx).toString();
+
                 if (item.getItemId() == R.id.action_comment) {
-                    /* 다이얼로그 방식
-                    // 댓글 작성 기능 수행
-                    BottomSheetDialog commentBottomSheet = new BottomSheetDialog(v.getContext());
-                    commentBottomSheet.setContentView(R.layout.dialog_comment);
-                    commentBottomSheet.show();
-
-                    TextView textView = commentBottomSheet.findViewById(R.id.textview_comment_name);
-                    textView.setText("본문 :" + selectedText);
-
-                    ImageButton confirm = commentBottomSheet.findViewById(R.id.imagebutton_comment_confirm);
-
-                    confirm.setOnClickListener(v -> {
-                        ApiClient apiClient = new ApiClient(v.getContext());
-
-                        EditText comment = commentBottomSheet.findViewById(R.id.edittext_comment);
-                        apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, comment.getText().toString());
-                        commentBottomSheet.dismiss();
-                    });
-                    return true;
-                     */
-
-                    showCommentSheetDialog(null, selectedText, sectionId, startIdx, endIdx, null);
-
-
-
+                    holder.description.setText(holder.description.getText());
+                    showCommentSheetDialog(null, selectedText, sectionId, String.valueOf(startIdx), String.valueOf(endIdx), null);
                 } else if (item.getItemId() == R.id.action_search) {
                     // 단어 검색
+                    holder.description.setText(holder.description.getText());
                     Intent searchIntent = new Intent(activity, KeywordDetailActivity.class);
                     searchIntent.putExtra("keyword", selectedText);
                     activity.startActivity(searchIntent);
 
                     return true;
                 }
+
                 return false;
             }
         });
@@ -328,31 +293,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         }
 
         return highlightString;
-    }
-
-    private void updateSelection(TextView textView, int start, int end) {
-        int startIdx = start;
-        int endIdx = end;
-
-        if(startIdx >= endIdx) {
-            int temp = startIdx;
-            startIdx = endIdx;
-            endIdx = temp;
-        }
-
-        // 선택된 텍스트에 배경 강조
-        if (start == end || start < 0 || end < 0) {
-            return;
-        }
-
-        String text = textView.getText().toString();
-        SpannableString spannableString = new SpannableString(text);
-        // 이전에 설정된 span 삭제
-        spannableString.removeSpan(BackgroundColorSpan.class);
-
-        spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), startIdx, endIdx, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        // 텍스트뷰에 설정
-        textView.setText(spannableString);
     }
 
     public static String formatDuration(int durationSecond) {
