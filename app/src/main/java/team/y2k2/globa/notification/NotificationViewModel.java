@@ -1,6 +1,5 @@
 package team.y2k2.globa.notification;
 
-import static team.y2k2.globa.api.ApiClient.apiService;
 import static team.y2k2.globa.api.ApiClient.authorization;
 
 import android.util.Log;
@@ -11,9 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
-import org.checkerframework.checker.units.qual.C;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,7 +18,6 @@ import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.request.NotificationRequest;
-import team.y2k2.globa.api.model.request.NotificationTokenRequest;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
 
@@ -157,5 +153,4 @@ public class NotificationViewModel extends ViewModel {
             }
         });
     }
-
 }
