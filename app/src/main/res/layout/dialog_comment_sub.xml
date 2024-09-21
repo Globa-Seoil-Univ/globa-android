@@ -74,7 +74,7 @@
         android:id="@+id/edittext_comment_sub"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_button"
+        android:background="@drawable/edit_rounded"
         android:hint="댓글 남기기"
         android:textSize="@dimen/large"
         android:textColorHint="@color/darkGray"
@@ -88,8 +88,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"/>
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
 
     <ImageButton
         android:id="@+id/imagebutton_comment_sub_confirm"

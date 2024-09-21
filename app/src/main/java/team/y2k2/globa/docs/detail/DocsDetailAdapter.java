@@ -126,6 +126,13 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         holder.description.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int startIdx = holder.description.getSelectionStart();
+                int endIdx = holder.description.getSelectionEnd();
+
+                if (startIdx == -1 || endIdx == -1) {
+                    return false;
+                }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
                         showPopupMenu(v, holder, activity.getFolderId(), activity.getRecordId(), detailItems.get(position).getSectionId());
