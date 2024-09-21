@@ -43,4 +43,18 @@
         app:layout_constraintTop_toBottomOf="@id/textview_item_docs_detail_title"
         app:layout_constraintStart_toStartOf="@id/textview_item_docs_detail_title" />
 
+    <TextView
+        android:id="@+id/textview_item_docs_detail_comment"
+        android:layout_marginTop="11dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:textSize="@dimen/normal_light"
+        android:text="댓글 보기"
+        app:layout_constraintTop_toBottomOf="@id/textview_item_docs_detail_description"
+        app:layout_constraintStart_toStartOf="@id/textview_item_docs_detail_description" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

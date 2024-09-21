@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -257,6 +258,13 @@ public class StatisticsFragment extends Fragment {
         int[] barColors = new int[]{Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#B4622F")};
         dataSet.setColors(barColors);
 
+//        dataSet.setValueFormatter(new ValueFormatter() {
+//            @Override
+//            public String getFormattedValue(float value) {
+//                return String.valueOf((int) value); // 정수로 변환하여 반환
+//            }
+//        });
+
         // 데이터 객체 생성
         BarData data = new BarData(dataSet);
         data.setBarWidth(0.7f); // 막대 폭 설정
@@ -297,7 +305,7 @@ public class StatisticsFragment extends Fragment {
         axisRight.setDrawAxisLine(true);
         axisRight.setAxisMinimum(0f);
         axisRight.setAxisMaximum(100f);
-        axisRight.setGranularity(0.1f);
+        axisRight.setGranularity(1f);
 
 
         // YAxis(Left) (수평 막대 기준 아래쪽) - 선 유무, 데이터 최솟값/최댓값, label 유무
@@ -306,7 +314,7 @@ public class StatisticsFragment extends Fragment {
         axisLeft.setDrawAxisLine(false); // 축선 활성화
         axisLeft.setAxisMinimum(0f); // 최솟값
         axisLeft.setAxisMaximum(100f); // 최댓값
-        axisLeft.setGranularity(0.1f); // 기준선 간격 설정
+        axisLeft.setGranularity(1f); // 기준선 간격 설정
         axisLeft.setDrawLabels(false); // label 삭제
 
         // 기준선에 원하는 위치의 값을 추가합니다.
