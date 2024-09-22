@@ -8,7 +8,7 @@ public class DocsUploadModel {
     private String recordPath;
 
     public DocsUploadModel(Intent intent) {
-        recordName = intent.getStringExtra("recordName").split("\\.")[0].substring(0, 20);
+        recordName = intent.getStringExtra("recordName").split("\\.")[0];
         recordExtension = intent.getStringExtra("recordName").split("\\.")[1];
         recordPath = intent.getStringExtra("recordPath");
     }

@@ -40,8 +40,15 @@ public class DocsUploadActivity extends AppCompatActivity {
 
 
     public void setTextViewTitles() {
-        binding.textviewDocsAudioTitle.setText(viewModel.getRecordName());
-        binding.edittextDocsUploadTitle.setHint(viewModel.getRecordName());
+        String docsTitle;
+        if(viewModel.getRecordName().length() >= 20) {
+            docsTitle = viewModel.getRecordName().substring(0, 20);
+        }
+        else
+            docsTitle = viewModel.getRecordName();
+
+        binding.textviewDocsAudioTitle.setText(docsTitle);
+        binding.edittextDocsUploadTitle.setHint(docsTitle);
     }
 
     public void setOnClickListeners() {

@@ -79,7 +79,11 @@ public class DocsUploadViewModel extends ViewModel {
                 .addOnSuccessListener(taskSnapshot -> {
                     // 업로드 성공 시
                     Toast.makeText(activity, "파일 업로드 성공", Toast.LENGTH_SHORT).show();
-                    requestCreateRecord(model.getRecordName());
+                    if(model.getRecordName().length() >= 20)
+                        requestCreateRecord(model.getRecordName().substring(0, 20));
+                    else
+                        requestCreateRecord(model.getRecordName());
+
 
                 })
                 .addOnFailureListener(e -> {
