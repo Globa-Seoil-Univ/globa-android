@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.units.qual.C;
 
@@ -35,6 +37,9 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
     NotificationViewModel notificationViewModel;
     ProfileImage profileImage;
     int whiteColor, primaryColor;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference imageRef;
 
     public ShareFragmentAdapter(List<ShareFragmentItem> items, NotificationActivity activity, ShareFragment fragment) {
         this.activity = activity;
@@ -57,12 +62,20 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
 
         ShareFragmentItem item = items.get(position);
 
-        if(item.getProfile() != null && !item.getProfile().isEmpty()) {
+        if(item.getProfile() != null) {
             // 프로필이 있을 때
-            Glide.with(holder.itemView.getContext())
-                    .load(item.getProfile())
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+            if(item.getProfile().startsWith("http")) {
+                Glide.with(holder.itemView.getContext())
+                        .load(item.getProfile())
+                        .error(R.mipmap.ic_launcher)
+                        .into(holder.profileImage);
+            } else {
+                imageRef = storage.getReference().child(item.getProfile());
+                Glide.with(holder.itemView.getContext())
+                        .load(ProfileImage.convertGsToHttps(imageRef.toString()))
+                        .error(R.mipmap.ic_launcher)
+                        .into(holder.profileImage);
+            }
         } else {
             // 프로필이 없을 때
             Glide.with(holder.itemView.getContext())
