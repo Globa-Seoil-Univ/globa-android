@@ -190,6 +190,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
             menu.findItem(R.id.action_comment_update).setOnMenuItemClickListener(menuItem -> {
                 // 댓글 수정 동작
+                mainAdapter.setSelectedText(commentItems.get(position).getContent());
                 mainAdapter.focusOnCommentEt();
 
                 focusViewModel.getCommentFocusLiveData().observe(activity, hasFocus -> {

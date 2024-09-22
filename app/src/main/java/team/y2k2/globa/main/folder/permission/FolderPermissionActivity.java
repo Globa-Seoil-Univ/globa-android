@@ -136,6 +136,8 @@ public class FolderPermissionActivity extends AppCompatActivity{
 
             }
 
+            finish();
+
         });
     }
 
