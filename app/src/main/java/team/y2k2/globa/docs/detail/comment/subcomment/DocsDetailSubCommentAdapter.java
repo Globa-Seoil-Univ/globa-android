@@ -127,7 +127,6 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
 
                 commentAdapter.focusOnSubCommentEt();
 
-
                 focusViewModel.getSubCommentFocusLiveData().observe(activity, hasFocus -> {
                     if(hasFocus) {
                         // 대댓글 수정 동작 (버튼 상태 변경)
@@ -142,6 +141,9 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
                         commentAdapter.setSubButtonStatus(BUTTON_COMMENT_SUB_CONFIRM);
                         Toast.makeText(activity, "답글 수정 불가", Toast.LENGTH_SHORT).show();
                     }
+
+                    focusViewModel.setSubCommentFocusLiveData(false);
+
                 });
 
                 return true;

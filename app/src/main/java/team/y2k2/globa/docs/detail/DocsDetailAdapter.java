@@ -297,7 +297,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                         String content = comment.getContent();
                         String commentId = comment.getCommentId();
                         boolean hasReply = comment.isHasReply();
-                        commentItems.add(new DocsDetailCommentItem(profile, name, createdTime, content, commentId, hasReply));
+                        boolean isDeleted = comment.isDeleted();
+                        commentItems.add(new DocsDetailCommentItem(profile, name, createdTime, content, commentId, hasReply, isDeleted));
                         if(i == comments.size()) {
                             docsDetailViewModel.setCommentLiveData(true);
                         }
@@ -370,7 +371,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                             Log.d("댓글 추가", "내 프로필 경로: " + myProfile);
                             Log.d("댓글 추가", "내 이름: " + myName + ", 작성 내용: " + text);
                             Log.d(getClass().getSimpleName(), "댓글 버튼 상태: " + buttonStatus);
-                            commentAdapter.addNewItem(new DocsDetailCommentItem(myProfile, myName, "방금전", text, "commentId", false));
+                            commentAdapter.addNewItem(new DocsDetailCommentItem(myProfile, myName, "방금전", text, "commentId", false, false));
                             // API Request 필요
                             if(commentItems == null) {
                                 // 댓글 최초 추가

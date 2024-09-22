@@ -13,14 +13,16 @@ public class DocsDetailCommentItem {
     private String content;
     private String commentId;
     private boolean hasReply;
+    private boolean isDeleted;
 
-    public DocsDetailCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean hasReply) {
+    public DocsDetailCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean hasReply, boolean isDeleted) {
         this.profile = profile;
         this.name = name;
         this.createdTime = createdTime;
         this.content = content;
         this.commentId = commentId;
         this.hasReply = hasReply;
+        this.isDeleted = isDeleted;
     }
 
     public String getProfile() {
@@ -40,6 +42,9 @@ public class DocsDetailCommentItem {
     }
     public boolean isHasSubComment() {
         return hasReply;
+    }
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     public void setProfile(String profile) {

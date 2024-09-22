@@ -72,11 +72,20 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         viewModel.getResponse();
 
         docsDetailViewModel.getIsFirstCommentLiveData().observe(DocsActivity.this, isFirst -> {
-            Log.d(getClass().getSimpleName(), "DocsActivity에서 옵저버 시작");
+            Log.d(getClass().getSimpleName(), "DocsActivity에서 첫 댓글 옵저버 시작");
             if(isFirst) {
                 Log.d(getClass().getSimpleName(), "첫 댓글 감지 및 화면 다시 로드 시작");
                 viewModel.getResponse();
                 docsDetailViewModel.setIsFirstCommentLiveData(false);
+            }
+        });
+
+        docsDetailViewModel.getIsAllDeletedLiveData().observe(DocsActivity.this, isAllDeleted -> {
+            Log.d(getClass().getSimpleName(), "DocsActivity에서 모든 댓글 삭제 옵저버 시작");
+            if(isAllDeleted) {
+                Log.d(getClass().getSimpleName(), "모든 삭제 감지 및 화면 다시 로드 시작");
+                viewModel.getResponse();
+                docsDetailViewModel.setIsAllDeletedLiveData(false);
             }
         });
 

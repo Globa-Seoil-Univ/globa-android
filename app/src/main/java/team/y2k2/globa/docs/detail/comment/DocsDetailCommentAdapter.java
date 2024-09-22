@@ -38,6 +38,7 @@ import team.y2k2.globa.api.model.entity.SubComment;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
+import team.y2k2.globa.docs.detail.DocsDetailViewModel;
 import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentAdapter;
 import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 import team.y2k2.globa.main.ProfileImage;
@@ -88,6 +89,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     ApiClient apiClient;
 
     private FocusViewModel focusViewModel;
+    private DocsDetailViewModel docsDetailViewModel;
 
     public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailAdapter mainAdapter) {
         this.commentItems = commentItems;
@@ -98,6 +100,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         this.highlightId = highlightId;
         this.mainAdapter = mainAdapter;
         focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);
+        docsDetailViewModel = new ViewModelProvider(activity).get(DocsDetailViewModel.class);
     }
 
     public void addNewItem(DocsDetailCommentItem newItem) {
@@ -336,6 +339,36 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             }
             apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
             bottomSheetDialog.dismiss();
+            boolean isAllDeleted = true;
+
+            if(position == 0) {
+                for(int i = 1; i < commentItems.size(); i++) {
+                    if(!commentItems.get(i).isDeleted()) {
+                        isAllDeleted = false;
+                    }
+                }
+            } else if(position > 0 && position < commentItems.size() - 1) {
+                for(int i = 0; i < position; i++) {
+                    if(!commentItems.get(i).isDeleted()) {
+                        isAllDeleted = false;
+                    }
+                }
+                for(int i = position + 1; i < commentItems.size(); i++) {
+                    if(!commentItems.get(i).isDeleted()) {
+                        isAllDeleted = false;
+                    }
+                }
+            } else {
+                for(int i = 0; i < commentItems.size() - 1; i++) {
+                    if(!commentItems.get(i).isDeleted()) {
+                        isAllDeleted = false;
+                    }
+                }
+            }
+
+            if(isAllDeleted) {
+                docsDetailViewModel.setIsAllDeletedLiveData(true);
+            }
         });
         cancelBtn.setOnClickListener(v -> {
             bottomSheetDialog.dismiss();

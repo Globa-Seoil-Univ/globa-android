@@ -7,12 +7,16 @@ public class DocsDetailViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> commentLiveData = new MutableLiveData<>(false);
     private MutableLiveData<Boolean> isFirstCommentLiveData = new MutableLiveData<>(false);
+    private MutableLiveData<Boolean> isAllDeletedLiveData = new MutableLiveData<>(false);
 
     public MutableLiveData<Boolean> getCommentLiveData() {
         return commentLiveData;
     }
     public MutableLiveData<Boolean> getIsFirstCommentLiveData() {
         return isFirstCommentLiveData;
+    }
+    public MutableLiveData<Boolean> getIsAllDeletedLiveData() {
+        return isAllDeletedLiveData;
     }
 
     public void setCommentLiveData(boolean isReceived) {
@@ -21,4 +25,8 @@ public class DocsDetailViewModel extends ViewModel {
     public void setIsFirstCommentLiveData(boolean isFirst) {
         isFirstCommentLiveData.setValue(isFirst);
     }
+    public void setIsAllDeletedLiveData(boolean isAllDeleted) {
+        isAllDeletedLiveData.setValue(isAllDeleted);
+    }
+
 }
