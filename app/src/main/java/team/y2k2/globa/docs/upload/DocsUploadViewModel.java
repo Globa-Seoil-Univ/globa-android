@@ -133,9 +133,8 @@ public class DocsUploadViewModel extends ViewModel {
         // Handler 생성 및 연결
         handler = new Handler(handlerThread.getLooper());
 
-
-        if(model.getRecordName().length() == 0)
-            model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString());
+        if(activity.binding.edittextDocsUploadTitle.getText().length() != 0)
+            model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString().substring(0, 32));
 
         SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
         // Firebase Storage 참조 가져오기
