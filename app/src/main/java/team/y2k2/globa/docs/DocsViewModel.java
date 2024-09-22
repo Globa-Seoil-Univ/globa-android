@@ -1,7 +1,6 @@
 package team.y2k2.globa.docs;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
