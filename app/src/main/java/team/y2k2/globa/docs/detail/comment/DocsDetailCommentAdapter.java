@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.SubComment;
@@ -156,9 +155,10 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             apiClient = new ApiClient(activity);
             myProfile = apiClient.requestUserInfo().getProfile();
             myName = apiClient.requestUserInfo().getName();
-            subCommentResponse = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 10);
 
+            List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 100).getSubComments();
             subCommentList = subCommentResponse.getSubComments();
+
             subCommentItems.clear();
             for(SubComment subComment : subCommentList) {
                 String subProfile = subComment.getUser().getProfile();

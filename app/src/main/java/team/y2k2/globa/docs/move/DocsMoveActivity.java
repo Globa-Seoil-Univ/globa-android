@@ -38,7 +38,7 @@ public class DocsMoveActivity extends AppCompatActivity {
 
     public void loadFolder() {
         ApiClient apiClient = new ApiClient(this);
-        response = apiClient.requestGetFolders(1, 10);
+        response = apiClient.requestGetFolders(1, 100);
 
         if (response != null) {
             DocsUploadFolderAdapter adapter = new DocsUploadFolderAdapter(getApplicationContext(), R.layout.item_folder, response.getFolders());

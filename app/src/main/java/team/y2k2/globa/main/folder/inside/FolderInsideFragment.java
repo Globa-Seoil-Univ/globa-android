@@ -56,6 +56,7 @@ public class FolderInsideFragment extends Fragment {
 
     int folderId;
     String folderTitle;
+    String folderDatetime;
 
     private final int REQUEST_CODE = 101;
 
@@ -108,10 +109,9 @@ public class FolderInsideFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     public void loadFolderInside() {
         ApiClient apiClient = new ApiClient(getContext());
-        FolderInsideRecordResponse response = apiClient.requestGetFolderInside(folderId, 1, 10);
+        FolderInsideRecordResponse response = apiClient.requestGetFolderInside(folderId, 1, 100);
 
         if (response != null) {
             // 받아온 데이터를 처리하는 로직을 작성합니다.
@@ -123,8 +123,9 @@ public class FolderInsideFragment extends Fragment {
                 String recordId = record.getRecordId();
                 String title = record.getTitle();
                 String path = record.getPath();
+                String datetime = record.getCreatedTime();
 
-                model.addItem(Integer.toString(folderId), recordId, title, path);
+                model.addItem(Integer.toString(folderId), recordId, title, datetime);
             }
 
             if(model.getItems().size() == 0) {
@@ -142,6 +143,7 @@ public class FolderInsideFragment extends Fragment {
         Bundle bundle = getArguments();
         folderId = bundle.getInt("folderId");
         folderTitle = bundle.getString("folderTitle");
+        folderDatetime = bundle.getString("folderDatetime");
     }
 
     public void setPreferences() {
@@ -158,6 +160,8 @@ public class FolderInsideFragment extends Fragment {
 
         TextView dialogTitle = bottomSheetView.findViewById(R.id.textview_more_folder_title);
         dialogTitle.setText(binding.textviewFolderInsideTitle.getText().toString());
+        TextView dialogDatetime = bottomSheetView.findViewById(R.id.textview_more_folder_description);
+        dialogDatetime.setText(folderDatetime);
 
         RelativeLayout nameEditButton = bottomSheetView.findViewById(R.id.relativelayout_more_rename);
         RelativeLayout shareButton = bottomSheetView.findViewById(R.id.relativelayout_more_share);

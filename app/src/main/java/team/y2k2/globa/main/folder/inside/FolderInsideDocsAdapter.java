@@ -87,6 +87,12 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
 
         moreBottomSheet.show();
 
+        TextView title = moreBottomSheet.findViewById(R.id.textview_more_docs_title);
+        TextView datetime = moreBottomSheet.findViewById(R.id.textview_more_docs_description);
+
+        title.setText(items.get(position).getTitle());
+        datetime.setText(items.get(position).getDatetime());
+
         RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
         rename.setOnClickListener(d1 -> {
             moreBottomSheet.dismiss();

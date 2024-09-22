@@ -46,6 +46,7 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
             Bundle bundle = new Bundle();
             bundle.putInt("folderId", items.get(position).getFolderId());
             bundle.putString("folderTitle", title);
+            bundle.putString("folderDatetime", datetime);
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 

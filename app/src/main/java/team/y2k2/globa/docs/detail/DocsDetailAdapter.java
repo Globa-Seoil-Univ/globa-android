@@ -285,9 +285,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                 @Override
                 public void onClick(View widget) {
                     Log.d(getClass().getSimpleName(), "folderId: " + folderId + ", recordId: " + recordId + ", sectionId: " + sectionId + ", highlightId: " + highlightId);
-
-                    List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
+                    List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 100).getComments();
                     commentItems = new ArrayList<>();
+
                     int i = 0;
                     for (Comment comment : comments) {
                         i++;

@@ -5,15 +5,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsUploadBinding;
@@ -103,13 +100,5 @@ public class DocsUploadActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         releaseMediaPlayer();
-    }
-
-    public AlertDialog getDialog() {
-        return dialog;
-    }
-
-    public AlertDialog.Builder getBuilder() {
-        return builder;
     }
 }

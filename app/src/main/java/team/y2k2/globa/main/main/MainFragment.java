@@ -168,6 +168,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
 
+        binding.viewpagerMainCarousel.setX(binding.viewpagerMainCarousel.getX() * numColumns);
+        binding.viewpagerMainCarousel.setY(binding.viewpagerMainCarousel.getY() * numColumns);
+
         binding.recyclerviewMainDocument.setAdapter(adapter);
         binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
     }

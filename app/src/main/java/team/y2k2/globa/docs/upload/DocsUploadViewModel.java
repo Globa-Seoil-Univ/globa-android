@@ -5,11 +5,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
 
 import com.arthenica.mobileffmpeg.FFmpeg;
@@ -18,7 +16,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.time.Instant;
-import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
@@ -133,9 +130,8 @@ public class DocsUploadViewModel extends ViewModel {
         // Handler 생성 및 연결
         handler = new Handler(handlerThread.getLooper());
 
-
-        if(model.getRecordName().length() == 0)
-            model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString());
+        if(activity.binding.edittextDocsUploadTitle.getText().length() != 0)
+            model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString().substring(0, 32));
 
         SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
         // Firebase Storage 참조 가져오기

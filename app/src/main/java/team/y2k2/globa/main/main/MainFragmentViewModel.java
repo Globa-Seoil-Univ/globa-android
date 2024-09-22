@@ -65,8 +65,8 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getCurrentlyRecords() {
-        recordResponse = apiClient.requestGetRecords( 20);
-        folderResponse = apiClient.requestGetFolders(1, 20);
+        recordResponse = apiClient.requestGetRecords( 100);
+        folderResponse = apiClient.requestGetFolders(1, 100);
 
         DocsListItemModel listItems = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
@@ -91,8 +91,8 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getMostViewedRecords() {
-        recordResponse = apiClient.requestGetRecords(20);
-        folderResponse = apiClient.requestGetFolders(1, 20);
+        recordResponse = apiClient.requestGetRecords(100);
+        folderResponse = apiClient.requestGetFolders(1, 100);
 
         DocsListItemModel listItems = new DocsListItemModel();
 
