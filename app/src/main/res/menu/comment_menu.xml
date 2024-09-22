@@ -10,7 +10,7 @@
     <!-- 단어 검색 -->
     <item
         android:id="@+id/action_comment_delete"
-        android:title="단어 삭제"
+        android:title="댓글 삭제"
         android:icon="@android:drawable/ic_menu_more" />
 
     <!-- 다른 액션 아이템들 추가 가능 -->

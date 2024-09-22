@@ -101,7 +101,11 @@ public class FolderAddActivity extends AppCompatActivity {
             }
 
             String title = binding.edittextFolderaddInputname.getText().toString();
-            Log.d(getClass().getSimpleName(), "제목: " + title + ", 공유대상: " + shareTargetList.get(0).getCode() + ", " + shareTargetList.get(0).getRole());
+
+            if (!shareTargetList.isEmpty()) {
+                Log.d(getClass().getSimpleName(), "제목: " + title + ", 공유대상: " + shareTargetList.get(0).getCode() + ", " + shareTargetList.get(0).getRole());
+            }
+
             apiClient.requestInsertFolder(title, shareTargetList);
 
             finish();
