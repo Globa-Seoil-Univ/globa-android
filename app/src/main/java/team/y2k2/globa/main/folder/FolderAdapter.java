@@ -52,6 +52,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
             Bundle bundle = new Bundle();
             bundle.putInt("folderId", items.get(position).getFolderId());
             bundle.putString("folderTitle", items.get(position).getTitle());
+            bundle.putString("folderDatetime", items.get(position).getDatetime());
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 

@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsUploadBinding;
 

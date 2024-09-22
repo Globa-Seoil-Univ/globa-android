@@ -5,11 +5,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
 
 import com.arthenica.mobileffmpeg.FFmpeg;
@@ -18,7 +16,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.time.Instant;
-import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
