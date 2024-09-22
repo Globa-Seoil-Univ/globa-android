@@ -377,6 +377,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                                 Log.d(getClass().getSimpleName(), "댓글 최초 추가 시작");
                                 apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, text);
                                 Log.d(getClass().getSimpleName(), "댓글 최초 추가 종료");
+                                bottomSheetDialog.dismiss();
+                                docsDetailViewModel.setIsFirstCommentLiveData(true);
                             } else {
                                 // 댓글 추가 (최초X)
                                 Log.d(getClass().getSimpleName(), "댓글 추가 시작");

@@ -24,11 +24,13 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
+import team.y2k2.globa.docs.detail.DocsDetailViewModel;
 import team.y2k2.globa.docs.more.DocsMoreViewModel;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
     public ActivityDocsBinding binding;
     DocsViewModel viewModel;
+    DocsDetailViewModel docsDetailViewModel;
     private SimpleExoPlayer player;
 
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -60,6 +62,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         // Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
 
         viewModel = new ViewModelProvider(this).get(DocsViewModel.class);
+        docsDetailViewModel = new ViewModelProvider(this).get(DocsDetailViewModel.class);
         player = new SimpleExoPlayer.Builder(this).build();
 
         viewModel.setActivity(this);
@@ -67,6 +70,15 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         viewModel.setPlayer(player);
         viewModel.setBinding(binding);
         viewModel.getResponse();
+
+        docsDetailViewModel.getIsFirstCommentLiveData().observe(DocsActivity.this, isFirst -> {
+            Log.d(getClass().getSimpleName(), "DocsActivity에서 옵저버 시작");
+            if(isFirst) {
+                Log.d(getClass().getSimpleName(), "첫 댓글 감지 및 화면 다시 로드 시작");
+                viewModel.getResponse();
+                docsDetailViewModel.setIsFirstCommentLiveData(false);
+            }
+        });
 
         binding.textviewDocsTitle.setText(viewModel.getTitle());
 
@@ -130,8 +142,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         binding.recyclerviewDocsDetail.setAdapter(viewModel.getDetailAdapter());
         binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
     }
-
-
 
     public static String formatDuration(int durationMillis) {
         int hours = (durationMillis / 1000) / 3600;

@@ -58,6 +58,7 @@ public class DocsViewModel extends ViewModel {
     }
 
     public void getResponse() {
+        Log.d(getClass().getSimpleName(), "뷰모델 viewModel.getResponse() 시작");
         ApiClient apiClient = new ApiClient(activity);
 
         DocsDetailResponse response = apiClient.requestGetDocumentDetail(folderId, recordId);

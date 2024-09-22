@@ -131,13 +131,13 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         if(profile != null) {
             if(profile.startsWith("http")) {
-                Glide.with(activity).load(profile).error(R.mipmap.ic_launcher).into(holder.profileImage);
+                Glide.with(activity).load(profile).error(R.drawable.profile_user).into(holder.profileImage);
             } else {
                 profileImageRef = storage.getReference().child(profile);
-                Glide.with(activity).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
+                Glide.with(activity).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.drawable.profile_user).into(holder.profileImage);
             }
         } else {
-            Glide.with(activity).load(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.profileImage);
+            Glide.with(activity).load(R.drawable.profile_user).error(R.drawable.profile_user).into(holder.profileImage);
         }
 
         holder.name.setText(name);
