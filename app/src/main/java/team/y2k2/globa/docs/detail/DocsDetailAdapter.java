@@ -254,7 +254,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
                 if (item.getItemId() == R.id.action_comment) {
                     holder.description.setText(holder.description.getText());
-                    showCommentSheetDialog(null, selectedText, sectionId, String.valueOf(startIdx), String.valueOf(endIdx), null);
+                    showCommentSheetDialog(null, sectionId, null, selectedText, String.valueOf(startIdx), String.valueOf(endIdx));
                 } else if (item.getItemId() == R.id.action_search) {
                     // 단어 검색
                     holder.description.setText(holder.description.getText());
