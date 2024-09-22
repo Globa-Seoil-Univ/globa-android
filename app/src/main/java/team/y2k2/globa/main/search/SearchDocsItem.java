@@ -18,7 +18,7 @@ public class SearchDocsItem {
     }
 
     public String getDatetime() {
-        return datetime;
+        return datetime.split("T")[0] + " " + datetime.split("T")[1];
     }
 
     public String getFolderId() {
