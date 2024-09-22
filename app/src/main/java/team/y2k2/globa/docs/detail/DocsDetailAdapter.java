@@ -180,7 +180,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                                             ApiClient apiClient = new ApiClient(activity);
 
                                             String highlightId = String.valueOf(highlight.getHighlightId()); // highlightId 값을 가져옴
-                                            List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
+                                            List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 100).getComments();
                                             String commentId = comments.get(highlightIndex).getCommentId();
                                             Log.d(getClass().getName(), "commentId : " + commentId);
                                             Response<Void> result = apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
@@ -270,7 +270,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                 @Override
                 public void onClick(View widget) {
                     Log.d(getClass().getSimpleName(), "folderId: " + folderId + ", recordId: " + recordId + ", sectionId: " + sectionId + ", highlightId: " + highlightId);
-                    List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
+                    List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 100).getComments();
                     commentItems = new ArrayList<>();
                     for (Comment comment : comments) {
                         String profile = comment.getUser().getProfile();

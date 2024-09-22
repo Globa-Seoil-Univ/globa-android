@@ -111,7 +111,7 @@ public class FolderInsideFragment extends Fragment {
 
     public void loadFolderInside() {
         ApiClient apiClient = new ApiClient(getContext());
-        FolderInsideRecordResponse response = apiClient.requestGetFolderInside(folderId, 1, 10);
+        FolderInsideRecordResponse response = apiClient.requestGetFolderInside(folderId, 1, 100);
 
         if (response != null) {
             // 받아온 데이터를 처리하는 로직을 작성합니다.

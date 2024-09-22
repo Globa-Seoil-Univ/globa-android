@@ -155,7 +155,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             apiClient = new ApiClient(activity);
             myProfile = apiClient.requestUserInfo().getProfile();
             myName = apiClient.requestUserInfo().getName();
-            List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 10).getSubComments();
+            List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 100).getSubComments();
             subCommentItems.clear();
             for(SubComment subComment : subCommentList) {
                 String subProfile = subComment.getUser().getProfile();

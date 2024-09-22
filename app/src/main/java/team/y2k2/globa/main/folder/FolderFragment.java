@@ -52,7 +52,7 @@ public class FolderFragment extends Fragment {
 
     public void loadFolder() {
         ApiClient apiClient = new ApiClient(getContext());
-        FolderResponse response = apiClient.requestGetFolders(1, 10);
+        FolderResponse response = apiClient.requestGetFolders(1, 100);
 
         model = new FolderModel();
         currentlyModel = new FolderCurrentlyModel();
