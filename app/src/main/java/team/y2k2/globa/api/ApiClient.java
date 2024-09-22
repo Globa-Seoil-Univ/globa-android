@@ -20,6 +20,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import team.y2k2.globa.api.model.entity.ShareTarget;
 import team.y2k2.globa.api.model.request.CommentRequest;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.FirstCommentRequest;
@@ -245,8 +246,8 @@ public class ApiClient {
     }
 
     // 폴더 추가
-    public Response<Void> requestInsertFolder(String title) {
-        FolderAddRequest request = new FolderAddRequest(title);
+    public Response<Void> requestInsertFolder(String title, List<ShareTarget> shareTargets) {
+        FolderAddRequest request = new FolderAddRequest(title, shareTargets);
         try {
             return CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
@@ -267,6 +268,10 @@ public class ApiClient {
                         }
                         case 500: {
                             response = Response.error(500, ResponseBody.create(null, "서버 에러"));
+                            break;
+                        }
+                        default: {
+                            Log.d(getClass().getSimpleName(), "폴더 추가 응답 코드 : " + response.code());
                             break;
                         }
                     }
@@ -722,6 +727,7 @@ public class ApiClient {
                     response = call.execute();
 
                     if (response.isSuccessful()) {
+                        Log.d("댓글 가져오기 API", "댓글 가져오기 API 응답 코드: " + response.code());
                         return response.body();
                     } else {
                         Log.d("댓글 가져오기 API", "댓글 가져오기 API 응답 코드: " + response.code());

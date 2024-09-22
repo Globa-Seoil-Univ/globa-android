@@ -96,7 +96,7 @@ public class FolderShareActivity extends AppCompatActivity {
         binding.edittextFoldershareInputname.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                binding.textviewFoldershareConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
             }
 
             @Override

@@ -85,6 +85,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     ProfileImage profileImage;
 
     private FocusViewModel focusViewModel;
+    private DocsDetailViewModel docsDetailViewModel;
 
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
         this.profileImage = new ProfileImage();
@@ -96,6 +97,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         this.myProfile = profileImage.convertGsToHttps(FirebaseStorage.getInstance().getReference().child(activity.getProfile()).toString());
         this.myName = activity.getName();
         focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);
+        docsDetailViewModel = new ViewModelProvider(activity).get(DocsDetailViewModel.class);
     }
 
     @NonNull
@@ -155,9 +157,17 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                                     selectedPosition = position;
                                     selectedId = String.valueOf(highlight.getHighlightId());
 
+                                    docsDetailViewModel.getCommentLiveData().observe(activity, isReceived -> {
+                                        Log.d(getClass().getSimpleName(), "댓글 옵저버 시작");
+                                        if(isReceived) {
+                                            Log.d(getClass().getSimpleName(), "댓글 옵저버 isReceived == true");
+                                            buttonStatus = BUTTON_COMMENT_CONFIRM;
+                                            showCommentSheetDialog(commentItems, sectionId, selectedId,
+                                                    selection.subSequence(hStartIndex, hEndIndex).toString(), String.valueOf(hStartIndex), String.valueOf(hEndIndex));
+                                        }
+                                    });
 
-                                    buttonStatus = BUTTON_COMMENT_CONFIRM;
-                                    showCommentSheetDialog(commentItems, sectionId, selectedId, selection.subSequence(hStartIndex, hEndIndex).toString(), String.valueOf(hStartIndex), String.valueOf(hEndIndex));
+
                                     break;
                                 }
                             }
@@ -271,9 +281,12 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                 @Override
                 public void onClick(View widget) {
                     Log.d(getClass().getSimpleName(), "folderId: " + folderId + ", recordId: " + recordId + ", sectionId: " + sectionId + ", highlightId: " + highlightId);
+
                     List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
                     commentItems = new ArrayList<>();
+                    int i = 0;
                     for (Comment comment : comments) {
+                        i++;
                         String profile = comment.getUser().getProfile();
                         String name = comment.getUser().getName();
                         String createdTime = comment.getCreatedTime();
@@ -281,6 +294,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                         String commentId = comment.getCommentId();
                         boolean hasReply = comment.isHasReply();
                         commentItems.add(new DocsDetailCommentItem(profile, name, createdTime, content, commentId, hasReply));
+                        if(i == comments.size()) {
+                            docsDetailViewModel.setCommentLiveData(true);
+                        }
                     }
 
                     Log.d(getClass().getSimpleName(), "선택 단어(highlightString) : " + selectedString);
