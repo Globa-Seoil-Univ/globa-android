@@ -180,36 +180,36 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                                 showPopupMenu(v, holder, activity.getFolderId(), activity.getRecordId(), detailItems.get(position).getSectionId());
                             }
                         }
-                        else {
-                            for (int i = 0; i < highlights.size(); i++) {
-                                Highlight highlight = highlights.get(i);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                                final int highlightIndex = i; // highlightIndex 값을 final로 선언
-
-                                builder.setTitle("댓글 삭제")
-                                        .setMessage("댓글을 삭제하시겠습니까?")
-                                        .setPositiveButton("예", (dialog, witch) -> {
-                                            // 예 버튼 클릭 시 동작 (댓글 삭제 로직)
-                                            Toast.makeText(activity, "댓글을 삭제했습니다.", Toast.LENGTH_LONG).show();
-
-                                            ApiClient apiClient = new ApiClient(activity);
-
-                                            String highlightId = String.valueOf(highlight.getHighlightId()); // highlightId 값을 가져옴
-                                            List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
-                                            String commentId = comments.get(highlightIndex).getCommentId();
-                                            Log.d(getClass().getName(), "commentId : " + commentId);
-                                            Response<Void> result = apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
-
-                                            Log.d(getClass().getName(), "code : " + result.code());
-                                        })
-                                        .setNegativeButton("아니오", (dialog, which) -> {
-                                            dialog.dismiss();
-                                        });
-
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                            }
-                        }
+//                        else {
+//                            for (int i = 0; i < highlights.size(); i++) {
+//                                Highlight highlight = highlights.get(i);
+//                                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+//                                final int highlightIndex = i; // highlightIndex 값을 final로 선언
+//
+//                                builder.setTitle("댓글 삭제")
+//                                        .setMessage("댓글을 삭제하시겠습니까?")
+//                                        .setPositiveButton("예", (dialog, witch) -> {
+//                                            // 예 버튼 클릭 시 동작 (댓글 삭제 로직)
+//                                            Toast.makeText(activity, "댓글을 삭제했습니다.", Toast.LENGTH_LONG).show();
+//
+//                                            ApiClient apiClient = new ApiClient(activity);
+//
+//                                            String highlightId = String.valueOf(highlight.getHighlightId()); // highlightId 값을 가져옴
+//                                            List<Comment> comments = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 10).getComments();
+//                                            String commentId = comments.get(highlightIndex).getCommentId();
+//                                            Log.d(getClass().getName(), "commentId : " + commentId);
+//                                            Response<Void> result = apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
+//
+//                                            Log.d(getClass().getName(), "code : " + result.code());
+//                                        })
+//                                        .setNegativeButton("아니오", (dialog, which) -> {
+//                                            dialog.dismiss();
+//                                        });
+//
+//                                AlertDialog dialog = builder.create();
+//                                dialog.show();
+//                            }
+//                        }
                         break;
                 }
 
