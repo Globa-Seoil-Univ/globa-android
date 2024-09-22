@@ -35,6 +35,7 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.SubComment;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.detail.DocsDetailViewModel;
@@ -184,7 +185,15 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         // 댓글 수정 또는 삭제
         holder.itemView.setOnLongClickListener(view -> {
-            view.showContextMenu();
+            apiClient = new ApiClient(activity);
+            UserInfoResponse response = apiClient.requestUserInfo();
+
+            Log.d(getClass().getName(),commentItems.get(position).getProfile());
+
+            if(commentItems.get(position).getProfile().equals(response.getProfile()))
+                view.showContextMenu();
+
+
             return true;
         });
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {

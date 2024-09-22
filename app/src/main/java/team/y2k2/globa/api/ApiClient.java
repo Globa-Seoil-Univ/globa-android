@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -1057,7 +1058,10 @@ public class ApiClient {
             case ERR_NOT_DESERVE_ADD_NOTICE:
             case ERR_NOT_DESERVE_ACCESS_FOLDER:
             case ERR_NOT_DESERVE_MODIFY_INVITATION:
-            case ERR_NOT_DESERVE_POST_COMMENT:
+            case ERR_NOT_DESERVE_POST_COMMENT: {
+                Toast.makeText(context, "댓글을 작성할 권한이 없습니다.", Toast.LENGTH_SHORT).show();
+                throw new IllegalArgumentException("댓글을 작성할 권한이 없습니다.");
+            }
             case ERR_NOT_DESERVE_FCM:
             case ERR_NOT_DESERVE_DICTIONARY:
             case ERR_INVALID_TOKEN_USER:
