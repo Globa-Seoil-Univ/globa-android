@@ -37,16 +37,15 @@ public class DocsStatisticsViewModel extends ViewModel {
             public void onResponse(Call<StatisticsResponse> call, Response<StatisticsResponse> response) {
                 if(response.isSuccessful()) {
                     docsStatisticsLiveData.postValue(response.body());
-                    Log.d(getClass().getName(), "서버 응답 성공!");
+                    Log.d(getClass().getName(), "문서 시각화 자료 요청 응답 코드 : " + response.code());
                 } else {
-                    Log.e(getClass().getName(), "서버 응답 오류 발생 : " + response.code());
+                    Log.d(getClass().getName(), "문서 시각화 자료 요청 응답 코드 : " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<StatisticsResponse> call, Throwable t) {
                 Log.e(getClass().getName(), "서버 통신 실패: " + t.getMessage());
-                errorLiveData.setValue(t.getMessage());
             }
         });
     }

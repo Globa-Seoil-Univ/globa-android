@@ -118,7 +118,21 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
 
-        drawBarChart(docsBarChart, wordX, doubleWordValues);
+        for(int i = 0; i < doubleWordValues.length; i++) {
+            doubleWordValues[i] = doubleWordValues[i] * 100;
+        }
+
+        if(wordX.length == 0) {
+            String[] newWordX = new String[10];
+            double[] newWordValue = new double[10];
+            for(int i = 0; i < 10; i++) {
+                newWordX[i] = " ";
+                newWordValue[i] = 0;
+            }
+            drawBarChart(docsBarChart, newWordX, newWordValue);
+        } else {
+            drawBarChart(docsBarChart, wordX, doubleWordValues);
+        }
     }
 
     private void drawStudyTimeChart() {
@@ -281,7 +295,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         axisLeft.setDrawGridLines(true); // 기준선 활성화
         axisLeft.setDrawAxisLine(true); // 축선 활성화
         axisLeft.setAxisMinimum(0f); // 최솟값
-        axisLeft.setAxisMaximum(1f); // 최댓값
+        axisLeft.setAxisMaximum(100f); // 최댓값
         axisLeft.setGranularity(0.1f); // 기준선 간격 설정
         axisLeft.setDrawLabels(false); // label 삭제
 

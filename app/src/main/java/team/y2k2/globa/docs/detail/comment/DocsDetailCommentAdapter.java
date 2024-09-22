@@ -35,6 +35,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.SubComment;
+import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentAdapter;
@@ -67,7 +68,9 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
     private MutableLiveData<Boolean> subCommentEtFocus = new MutableLiveData<>();
 
+    SubCommentResponse subCommentResponse = new SubCommentResponse();
     ArrayList<DocsDetailSubCommentItem> subCommentItems = new ArrayList<>();
+    List<SubComment> subCommentList = new ArrayList<>();
 
     private DocsDetailAdapter mainAdapter;
     private DocsDetailSubCommentAdapter subAdapter;
@@ -155,7 +158,9 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             apiClient = new ApiClient(activity);
             myProfile = apiClient.requestUserInfo().getProfile();
             myName = apiClient.requestUserInfo().getName();
-            List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 10).getSubComments();
+            subCommentResponse = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 10);
+
+            subCommentList = subCommentResponse.getSubComments();
             subCommentItems.clear();
             for(SubComment subComment : subCommentList) {
                 String subProfile = subComment.getUser().getProfile();

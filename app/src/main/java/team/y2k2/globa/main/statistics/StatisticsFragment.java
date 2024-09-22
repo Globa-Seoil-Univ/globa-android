@@ -27,6 +27,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -111,41 +112,22 @@ public class StatisticsFragment extends Fragment {
     private void drawKeywordsChart() {
         wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
-        wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 100)).toArray();
+//        wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 100)).toArray();
 
-        if(wordX.length < 10 && wordX.length > 0) {
-            List<String> wordXList = new ArrayList<>();
-            List<Integer> wordValuesList = new ArrayList<>();
-            for(int i = 0; i < wordX.length; i++) {
-                wordXList.add(wordX[i]);
-                wordValuesList.add(wordValues[i]);
-            }
-            for(int i = 0; i < 10 - wordX.length; i++) {
-                wordXList.add(" ");
-                wordValuesList.add(0);
-            }
+        for(int i = 0; i < doubleWordValues.length; i++) {
+            doubleWordValues[i] = doubleWordValues[i] * 100;
+        }
+
+        if(wordX.length == 0) {
             String[] newWordX = new String[10];
-            int[] newWordValue = new int[10];
-            int i = 0, j = 0;
-            for(String s : wordXList) {
-                newWordX[i] = s;
-                i++;
-            }
-            for(int n : wordValuesList) {
-                newWordValue[j] = n;
-                j++;
-            }
-            drawBarChart(barChart, newWordX, newWordValue);
-        } else if(wordX.length == 0) {
-            String[] newWordX = new String[10];
-            int[] newWordValue = new int[10];
+            double[] newWordValue = new double[10];
             for(int i = 0; i < 10; i++) {
                 newWordX[i] = " ";
                 newWordValue[i] = 0;
             }
             drawBarChart(barChart, newWordX, newWordValue);
         } else {
-            drawBarChart(barChart, wordX, wordValues);
+            drawBarChart(barChart, wordX, doubleWordValues);
         }
     }
 
@@ -234,26 +216,21 @@ public class StatisticsFragment extends Fragment {
         }
     }
 
-    private void setBarData(String[] dayX, int[] values) {
+    private void setBarData(String[] dayX, double[] values) {
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
 
-        ArrayList<Pair<Integer, String>> sortedList = new ArrayList<>();
+        ArrayList<Pair<Double, String>> sortedList = new ArrayList<>();
         for (int i = 0; i < values.length; i++) {
             sortedList.add(new Pair<>(values[i], dayX[i]));
         }
 
         // 내림차순으로 정렬 (values를 기준으로)
-        Collections.sort(sortedList, new Comparator<Pair<Integer, String>>() {
-            @Override
-            public int compare(Pair<Integer, String> o1, Pair<Integer, String> o2) {
-                return o1.first - o2.first; // 내림차순 정렬
-            }
-        });
+        Collections.sort(sortedList, (o1, o2) -> Double.compare(o1.first, o2.first));
 
         // 정렬된 값을 entries와 labels에 추가
         for (int i = 0; i < sortedList.size(); i++) {
-            entries.add(new BarEntry(i, sortedList.get(i).first));
+            entries.add(new BarEntry(i, sortedList.get(i).first.floatValue()));
             labels.add(sortedList.get(i).second); // dayX도 정렬된 값에 맞춤
         }
 
@@ -263,19 +240,6 @@ public class StatisticsFragment extends Fragment {
         // 각 막대의 색상 설정
         int[] barColors = new int[]{Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#B4622F")};
         dataSet.setColors(barColors);
-        dataSet.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.format(Locale.getDefault(), "%d", (int) value);
-            }
-        });
-
-//        dataSet.setValueFormatter(new ValueFormatter() {
-//            @Override
-//            public String getFormattedValue(float value) {
-//                return String.valueOf((int) value); // 정수로 변환하여 반환
-//            }
-//        });
 
         // 데이터 객체 생성
         BarData data = new BarData(dataSet);
@@ -291,12 +255,15 @@ public class StatisticsFragment extends Fragment {
         barChart.invalidate(); // 차트 갱신
     }
 
-    private void drawBarChart(HorizontalBarChart barChart, String[] dayX, int[] values) {
+    private void drawBarChart(HorizontalBarChart barChart, String[] dayX, double[] values) {
         barChart.getDescription().setEnabled(false); // chart 밑에 description 표시 유무
         barChart.setTouchEnabled(false); // 터치 유무
         barChart.getLegend().setEnabled(false); // Legend는 차트의 범례
         barChart.setExtraOffsets(10f, 0f, 40f, 0f);
         barChart.setFitBars(true);
+
+        List<String> list = Arrays.asList(dayX);
+        Collections.reverse(list);
 
         setBarData(dayX, values); // 데이터 설정
 

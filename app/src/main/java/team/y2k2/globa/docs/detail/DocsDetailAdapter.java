@@ -155,7 +155,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                                     selectedPosition = position;
                                     selectedId = String.valueOf(highlight.getHighlightId());
 
-                                    buttonStatus = BUTTON_COMMENT_UPDATE;
+
+                                    buttonStatus = BUTTON_COMMENT_CONFIRM;
                                     showCommentSheetDialog(commentItems, sectionId, selectedId, selection.subSequence(hStartIndex, hEndIndex).toString(), String.valueOf(hStartIndex), String.valueOf(hEndIndex));
                                     break;
                                 }
@@ -327,12 +328,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         commentBtn = bottomSheetView.findViewById(R.id.imagebutton_comment_confirm);
 
         Log.d("댓글 창", "버튼 상태 buttonStatus: " + buttonStatus);
-        /* buttonStatus
-            0: 댓글 작성 상태
-            1: 대댓글 작성 상태
-            2: 댓글 수정 상태
-            3: 대댓글 수정 상태
-         */
 
         // 선택된 단어 표시
         commentTv.setText(name);
