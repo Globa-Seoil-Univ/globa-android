@@ -65,7 +65,7 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getCurrentlyRecords() {
-        recordResponse = apiClient.requestGetRecords(context, 20);
+        recordResponse = apiClient.requestGetRecords( 20);
         folderResponse = apiClient.requestGetFolders(1, 20);
 
         DocsListItemModel listItems = new DocsListItemModel();
@@ -91,7 +91,7 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getMostViewedRecords() {
-        recordResponse = apiClient.requestGetRecords(context, 20);
+        recordResponse = apiClient.requestGetRecords(20);
         folderResponse = apiClient.requestGetFolders(1, 20);
 
         DocsListItemModel listItems = new DocsListItemModel();
@@ -117,57 +117,53 @@ public class MainFragmentViewModel {
     }
 
     public ArrayList<DocsListItem> getSharedRecords() {
-        recordResponse = apiClient.requestGetRecords(context, 20);
-        folderResponse = apiClient.requestGetFolders(1, 20);
+        recordResponse = apiClient.requestGetRecordsOfSharing(20);
 
-        DocsListItemModel docsList = new DocsListItemModel();
+        DocsListItemModel listItems = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
 
-        for(Record record : records) {
+        RecordDB recordDB = new RecordDB(context);
+        for (int i = 0; i < records.size(); i++) {
+            Record record = records.get(i);
+
             String recordId = record.getRecordId();
             String folderId = record.getFolderId();
             String title = record.getTitle();
             String datetime = record.getCreatedTime();
             List<Keyword> keywords = record.getKeywords();
 
-            for(Folder folder : folderResponse.getFolders()) {
-                int myFolderId = Integer.parseInt(folder.getFolderId());
-                int targetFolderId = Integer.parseInt(folderId);
-
-                if(myFolderId == targetFolderId) {
-                    docsList.addItem(recordId, folderId, title, datetime, keywords);
-                }
-            }
+            recordDB.onInsert(Integer.valueOf(recordId), Integer.valueOf(folderId), title, datetime, keywords);
         }
-        return docsList.getItems();
+
+        model = new MainFragmentModel(records);
+
+        listItems.addItems(model.records);
+        return listItems.getItems();
     }
 
     public ArrayList<DocsListItem> getReceivedRecords() {
-        recordResponse = apiClient.requestGetRecords(context,20);
-        folderResponse = apiClient.requestGetFolders(1, 20);
+        recordResponse = apiClient.requestGetRecordsOfReceiving(20);
 
-        DocsListItemModel docsList = new DocsListItemModel();
+        DocsListItemModel listItems = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
 
-        ArrayList<Integer> folderIds = new ArrayList<>();
+        RecordDB recordDB = new RecordDB(context);
+        for (int i = 0; i < records.size(); i++) {
+            Record record = records.get(i);
 
-        for(Folder folder : folderResponse.getFolders()) {
-            folderIds.add(Integer.parseInt(folder.getFolderId()));
-        }
-
-        for(Record record : records) {
             String recordId = record.getRecordId();
             String folderId = record.getFolderId();
             String title = record.getTitle();
             String datetime = record.getCreatedTime();
             List<Keyword> keywords = record.getKeywords();
 
-            if(! folderIds.contains(Integer.parseInt(folderId))) {
-                docsList.addItem(recordId, folderId, title, datetime, keywords);
-            }
+            recordDB.onInsert(Integer.valueOf(recordId), Integer.valueOf(folderId), title, datetime, keywords);
         }
 
-        return docsList.getItems();
+        model = new MainFragmentModel(records);
+
+        listItems.addItems(model.records);
+        return listItems.getItems();
     }
 
     public void getUnreadNotificationCheck() {

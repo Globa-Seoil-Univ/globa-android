@@ -163,18 +163,7 @@ public class LoginViewModel extends ViewModel {
             }
         }
 
-        public void userPreferences(TokenResponse response) {
-            String accessToken = response.getAccessToken();
-            String refreshToken = response.getRefreshToken();
 
-            Log.d("엑세스 토큰", "AT : " + accessToken);
-
-            SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("accessToken", accessToken);
-            editor.putString("refreshToken", refreshToken);
-            editor.commit();
-        }
 
         public void userProfilePreferences(UserInfoResponse response) {
             SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);

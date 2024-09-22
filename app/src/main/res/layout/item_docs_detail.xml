@@ -44,4 +44,5 @@
         app:layout_constraintStart_toStartOf="@id/textview_item_docs_detail_title"
         android:textIsSelectable="true"/>
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>

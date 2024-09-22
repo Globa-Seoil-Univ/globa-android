@@ -350,6 +350,26 @@ public interface ApiService {
     );
 
     /**
+     * 공유 받는 문서 조회
+     */
+    @GET("/record/receiving")
+    Call<RecordResponse> requestGetRecordsOfReceiving(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("count") int number
+    );
+
+    /**
+     * 공유한 조회
+     */
+    @GET("/record/sharing")
+    Call<RecordResponse> requestGetRecordsOfSharing(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Query("count") int number
+    );
+
+    /**
      * 문서 상세 가져오기
      */
     @GET("/folder/{folder_id}/record/{record_id}")
