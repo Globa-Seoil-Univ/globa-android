@@ -82,19 +82,22 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private final int BUTTON_COMMENT_UPDATE = 1;
     private int buttonStatus = BUTTON_COMMENT_CONFIRM;
 
-    ProfileImage profileImage;
 
     private FocusViewModel focusViewModel;
     private DocsDetailViewModel docsDetailViewModel;
 
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
-        this.profileImage = new ProfileImage();
         this.detailItems = detailItems;
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
         this.apiClient = new ApiClient(activity);
-        this.myProfile = profileImage.convertGsToHttps(FirebaseStorage.getInstance().getReference().child(activity.getProfile()).toString());
+        if(activity.getProfile().startsWith("http")) {
+            this.myProfile = activity.getProfile();
+        } else {
+            this.myProfile = ProfileImage.convertGsToHttps(FirebaseStorage.getInstance().getReference().child(activity.getProfile()).toString());
+        }
+
         this.myName = activity.getName();
         focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);
         docsDetailViewModel = new ViewModelProvider(activity).get(DocsDetailViewModel.class);
@@ -164,6 +167,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
                                             buttonStatus = BUTTON_COMMENT_CONFIRM;
                                             showCommentSheetDialog(commentItems, sectionId, selectedId,
                                                     selection.subSequence(hStartIndex, hEndIndex).toString(), String.valueOf(hStartIndex), String.valueOf(hEndIndex));
+                                            docsDetailViewModel.setCommentLiveData(false);
                                         }
                                     });
 

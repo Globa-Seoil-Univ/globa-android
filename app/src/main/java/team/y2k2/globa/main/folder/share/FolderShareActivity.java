@@ -96,7 +96,7 @@ public class FolderShareActivity extends AppCompatActivity {
         binding.edittextFoldershareInputname.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                binding.textviewFoldershareConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+
             }
 
             @Override
@@ -174,8 +174,15 @@ public class FolderShareActivity extends AppCompatActivity {
                     }
                 }
             }
-            Toast.makeText(this, "공유 추가 완료!", Toast.LENGTH_SHORT).show();
-            finish();
+            folderShareViewModel.getIsSucceedLiveData().observe(FolderShareActivity.this, responseCode -> {
+                if(responseCode.equals("201")) {
+                    Toast.makeText(this, "공유 추가 완료!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, "공유 추가 권한이 없습니다", Toast.LENGTH_SHORT).show();
+                }
+            });
+            
         });
     }
 

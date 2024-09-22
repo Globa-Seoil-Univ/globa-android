@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -27,6 +29,9 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
     ArrayList<FolderPermissionItem> items;
     FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
     private onItemLongClickListener longClickListener;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference imageRef;
 
     public interface onItemLongClickListener {
         void onItemLongClick(int position);
@@ -54,8 +59,9 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
                     .error(R.mipmap.ic_launcher)
                     .into(holder.profileImage);
         } else {
+            imageRef = storage.getReference().child(item.getProfileImageUrl());
             Glide.with(holder.itemView.getContext())
-                    .load(ProfileImage.convertGsToHttps(item.getProfileImageUrl()))
+                    .load(ProfileImage.convertGsToHttps(imageRef.toString()))
                     .error(R.mipmap.ic_launcher)
                     .into(holder.profileImage);
         }

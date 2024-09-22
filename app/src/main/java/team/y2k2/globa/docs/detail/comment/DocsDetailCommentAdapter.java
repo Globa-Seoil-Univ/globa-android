@@ -104,18 +104,13 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         if(commentItems == null) {
             commentItems = new ArrayList<>();
         }
-        commentItems.add(newItem);
+        commentItems.add(0, newItem);
         notifyDataSetChanged();
     }
 
     public void updateItem(String text, int position) {
         commentItems.get(position).setContent(text);
         notifyItemChanged(position);
-    }
-
-    public void removeItem(int position) {
-        commentItems.remove(position);
-        notifyItemRemoved(position);
     }
 
     @NonNull
@@ -335,7 +330,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         TextView cancelBtn = bottomSheetView.findViewById(R.id.textview_delete_comment_cancel);
 
         confirmBtn.setOnClickListener(v -> {
-            removeItem(position);
+            updateItem("삭제된 댓글입니다", position);
             if(apiClient == null) {
                 apiClient = new ApiClient(activity);
             }

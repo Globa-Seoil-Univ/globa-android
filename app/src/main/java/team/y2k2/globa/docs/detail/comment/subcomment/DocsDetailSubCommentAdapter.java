@@ -185,7 +185,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         TextView cancelBtn = bottomSheetView.findViewById(R.id.textview_delete_comment_cancel);
 
         confirmBtn.setOnClickListener(v -> {
-            removeItem(position);
+            updateItem("삭제된 댓글입니다", position);
             if(apiClient == null) {
                 apiClient = new ApiClient(activity);
             }
