@@ -1,5 +1,7 @@
 package team.y2k2.globa.main.search;
 
+import android.util.Log;
+
 public class SearchDocsItem {
     private final String title;
     private final String datetime;
@@ -18,7 +20,7 @@ public class SearchDocsItem {
     }
 
     public String getDatetime() {
-        return datetime.split("T")[0] + " " + datetime.split("T")[1];
+        return datetime;
     }
 
     public String getFolderId() {
