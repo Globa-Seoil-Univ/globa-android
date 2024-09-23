@@ -7,13 +7,15 @@ public class DocsDetailSubCommentItem {
     private String createdTime;
     private String content;
     private String commentId;
+    private boolean deleted;
 
-    public DocsDetailSubCommentItem(String profile, String name, String createdTime, String content, String commentId) {
+    public DocsDetailSubCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean deleted) {
         this.profile = profile;
         this.name = name;
         this.createdTime = createdTime;
         this.content = content;
         this.commentId = commentId;
+        this.deleted = deleted;
     }
 
     public String getProfile() {
@@ -32,6 +34,10 @@ public class DocsDetailSubCommentItem {
         return commentId;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     public void setProfile(String profile) {
         this.profile = profile;
     }
@@ -45,4 +51,7 @@ public class DocsDetailSubCommentItem {
         this.content = content;
     }
 
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

@@ -164,9 +164,10 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
                 String subCreatedTime = subComment.getCreatedTime();
                 String subContent = subComment.getContent();
                 String subId = subComment.getCommentId();
+                boolean subDeleted = subComment.isDeleted();
                 Log.d("대댓글 호출", "subProfile: " + subProfile + ", subName: " + subName + ", subCreatedTime: " + subCreatedTime +
                         ", subContent: " + subContent);
-                subCommentItems.add(new DocsDetailSubCommentItem(subProfile, subName, subCreatedTime, subContent, subId));
+                subCommentItems.add(new DocsDetailSubCommentItem(subProfile, subName, subCreatedTime, subContent, subId, subDeleted));
             }
 
             String parentId = commentItems.get(position).getCommentId();
@@ -187,9 +188,11 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
             Log.d(getClass().getName(),commentItems.get(position).getProfile());
 
-            if(commentItems.get(position).getProfile().equals(response.getProfile()))
-                view.showContextMenu();
+            if(!commentItems.get(position).getProfile().equals(response.getProfile()))
+                return false;
 
+            if(!commentItems.get(position).isDeleted())
+                view.showContextMenu();
 
             return true;
         });
@@ -298,7 +301,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
                         if(subButtonStatus == BUTTON_COMMENT_SUB_CONFIRM) {
                             Log.d("대댓글 추가", "내 프로필: " + myProfile + ", 내 이름: " + myName + ", 작성 내용: " + text);
                             // 대댓글 아이템 리스트 추가
-                            subAdapter.addNewItem(new DocsDetailSubCommentItem(myProfile, myName, "방금전", text, "commentId"));
+                            subAdapter.addNewItem(new DocsDetailSubCommentItem(myProfile, myName, "방금전", text, "commentId", false));
 
                             // API Request
                             apiClient.requestInsertSubComment(folderId, recordId,sectionId, highlightId, parentId, text);
