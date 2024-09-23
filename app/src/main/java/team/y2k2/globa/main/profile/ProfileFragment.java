@@ -45,22 +45,25 @@ public class ProfileFragment extends Fragment {
 
     private String name, userId, profile;
 
-    private ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), result -> {
-                if(result.getData() != null) {
-                    String newName = result.getData().getStringExtra("newName");
-                    String newProfile = result.getData().getStringExtra("newProfile");
-                    refreshData(newName, newProfile);
-                }
-            });
+    private ActivityResultLauncher<Intent> resultLauncher;
 
     public ProfileFragment() {
         model = new ProfileModel();
+
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(getLayoutInflater());
+
+        resultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if(result.getData() != null) {
+                        String newName = result.getData().getStringExtra("newName");
+                        String newProfile = result.getData().getStringExtra("newProfile");
+                        refreshData(newName, newProfile);
+                    }
+                });
 
         SettingItemAdapter adapter = new SettingItemAdapter(model.getItems(), this);
 
@@ -112,7 +115,10 @@ public class ProfileFragment extends Fragment {
         binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
 
             Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
-            resultLauncher.launch(intent);
+            if(resultLauncher != null) {
+                resultLauncher.launch(intent);
+            }
+
         });
 
         return binding.getRoot();
