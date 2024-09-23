@@ -59,6 +59,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     MainFragmentViewModel viewModel;
 
+    int filterType;
+
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(getLayoutInflater());
@@ -72,7 +74,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         setOnRefreshListener(binding.swiperefreshlayoutMain);
 
         showPromotions();
-        showRecords(RECORDS_FILTER_CURRENTLY);
+        filterType = RECORDS_FILTER_CURRENTLY;
+        showRecords(filterType);
 
         checkNotification();
 
@@ -112,7 +115,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void setOnRefreshListener(SwipeRefreshLayout refreshLayout) {
         refreshLayout.setOnRefreshListener(() -> {
-            showRecords(RECORDS_FILTER_CURRENTLY);
+            showRecords(filterType);
             binding.swiperefreshlayoutMain.setRefreshing(false);
         });
     }
@@ -141,6 +144,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void showRecords(int buttonFilterType) {
         DocsListItemAdapter adapter;
+
+        filterType = buttonFilterType;
 
         switch (buttonFilterType) {
             case RECORDS_FILTER_CURRENTLY:
