@@ -25,7 +25,7 @@
         android:fontFamily="@font/notosans_regular"
         android:textSize="@dimen/normal_light"
         android:textColor="@color/black"
-        android:maxLines="2"
+        android:maxLines="3"
         android:ellipsize="end"
         app:layout_constraintStart_toEndOf="@+id/imageview_item_notification_inquiry"
         app:layout_constraintEnd_toStartOf="@+id/textview_item_notification_inquiry_createdtime"

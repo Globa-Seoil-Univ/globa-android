@@ -69,9 +69,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
     private MutableLiveData<Boolean> subCommentEtFocus = new MutableLiveData<>();
 
-    SubCommentResponse subCommentResponse = new SubCommentResponse();
     ArrayList<DocsDetailSubCommentItem> subCommentItems = new ArrayList<>();
-    List<SubComment> subCommentList = new ArrayList<>();
 
     private DocsDetailAdapter mainAdapter;
     private DocsDetailSubCommentAdapter subAdapter;
@@ -158,7 +156,6 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             myName = apiClient.requestUserInfo().getName();
 
             List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 100).getSubComments();
-            subCommentList = subCommentResponse.getSubComments();
 
             subCommentItems.clear();
             for(SubComment subComment : subCommentList) {
@@ -202,6 +199,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
             menu.findItem(R.id.action_comment_update).setOnMenuItemClickListener(menuItem -> {
                 // 댓글 수정 동작
+                mainAdapter.setSelectedText(commentItems.get(position).getContent());
                 mainAdapter.focusOnCommentEt();
 
                 focusViewModel.getCommentFocusLiveData().observe(activity, hasFocus -> {

@@ -82,9 +82,10 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private final int BUTTON_COMMENT_UPDATE = 1;
     private int buttonStatus = BUTTON_COMMENT_CONFIRM;
 
-
     private FocusViewModel focusViewModel;
     private DocsDetailViewModel docsDetailViewModel;
+
+    private String selectedText;
 
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
         this.detailItems = detailItems;
@@ -426,6 +427,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         commentEt.requestFocus();
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(commentEt, InputMethodManager.SHOW_IMPLICIT);
+        commentEt.setText(selectedText);
     }
 
     public void setButtonStatus(int status) {
@@ -442,4 +444,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         this.selectedId = selectedId;
     }
 
+    public void setSelectedText(String selectedText) {
+        this.selectedText = selectedText;
+    }
 }
