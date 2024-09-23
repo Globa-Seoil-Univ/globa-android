@@ -240,7 +240,7 @@ public class StatisticsFragment extends Fragment {
         // 각 막대의 색상 설정
         int[] barColors = new int[]{Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#E8C1A0"), Color.parseColor("#B4622F")};
         dataSet.setColors(barColors);
-        dataSet.setValueTextSize(12f);
+        dataSet.setValueTextSize(10f);
 
         // 데이터 객체 생성
         BarData data = new BarData(dataSet);
