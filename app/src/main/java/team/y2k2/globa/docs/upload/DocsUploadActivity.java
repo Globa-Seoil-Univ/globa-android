@@ -77,6 +77,10 @@ public class DocsUploadActivity extends AppCompatActivity {
             dialog.show();
             viewModel.docsUpload();
         });
+
+        binding.imagebuttonDocsUploadBack.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void playAudio(String audioPath) {
