@@ -1,29 +1,24 @@
 package team.y2k2.globa.main.folder.inside;
 
+
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.docs.move.DocsMoveActivity;
@@ -34,8 +29,13 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
     BottomSheetDialog bottomSheetDialog;
     BottomSheetDialog moreBottomSheet;
 
-    public FolderInsideDocsAdapter(ArrayList<FolderInsideDocsItem> items) {
+    Context context;
+    FolderInsideFragment fragment;
+
+    public FolderInsideDocsAdapter(ArrayList<FolderInsideDocsItem> items, FolderInsideFragment fragment) {
         this.items = items;
+        this.fragment = fragment;
+        this.context = fragment.getContext();
     }
 
     @NonNull
@@ -125,6 +125,13 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
         // 버튼 클릭 리스너를 별도의 메서드로 분리
         confirm.setOnClickListener(d2 -> {
             bottomSheetDialog.dismiss();
+            ApiClient client = new ApiClient(context);
+            String folderId = items.get(position).getFolderId();
+            String recordId = items.get(position).getRecordId();
+            client.deleteRecord(folderId,recordId);
+
+
+            fragment.loadFolderInside();
         });
         cancel.setOnClickListener(d2 -> {
             bottomSheetDialog.dismiss();

@@ -132,7 +132,7 @@ public class FolderInsideFragment extends Fragment {
                 model.addItem("", "", "", "");
             }
 
-            FolderInsideDocsAdapter adapter = new FolderInsideDocsAdapter(model.getItems());
+            FolderInsideDocsAdapter adapter = new FolderInsideDocsAdapter(model.getItems(), this);
 
             binding.recyclerviewFolderInsideDocs.setAdapter(adapter);
             binding.recyclerviewFolderInsideDocs.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
@@ -201,11 +201,11 @@ public class FolderInsideFragment extends Fragment {
 
     public void showSecondBottomSheetDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(FolderInsideFragment.this.getContext());
-        View bottomSheetView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_delete_folder, null);
+        View bottomSheetView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_delete_docs, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        TextView cancelButton = bottomSheetView.findViewById(R.id.textview_delete_folder_cancel);
-        TextView confirmButton = bottomSheetView.findViewById(R.id.textview_delete_folder_confirm);
+        TextView cancelButton = bottomSheetView.findViewById(R.id.textview_delete_docs_cancel);
+        TextView confirmButton = bottomSheetView.findViewById(R.id.textview_delete_docs_confirm);
 
         cancelButton.setOnClickListener(v -> {
             bottomSheetDialog.dismiss();
