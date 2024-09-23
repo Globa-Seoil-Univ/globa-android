@@ -16,10 +16,10 @@
             android:id="@+id/imageview_folder_inside_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="20dp"
             android:background="@null"
             android:layout_centerVertical="true"
-            android:src="@drawable/arrow_back" />
+            android:src="@drawable/header_back" />
     </RelativeLayout>
 
     <RelativeLayout

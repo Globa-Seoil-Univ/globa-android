@@ -21,7 +21,8 @@ import team.y2k2.globa.api.model.response.UserSearchResponse;
 public class FolderShareViewModel extends ViewModel {
 
     private ApiService apiService;
-    private MutableLiveData<UserSearchResponse> userSearchLiveData = new MutableLiveData<UserSearchResponse>();
+    private MutableLiveData<UserSearchResponse> userSearchLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> isSucceedLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public FolderShareViewModel() {
@@ -30,6 +31,9 @@ public class FolderShareViewModel extends ViewModel {
 
     public LiveData<UserSearchResponse> getUserSearchLiveData() {
         return userSearchLiveData;
+    }
+    public MutableLiveData<String> getIsSucceedLiveData() {
+        return isSucceedLiveData;
     }
     public LiveData<String> getErrorLiveData() {
         return errorLiveData;
@@ -61,12 +65,9 @@ public class FolderShareViewModel extends ViewModel {
                 if(response.isSuccessful()) {
                     Log.d(getClass().getName(), "공유 추가 성공");
                 } else {
-                    try {
-                        Log.d(getClass().getName(), "공유 추가 실패 : " + response.code() + ", " + response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    Log.d(getClass().getName(), "공유 추가 실패 : " + response.code());
                 }
+                isSucceedLiveData.setValue(String.valueOf(response.code()));
             }
 
             @Override

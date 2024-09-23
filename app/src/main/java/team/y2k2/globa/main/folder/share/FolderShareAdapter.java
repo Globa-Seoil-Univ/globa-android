@@ -27,7 +27,7 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
 
     @NonNull
     @Override
-    public FolderShareAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.item_folder_share, parent, false);
 
@@ -35,13 +35,13 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderShareAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         FolderShareItem item = itemList.get(position);
-        if(!item.getImage().equals("")) {
-            Glide.with(context).load(item.getImage()).into(holder.image);
+        if(!item.getImage().isEmpty()) {
+            Glide.with(context).load(item.getImage()).error(R.drawable.profile_user).into(holder.image);
         } else {
-            Glide.with(context).load(R.mipmap.ic_launcher).into(holder.image);
+            Glide.with(context).load(R.mipmap.ic_launcher).error(R.drawable.profile_user).into(holder.image);
         }
 
         holder.layout.setOnClickListener(v -> {
@@ -52,7 +52,7 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return (itemList != null ? itemList.size() : 0);
     }
 
     public FolderShareItem getItem(int position) {

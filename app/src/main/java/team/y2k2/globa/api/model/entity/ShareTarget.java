@@ -9,8 +9,16 @@ public class ShareTarget {
     @SerializedName("role")
     String role;
 
-    ShareTarget(String code, String role) {
+    public ShareTarget(String code, String role) {
         this.code = code;
         this.role = role;
     }
+
+    public String getCode() {
+        return code;
+    }
+    public String getRole() {
+        return role;
+    }
+
 }

@@ -9,6 +9,8 @@ public class Notification {
     private String type;
     @SerializedName("createdTime")
     private String createdTime;
+    @SerializedName("isRead")
+    private boolean isRead;
     @SerializedName("notice")
     private Notice notice;
     @SerializedName("user")
@@ -62,5 +64,9 @@ public class Notification {
 
     public String getType() {
         return type;
+    }
+
+    public boolean isRead() {
+        return isRead;
     }
 }

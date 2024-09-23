@@ -31,7 +31,6 @@ public class MyinfoItem {
         this.name = name;
     }
 
-
     public Activity getActivity() {
         return activity;
     }

@@ -22,37 +22,52 @@ public class FolderNameEditActivity extends AppCompatActivity {
 
     private FolderNameEditViewModel folderNameEditViewModel;
 
+    int folderId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
         binding = ActivityFolderNameEditBinding.inflate(getLayoutInflater());
 
-        String folderTitle = intent.getStringExtra("folderTitle");
+        initializeUI();
 
-        binding.textviewFolderNameTitle.setText(folderTitle);
+        setContentView(binding.getRoot());
+    }
 
+    private void initializeUI() {
+
+        // 뷰모델 로드
         folderNameEditViewModel = new ViewModelProvider(this).get(FolderNameEditViewModel.class);
 
-        int folderId = getIntent().getIntExtra("folderId", 0);
+        // folderId 받아오기
+        folderId = getIntent().getIntExtra("folderId", 0);
         if(folderId == 0) {
             Toast.makeText(this, "유효하지 않은 폴더 ID 입니다", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        initializeEditText();
+
+        initializeButton();
+    }
+
+    private void initializeEditText() {
+        binding.edittextFolderNameInputname.setText(getIntent().getStringExtra("folderTitle"));
+        binding.textviewFolderNameCount.setText(binding.edittextFolderNameInputname.getText().toString().length() + "/32");
+        // EditText에 TextWather적용
         binding.edittextFolderNameInputname.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(count != 0) {
-                    binding.textviewFolderNameChangeConfirm.setTextColor(getResources().getColor(R.color.primary));
+                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                } else {
+                    binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
-                else {
-                    binding.textviewFolderNameChangeConfirm.setTextColor(getResources().getColor(R.color.darkGray));
-                }
+                binding.textviewFolderNameCount.setText(s.length() + "/32");
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                binding.textviewFolderNameCount.setText(s.length() + "/32");
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -74,7 +89,10 @@ public class FolderNameEditActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void initializeButton() {
+        // 확인 버튼
         binding.textviewFolderNameChangeConfirm.setOnClickListener(v -> {
             if(binding.edittextFolderNameInputname.getText().length() == 0) {
                 Toast.makeText(this, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
@@ -91,12 +109,13 @@ public class FolderNameEditActivity extends AppCompatActivity {
             setResult(RESULT_OK, resultIntent);
             finish(); // 액티비티 종료
         });
+
+        // 뒤로가기 버튼
         binding.buttonFolderNameBack.setOnClickListener(v -> {
             Intent resultIntent = new Intent();
             setResult(RESULT_CANCELED, resultIntent);
             finish();
         });
-
-        setContentView(binding.getRoot());
     }
+
 }

@@ -14,11 +14,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/imageview_service_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="24dp"
-            android:src="@drawable/arrow_back" />
+            android:layout_marginStart="20dp"
+            android:src="@drawable/header_back" />
 
         <TextView
             android:id="@+id/textView"

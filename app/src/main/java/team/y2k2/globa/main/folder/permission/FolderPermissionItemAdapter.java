@@ -13,28 +13,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerAdapter;
 import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerModel;
 
 public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPermissionItemAdapter.AdapterViewHolder> {
     ArrayList<FolderPermissionItem> items;
     FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
-    private OnItemLongClickListener longClickListener;
+    private onItemLongClickListener longClickListener;
 
-    public interface OnItemLongClickListener {
-        void onItemLongClick(View view, int position);
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference imageRef;
+
+    public interface onItemLongClickListener {
+        void onItemLongClick(int position);
     }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
-        this.longClickListener = listener;
-    }
-
-    public FolderPermissionItemAdapter(ArrayList<FolderPermissionItem> items) {
+    public FolderPermissionItemAdapter(ArrayList<FolderPermissionItem> items, onItemLongClickListener longClickListener) {
         this.items = items;
+        this.longClickListener = longClickListener;
     }
 
     @NonNull
@@ -48,11 +53,18 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         FolderPermissionItem item = items.get(position);
 
-        Glide.with(holder.itemView.getContext())
-                .load(item.getProfileImageUrl())
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .into(holder.profileImage);
+        if(item.getProfileImageUrl().startsWith("http")) {
+            Glide.with(holder.itemView.getContext())
+                    .load(item.getProfileImageUrl())
+                    .error(R.mipmap.ic_launcher)
+                    .into(holder.profileImage);
+        } else {
+            imageRef = storage.getReference().child(item.getProfileImageUrl());
+            Glide.with(holder.itemView.getContext())
+                    .load(ProfileImage.convertGsToHttps(imageRef.toString()))
+                    .error(R.mipmap.ic_launcher)
+                    .into(holder.profileImage);
+        }
 
         holder.name.setText(item.getName());
         holder.spinner.setSelection(item.getSelectedOption());
@@ -60,8 +72,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
         holder.itemView.setOnLongClickListener(v -> {
             Log.d("롱클릭", "롱클릭 발생!");
             if(longClickListener != null) {
-                longClickListener.onItemLongClick(v, position);
-                remove(position);
+                longClickListener.onItemLongClick(position);
             }
 
             return true;

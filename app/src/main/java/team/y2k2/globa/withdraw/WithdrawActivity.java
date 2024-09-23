@@ -17,6 +17,7 @@ public class WithdrawActivity extends AppCompatActivity {
     ActivityWithdrawBinding binding;
     private WithdrawViewModel withdrawViewModel;
     String content = ""; // 회원 탈퇴 사유(editText)를 담을 변수
+    ArrayList<Integer> checkedIndexs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,17 +25,19 @@ public class WithdrawActivity extends AppCompatActivity {
         binding = ActivityWithdrawBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        withdrawViewModel = new ViewModelProvider(this).get(WithdrawViewModel.class);
+
+        initializeUI();
+
+    }
+
+    private void initializeUI() {
+
         binding.buttonWithdrawBack.setOnClickListener(v -> {
             finish();
         });
 
-        withdrawViewModel = new ViewModelProvider(this).get(WithdrawViewModel.class);
-        /*
-        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String authorization = "Bearer" + preferences.getString("accessToken", "");
-         */
-
-        ArrayList<Integer> checkedIndexs = new ArrayList<>();
+        checkedIndexs = new ArrayList<>();
 
         // 회원 탈퇴 버튼 클릭 동작
         binding.buttonWithdrawWithdraw.setOnClickListener(v -> {
@@ -60,13 +63,10 @@ public class WithdrawActivity extends AppCompatActivity {
             }
 
             // 회원 탈퇴 작동 (탈퇴 사유 전송, 데이터 삭제 등)
-            withdrawViewModel.withdrawUser(surveyType, content);
-
-            Intent intent = new Intent(this, IntroActivity.class);
-            Toast.makeText(this, "회원 탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
-            startActivity(intent);
-            finish();
+            withdrawViewModel.withdrawUser(surveyType, content, this);
 
         });
+
     }
+
 }

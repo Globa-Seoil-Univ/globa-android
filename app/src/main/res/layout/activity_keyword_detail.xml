@@ -52,9 +52,9 @@
                     android:id="@+id/imageview_keyword_detail_top"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="20dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/arrow_back_white" />
+                    android:src="@drawable/header_back_white" />
 
                 <TextView
                     android:id="@+id/textview_keyword_detail_title"
@@ -98,7 +98,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginStart="20dp"
                             android:textColor="@color/white"
                             android:textSize="26dp"
                             android:textStyle="bold"
@@ -109,28 +109,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/lightGray"
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginStart="20dp"
                             android:layout_below="@+id/textview_keyword_detail_word"
                             android:text="[ 증진 ]"/>
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_alignBottom="@+id/textview_keyword_detail_pronunciation"
-                            android:layout_alignTop="@+id/textview_keyword_detail_pronunciation"
-                            android:layout_toEndOf="@id/textview_keyword_detail_pronunciation"
-                            android:layout_toRightOf="@id/textview_keyword_detail_pronunciation"
-                            android:src="@drawable/pronunciation" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/lightGray"
-                            android:layout_marginRight="30dp"
+                            android:layout_marginEnd="20dp"
                             android:layout_alignTop="@id/textview_keyword_detail_pronunciation"
                             android:layout_alignParentRight="true"
                             android:text="출처 : 우리말샘"/>
+
                     </RelativeLayout>
                 </RelativeLayout>
             </RelativeLayout>

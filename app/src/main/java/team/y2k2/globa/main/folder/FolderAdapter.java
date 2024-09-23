@@ -1,10 +1,15 @@
 package team.y2k2.globa.main.folder;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,13 +23,14 @@ import java.util.Date;
 import java.util.Locale;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.main.folder.inside.FolderInsideFragment;
-
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterViewHolder> {
     ArrayList<FolderItem> items;
-
-    public FolderAdapter(ArrayList<FolderItem> items) {
+    Activity activity;
+    public FolderAdapter(ArrayList<FolderItem> items, Activity activity) {
         this.items = items;
+        this.activity = activity;
     }
 
     @NonNull
@@ -46,6 +52,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
             Bundle bundle = new Bundle();
             bundle.putInt("folderId", items.get(position).getFolderId());
             bundle.putString("folderTitle", items.get(position).getTitle());
+            bundle.putString("folderDatetime", items.get(position).getDatetime());
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 
@@ -56,9 +63,22 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
                     .commit();
         });
 
+        holder.layout.setOnLongClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("폴더 삭제");
+            builder.setMessage("폴더를 삭제하시겠습니까?");
 
+            builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteFolder(position);
+                    Toast.makeText(activity, "폴더를 삭제했습니다", Toast.LENGTH_LONG);
+                }
+            });
+
+            return true;
+        });
     }
-
     @Override
     public int getItemCount() {
         return (null != items ? items.size() : 0);
@@ -68,7 +88,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
         TextView title;
         TextView datetime;
         ConstraintLayout layout;
-
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -78,8 +97,13 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
         }
     }
 
+    public void deleteFolder(int position) {
+        ApiClient client = new ApiClient(activity);
+        client.requestDeleteFolder(items.get(position).getFolderId());
+    }
+
     public String getDateFormat(String datetime) {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
         // 출력 형식
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA);
 

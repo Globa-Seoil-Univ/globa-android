@@ -30,7 +30,6 @@
             tools:text="@string/profile_alert_1_description" />
     </LinearLayout>
 
-
     <Switch
         android:id="@+id/switch_alert"
         android:layout_width="wrap_content"
@@ -40,6 +39,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

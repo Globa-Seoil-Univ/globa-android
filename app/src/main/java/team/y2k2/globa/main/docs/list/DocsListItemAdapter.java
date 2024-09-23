@@ -3,10 +3,10 @@ package team.y2k2.globa.main.docs.list;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import retrofit2.Response;
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.main.docs.keyword.DocsKeywordAdapter;
@@ -33,31 +35,38 @@ import team.y2k2.globa.main.docs.keyword.DocsKeywordModel;
 
 public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapter.AdapterViewHolder> {
     ArrayList<DocsListItem> items;
+    Activity activity;
 
-    public DocsListItemAdapter(ArrayList<DocsListItem> items) {
+    public DocsListItemAdapter(ArrayList<DocsListItem> items, Activity activity) {
         this.items = items;
+        this.activity = activity;
     }
 
     @NonNull
     @Override
-    public DocsListItemAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document, parent, false);
-        return new DocsListItemAdapter.AdapterViewHolder(view);
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+
+        if (items.get(0).getRecordId().equalsIgnoreCase(""))
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document_null, parent, false);
+        else
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_document, parent, false);
+
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DocsListItemAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
+        if(items.get(0).getRecordId().equals(""))
+            return;
+
         String title = items.get(position).getTitle();
         String datetime = getDateFormat(items.get(position).getDatetime());
 
         holder.title.setText(title);
         holder.datetime.setText(datetime);
 
-        holder.user_1.setImageResource(items.get(position).getImage_1());
-        holder.user_2.setImageResource(items.get(position).getImage_2());
-        holder.user_3.setImageResource(items.get(position).getImage_3());
-
-        BottomSheetDialog moreBottomSheet = new BottomSheetDialog(holder.more.getContext());
+        BottomSheetDialog moreBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
 
         moreBottomSheet.setContentView(R.layout.dialog_more_docs);
@@ -83,13 +92,14 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         // 버튼 클릭 리스너를 별도의 메서드로 분리
         confirm.setOnClickListener(d2 -> {
             bottomSheetDialog.dismiss();
+            deleteDocs(items.get(position).getFolderId(), items.get(position).getRecordId());
         });
         cancel.setOnClickListener(d2 -> {
             bottomSheetDialog.dismiss();
             moreBottomSheet.show();
         });
 
-        holder.more.setOnClickListener(view -> {
+        holder.itemView.setOnLongClickListener(view -> {
             moreBottomSheet.show();
 
             RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
@@ -106,12 +116,12 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
                 intent.putExtra("title", items.get(position).getTitle());
                 holder.itemView.getContext().startActivity(intent);
             });
-//            RelativeLayout move = moreBottomSheet.findViewById(R.id.relativelayout_more_move);
             RelativeLayout delete = moreBottomSheet.findViewById(R.id.relativelayout_more_delete);
             delete.setOnClickListener(d1 -> {
                 moreBottomSheet.dismiss();
                 bottomSheetDialog.show();
             });
+            return true;
         });
 
         // 키워드 어뎁터
@@ -121,10 +131,6 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
         if(items.get(position).getKeywords().size() == 0) {
             // 아직 STT 트렌젝션이 완료되지 않았을 때.
-            holder.more.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.user_layout_1.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.user_layout_2.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.user_layout_3.setLayoutParams(new LinearLayout.LayoutParams(0,0));
         }
         else {
             holder.processing.setLayoutParams(new LinearLayout.LayoutParams(0,0));
@@ -147,39 +153,18 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         TextView datetime;
         RecyclerView keywordRecyclerView;
         ConstraintLayout layout;
-        ImageView more;
-
         TextView processing;
         LottieAnimationView lottieAnimationView;
-
-        LinearLayout user_layout_1;
-        LinearLayout user_layout_2;
-        LinearLayout user_layout_3;
-        ImageView user_1;
-        ImageView user_2;
-        ImageView user_3;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.textview_document_main_docs_name);
             datetime = itemView.findViewById(R.id.textview_item_document_docs_time);
-
             layout = itemView.findViewById(R.id.constraintlayout_item_main_document);
 
-            keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
-            more = itemView.findViewById(R.id.imageview_folder_inside_more);
-
             processing = itemView.findViewById(R.id.textview_main_document_processing);
+            keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
             lottieAnimationView = itemView.findViewById(R.id.lottie_main_document_record);
-
-
-            user_layout_1 = itemView.findViewById(R.id.linearlayout_document_user_1);
-            user_layout_2 = itemView.findViewById(R.id.linearlayout_document_user_2);
-            user_layout_3 = itemView.findViewById(R.id.linearlayout_document_user_3);
-
-            user_1 = itemView.findViewById(R.id.imageview_document_user_1);
-            user_2 = itemView.findViewById(R.id.imageview_document_user_2);
-            user_3 = itemView.findViewById(R.id.imageview_document_user_3);
         }
     }
 
@@ -193,9 +178,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         String outputDate = "";
 
         try {
-            // 입력 날짜 문자열을 Date 객체로 파싱
             date = inputFormat.parse(datetime);
-            // Date 객체를 원하는 출력 형식의 문자열로 변환
             outputDate = outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -203,4 +186,17 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
         return outputDate;
     }
+
+    public void deleteDocs(String folderId, String recordId) {
+        ApiClient apiClient = new ApiClient(activity);
+        Response<Void> response = apiClient.deleteRecord(folderId, recordId);
+
+        if (response.isSuccessful()) {
+            Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());
+        } else {
+            Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
+        }
+    }
+
+
 }

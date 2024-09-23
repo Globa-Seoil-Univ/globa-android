@@ -28,15 +28,16 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     private List<MyinfoItem> itemList;
     private Context context;
     private ActivityResultLauncher<Intent> nicknameEditLauncher;
+    private MyinfoActivity activity;
 
-
-    public MyinfoAdapter(List<MyinfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher) {
+    public MyinfoAdapter(List<MyinfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher, MyinfoActivity activity) {
         this.itemList = itemList;
         this.nicknameEditLauncher = nicknameEditLauncher;
+        this.activity = activity;
     }
 
     @Override
-    public MyinfoAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.item_myinfo, parent, false);
 
@@ -44,18 +45,11 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(MyinfoAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
         MyinfoItem item = itemList.get(position);
         holder.title.setText(item.getTitle());
         holder.name.setText(item.getName());
         holder.image.setImageResource(item.getImage());
-
-        /*
-        if(item.getActivity() == null) {
-            // 임시 | null 값은 로그아웃으로 처리합니다.
-            return;
-        }
-         */
 
         holder.layout.setOnClickListener(v -> {
             if(item.getActivity() != null) {
@@ -63,6 +57,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                 if(item.getTitle().toString().equals("이름")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
                     intent.putExtra("current_name", item.getName().toString());
+                    intent.putExtra("userId", activity.getUserId());
                     nicknameEditLauncher.launch(intent);
                 } else if(item.getTitle().toString().equals("회원탈퇴")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
@@ -74,7 +69,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                 if(item.getTitle().toString().equals("계정 코드")) {
                     // 계정코드 클립보드 복사
                     copyToClipboard(context, item.getName().toString());
-                    Toast.makeText(context, "복사완료!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "코드 복사완료!", Toast.LENGTH_SHORT).show();
                     Log.d(getClass().getName(), "클립보드 복사 완료");
                 } else if(item.getTitle().toString().equals("로그아웃")) {
                     // 로그아웃 로직
@@ -83,19 +78,23 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
-                    Log.d(getClass().getName(), "프리퍼런스 리셋 완료 : " + preferences.getString("accessToken", ""));
+                    Log.d(getClass().getName(), "프리퍼런스 리셋 완료");
                     Intent logoutIntent = new Intent(context, IntroActivity.class);
+                    logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(logoutIntent);
                 }
 
             }
 
         });
+
+
+
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemList != null ? itemList.size() : 0;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

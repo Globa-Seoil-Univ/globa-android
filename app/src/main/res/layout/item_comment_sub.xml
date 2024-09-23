@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/item_profile_items"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
+
+
+    <LinearLayout
+        android:id="@+id/linearlayout_profile_icon_bg_sub"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/profile_icon_background"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageview_item_comment_sub_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            tools:src="@drawable/profile_user" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textview_item_comment_sub_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/normal"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/linearlayout_profile_icon_bg_sub"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="윤성빈" />
+
+    <LinearLayout
+        android:id="@+id/linearlayout_comment_sub_split"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        android:background="@drawable/profile_icon_background"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/textview_item_comment_sub_datetime"
+        app:layout_constraintStart_toEndOf="@id/textview_item_comment_sub_username"
+        app:layout_constraintTop_toTopOf="@id/textview_item_comment_sub_datetime"/>
+
+    <TextView
+        android:id="@+id/textview_item_comment_sub_datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/small"
+        app:layout_constraintStart_toEndOf="@id/linearlayout_comment_sub_split"
+        app:layout_constraintBottom_toBottomOf="@id/textview_item_comment_sub_username"
+        tools:text="5분 전"/>
+
+    <TextView
+        android:id="@+id/textview_item_comment_sub_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/textview_item_comment_sub_username"
+        app:layout_constraintStart_toStartOf="@id/textview_item_comment_sub_username"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="이것은 댓글입니다.이것은 댓글입니다.이것은 댓글입니다.이것은 댓글입니다."
+        android:maxLines="3"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

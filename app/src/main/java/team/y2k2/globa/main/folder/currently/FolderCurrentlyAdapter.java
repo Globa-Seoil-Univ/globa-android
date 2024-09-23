@@ -29,13 +29,13 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
 
     @NonNull
     @Override
-    public FolderCurrentlyAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_folder_currently, parent, false);
-        return new FolderCurrentlyAdapter.AdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderCurrentlyAdapter.AdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         String title = items.get(position).getTitle();
         String datetime = getDateFormat(items.get(position).getDatetime());
 
@@ -46,6 +46,7 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
             Bundle bundle = new Bundle();
             bundle.putInt("folderId", items.get(position).getFolderId());
             bundle.putString("folderTitle", title);
+            bundle.putString("folderDatetime", datetime);
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 

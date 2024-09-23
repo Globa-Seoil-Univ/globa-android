@@ -20,11 +20,11 @@
             android:id="@+id/button_folderadd_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="24dp"
             android:background="@drawable/header_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/textview_folder_add_confirm"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginRight="20dp" />
+            android:layout_marginEnd="20dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,7 +51,7 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_folderadd_header"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginStart="20dp" />
 
     <EditText
         android:id="@+id/edittext_folderadd_inputname"
@@ -59,15 +59,15 @@
         android:layout_height="wrap_content"
         android:hint="폴더명 입력"
         android:textColorHint="@color/gray"
-        android:textSize="18sp"
+        android:textSize="@dimen/normal"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_folderadd_announce"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/button_folderadd_cancel"
@@ -75,11 +75,10 @@
         android:layout_height="17dp"
         android:background="@drawable/cancel"
         android:backgroundTint="@color/gray"
-        app:layout_constraintTop_toTopOf="@+id/edittext_folderadd_inputname"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="320dp" />
+        app:layout_constraintEnd_toEndOf="@id/edittext_folderadd_inputname"
+        app:layout_constraintTop_toTopOf="@id/edittext_folderadd_inputname"
+        app:layout_constraintBottom_toBottomOf="@id/edittext_folderadd_inputname"
+        android:layout_marginEnd="16dp" />
 
     <TextView
         android:id="@+id/textview_folderadd_count"
@@ -89,29 +88,97 @@
         android:fontFamily="@font/notosans_regular"
         android:textSize="13sp"
         android:textColor="@color/gray"
-        app:layout_constraintEnd_toEndOf="@+id/edittext_folderadd_inputname"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
-        app:layout_constraintStart_toStartOf="@+id/edittext_folderadd_inputname"
-        android:layout_marginLeft="330dp" />
+        app:layout_constraintEnd_toEndOf="@id/button_folderadd_cancel"
+        app:layout_constraintStart_toStartOf="@id/button_folderadd_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname" />
 
     <TextView
-        android:id="@+id/textview_folderadd_share"
+        android:id="@+id/textview_folderadd_share_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="공유"
+        android:text="공유할 멤버를 선택해주세요"
         android:fontFamily="@font/notosans_bold"
-        android:textSize="20sp"
+        android:textSize="@dimen/big"
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@+id/edittext_folderadd_inputname"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp" />
+
+    <EditText
+        android:id="@+id/edittext_folderadd_share_inputname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="유저 코드 6글자 입력"
+        android:textColorHint="@color/lightGray"
+        android:textSize="@dimen/normal"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_folderadd_share_title"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/button_foldershare_share_cancel"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:background="@drawable/cancel"
+        android:backgroundTint="@color/gray"
+        app:layout_constraintTop_toTopOf="@+id/edittext_folderadd_share_inputname"
+        app:layout_constraintBottom_toBottomOf="@+id/edittext_folderadd_share_inputname"
+        app:layout_constraintEnd_toEndOf="@+id/edittext_folderadd_share_inputname"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="10dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout_folderadd_share_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/foldershare_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_share_inputname"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="16dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageview_folderadd_share_search"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/profile_user"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/textview_folderadd_share_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:fontFamily="@font/notosans_regular"
+            android:textSize="@dimen/large"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@+id/imageview_folderadd_share_search"
+            app:layout_constraintTop_toTopOf="@+id/imageview_folderadd_share_search"
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_folderadd_share_search"
+            android:layout_marginStart="12dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_folderadd_addlist"
-        android:layout_width="wrap_content"
+        android:id="@+id/recyclerview_folderadd_share_selected"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/textview_folderadd_share"
-        app:layout_constraintTop_toBottomOf="@+id/textview_folderadd_share" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_folderadd_share_search"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

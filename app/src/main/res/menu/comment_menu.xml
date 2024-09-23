@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 댓글 작성 -->
+    <item
+        android:id="@+id/action_comment_update"
+        android:title="댓글 수정"
+        android:icon="@android:drawable/ic_menu_more" />
+
+    <!-- 단어 검색 -->
+    <item
+        android:id="@+id/action_comment_delete"
+        android:title="댓글 삭제"
+        android:icon="@android:drawable/ic_menu_more" />
+
+    <!-- 다른 액션 아이템들 추가 가능 -->
+
+</menu>
