@@ -46,7 +46,7 @@
     <string name="docs_more_datetime">2001-04-24 오후 14:10</string>
     <string name="docs_more_rename_docs">이름 변경</string>
     <string name="docs_more_move_docs">폴더 이동</string>
-    <string name="docs_more_delete_docs">폴더 삭제</string>
+    <string name="docs_more_delete_docs">문서 삭제</string>
 
     <string name="docs_title_sample_1">프로젝트관리캡스톤디자인 10주차</string>
     <string name="docs_title_datetime_1">2024-05-08 오전 10:20</string>
