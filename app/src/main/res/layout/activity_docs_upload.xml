@@ -136,33 +136,34 @@
         android:hint="제목 작성"
         android:textSize="@dimen/large"
         android:background="@null"
+        android:maxLength="32"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_title"
         app:layout_constraintStart_toStartOf="@id/textview_docs_upload_title"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/textview_docs_upload_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="설명(선택)"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/edittext_docs_upload_title"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="@dimen/small"/>
+<!--    <TextView-->
+<!--        android:id="@+id/textview_docs_upload_description"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="설명(선택)"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/edittext_docs_upload_title"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:textSize="@dimen/small"/>-->
 
-    <EditText
-        android:id="@+id/edittext_docs_upload_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:hint="설명 추가"
-        android:textSize="@dimen/large"
-        android:background="@null"
-        app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_description"
-        app:layout_constraintStart_toStartOf="@id/textview_docs_upload_description"
-        app:layout_constraintEnd_toEndOf="parent" />
+<!--    <EditText-->
+<!--        android:id="@+id/edittext_docs_upload_description"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:hint="설명 추가"-->
+<!--        android:textSize="@dimen/large"-->
+<!--        android:background="@null"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_description"-->
+<!--        app:layout_constraintStart_toStartOf="@id/textview_docs_upload_description"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <LinearLayout
         android:id="@+id/linearlayout_docs_upload_border_3"
@@ -171,7 +172,7 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:background="@color/lightGray"
-        app:layout_constraintTop_toBottomOf="@id/edittext_docs_upload_description"
+        app:layout_constraintTop_toBottomOf="@id/edittext_docs_upload_title"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView

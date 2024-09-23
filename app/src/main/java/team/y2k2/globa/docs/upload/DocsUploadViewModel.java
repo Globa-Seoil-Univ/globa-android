@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
@@ -135,7 +136,7 @@ public class DocsUploadViewModel extends ViewModel {
         handler = new Handler(handlerThread.getLooper());
 
         if(activity.binding.edittextDocsUploadTitle.getText().length() != 0)
-            model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString().substring(0, 32));
+            model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString());
 
         SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
         // Firebase Storage 참조 가져오기

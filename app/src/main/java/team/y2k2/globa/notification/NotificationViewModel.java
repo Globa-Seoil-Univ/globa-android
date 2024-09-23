@@ -45,7 +45,7 @@ public class NotificationViewModel extends ViewModel {
 
     public void getNotification(String type) {
         Log.d("알림 API", "알림 API 요청 타입: " + type);
-        apiService.requestGetNotification("application/json", authorization, 1, 10, type).enqueue(new Callback<NotificationResponse>() {
+        apiService.requestGetNotification("application/json", authorization, 1, 100, type).enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
                 if(response.isSuccessful()) {
