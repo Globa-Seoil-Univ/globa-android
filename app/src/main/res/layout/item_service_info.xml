@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
+        android:id="@+id/linearlayout_item_service_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
