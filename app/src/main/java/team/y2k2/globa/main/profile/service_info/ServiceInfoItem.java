@@ -5,19 +5,15 @@ import android.app.Activity;
 public class ServiceInfoItem {
     private final int title;
     private final int description;
+    private final String url;
 
-    private Activity activity;
 
-
-    ServiceInfoItem(int title, int description) {
+    ServiceInfoItem(int title, int description, String url) {
         this.title = title;
         this.description = description;
+        this.url = url;
     }
-    ServiceInfoItem(int title, int description, Activity activity) {
-        this.title = title;
-        this.description = description;
-        this.activity = activity;
-    }
+
     public int getDescription() {
         return description;
     }
@@ -26,7 +22,8 @@ public class ServiceInfoItem {
         return title;
     }
 
-    public Activity getActivity() {
-        return activity;
+    public String getUrl() {
+        return url;
     }
+
 }

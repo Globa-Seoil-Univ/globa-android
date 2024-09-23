@@ -83,7 +83,4 @@ public class FolderFragment extends Fragment {
         binding.recyclerviewFolderCurrently.setAdapter(currentlyAdapter);
         binding.recyclerviewFolderCurrently.setLayoutManager(layoutManager);
     }
-
-
-
 }

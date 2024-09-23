@@ -37,6 +37,8 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         recordDB = new RecordDB(this);
+        updateSearchResults("");
+
 
         binding.edittextSearch.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
