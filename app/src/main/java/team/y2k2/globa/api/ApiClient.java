@@ -863,7 +863,7 @@ public class ApiClient {
         try {
             return CompletableFuture.supplyAsync(() -> {
 
-                Call<NotificationResponse> call = apiService.requestGetNotification(APPLICATION_JSON, authorization, 1, 10, type);
+                Call<NotificationResponse> call = apiService.requestGetNotification(APPLICATION_JSON, authorization, 1, 100, type);
                 Response<NotificationResponse> response;
                 try {
                     response = call.execute();
