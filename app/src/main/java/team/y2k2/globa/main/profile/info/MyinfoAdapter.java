@@ -78,7 +78,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
-                    Log.d(getClass().getName(), "프리퍼런스 리셋 완료 : " + preferences.getString("accessToken", ""));
+                    Log.d(getClass().getName(), "프리퍼런스 리셋 완료");
                     Intent logoutIntent = new Intent(context, IntroActivity.class);
                     logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(logoutIntent);

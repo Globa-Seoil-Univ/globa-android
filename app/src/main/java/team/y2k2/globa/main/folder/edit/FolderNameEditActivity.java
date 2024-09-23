@@ -52,16 +52,18 @@ public class FolderNameEditActivity extends AppCompatActivity {
     }
 
     private void initializeEditText() {
+        binding.edittextFolderNameInputname.setText(getIntent().getStringExtra("folderTitle"));
+        binding.textviewFolderNameCount.setText(binding.edittextFolderNameInputname.getText().toString().length() + "/32");
         // EditText에 TextWather적용
         binding.edittextFolderNameInputname.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(count != 0) {
                     binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
-                }
-                else {
+                } else {
                     binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
+                binding.textviewFolderNameCount.setText(s.length() + "/32");
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
