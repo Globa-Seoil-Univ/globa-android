@@ -15,9 +15,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -221,7 +223,10 @@ public class ApiClient {
 
     public LoginResponse requestSignIn(LoginRequest request) {
         try {
-            return CompletableFuture.supplyAsync(() -> {
+
+            AtomicBoolean isSuccess = new AtomicBoolean(true);
+
+            LoginResponse parentResponse = CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<LoginResponse> call = apiService.requestSignIn(request);
                 Response<LoginResponse> response;
@@ -229,17 +234,22 @@ public class ApiClient {
                 try {
                     response = call.execute();
 
-                    if (response.isSuccessful()) {
+                    if (response.isSuccessful() && response.code() != 400) {
                         return response.body();
                     } else {
                         handleErrorCode(response.code());
-                        return null;
+                        isSuccess.set(false);
+                        return response.body();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+
+            if (!isSuccess.get())
+                parentResponse = null;
+            return parentResponse;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;

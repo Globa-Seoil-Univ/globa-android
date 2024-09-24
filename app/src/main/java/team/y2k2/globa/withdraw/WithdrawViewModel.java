@@ -28,24 +28,24 @@ import team.y2k2.globa.intro.IntroActivity;
 public class WithdrawViewModel extends ViewModel {
 
     private ApiService apiService;
+    private MutableLiveData<Integer> responseLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
 
     public WithdrawViewModel() {
         apiService = ApiClient.apiService;
     }
-    
-    public void withdrawUser(int[] surveyType, String content, Context context) {
-//        Log.d("회원 탈퇴", "회원 탈퇴 시작 (surveyType: " + surveyType[0] + ", " + surveyType[1] + ", "
-//                + surveyType[2] + ", content: " + content + ")");
+
+    public MutableLiveData<Integer> getResponseLiveData() {
+        return responseLiveData;
+    }
+
+    public void withdrawUser(int surveyType, String content, Context context) {
         WithdrawRequest withdrawRequest = new WithdrawRequest(surveyType, content);
+
         apiService.requestWithdrawUser(APPLICATION_JSON, authorization, withdrawRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
-                    editor.clear();
-                    editor.apply();
                     Intent withDrawIntent = new Intent(context, IntroActivity.class);
                     withDrawIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(withDrawIntent);
@@ -54,6 +54,7 @@ public class WithdrawViewModel extends ViewModel {
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("event");
                     Toast.makeText(context, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show();
                     Log.d(getClass().getName(), "회원 탈퇴 성공");
+                    responseLiveData.setValue(response.code());
                 } else {
                     Log.d(getClass().getName(), "회원 탈퇴 실패 : " + response.code());
                 }

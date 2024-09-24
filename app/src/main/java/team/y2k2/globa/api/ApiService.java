@@ -127,7 +127,7 @@ public interface ApiService {
      * @surveyType 1: 서비스 사용 불편, 2: 정확성 낮음, 3: 기능 부족, 4: 다른 서비스 선호
      * @content 추가 내용
      */
-    @DELETE("/user")
+    @HTTP(method = "DELETE", path = "/user", hasBody = true)
     Call<Void> requestWithdrawUser(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,

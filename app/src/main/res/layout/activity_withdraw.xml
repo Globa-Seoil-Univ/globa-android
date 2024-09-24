@@ -64,60 +64,72 @@
         app:layout_constraintStart_toStartOf="@+id/textview_withdraw_announce"
         app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_announce" />
 
-    <CheckBox
-        android:id="@+id/checkbox_withdraw_reason1"
-        android:layout_width="wrap_content"
+<!--    <CheckBox-->
+<!--        android:id="@+id/checkbox_withdraw_reason1"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="서비스 사용이 불편해요"-->
+<!--        android:fontFamily="@font/notosans_regular"-->
+<!--        android:textSize="@dimen/normal_light"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:buttonTint="@color/primary"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/textview_withdraw_subannounce"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_subannounce"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:checked="true" />-->
+
+<!--    <CheckBox-->
+<!--        android:id="@+id/checkbox_withdraw_reason2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="정확성이 떨어져요"-->
+<!--        android:fontFamily="@font/notosans_regular"-->
+<!--        android:textSize="@dimen/normal_light"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:buttonTint="@color/primary"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason1"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason1"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:checked="true" />-->
+
+<!--    <CheckBox-->
+<!--        android:id="@+id/checkbox_withdraw_reason3"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="기능이 부족해요"-->
+<!--        android:fontFamily="@font/notosans_regular"-->
+<!--        android:textSize="@dimen/normal_light"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:buttonTint="@color/primary"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason2"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason2"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:checked="true" />-->
+
+<!--    <CheckBox-->
+<!--        android:id="@+id/checkbox_withdraw_reason4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="다른 서비스가 더 좋아요"-->
+<!--        android:fontFamily="@font/notosans_regular"-->
+<!--        android:textSize="@dimen/normal_light"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:buttonTint="@color/primary"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason3"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason3"-->
+<!--        android:layout_marginTop="12dp" />-->
+
+    <RadioGroup
+        android:id="@+id/group_withdraw_check"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="서비스 사용이 불편해요"
-        android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/normal_light"
-        android:textColor="@color/black"
-        android:buttonTint="@color/primary"
-        app:layout_constraintStart_toStartOf="@+id/textview_withdraw_subannounce"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_subannounce"
-        android:layout_marginTop="16dp"
-        android:checked="true" />
-
-    <CheckBox
-        android:id="@+id/checkbox_withdraw_reason2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="정확성이 떨어져요"
-        android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/normal_light"
-        android:textColor="@color/black"
-        android:buttonTint="@color/primary"
-        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason1"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason1"
-        android:layout_marginTop="12dp"
-        android:checked="true" />
-
-    <CheckBox
-        android:id="@+id/checkbox_withdraw_reason3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="기능이 부족해요"
-        android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/normal_light"
-        android:textColor="@color/black"
-        android:buttonTint="@color/primary"
-        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason2"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason2"
-        android:layout_marginTop="12dp"
-        android:checked="true" />
-
-    <CheckBox
-        android:id="@+id/checkbox_withdraw_reason4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="다른 서비스가 더 좋아요"
-        android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/normal_light"
-        android:textColor="@color/black"
-        android:buttonTint="@color/primary"
-        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason3"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason3"
-        android:layout_marginTop="12dp" />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp" />
 
     <EditText
         android:id="@+id/edittext_withdraw_detail"
@@ -130,7 +142,7 @@
         android:background="@drawable/withdraw_edittext_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason4"
+        app:layout_constraintTop_toBottomOf="@+id/group_withdraw_check"
         android:padding="15dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"

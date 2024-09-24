@@ -140,20 +140,26 @@ public class LoginViewModel extends ViewModel {
 
                         LoginResponse response = apiClient.requestSignIn(request);
 
-                        userPreferences(request, response);
-                        sendLogMessage(request,response);
+                        if(response == null){
+                            Toast.makeText(activity, "로그인 실패 : 탈퇴한 사용자 ", Toast.LENGTH_SHORT).show();
+                        } else{
 
-                        ApiClient apiNewClient = new ApiClient(activity);
-                        UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
-                        userProfilePreferences(userInfoResponse);
-                        showLogMessages(userInfoResponse);
+                            userPreferences(request, response);
+                            sendLogMessage(request,response);
+
+                            ApiClient apiNewClient = new ApiClient(activity);
+                            UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
+                            userProfilePreferences(userInfoResponse);
+                            showLogMessages(userInfoResponse);
 
 
-                        activity.dialog.dismiss();
-                        Intent intent = new Intent(activity, MainActivity.class);
-                        activity.startActivity(intent);
+                            activity.dialog.dismiss();
+                            Intent intent = new Intent(activity, MainActivity.class);
+                            activity.startActivity(intent);
 
-                        Toast.makeText(activity, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
 
