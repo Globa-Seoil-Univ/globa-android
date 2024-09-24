@@ -54,6 +54,7 @@ public class StatisticsFragment extends Fragment {
     private List<Studytime> studytimes;
     private List<Quizgrade> quizgrades;
     private int maxStudyTime;
+    private double maxWordValue;
 
     @Nullable
     @Override
@@ -113,7 +114,15 @@ public class StatisticsFragment extends Fragment {
     private void drawKeywordsChart() {
         wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
-//        wordValues = DoubleStream.of(doubleWordValues).mapToInt(value -> (int)(value * 100)).toArray();
+
+        maxWordValue = 0;
+        if(doubleWordValues.length != 0) {
+            for(int i = 0; i < doubleWordValues.length; i++) {
+                if(doubleWordValues[i] > maxWordValue) {
+                    maxWordValue = doubleWordValues[i];
+                }
+            }
+        }
 
         for(int i = 0; i < doubleWordValues.length; i++) {
             doubleWordValues[i] = doubleWordValues[i] * 100;
@@ -303,7 +312,7 @@ public class StatisticsFragment extends Fragment {
         axisLeft.setDrawGridLines(false); // 기준선 활성화
         axisLeft.setDrawAxisLine(false); // 축선 활성화
         axisLeft.setAxisMinimum(0f); // 최솟값
-        axisLeft.setAxisMaximum(100f); // 최댓값
+        axisLeft.setAxisMaximum((float) (maxWordValue * 100)); // 최댓값
         axisLeft.setGranularity(1f); // 기준선 간격 설정
         axisLeft.setDrawLabels(false); // label 삭제
 

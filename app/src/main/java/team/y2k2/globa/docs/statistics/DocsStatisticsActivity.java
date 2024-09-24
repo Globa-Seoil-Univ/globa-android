@@ -53,6 +53,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
     private List<Studytime> studytimes;
     private List<Quizgrade> quizgrades;
     private int maxStudyTime;
+    private double maxWordValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,15 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         // 단어 중요도 차트
         wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
+
+        maxWordValue = 0;
+        if(doubleWordValues.length != 0) {
+            for(int i = 0; i < doubleWordValues.length; i++) {
+                if(doubleWordValues[i] > maxWordValue) {
+                    maxWordValue = doubleWordValues[i];
+                }
+            }
+        }
 
         for(int i = 0; i < doubleWordValues.length; i++) {
             doubleWordValues[i] = doubleWordValues[i] * 100;
@@ -306,7 +316,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         axisLeft.setDrawGridLines(true); // 기준선 활성화
         axisLeft.setDrawAxisLine(true); // 축선 활성화
         axisLeft.setAxisMinimum(0f); // 최솟값
-        axisLeft.setAxisMaximum(100f); // 최댓값
+        axisLeft.setAxisMaximum((float) (maxWordValue * 100)); // 최댓값
         axisLeft.setGranularity(0.1f); // 기준선 간격 설정
         axisLeft.setDrawLabels(false); // label 삭제
 
