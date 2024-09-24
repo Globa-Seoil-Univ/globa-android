@@ -52,6 +52,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
     private List<Keyword> keywords;
     private List<Studytime> studytimes;
     private List<Quizgrade> quizgrades;
+    private int maxStudyTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +141,15 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
         timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
 
+        maxStudyTime = 0;
+        if(timeValues.length != 0) {
+            for(int i = 0; i < timeValues.length; i++) {
+                if(timeValues[i] > maxStudyTime) {
+                    maxStudyTime = timeValues[i];
+                }
+            }
+        }
+
         for(int i = 0; i < timeX.length; i++) {
             timeX[i] = timeX[i].substring(0, 10);
         }
@@ -166,7 +176,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
                 newTimeValues[j] = n;
                 j++;
             }
-            drawLineChart(docsTimeLineChart, 60, newTimeX, newTimeValues, "공부시간");
+            drawLineChart(docsTimeLineChart, maxStudyTime, newTimeX, newTimeValues, "공부시간");
         } else if (timeX.length == 0) {
             String[] newTimeX = new String[10];
             int[] newTimeValues = new int[10];
@@ -174,9 +184,9 @@ public class DocsStatisticsActivity extends AppCompatActivity {
                 newTimeX[i] = "0";
                 newTimeValues[i] = 0;
             }
-            drawLineChart(docsTimeLineChart, 60, newTimeX, newTimeValues, "공부시간");
+            drawLineChart(docsTimeLineChart, maxStudyTime, newTimeX, newTimeValues, "공부시간");
         } else {
-            drawLineChart(docsTimeLineChart, 60, timeX, timeValues, "공부시간");
+            drawLineChart(docsTimeLineChart, maxStudyTime, timeX, timeValues, "공부시간");
         }
     }
 

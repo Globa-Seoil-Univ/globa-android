@@ -53,6 +53,7 @@ public class StatisticsFragment extends Fragment {
     private List<Keyword> keywords;
     private List<Studytime> studytimes;
     private List<Quizgrade> quizgrades;
+    private int maxStudyTime;
 
     @Nullable
     @Override
@@ -135,6 +136,15 @@ public class StatisticsFragment extends Fragment {
         timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
         timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
 
+        maxStudyTime = 0;
+        if(timeValues.length != 0) {
+            for(int i = 0; i < timeValues.length; i++) {
+                if(timeValues[i] > maxStudyTime) {
+                    maxStudyTime = timeValues[i];
+                }
+            }
+        }
+
         for(int i = 0; i < timeX.length; i++) {
             timeX[i] = timeX[i].substring(0, 10);
         }
@@ -161,7 +171,7 @@ public class StatisticsFragment extends Fragment {
                 newTimeValues[j] = n;
                 j++;
             }
-            drawLineChart(timeLineChart, 60, newTimeX, newTimeValues, "공부시간");
+            drawLineChart(timeLineChart, maxStudyTime, newTimeX, newTimeValues, "공부시간");
         } else if (timeX.length == 0) {
             String[] newTimeX = new String[10];
             int[] newTimeValues = new int[10];
@@ -169,9 +179,9 @@ public class StatisticsFragment extends Fragment {
                 newTimeX[i] = "0";
                 newTimeValues[i] = 0;
             }
-            drawLineChart(timeLineChart, 60, newTimeX, newTimeValues, "공부시간");
+            drawLineChart(timeLineChart, maxStudyTime, newTimeX, newTimeValues, "공부시간");
         } else {
-            drawLineChart(timeLineChart, 60, timeX, timeValues, "공부시간");
+            drawLineChart(timeLineChart, maxStudyTime, timeX, timeValues, "공부시간");
         }
     }
 
