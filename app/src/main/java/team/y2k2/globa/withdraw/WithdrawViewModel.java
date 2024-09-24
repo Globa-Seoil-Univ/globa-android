@@ -49,10 +49,10 @@ public class WithdrawViewModel extends ViewModel {
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("notification");
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("notice");
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("event");
-                    Toast.makeText(context, "로그아웃 성공", Toast.LENGTH_SHORT).show();
-                    Log.d(getClass().getName(), "로그아웃 성공");
+                    Toast.makeText(context, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show();
+                    Log.d(getClass().getName(), "회원 탈퇴 성공");
                 } else {
-                    Log.d(getClass().getName(), "로그아웃 실패 : " + response.code());
+                    Log.d(getClass().getName(), "회원 탈퇴 성공 : " + response.code());
                 }
             }
             @Override

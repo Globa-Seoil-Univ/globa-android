@@ -63,17 +63,40 @@ public class NicknameEditActivity extends AppCompatActivity {
                 binding.textviewNicknameeditChange.setTextColor(color);
                 binding.textviewNicknameeditCount.setText(s.length() + "/32");
                 isChanged = true;
+                if(s.length() == 0) {
+                    binding.buttonNicknameEditCancel.setVisibility(View.GONE);
+                } else {
+                    binding.buttonNicknameEditCancel.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 // 텍스트 변경 후
+                if(s.length() > 32) {
+                    binding.edittextNicknameeditInputname.removeTextChangedListener(this);
+                    String text = s.toString().substring(0, 32);
+                    binding.edittextNicknameeditInputname.setText(text);
+                    binding.edittextNicknameeditInputname.setSelection(text.length());
+                    binding.edittextNicknameeditInputname.addTextChangedListener(this);
+                }
+                if(s.length() <= 32) {
+                    binding.textviewNicknameeditCount.setText(s.length() + "/32");
+                    binding.textviewNicknameeditChange.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                }
+                if(s.length() == 0) {
+                    binding.textviewNicknameeditChange.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                }
             }
         });
 
         // 변경 버튼
         binding.textviewNicknameeditChange.setOnClickListener(v -> {
             if(isChanged) {
+                if(binding.edittextNicknameeditInputname.getText().toString().isEmpty()) {
+                    Toast.makeText(this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String newNickname = binding.edittextNicknameeditInputname.getText().toString();
                 nicknameEditViewModel.updateNickname(this,userId, newNickname);
                 onNicknameChanged(newNickname);

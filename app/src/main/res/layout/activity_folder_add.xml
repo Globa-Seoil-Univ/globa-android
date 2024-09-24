@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_folderadd_header"
         android:layout_width="match_parent"
-        android:layout_height="71dp"
+        android:layout_height="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="20dp" />
+            android:layout_marginStart="20dp" />
 
         <TextView
             android:id="@+id/textview_folder_add_confirm"
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="추가할 폴더의 이름을 입력해주세요"
-        android:textSize="20sp"
+        android:textSize="@dimen/big"
         android:fontFamily="@font/notosans_bold"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +78,8 @@
         app:layout_constraintEnd_toEndOf="@id/edittext_folderadd_inputname"
         app:layout_constraintTop_toTopOf="@id/edittext_folderadd_inputname"
         app:layout_constraintBottom_toBottomOf="@id/edittext_folderadd_inputname"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="16dp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textview_folderadd_count"
@@ -88,9 +89,9 @@
         android:fontFamily="@font/notosans_regular"
         android:textSize="13sp"
         android:textColor="@color/gray"
-        app:layout_constraintEnd_toEndOf="@id/button_folderadd_cancel"
-        app:layout_constraintStart_toStartOf="@id/button_folderadd_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname" />
+        app:layout_constraintEnd_toEndOf="@id/edittext_folderadd_inputname"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
+        android:layout_marginEnd="12dp"/>
 
     <TextView
         android:id="@+id/textview_folderadd_share_title"
@@ -122,7 +123,7 @@
         android:layout_marginTop="16dp"/>
 
     <Button
-        android:id="@+id/button_foldershare_share_cancel"
+        android:id="@+id/button_folderadd_share_cancel"
         android:layout_width="17dp"
         android:layout_height="17dp"
         android:background="@drawable/cancel"
@@ -131,7 +132,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/edittext_folderadd_share_inputname"
         app:layout_constraintEnd_toEndOf="@+id/edittext_folderadd_share_inputname"
         android:layout_marginBottom="4dp"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginEnd="10dp"
+        android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintlayout_folderadd_share_search"

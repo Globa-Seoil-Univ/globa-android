@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -36,7 +37,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
 
         binding.textviewDocsNameChangeConfirm.setOnClickListener(v -> {
             String newName = binding.edittextDocsNameInputname.getText().toString();
-            if(binding.edittextDocsNameInputname.getText().toString().length() == 0) {
+            if(binding.edittextDocsNameInputname.getText().toString().isEmpty()) {
                 Toast.makeText(this, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -60,6 +61,11 @@ public class DocsNameEditActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 binding.textviewDocsNameCount.setText(s.length() + "/32");
+                if(s.length() == 0) {
+                    binding.buttonDocsNameCancel.setVisibility(View.GONE);
+                } else {
+                    binding.buttonDocsNameCancel.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

@@ -141,9 +141,11 @@ public class FolderAddActivity extends AppCompatActivity {
                     binding.textviewFolderaddCount.setText(s.length() + "/32");
                     binding.textviewFolderAddConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 }
-
                 if(s.length() == 0) {
                     binding.textviewFolderAddConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    binding.buttonFolderaddCancel.setVisibility(View.GONE);
+                } else {
+                    binding.buttonFolderaddCancel.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -184,7 +186,12 @@ public class FolderAddActivity extends AppCompatActivity {
                             }
                         }
                     });
+                }
 
+                if(s.length() == 0) {
+                    binding.buttonFolderaddShareCancel.setVisibility(View.GONE);
+                } else {
+                    binding.buttonFolderaddShareCancel.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -201,6 +208,14 @@ public class FolderAddActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "사용자를 검색해주세요", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        binding.buttonFolderaddCancel.setOnClickListener(v -> {
+            binding.edittextFolderaddInputname.setText("");
+        });
+
+        binding.buttonFolderaddShareCancel.setOnClickListener(v -> {
+            binding.edittextFolderaddShareInputname.setText("");
         });
 
     }

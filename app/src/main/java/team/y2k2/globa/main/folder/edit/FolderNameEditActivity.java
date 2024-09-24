@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,6 +65,11 @@ public class FolderNameEditActivity extends AppCompatActivity {
                     binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
                 binding.textviewFolderNameCount.setText(s.length() + "/32");
+                if(s.length() == 0) {
+                    binding.buttonFolderNameCancel.setVisibility(View.GONE);
+                } else {
+                    binding.buttonFolderNameCancel.setVisibility(View.VISIBLE);
+                }
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -88,6 +94,10 @@ public class FolderNameEditActivity extends AppCompatActivity {
                     binding.textviewFolderNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
             }
+        });
+
+        binding.buttonFolderNameCancel.setOnClickListener(v -> {
+            binding.edittextFolderNameInputname.setText("");
         });
     }
 

@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_folder_name_header"
         android:layout_width="match_parent"
-        android:layout_height="71dp"
+        android:layout_height="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="변경할 폴더 이름을 입력해주세요."
-        android:textSize="@dimen/large"
+        android:textSize="@dimen/big"
         android:fontFamily="@font/notosans_bold"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
