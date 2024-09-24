@@ -124,6 +124,7 @@ public class FolderInsideFragment extends Fragment {
                 String title = record.getTitle();
                 String path = record.getPath();
                 String datetime = record.getCreatedTime();
+                datetime = datetime.replace("T", "  ");
 
                 model.addItem(Integer.toString(folderId), recordId, title, datetime);
             }

@@ -22,7 +22,6 @@ public class DocsNameEditActivity extends AppCompatActivity {
     String recordId;
     String folderId;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
