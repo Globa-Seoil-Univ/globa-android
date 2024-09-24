@@ -49,6 +49,8 @@ public class DocsNameEditActivity extends AppCompatActivity {
             binding.edittextDocsNameInputname.setText("");
         });
 
+        binding.textviewDocsNameCount.setText(title.length() + "/32");
+
         binding.edittextDocsNameInputname.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -81,6 +83,10 @@ public class DocsNameEditActivity extends AppCompatActivity {
                     binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
             }
+        });
+
+        binding.buttonDocsNameBack.setOnClickListener(v -> {
+            finish();
         });
 
         setContentView(binding.getRoot());

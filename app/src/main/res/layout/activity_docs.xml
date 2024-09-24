@@ -20,7 +20,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@null"
-            android:layout_marginLeft="24dp"
+            android:layout_marginStart="20dp"
             android:layout_centerVertical="true"
             android:src="@drawable/header_back" />
 
@@ -45,7 +45,7 @@
             android:id="@+id/imageview_docs_more"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginEnd="20dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:src="@drawable/more" />
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:visibility="invisible"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/docs_replay_5"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
@@ -161,8 +161,7 @@
         app:lottie_loop="true"
         app:lottie_speed="1"
         app:lottie_rawRes="@raw/loading"
-        app:lottie_repeatCount="100"
-        />
+        app:lottie_repeatCount="100" />
 
     <ImageButton
         android:id="@+id/imageview_document_forward"
@@ -170,7 +169,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:visibility="invisible"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:src="@drawable/docs_forward_5"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
