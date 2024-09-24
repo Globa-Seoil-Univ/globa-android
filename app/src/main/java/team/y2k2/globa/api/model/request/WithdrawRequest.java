@@ -13,18 +13,4 @@ public class WithdrawRequest {
         this.content = content;
     }
 
-    public int[] getSurveyType() {
-        return surveyType;
-    }
-    public void setSurveyType(int[] surveyType) {
-        this.surveyType = surveyType;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 }

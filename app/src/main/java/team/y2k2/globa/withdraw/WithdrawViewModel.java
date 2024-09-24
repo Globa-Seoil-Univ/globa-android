@@ -1,6 +1,7 @@
 package team.y2k2.globa.withdraw;
 
 import static team.y2k2.globa.api.ApiClient.authorization;
+import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;
 
 import android.app.Activity;
 import android.app.Application;
@@ -36,8 +37,10 @@ public class WithdrawViewModel extends ViewModel {
     }
     
     public void withdrawUser(int[] surveyType, String content, Context context) {
+//        Log.d("회원 탈퇴", "회원 탈퇴 시작 (surveyType: " + surveyType[0] + ", " + surveyType[1] + ", "
+//                + surveyType[2] + ", content: " + content + ")");
         WithdrawRequest withdrawRequest = new WithdrawRequest(surveyType, content);
-        apiService.requestWithdrawUser("application/json", authorization, withdrawRequest).enqueue(new Callback<Void>() {
+        apiService.requestWithdrawUser(APPLICATION_JSON, authorization, withdrawRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
@@ -52,7 +55,7 @@ public class WithdrawViewModel extends ViewModel {
                     Toast.makeText(context, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show();
                     Log.d(getClass().getName(), "회원 탈퇴 성공");
                 } else {
-                    Log.d(getClass().getName(), "회원 탈퇴 성공 : " + response.code());
+                    Log.d(getClass().getName(), "회원 탈퇴 실패 : " + response.code());
                 }
             }
             @Override
