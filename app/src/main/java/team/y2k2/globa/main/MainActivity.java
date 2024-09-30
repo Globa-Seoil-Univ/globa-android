@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.setActivity(this);
-        // 꼽사리....
         viewModel.getUserIdUpdateToken();
         viewModel.getUserAccount();
         setContentView(binding.getRoot());
