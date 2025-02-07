@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
 
-import com.arthenica.mobileffmpeg.FFmpeg;
+//import com.arthenica.mobileffmpeg.FFmpeg;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -93,39 +93,39 @@ public class DocsUploadViewModel extends ViewModel {
     }
 
     // MP3 to OGG 변환 함수 호출
-    private void convertAudio(String path, String folderId) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Instant instant = Instant.now();
-                unixTime = instant.getEpochSecond();
-
-                String oggPath = path.replace(".tmp", ".ogg");
-
-                String[] cmd = new String[]{"-i", path, "-vn", "-map_metadata", "-1", "-ac", "1", "-c:a", "libopus", "-b:a", "12k", "-application", "voip", oggPath};
-                int rc = FFmpeg.execute(cmd);
-                if (rc == 0) {
-                    // 변환 성공
-                    Log.d("AudioConverter", "변환 성공");
-                } else {
-                    // 변환 실패
-                    Log.e("AudioConverter", "변환 실패");
-                }
-
-                uploadRecordFile(oggPath, folderId);
-
-                // 변환 완료 후 UI 업데이트 (필요시)
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI 업데이트 (예: ProgressBar 숨기기, 변환 완료 메시지 표시)
-                        activity.dialog.dismiss();
-                        activity.finish();
-                    }
-                });
-            }
-        });
-    }
+//    private void convertAudio(String path, String folderId) {
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Instant instant = Instant.now();
+//                unixTime = instant.getEpochSecond();
+//
+//                String oggPath = path.replace(".tmp", ".ogg");
+//
+//                String[] cmd = new String[]{"-i", path, "-vn", "-map_metadata", "-1", "-ac", "1", "-c:a", "libopus", "-b:a", "12k", "-application", "voip", oggPath};
+//                int rc = FFmpeg.execute(cmd);
+//                if (rc == 0) {
+//                    // 변환 성공
+//                    Log.d("AudioConverter", "변환 성공");
+//                } else {
+//                    // 변환 실패
+//                    Log.e("AudioConverter", "변환 실패");
+//                }
+//
+//                uploadRecordFile(oggPath, folderId);
+//
+//                // 변환 완료 후 UI 업데이트 (필요시)
+//                activity.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // UI 업데이트 (예: ProgressBar 숨기기, 변환 완료 메시지 표시)
+//                        activity.dialog.dismiss();
+//                        activity.finish();
+//                    }
+//                });
+//            }
+//        });
+//    }
 
 
     public void docsUpload() {
@@ -152,7 +152,7 @@ public class DocsUploadViewModel extends ViewModel {
             folderId = String.valueOf(folder.getFolderId());
         }
 
-        convertAudio(model.getRecordPath(), folderId);
+//        convertAudio(model.getRecordPath(), folderId);
     }
 
     public String getRecordPath() {
