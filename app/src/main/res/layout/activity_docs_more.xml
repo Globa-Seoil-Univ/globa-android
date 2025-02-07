@@ -127,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/docs_more_rename_docs"
+            android:text="@string/rename"
             android:textColor="@color/black"
             android:layout_toEndOf="@+id/imagebutton_docs_more_rename"/>
 
@@ -181,7 +181,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="문서 삭제"
+            android:text="@string/docs_more_delete_docs"
             android:textColor="@color/red"
             android:layout_toEndOf="@+id/imagebutton_docs_more_delete"/>
     </RelativeLayout>
@@ -191,7 +191,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="공유"
+        android:text="@string/share"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -219,7 +219,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="링크 공유"
+            android:text="@string/share_link"
             android:textColor="@color/black"
             android:layout_toEndOf="@+id/imagebutton_docs_more_share"/>
     </RelativeLayout>

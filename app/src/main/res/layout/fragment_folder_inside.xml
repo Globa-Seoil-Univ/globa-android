@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:id="@+id/relativelayout_folder_inside_tab"
@@ -38,7 +39,7 @@
             android:textStyle="bold"
             android:fontFamily="@font/notosans_regular"
             android:textColor="@color/black"
-            android:text="이것은 아주 긴 제목입니다."/>
+            tools:text="이것은 아주 긴 제목입니다."/>
 
         <ImageView
             android:id="@+id/textview_folder_inside_more"

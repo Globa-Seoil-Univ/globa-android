@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/constraintlayout_item_notification_docs"
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/constraintlayout_item_notification_docs"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/document_background"
-    android:padding="16dp" >
+    android:padding="16dp"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageview_item_notification_docs"
@@ -20,7 +20,7 @@
         android:id="@+id/textview_item_notification_docs_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="전체 알림 제목입니다"
+        tools:text="전체 알림 제목입니다"
         android:fontFamily="@font/notosans_regular"
         android:textSize="@dimen/normal_light"
         android:textColor="@color/black"
@@ -37,7 +37,7 @@
         android:id="@+id/textview_item_notification_docs_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="전체 알림 내용입니다."
+        tools:text="전체 알림 내용입니다."
         android:fontFamily="@font/notosans_regular"
         android:textSize="@dimen/small"
         android:textColor="@color/gray"
@@ -49,7 +49,7 @@
         android:id="@+id/textview_item_notification_docs_createdtime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="20m"
+        tools:text="20m"
         android:fontFamily="@font/notosans_regular"
         android:textSize="@dimen/small"
         android:textColor="@color/gray"

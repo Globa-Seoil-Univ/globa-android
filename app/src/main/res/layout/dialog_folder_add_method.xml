@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:text="링크 공유"
+                android:text="@string/share_link"
                 android:textColor="@color/black"
                 android:layout_toEndOf="@+id/imagebutton_folderadd_link"/>
 
@@ -105,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:text="멤버 공유"
+                android:text="@string/share_member"
                 android:textColor="@color/black"
                 android:layout_toEndOf="@+id/imagebutton_folderadd_member"/>
 

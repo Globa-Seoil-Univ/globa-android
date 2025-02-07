@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/main_delete_docs_modal_title"
+            android:text="@string/delete_confirmation_message"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             android:textStyle="bold" />
@@ -63,7 +63,7 @@
             android:gravity="center"
             android:textColor="@color/darkGray"
             android:layout_weight="9"
-            android:text="취소" />
+            android:text="@string/cancel" />
 
         <LinearLayout
             android:id="@+id/linearlayout_delete_docs_split"
@@ -81,7 +81,7 @@
             android:textColor="@color/red"
             android:gravity="center"
             android:layout_weight="9"
-            android:text="삭제" />
+            android:text="@string/delete" />
     </LinearLayout>
 
 

@@ -14,7 +14,7 @@
         android:layout_gravity="left"
         android:singleLine="true"
         android:ellipsize="end"
-        android:text="읽기"
+        android:text="@string/item_folder_permission_spinner_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

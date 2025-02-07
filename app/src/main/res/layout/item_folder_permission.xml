@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/constraintlayout_item_folder_permission"
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/constraintlayout_item_folder_permission"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/document_background">
+    android:background="@drawable/document_background"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageview_folder_permission_profile_image"
@@ -23,7 +23,7 @@
         android:id="@+id/textview_folder_permission_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="성빈클론"
+        tools:text="성빈클론"
         android:textSize="@dimen/normal_light"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"

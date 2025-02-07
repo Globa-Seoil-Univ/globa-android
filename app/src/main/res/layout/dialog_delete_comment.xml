@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="댓글을 삭제하시겠습니까?"
+            android:text="@string/dialog_delete_comment_title"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             android:textStyle="bold" />
@@ -41,7 +41,7 @@
             android:textColor="@color/darkGray"
             android:layout_below="@+id/textview_delete_comment_title"
             android:layout_marginTop="5dp"
-            android:text="한 번 삭제한 댓글은 되돌릴 수 없습니다."
+            android:text="@string/dialog_delete_comment_description"
             android:textSize="@dimen/small"
             />
     </RelativeLayout>
@@ -63,7 +63,7 @@
             android:gravity="center"
             android:textColor="@color/darkGray"
             android:layout_weight="9"
-            android:text="취소" />
+            android:text="@string/cancel" />
 
         <LinearLayout
             android:id="@+id/linearlayout_delete_comment_split"
@@ -81,7 +81,7 @@
             android:textColor="@color/red"
             android:gravity="center"
             android:layout_weight="9"
-            android:text="삭제" />
+            android:text="@string/delete" />
     </LinearLayout>
 
 

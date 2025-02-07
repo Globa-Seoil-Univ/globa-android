@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/modal_background">
 
     <LinearLayout
@@ -24,7 +24,7 @@
         android:id="@+id/textview_comment_sub_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="댓글"
+        android:text="@string/dialog_comment_title"
         android:textColor="@color/black"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
@@ -48,7 +48,7 @@
         android:id="@+id/textview_comment_sub_parent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="> 댓글 예시"
+        tools:text="> 댓글 예시"
         android:textColor="@color/black"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
@@ -75,7 +75,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_rounded"
-        android:hint="댓글 남기기"
+        android:hint="@string/dialog_comment_hint"
         android:textSize="@dimen/large"
         android:textColorHint="@color/darkGray"
         android:textColor="@color/black"

@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="2024-03-11 ICT 기술 융합 강의 녹음은 어지럽..."
+        tools:text="2024-03-11 ICT 기술 융합 강의 녹음은 어지럽..."
         android:textColor="@color/black"
         android:textSize="16dp"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
         android:id="@+id/textview_item_document_docs_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2024-03-10 오전 09:00"
+        tools:text="2024-03-10 오전 09:00"
         android:textColor="@color/gray"
         android:textSize="14dp"
         app:layout_constraintTop_toBottomOf="@id/textview_document_main_docs_name"
@@ -72,7 +72,7 @@
                 android:id="@+id/textview_main_document_processing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="요약중.."
+                android:text="@string/item_main_document_processing"
                 android:layout_gravity="center"/>
 
             <com.airbnb.lottie.LottieAnimationView
