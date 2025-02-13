@@ -1,0 +1,182 @@
+<resources>
+    <string name="app_name">グローバ</string>
+
+    <string name="delete_confirmation_message">本当に消しますか？</string>
+
+    <string name="loading_title">音声変換は グローバ</string>
+    <string name="loading_subtitle">すべての音声を文字に変換し、要約して\n見やすいように提供します。</string>
+    <string name="loading_start">はじめる</string>
+    <string name="login_description">サービス利用のためにログインしてください。</string>
+    <string name="main_docs_type_1">最近追加</string>
+    <string name="main_docs_type_2">よく使う</string>
+    <string name="main_docs_type_3">共有した</string>
+    <string name="main_docs_type_4">共有された</string>
+    <string name="main_docs_empty">ドキュメントが見つかりません。</string>
+    <string name="docs_modal_delete_description">一度削除したドキュメントは復元できません。</string>
+    <string name="folder_add_title">追加するフォルダ名を書いてください。</string>
+    <string name="folder_add_share_title">共有方法を選択してください。</string>
+    <string name="folder_add_share_description_1">リンク共有はリンクを持っている誰でも見ることができ、</string>
+    <string name="folder_add_share_description_2">メンバー共有は招待された人だけが見ることができ、権限の変更が可能です。</string>
+    <string name="notice_folder_add_1">さんが</string>
+    <string name="notice_folder_add_2">フォルダに追加されました。</string>
+
+    <string name="main_home">ホーム</string>
+    <string name="analytics">統計</string>
+    <string name="main_my_info">マイページ</string>
+
+    <string name="folder">フォルダ</string>
+    <string name="all_info">すべて</string>
+    <string name="notice">お知らせ</string>
+    <string name="share">共有</string>
+    <string name="docs">ドキュメント</string>
+    <string name="add">追加</string>
+    <string name="cancel">キャンセル</string>
+    <string name="delete">削除</string>
+    <string name="title">タイトル</string>
+    <string name="description">内容</string>
+    <string name="account">アカウント</string>
+    <string name="change">変更</string>
+    <string name="quiz">クイズ</string>
+    <string name="notification">通知</string>
+    <string name="setting">設定</string>
+    <string name="inquiry">ヘルプセンター</string>
+    <string name="move">移動</string>
+    <string name="name">名前</string>
+
+    <string name="rename">名前を変更</string>
+
+    <string name="upload_title">新規作成</string>
+    <string name="upload_cloud">アップロード</string>
+    <string name="upload_record">録音</string>
+
+    <string name="keyword_title">単語検索</string>
+    <string name="share_link">リンク共有</string>
+    <string name="share_member">メンバー共有</string>
+
+    <string name="docs_more_title">폴더 삭제 타이틀입니다. 이 값 쓰지 마세요</string>
+    <string name="docs_more_datetime">2001-04-24 오후 14:10</string>
+    <string name="docs_more_move_docs">폴더 이동</string>
+    <string name="docs_more_delete_docs">문서 삭제</string>
+
+    <string name="profile_title">マイページ</string>
+    <string name="profile_account_username">山田太郎</string>
+    <string name="profile_account_code">アカウントコード</string>
+    <string name="profile_alert_setting">通知設定</string>
+    <string name="profile_inquiry">ヘルプ</string>
+    <string name="profile_clean_data">キャッシュを消去</string>
+    <string name="profile_service_info">サービス情報</string>
+    <string name="profile_confirm">受付</string>
+
+    <string name="theme_mode">テーマモード</string>
+
+    <string name="profile_inquiry_send">受付</string>
+    <string name="profile_inquiry_description_hint">内容を書いてください。</string>
+
+    <string name="profile_service_info_1_title">Globaサービス利用規約</string>
+    <string name="profile_service_info_1_description">Globaサービス利用規約を読む</string>
+
+    <string name="profile_service_info_2_title">プライバシーポリシー</string>
+    <string name="profile_service_info_2_description">モバイルプライバシーポリシーを読む</string>
+
+    <string name="profile_service_info_3_title">アプリのバージョン</string>
+    <string name="profile_service_info_3_description">0.0.1</string>
+
+    <string name="profile_service_info_4_title">オープンソースライセンス</string>
+    <string name="profile_service_info_4_description">オープンソースソフトウェアに関するライセンス詳細</string>
+
+    <string name="main_delete_folder_modal_description">一度削除したフォルダは復元できません。</string>
+    <string name="main_delete_docs_modal_description">一度削除したドキュメントは復元できません。</string>
+
+    <string name="profile_alert_1_title">アップロード通知</string>
+    <string name="profile_alert_1_description">アップロードの進行状況または完了ステータスに関する通知が発生します。</string>
+
+    <string name="profile_alert_2_title">共有通知</string>
+    <string name="profile_alert_2_description">共有参加、離脱、内部修正に関する情報に関する通知が発生します。</string>
+
+    <string name="profile_alert_3_title">イベント通知</string>
+    <string name="profile_alert_3_description">様々なイベント、特典などのマーケティング関連の通知が発生します。</string>
+
+    <string name="folder_current">最近使用したフォルダ</string>
+    <string name="folder_permission_title">権限変更</string>
+
+    <string name="folder_share_type_title">共有方法を選択してください。</string>
+    <string name="folder_share_type_description">リンク共有はリンクを持っている誰でも見ることができ、\nメンバー共有は招待された人だけが見ることができ、権限の変更が可能です。</string>
+
+    <string name="profile_clean_data_modal_description">録音されたすべての音声を削除します。\n削除された録音ファイルは元に戻すことができません。</string>
+    <string name="activity_docs_name_edit_title">ファイル名を書いてください。</string>
+    <string name="activity_docs_statistics_title">視覚化資料を見る</string>
+    <string name="activity_nickname_edit_title">ファイル名を書いてください。</string>
+    <string name="activity_docs_upload_description">説明(任意)</string>
+    <string name="activity_docs_upload_share_confirm">アップロード</string>
+    <string name="activity_folder_add_title">ファイル名を書いてください。</string>
+    <string name="activity_folder_name_edit_title">ファイル名を書いてください。</string>
+    <string name="activity_login_kakao">Kakaoで　つずく</string>
+    <string name="activity_login_naver">Naverで　つずく</string>
+    <string name="activity_login_google">Googleで つずく</string>
+    <string name="activity_login_twitter">Twitterで つずく</string>
+    <string name="activity_folder_share_title">共有するメンバーを選択してください。</string>
+    <string name="activity_folder_share_confirm">適用</string>
+    <string name="item_folder_permission_spinner_title">読み取り</string>
+    <string name="activity_quiz_result_description">やったー！</string>
+    <string name="activity_quiz_result_score_title">最終スコア</string>
+    <string name="activity_quiz_result_count_title">正解数</string>
+    <string name="dialog_comment_title">コメント</string>
+    <string name="dialog_comment_hint">コメントを残す</string>
+    <string name="dialog_delete_comment_title">コメントを削除しますか？</string>
+    <string name="dialog_delete_comment_description">一度削除したコメントは復元できません。</string>
+    <string name="item_notification_share_title">さんが次のフォルダに招待しました。</string>
+    <string name="item_notification_share_description">内容です。</string>
+    <string name="item_notification_share_cancel">拒否</string>
+    <string name="item_notification_share_confirm">承諾</string>
+
+    <string name="activity_docs_statistics_title_word">시각화 자료</string>
+    <string name="activity_docs_statistics_title_time">학습 시간</string>
+    <string name="activity_docs_statistics_title_score">학습 성적</string>
+
+    <string name="twitter_consumer_key">289VE8u31zKqPX9tJGSTbR9ce</string>
+    <string name="twitter_consumer_secret">H2zuCbYUOkNDkxX0cCoP0bZ4NPFpVPp3i6Smgp78cp31VdDxeJ</string>
+
+    <!-- 개인정보 처리 약관 -->
+    <string name="conditions_title">개인정보처리방침</string>
+    <string name="conditions_title_no1">제 1조 (목적)</string>
+    <string name="conditions_title_no2">제 2조 (개인정보 처리의 원칙)</string>
+    <string name="conditions_title_no3">제 3조 (본 방침의 공개)</string>
+    <string name="conditions_title_no4">제 4조 (본 방침의 변경)</string>
+
+    <string name="conditions_details_no1">Globa(이하 ‘회사’라고 함)는 회사가 제공하고자 하는 서비스(이하 ‘회사 서비스’)를 이용하는 개인(이하 ‘이용자’ 또는 ‘개인’)의 정보(이하 ‘개인정보’)를 보호하기 위해, 개인정보보호법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률(이하 ‘정보통신망법’) 등 관련 법령을 준수하고, 서비스 이용자의 개인정보 보호 관련한 고충을 신속하고 원할하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보처리방침(이하 ‘본 방침’)을 수립합니다.</string>
+    <string name="conditions_details_no2">개인정보 관련 법령 및 본 방침에 따라 회사는 이용자의 개인정보를 수집할 수 있으며 수집된 개인정보는 개인의 동의가 있는 경우에 한해 제3자에게 제공될 수 있습니다. 단, 법령의 규정 등에 의해 적법하게 강제되는 경우 회사는 수집한 이용자의 개인정보를 사전에 개인의 동의 없이 제3자에게 제공할 수도 있습니다.</string>
+    <string name="conditions_details_no3_1">회사는 이용자가 언제든지 쉽게 본 방침을 확인할 수 있도록 회사 홈페이지 첫 화면 또는 첫 화면과의 연결화면을 통해 본 방침을 공개하고 있습니다.</string>
+    <string name="conditions_details_no3_2">회사는 제 1항에 따라 본 방침을 공개하는 경우 글자 크기, 색상 등을 활용하여 이용자가 본 방침을 쉽게 확인할 수 있도록 합니다.</string>
+    <string name="conditions_details_no4_1">본 방침은 개인정보 관련 법령, 지침, 고시 또는 정부나 회사 서비스의 정책이나 내용의 변경에 따라 개정될 수 있습니다.</string>
+    <string name="conditions_details_no4_2">회사는 제 1항에 따라 본 방침을 개정하는 경우 다음 각 호 하나 이상의 방법으로 공지합니다.</string>
+    <string name="conditions_details_no4_2_a">회사가 운영하는 인터넷 홈페이지의 첫 화면의 공지사항란 또는 별도의 창을 통하여 공지하는 방법</string>
+    <string name="conditions_details_no4_2_b">서면 · 모사전송 · 전자우편 또는 이와 비슷한 방법으로 공지하는 방법</string>
+    <string name="conditions_details_no4_3">회사는 제 2항의 공지는 본 방침 개정의 시행일로부터 최소 7일 이전에 공지합니다. 다만, 이용자 권리의 중요한 변경이 있을 경우에는 최소 30일 전에 공지합니다.</string>
+    <string name="conditions_details_no4_3_a">필수 수집 정보 : 이름, 닉네임</string>
+    <string name="conditions_details_no4_3_b">선택 수집 정보 : 프로필 사진</string>
+
+    <string name="folderadd_dialog_title">共有方法を選択してください。</string>
+    <string name="folderadd_dialog_detail">リンク共有はリンクを持つ誰でも見ることができ、\nメンバー共有は招待された人だけが見ることができ、権限の修正ができます。</string>
+    <string name="foldershare_dialog_title">権限を選択してください。</string>
+
+    <string name="foldershare_dialog_read">読み取り権限</string>
+    <string name="foldershare_dialog_write">書き込み権限</string>
+
+    <string name="activity_folder_move_change_select">フォルダを選択してください。</string>
+    <string name="fragment_folder_inside_title">タイトルをもっと短く書いてください。</string>
+
+    <string name="activity_docs_move_title">2024-03-12 회의록</string>
+    <string name="activity_docs_move_datetime">2024-03-12 오후 11:07</string>
+
+    <string name="item_main_document_processing">要約中..</string>
+
+    <string name="activity_theme_light_title">ライトモード</string>
+    <string name="activity_theme_dark_title">ダークモード</string>
+    <string name="activity_theme_system_title">システム設定と同じに</string>
+
+    <string name="activity_docs_summary_title">要約</string>
+    <string name="activity_docs_time_start"> </string>
+    <string name="activity_docs_time_end">ダウンロード中...</string>
+
+    <string name="activity_search_currently">ヒストリー</string>
+</resources>

@@ -81,7 +81,7 @@
             android:layout_margin="4dp"
             android:textColor="@color/black"
             android:background="@drawable/main_button"
-            tools:text="@string/activity_docs_summary_title"
+            android:text="@string/activity_docs_summary_title"
             android:layout_weight="1"
             style="@style/GlobaButton"/>
     </LinearLayout>

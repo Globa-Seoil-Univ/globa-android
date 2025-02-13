@@ -63,7 +63,7 @@ import team.y2k2.globa.api.model.request.DocsNameEditRequest;
 import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 
 public interface ApiService {
-    String API_BASE_URL = "https://globa.tetraplace.com";
+    String API_BASE_URL = "http://192.168.219.111";
     /**
      * 토큰 갱신
      */

@@ -4,17 +4,17 @@
     <item
         android:id="@+id/item_main_main"
         android:icon="@drawable/nav_item_main"
-        android:title="메인" />
+        android:title="@string/main_home" />
 
     <item
         android:id="@+id/item_main_folder"
         android:icon="@drawable/folder_detail"
-        android:title="폴더" />
+        android:title="@string/folder" />
 
     <item
         android:id="@+id/item_main_upload"
         android:icon="@drawable/upload"
-        android:title="업로드" />
+        android:title="@string/upload_cloud" />
 
     <item
         android:id="@+id/item_main_statistics"
@@ -24,6 +24,6 @@
     <item
         android:id="@+id/item_main_profile"
         android:icon="@drawable/nav_item_info"
-        android:title="내 정보" />
+        android:title="@string/main_my_info" />
 
 </menu>
