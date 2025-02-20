@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="@string/profile_inquiry_description_hint"
+            android:hint="@string/input_title"
             android:layout_below="@+id/textview_inquiry_title"/>
 
         <TextView
@@ -106,7 +106,7 @@
             android:layout_height="320dp"
             android:layout_marginTop="10dp"
             android:gravity="top"
-            android:hint="@string/profile_inquiry_description_hint"
+            android:hint="@string/input_description"
             android:layout_below="@+id/textview_inquiry_description"
             android:background="@null"/>
     </RelativeLayout>

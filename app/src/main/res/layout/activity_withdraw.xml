@@ -123,7 +123,7 @@
         android:id="@+id/edittext_withdraw_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="내용을 입력해주세요"
+        android:hint="@string/input_description"
         android:textColorHint="@color/lightGray"
         android:fontFamily="@font/notosans_regular"
         android:textSize="@dimen/large"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">グローバ</string>
+    <string name="app_name">Globa</string>
 
     <string name="delete_confirmation_message">本当に消しますか？</string>
 
@@ -42,6 +42,14 @@
     <string name="inquiry">ヘルプセンター</string>
     <string name="move">移動</string>
     <string name="name">名前</string>
+    <string name="statistics">統計</string>
+    <string name="etcetera">その他</string>
+    <string name="signout">ログアウト</string>
+    <string name="withdraw">アカウント削除</string>
+    <string name="score">点</string>
+    <string name="count">箇</string>
+    <string name="modify">修整</string>
+    <string name="read">読み</string>
 
     <string name="rename">名前を変更</string>
 
@@ -52,11 +60,13 @@
     <string name="keyword_title">単語検索</string>
     <string name="share_link">リンク共有</string>
     <string name="share_member">メンバー共有</string>
+    <string name="setting_docs">文書設定</string>
+    <string name="permission_management">権限を管理</string>
 
     <string name="docs_more_title">폴더 삭제 타이틀입니다. 이 값 쓰지 마세요</string>
-    <string name="docs_more_datetime">2001-04-24 오후 14:10</string>
-    <string name="docs_more_move_docs">폴더 이동</string>
-    <string name="docs_more_delete_docs">문서 삭제</string>
+    <string name="docs_more_datetime">2001-04-24 午後 14:10</string>
+    <string name="docs_more_move_docs">フォルダ移動</string>
+    <string name="docs_more_delete_docs">ドキュメントを削除</string>
 
     <string name="profile_title">マイページ</string>
     <string name="profile_account_username">山田太郎</string>
@@ -67,10 +77,12 @@
     <string name="profile_service_info">サービス情報</string>
     <string name="profile_confirm">受付</string>
 
+    <string name="input_title">題目を書いてください。</string>
+    <string name="input_description">内容を書いてください。</string>
+
     <string name="theme_mode">テーマモード</string>
 
     <string name="profile_inquiry_send">受付</string>
-    <string name="profile_inquiry_description_hint">内容を書いてください。</string>
 
     <string name="profile_service_info_1_title">Globaサービス利用規約</string>
     <string name="profile_service_info_1_description">Globaサービス利用規約を読む</string>
@@ -129,9 +141,10 @@
     <string name="item_notification_share_cancel">拒否</string>
     <string name="item_notification_share_confirm">承諾</string>
 
-    <string name="activity_docs_statistics_title_word">시각화 자료</string>
-    <string name="activity_docs_statistics_title_time">학습 시간</string>
-    <string name="activity_docs_statistics_title_score">학습 성적</string>
+    <string name="activity_docs_statistics_title_word">視覚化資料</string>
+    <string name="activity_docs_statistics_title_time">学習時間</string>
+    <string name="activity_docs_statistics_title_score">学習成績</string>
+    <string name="fragment_statistics_title_word">キーワード重要度</string>
 
     <string name="twitter_consumer_key">289VE8u31zKqPX9tJGSTbR9ce</string>
     <string name="twitter_consumer_secret">H2zuCbYUOkNDkxX0cCoP0bZ4NPFpVPp3i6Smgp78cp31VdDxeJ</string>
@@ -165,8 +178,8 @@
     <string name="activity_folder_move_change_select">フォルダを選択してください。</string>
     <string name="fragment_folder_inside_title">タイトルをもっと短く書いてください。</string>
 
-    <string name="activity_docs_move_title">2024-03-12 회의록</string>
-    <string name="activity_docs_move_datetime">2024-03-12 오후 11:07</string>
+    <string name="activity_docs_move_title">2024-03-12 会議録</string>
+    <string name="activity_docs_move_datetime">2024-03-12 午後 11:07</string>
 
     <string name="item_main_document_processing">要約中..</string>
 
@@ -179,4 +192,28 @@
     <string name="activity_docs_time_end">ダウンロード中...</string>
 
     <string name="activity_search_currently">ヒストリー</string>
+    <string name="activity_search_keyword">キーワード作成</string>
+    <string name="activity_folder_add_input_name">ファイル名</string>
+    <string name="activity_fonder_add_input_share">ユーザーコード(6桁)</string>
+    <string name="activity_docs_more_statistics">視覚化資料を見る</string>
+    <string name="activity_docs_more_quiz">クイズ解き</string>
+
+    <string name="activity_quiz_result_empty">クイズをもう一度解くと、上昇率をお知らせします。</string>
+    <string name="activity_quiz_result_last_corrected_1">前回の成績より</string>
+    <string name="activity_quiz_result_last_corrected_2">点上がりました。</string>
+    <string name="activity_quiz_result_last_corrected_3">点点下がりました。</string>
+    <string name="activity_quiz_result_last_corrected_4">この前と成績が同じです。</string>
+    <string name="activity_quiz_result_last_score_zero">この前の成績が0点ですね。。。</string>
+
+    <string name="fragment_share_notification_2_1">さんが </string>
+    <string name="fragment_share_notification_2_2">フォルダ共有招待を送信しました。</string>
+
+    <string name="fragment_share_notification_3_1">さんが共有フォルダに文書を追加しました。</string>
+    <string name="fragment_share_notification_3_2">が追加。</string>
+
+    <string name="fragment_share_notification_4_1">フォルダに</string>
+    <string name="fragment_share_notification_4_2">さんが招待されました。</string>
+
+    <string name="fragment_share_notification_5_1">さんが </string>
+    <string name="fragment_share_notification_5_2">にコメントを追加しました。</string>
 </resources>

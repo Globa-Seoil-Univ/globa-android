@@ -58,7 +58,7 @@
         android:id="@+id/edittext_foldershare_inputname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="유저 코드 6글자 입력"
+        android:hint="@string/activity_fonder_add_input_share"
         android:textColorHint="@color/lightGray"
         android:textSize="@dimen/normal"
         android:fontFamily="@font/notosans_regular"

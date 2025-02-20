@@ -97,7 +97,7 @@ public class ShareFragment extends Fragment {
         isRead = notification.isRead();
         switch (notificationType) {
             case "2" :
-                title = notification.getUser().getName() + "님이 " + notification.getFolder().getTitle() + " 폴더 공유 초대를 보냈습니다.";
+                title = notification.getUser().getName() + getString(R.string.fragment_share_notification_2_1) + notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_2_2);
                 content = "";
                 String folderId = notification.getFolder().getFolderId();
                 String shareId = notification.getShare().getShareId();
@@ -105,19 +105,19 @@ public class ShareFragment extends Fragment {
                 shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, folderId, shareId, "2", isRead));
                 break;
             case "3" :
-                title = notification.getUser().getName() + "님이 공유 폴더에 문서를 추가하였습니다.";
-                content = notification.getRecord().getTitle() + "가 추가됨";
+                title = notification.getUser().getName() + getString(R.string.fragment_share_notification_3_1);
+                content = notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_3_2);
                 Log.d("공유 알림", "공유 알림(3번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                 shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "3", isRead));
                 break;
             case "4" :
-                title = notification.getFolder().getTitle() + "폴더에 " + notification.getUser().getName() + "님이 초대되었습니다.";
+                title = notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_4_1) + notification.getUser().getName() + getString(R.string.fragment_share_notification_4_2);
                 content = "";
                 Log.d("공유 알림", "공유 알림(4번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                 shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "4", isRead));
                 break;
             case "5" :
-                title = notification.getUser().getName() + "님이 " + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + "에 댓글을 추가하였습니다.";
+                title = notification.getUser().getName() + getString(R.string.fragment_share_notification_5_1) + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_5_2);
                 content = notification.getComment().getContent();
                 Log.d("공유 알림", "공유 알림(5번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                 shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "5", isRead));

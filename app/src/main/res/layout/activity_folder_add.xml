@@ -57,7 +57,7 @@
         android:id="@+id/edittext_folderadd_inputname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="폴더명 입력"
+        android:hint="@string/activity_folder_add_input_name"
         android:textColorHint="@color/gray"
         android:textSize="@dimen/normal"
         android:fontFamily="@font/notosans_regular"
@@ -84,13 +84,13 @@
         android:id="@+id/textview_folderadd_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="0/32"
         android:fontFamily="@font/notosans_regular"
         android:textSize="13sp"
         android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="@id/button_folderadd_cancel"
         app:layout_constraintStart_toStartOf="@id/button_folderadd_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname" />
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
+        tools:text="0/32" />
 
     <TextView
         android:id="@+id/textview_folderadd_share_title"
@@ -109,7 +109,7 @@
         android:id="@+id/edittext_folderadd_share_inputname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="유저 코드 6글자 입력"
+        android:hint="@string/activity_fonder_add_input_share"
         android:textColorHint="@color/lightGray"
         android:textSize="@dimen/normal"
         android:fontFamily="@font/notosans_regular"
@@ -159,7 +159,6 @@
             android:id="@+id/textview_folderadd_share_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text=""
             android:fontFamily="@font/notosans_regular"
             android:textSize="@dimen/large"
             android:textColor="@color/black"

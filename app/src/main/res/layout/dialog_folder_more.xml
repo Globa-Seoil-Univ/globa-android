@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/modal_background">
 
     <RelativeLayout
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/docs_more_title"
+            tools:text="@string/docs_more_title"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             android:textStyle="bold" />
@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:text="공유"
+                android:text="@string/share"
                 android:textColor="@color/black"
                 android:layout_toEndOf="@+id/imagebutton_more_move"/>
         </RelativeLayout>
@@ -132,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:text="권한 관리"
+                android:text="@string/permission_management"
                 android:textColor="@color/black"
                 android:layout_toEndOf="@+id/imagebutton_more_authority"/>
         </RelativeLayout>

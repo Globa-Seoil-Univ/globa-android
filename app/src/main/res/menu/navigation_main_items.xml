@@ -19,7 +19,7 @@
     <item
         android:id="@+id/item_main_statistics"
         android:icon="@drawable/statistics"
-        android:title="통계" />
+        android:title="@string/statistics" />
 
     <item
         android:id="@+id/item_main_profile"

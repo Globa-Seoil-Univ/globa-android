@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="문서 설정"
+            android:text="@string/setting_docs"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
@@ -98,7 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="문서"
+        android:text="@string/docs"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -229,7 +229,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="기타"
+        android:text="@string/etcetera"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -257,7 +257,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="시각화 자료 보기"
+            android:text="@string/activity_docs_more_statistics"
             android:textColor="@color/black"
             android:layout_toEndOf="@+id/imagebutton_docs_more_statistics"/>
     </RelativeLayout>
@@ -283,7 +283,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="퀴즈 풀기"
+            android:text="@string/activity_docs_more_quiz"
             android:textColor="@color/black"
             android:layout_toEndOf="@+id/imagebutton_docs_more_quiz"/>
     </RelativeLayout>

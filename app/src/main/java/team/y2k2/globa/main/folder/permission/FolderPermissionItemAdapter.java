@@ -110,7 +110,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
             name = itemView.findViewById(R.id.textview_folder_permission_name);
             profileImage = itemView.findViewById(R.id.imageview_folder_permission_profile_image);
 
-            adapter = new FolderPermissionSpinnerAdapter(itemView.getContext(), model.getOptions());
+            adapter = new FolderPermissionSpinnerAdapter(itemView.getContext(), model.getOptions(itemView.getContext()));
             spinner.setAdapter(adapter);
             spinner.setDropDownVerticalOffset(5);
 

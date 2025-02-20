@@ -35,7 +35,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/darkGray"
             android:background="@null"
-            android:hint="키워드 입력"/>
+            android:hint="@string/activity_search_keyword"/>
 
     </LinearLayout>
 

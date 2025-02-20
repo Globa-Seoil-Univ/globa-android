@@ -133,7 +133,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:hint="제목 작성"
+        android:hint="@string/input_title"
         android:textSize="@dimen/large"
         android:background="@null"
         android:maxLength="32"
