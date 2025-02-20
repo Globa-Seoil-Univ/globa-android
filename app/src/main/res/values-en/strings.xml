@@ -1,0 +1,218 @@
+<resources>
+    <string name="app_name">Globa</string>
+
+    <string name="delete_confirmation_message">Are you sure you want to delete?</string>
+
+    <string name="loading_title">Voice to Text by Globa</string>
+    <string name="loading_subtitle">Converts all voices to text, summarizes them, and makes them easy for users to view.</string>
+    <string name="loading_start">Get Started</string>
+    <string name="login_description">Please log in for smooth service use.</string>
+    <string name="main_docs_type_1">Recently</string>
+    <string name="main_docs_type_2">Frequently</string>
+    <string name="main_docs_type_3">Shared</string>
+    <string name="main_docs_type_4">Sharing</string>
+    <string name="main_docs_empty">Documents not found.</string>
+    <string name="docs_modal_delete_description">Deleted documents cannot be recovered.</string>
+    <string name="folder_add_title">Please enter the folder name to add.</string>
+    <string name="folder_add_share_title">Please select a sharing method.</string>
+    <string name="folder_add_share_description_1">Link sharing allows anyone with the link to view it,</string>
+    <string name="folder_add_share_description_2">Member sharing allows only invited people to view it and change permissions.</string>
+    <string name="notice_folder_add_1">added you to the</string>
+    <string name="notice_folder_add_2">folder.</string>
+
+    <string name="main_home">Home</string>
+    <string name="analytics">Statistics</string>
+    <string name="main_my_info">My Info</string>
+
+    <string name="folder">Folder</string>
+    <string name="all_info">All</string>
+    <string name="notice">Notice</string>
+    <string name="share">Share</string>
+    <string name="docs">Documents</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="account">Account</string>
+    <string name="change">Change</string>
+    <string name="quiz">Quiz</string>
+    <string name="notification">Notification</string>
+    <string name="setting">Setting</string>
+    <string name="inquiry">Inquiry</string>
+    <string name="move">Move</string>
+    <string name="name">Name</string>
+    <string name="statistics">Statistics</string>
+    <string name="etcetera">Etcetera</string>
+    <string name="signout">Sign Out</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="score">Score</string>
+    <string name="count">Count</string>
+    <string name="modify">Modify</string>
+    <string name="read">Read</string>
+
+    <string name="rename">Rename</string>
+
+    <string name="upload_title">Create New</string>
+    <string name="upload_cloud">Upload</string>
+    <string name="upload_record">Record</string>
+
+    <string name="keyword_title">Keyword Search</string>
+    <string name="share_link">Share Link</string>
+    <string name="share_member">Share Member</string>
+    <string name="setting_docs">Document Settings</string>
+    <string name="permission_management">Permission Management</string>
+
+    <string name="docs_more_title">Folder deletion title. Do not use this value</string>
+    <string name="docs_more_datetime">2001-04-24 14:10</string>
+    <string name="docs_more_move_docs">Move Folder</string>
+    <string name="docs_more_delete_docs">Delete Document</string>
+
+    <string name="profile_title">My Info</string>
+    <string name="profile_account_username">John Doe</string>
+    <string name="profile_account_code">User Code</string>
+    <string name="profile_alert_setting">Alert Settings</string>
+    <string name="profile_inquiry">Inquiry</string>
+    <string name="profile_clean_data">Delete Temporary Space</string>
+    <string name="profile_service_info">Service Info</string>
+    <string name="profile_confirm">Receipt</string>
+
+    <string name="input_title">Please enter the title.</string>
+    <string name="input_description">Please enter the description.</string>
+
+    <string name="theme_mode">Theme Mode</string>
+
+    <string name="profile_inquiry_send">Receipt</string>
+
+    <string name="profile_service_info_1_title">Globa Service Terms</string>
+    <string name="profile_service_info_1_description">Read Globa Service Terms</string>
+
+    <string name="profile_service_info_2_title">Privacy Policy</string>
+    <string name="profile_service_info_2_description">Read Mobile Privacy Policy</string>
+
+    <string name="profile_service_info_3_title">App Version</string>
+    <string name="profile_service_info_3_description">0.0.1</string>
+
+    <string name="profile_service_info_4_title">Open Source License</string>
+    <string name="profile_service_info_4_description">License details for open source software</string>
+
+    <string name="main_delete_folder_modal_description">Deleted folders cannot be recovered.</string>
+    <string name="main_delete_docs_modal_description">Deleted documents cannot be recovered.</string>
+
+    <string name="profile_alert_1_title">Upload Alert</string>
+    <string name="profile_alert_1_description">Notifications will be sent for upload progress or completion status.</string>
+
+    <string name="profile_alert_2_title">Share Alert</string>
+    <string name="profile_alert_2_description">Notifications will be sent for share participation, withdrawal, and internal modifications.</string>
+
+    <string name="profile_alert_3_title">Event Alert</string>
+    <string name="profile_alert_3_description">Notifications will be sent for various events, benefits, and marketing related information.</string>
+
+    <string name="folder_current">Recently Used Folders</string>
+    <string name="folder_permission_title">Change Permissions</string>
+
+    <string name="folder_share_type_title">Please select a sharing method.</string>
+    <string name="folder_share_type_description">Link sharing allows anyone with the link to view it,\nMember sharing allows only invited people to view it and change permissions.</string>
+
+    <string name="profile_clean_data_modal_description">Deletes all audio saved through Globa recordings.\nDeleted recordings cannot be recovered.</string>
+    <string name="activity_docs_name_edit_title">Please enter the name to change.</string>
+    <string name="activity_docs_statistics_title">Visualization Data</string>
+    <string name="activity_nickname_edit_title">Please enter the name to change.</string>
+    <string name="activity_docs_upload_description">Description (optional)</string>
+    <string name="activity_docs_upload_share_confirm">Upload</string>
+    <string name="activity_folder_add_title">Please enter the name of the folder to add.</string>
+    <string name="activity_folder_name_edit_title">Please enter the folder name to change.</string>
+    <string name="activity_login_kakao">Continue with Kakao</string>
+    <string name="activity_login_naver">Continue with Naver</string>
+    <string name="activity_login_google">Continue with Google</string>
+    <string name="activity_login_twitter">Continue with Twitter</string>
+    <string name="activity_folder_share_title">Please select the members to share with.</string>
+    <string name="activity_folder_share_confirm">Apply</string>
+    <string name="item_folder_permission_spinner_title">Read</string>
+    <string name="activity_quiz_result_description">You\'ve solved all the problems!</string>
+    <string name="activity_quiz_result_score_title">Final Score</string>
+    <string name="activity_quiz_result_count_title">Correct Answers</string>
+    <string name="dialog_comment_title">Comment</string>
+    <string name="dialog_comment_hint">Leave a comment</string>
+    <string name="dialog_delete_comment_title">Delete comment?</string>
+    <string name="dialog_delete_comment_description">Deleted comments cannot be recovered.</string>
+    <string name="item_notification_share_title">invited you to the following folder.</string>
+    <string name="item_notification_share_description">This is the content.</string>
+    <string name="item_notification_share_cancel">Reject</string>
+    <string name="item_notification_share_confirm">Accept</string>
+
+    <string name="activity_docs_statistics_title_word">Visualization Data</string>
+    <string name="activity_docs_statistics_title_time">Learning Time</string>
+    <string name="activity_docs_statistics_title_score">Learning Score</string>
+    <string name="fragment_statistics_title_word">Keyword Importance</string>
+
+    <string name="twitter_consumer_key">289VE8u31zKqPX9tJGSTbR9ce</string>
+    <string name="twitter_consumer_secret">H2zuCbYUOkNDkxX0cCoP0bZ4NPFpVPp3i6Smgp78cp31VdDxeJ</string>
+
+    <string name="conditions_title">Privacy Policy</string>
+    <string name="conditions_title_no1">Article 1 (Purpose)</string>
+    <string name="conditions_title_no2">Article 2 (Principles of Personal Information Processing)</string>
+    <string name="conditions_title_no3">Article 3 (Disclosure of this Policy)</string>
+    <string name="conditions_title_no4">Article 4 (Changes to this Policy)</string>
+
+    <string name="conditions_details_no1">Globa (hereinafter referred to as \'the Company\') complies with relevant laws such as the Personal Information Protection Act, the Act on Promotion of Information and Communications Network Utilization and Information Protection, etc. (hereinafter referred to as the \'Information Network Act\'), and establishes the following Privacy Policy (hereinafter referred to as \'this Policy\') to promptly and smoothly handle service users\' grievances related to personal information protection, in order to protect the information (hereinafter referred to as \'personal information\') of individuals (hereinafter referred to as \'users\' or \'individuals\') using the services (hereinafter referred to as \'Company Services\') that the Company intends to provide.</string>
+    <string name="conditions_details_no2">According to the personal information related laws and this policy, the company can collect user\'s personal information, and the collected personal information can be provided to a third party only with the consent of the individual. However, if legally compelled by laws and regulations, the company may provide the collected user\'s personal information to a third party without prior individual consent.</string>
+    <string name="conditions_details_no3_1">The company discloses this policy on the first screen of the company\'s website or through a linked screen from the first screen so that users can easily check this policy at any time.</string>
+    <string name="conditions_details_no3_2">When disclosing this policy according to paragraph 1, the company makes it easy for users to check this policy by utilizing font size and color.</string>
+    <string name="conditions_details_no4_1">This policy can be revised according to changes in personal information related laws, guidelines, notices, or government or company service policies or content.</string>
+    <string name="conditions_details_no4_2">If the company revises this policy according to paragraph 1, it will be announced by one or more of the following methods:</string>
+    <string name="conditions_details_no4_2_a">Method of announcing through the notice board on the first screen of the company\'s website or through a separate window</string>
+    <string name="conditions_details_no4_2_b">Method of announcing in writing, facsimile transmission, e-mail, or similar method</string>
+    <string name="conditions_details_no4_3">The company announces the announcement in paragraph 2 at least 7 days before the effective date of the revision of this policy. However, in the event of a significant change in user rights, it will be announced at least 30 days in advance.</string>
+    <string name="conditions_details_no4_3_a">Required Collection Information: Name, Nickname</string>
+    <string name="conditions_details_no4_3_b">Optional Collection Information: Profile Picture</string>
+
+    <string name="folderadd_dialog_title">Please select a sharing method.</string>
+    <string name="folderadd_dialog_detail">Link sharing allows anyone with the link to view it,\nMember sharing allows only invited people to view it and change permissions.</string>
+    <string name="foldershare_dialog_title">Please select permissions.</string>
+
+    <string name="foldershare_dialog_read">Read Permission</string>
+    <string name="foldershare_dialog_write">Write Permission</string>
+
+    <string name="activity_folder_move_change_select">Please select the folder to change.</string>
+    <string name="fragment_folder_inside_title">This is a very long title.</string>
+
+    <string name="activity_docs_move_title">2024-03-12 Meeting Minutes</string>
+    <string name="activity_docs_move_datetime">2024-03-12 11:07 PM</string>
+
+    <string name="item_main_document_processing">Summarizing..</string>
+
+    <string name="activity_theme_light_title">Light Mode</string>
+    <string name="activity_theme_dark_title">Dark Mode</string>
+    <string name="activity_theme_system_title">Same as system settings</string>
+
+    <string name="activity_docs_summary_title">Summary</string>
+    <string name="activity_docs_time_start"></string>
+    <string name="activity_docs_time_end">Downloading...</string>
+
+    <string name="activity_search_currently">Recent Searches</string>
+    <string name="activity_search_keyword">Enter Keyword</string>
+    <string name="activity_folder_add_input_name">Folder Name</string>
+    <string name="activity_fonder_add_input_share">User Code (6 digits)</string>
+    <string name="activity_docs_more_statistics">View Visualization Data</string>
+    <string name="activity_docs_more_quiz">Take Quiz</string>
+
+    <string name="activity_quiz_result_empty">If you retake the quiz, we will show you the increase rate.</string>
+    <string name="activity_quiz_result_last_corrected_1">Compared to your last score,</string>
+    <string name="activity_quiz_result_last_corrected_2">points increased.</string>
+    <string name="activity_quiz_result_last_corrected_3">points decreased.</string>
+    <string name="activity_quiz_result_last_corrected_4">It\'s the same as your last score.</string>
+    <string name="activity_quiz_result_last_score_zero">Your last score was 0 points...</string>
+
+    <string name="fragment_share_notification_2_1"> sent you a folder sharing invitation.</string>
+    <string name="fragment_share_notification_2_2"></string>
+
+    <string name="fragment_share_notification_3_1"></string>
+    <string name="fragment_share_notification_3_2"> added a document to the shared folder.</string>
+
+    <string name="fragment_share_notification_4_1"></string>
+    <string name="fragment_share_notification_4_2"> have been invited to the folder.</string>
+
+    <string name="fragment_share_notification_5_1"></string>
+    <string name="fragment_share_notification_5_2"> Added a comment.</string>
+</resources>
