@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_folderadd_header"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="71dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,13 +24,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="20dp" />
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/textview_folder_add_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="추가"
+            android:text="@string/add"
             android:fontFamily="@font/notosans_regular"
             android:textColor="@color/gray"
             android:textSize="20sp"
@@ -45,8 +45,8 @@
         android:id="@+id/textview_folderadd_announce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="추가할 폴더의 이름을 입력해주세요"
-        android:textSize="@dimen/big"
+        android:text="@string/folder_add_title"
+        android:textSize="20sp"
         android:fontFamily="@font/notosans_bold"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
         android:id="@+id/edittext_folderadd_inputname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="폴더명 입력"
+        android:hint="@string/activity_folder_add_input_name"
         android:textColorHint="@color/gray"
         android:textSize="@dimen/normal"
         android:fontFamily="@font/notosans_regular"
@@ -78,26 +78,25 @@
         app:layout_constraintEnd_toEndOf="@id/edittext_folderadd_inputname"
         app:layout_constraintTop_toTopOf="@id/edittext_folderadd_inputname"
         app:layout_constraintBottom_toBottomOf="@id/edittext_folderadd_inputname"
-        android:layout_marginEnd="16dp"
-        android:visibility="gone"/>
+        android:layout_marginEnd="16dp" />
 
     <TextView
         android:id="@+id/textview_folderadd_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0/32"
         android:fontFamily="@font/notosans_regular"
         android:textSize="13sp"
         android:textColor="@color/gray"
-        app:layout_constraintEnd_toEndOf="@id/edittext_folderadd_inputname"
+        app:layout_constraintEnd_toEndOf="@id/button_folderadd_cancel"
+        app:layout_constraintStart_toStartOf="@id/button_folderadd_cancel"
         app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
-        android:layout_marginEnd="12dp"/>
+        tools:text="0/32" />
 
     <TextView
         android:id="@+id/textview_folderadd_share_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="공유할 멤버를 선택해주세요"
+        android:text="@string/activity_folder_share_title"
         android:fontFamily="@font/notosans_bold"
         android:textSize="@dimen/big"
         android:textColor="@color/black"
@@ -110,7 +109,7 @@
         android:id="@+id/edittext_folderadd_share_inputname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="유저 코드 6글자 입력"
+        android:hint="@string/activity_fonder_add_input_share"
         android:textColorHint="@color/lightGray"
         android:textSize="@dimen/normal"
         android:fontFamily="@font/notosans_regular"
@@ -123,7 +122,7 @@
         android:layout_marginTop="16dp"/>
 
     <Button
-        android:id="@+id/button_folderadd_share_cancel"
+        android:id="@+id/button_foldershare_share_cancel"
         android:layout_width="17dp"
         android:layout_height="17dp"
         android:background="@drawable/cancel"
@@ -132,8 +131,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/edittext_folderadd_share_inputname"
         app:layout_constraintEnd_toEndOf="@+id/edittext_folderadd_share_inputname"
         android:layout_marginBottom="4dp"
-        android:layout_marginEnd="10dp"
-        android:visibility="gone" />
+        android:layout_marginEnd="10dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintlayout_folderadd_share_search"
@@ -161,7 +159,6 @@
             android:id="@+id/textview_folderadd_share_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:fontFamily="@font/notosans_regular"
             android:textSize="@dimen/large"
             android:textColor="@color/black"

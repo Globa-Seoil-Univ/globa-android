@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/main_delete_docs_modal_title"
+            android:text="@string/delete_confirmation_message"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             android:textStyle="bold" />
@@ -41,7 +41,7 @@
             android:textColor="@color/darkGray"
             android:layout_below="@+id/textview_delete_folder_title"
             android:layout_marginTop="5dp"
-            android:text="한번 삭제한 폴더는 되돌릴 수 없습니다"
+            android:text="@string/dialog_delete_comment_description"
             android:textSize="@dimen/small"
             />
     </RelativeLayout>

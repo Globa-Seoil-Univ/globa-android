@@ -69,8 +69,8 @@ public class QuizResultActivity extends AppCompatActivity {
         // 띄어줄 점수와 정답 수
         gradeInt = getIntent().getIntExtra("grade", 0);
         correctedInt = getIntent().getIntExtra("correctAnswer", 0);
-        grade = gradeInt + "점";
-        corrected = correctedInt + "개";
+        grade = gradeInt + getString(R.string.score);
+        corrected = correctedInt + getString(R.string.count);
     }
 
     private void setScoreText() {
@@ -97,7 +97,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
         if(allEntries.isEmpty()) {
             // 문제 푼 이력이 없는 경우
-            percentString = "문제를 다시풀면 상승률을 알려드립니다!!";
+            percentString = getString(R.string.activity_quiz_result_empty);
             SpannableStringBuilder percentSpannable = new SpannableStringBuilder(percentString);
             percentSpannable.setSpan(new ForegroundColorSpan(color), 9, 12, 0); // "상승률" 글자에만 색 입히기
             binding.textviewQuizresultPercent.setText(percentSpannable);
@@ -111,7 +111,7 @@ public class QuizResultActivity extends AppCompatActivity {
                 if(gradeInt > lastCorrected) {
                     // 점수 상승 경우
                     different = gradeInt - lastCorrected;
-                    percentString = "지난번 성적보다 " + different + "점 상승했습니다!";
+                    percentString = getString(R.string.activity_quiz_result_last_corrected_1) + " " + different + getString(R.string.activity_quiz_result_last_corrected_2);
                     SpannableStringBuilder percentSpannable = new SpannableStringBuilder(percentString);
                     int percentStartIndex = 9;
                     int percentEndIndex = percentString.length() - 1;
@@ -120,7 +120,7 @@ public class QuizResultActivity extends AppCompatActivity {
                 } else if (gradeInt < lastCorrected) {
                     // 점수 하락 경우
                     different = lastCorrected - gradeInt;
-                    percentString = "지난번 성적보다 " + different + "점 감소했습니다ㅠ";
+                    percentString = getString(R.string.activity_quiz_result_last_corrected_1) + " " + different + getString(R.string.activity_quiz_result_last_corrected_2);
                     SpannableStringBuilder percentSpannable = new SpannableStringBuilder(percentString);
                     int percentStartIndex = 9;
                     int percentEndIndex = percentString.length() - 1;
@@ -128,12 +128,12 @@ public class QuizResultActivity extends AppCompatActivity {
                     binding.textviewQuizresultPercent.setText(percentSpannable);
                 } else {
                     // 점수 동일 경우
-                    percentString = "지난번과 성적이 같습니다!!";
+                    percentString = getString(R.string.activity_quiz_result_last_corrected_4);
                     binding.textviewQuizresultPercent.setText(percentString);
                 }
             } else {
                 // 지난 성적이 0점인 경우
-                percentString = "지난 성적이 0점이군요...";
+                percentString = getString(R.string.activity_quiz_result_last_score_zero);
                 binding.textviewQuizresultPercent.setText(percentString);
             }
             quizResultEditor.putInt("lastGrade", gradeInt);

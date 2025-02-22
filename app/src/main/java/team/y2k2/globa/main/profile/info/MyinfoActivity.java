@@ -166,10 +166,10 @@ public class MyinfoActivity extends AppCompatActivity {
             Log.d("이미지 로드 오류", "profile 값이 null입니다");
         }
 
-        itemList.add(new MyinfoItem("이름", name, R.drawable.arrow_right, new NicknameEditActivity()));
-        itemList.add(new MyinfoItem("계정 코드", code, R.drawable.item_docs_frame, null));
-        itemList.add(new MyinfoItem("로그아웃", "", R.drawable.arrow_right, null));
-        itemList.add(new MyinfoItem("회원탈퇴", "", R.drawable.arrow_right, new WithdrawActivity()));
+        itemList.add(new MyinfoItem(getString(R.string.name), name, R.drawable.arrow_right, new NicknameEditActivity()));
+        itemList.add(new MyinfoItem(getString(R.string.profile_account_code), code, R.drawable.item_docs_frame, null));
+        itemList.add(new MyinfoItem(getString(R.string.signout), "", R.drawable.arrow_right, null));
+        itemList.add(new MyinfoItem(getString(R.string.withdraw), "", R.drawable.arrow_right, new WithdrawActivity()));
 
         // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
         nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {

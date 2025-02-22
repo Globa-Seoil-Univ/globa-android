@@ -40,7 +40,7 @@
             android:id="@+id/textview_folder_permission_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/folder_permission_confirm"
+            android:text="@string/change"
             android:textAlignment="center"
             android:textColor="@color/primary"
             android:textSize="@dimen/normal"

@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/profile_clean_data_modal_title"
+            android:text="@string/profile_clean_data"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             android:textStyle="bold" />

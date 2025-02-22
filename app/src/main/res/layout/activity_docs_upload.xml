@@ -19,7 +19,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@null"
-            android:layout_marginStart="20dp"
+            android:layout_marginLeft="16dp"
             android:layout_centerVertical="true"
             android:src="@drawable/header_back" />
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:layout_marginStart="20dp"
+            android:layout_marginLeft="15dp"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             android:textStyle="bold"
@@ -45,7 +45,7 @@
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginLeft="16dp"
         android:background="@drawable/document_icon_background"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="2024-03-12 오후 11:07"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/darkGray"
         app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
@@ -90,7 +90,7 @@
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginRight="16dp"
         android:background="@drawable/document_play_background"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -119,10 +119,10 @@
         android:id="@+id/textview_docs_upload_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="제목"
+        android:text="@string/title"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_1"
         app:layout_constraintStart_toStartOf="parent"
@@ -132,38 +132,14 @@
         android:id="@+id/edittext_docs_upload_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:hint="제목 작성"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/input_title"
         android:textSize="@dimen/large"
         android:background="@null"
         android:maxLength="32"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_title"
         app:layout_constraintStart_toStartOf="@id/textview_docs_upload_title"
         app:layout_constraintEnd_toEndOf="parent" />
-
-<!--    <TextView-->
-<!--        android:id="@+id/textview_docs_upload_description"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="설명(선택)"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:textColor="@color/black"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/edittext_docs_upload_title"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:textSize="@dimen/small"/>-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/edittext_docs_upload_description"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:hint="설명 추가"-->
-<!--        android:textSize="@dimen/large"-->
-<!--        android:background="@null"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_description"-->
-<!--        app:layout_constraintStart_toStartOf="@id/textview_docs_upload_description"-->
-<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <LinearLayout
         android:id="@+id/linearlayout_docs_upload_border_3"
@@ -179,10 +155,10 @@
         android:id="@+id/textview_docs_upload_folder_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="폴더"
+        android:text="@string/folder"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_3"
         app:layout_constraintStart_toStartOf="parent"
@@ -192,9 +168,9 @@
         android:id="@+id/spinner_docs_upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:padding="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_folder_title"/>
@@ -209,13 +185,37 @@
         app:layout_constraintTop_toBottomOf="@id/spinner_docs_upload"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <TextView
+        android:id="@+id/textview_docs_upload_language_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/language"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_4"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="@dimen/small"/>
+
+    <Spinner
+        android:id="@+id/spinner_docs_upload_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_language_title"/>
+
     <LinearLayout
         android:id="@+id/linearlayout_docs_upload_confirm"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
 
         android:background="@drawable/main_button_selected"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -227,8 +227,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:backgroundTint="@color/twitter"
-            android:text="업로드"
-            android:textSize="16sp"
+            android:text="@string/activity_docs_upload_share_confirm"
+            android:textSize="16dp"
             app:cornerRadius="8dp" />
     </LinearLayout>
 

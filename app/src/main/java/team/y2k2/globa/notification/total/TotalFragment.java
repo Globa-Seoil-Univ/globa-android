@@ -16,6 +16,7 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.api.model.response.NotificationResponse;
@@ -102,15 +103,15 @@ public class TotalFragment extends Fragment {
                 break;
             case "3" :
                 profile = notification.getUser().getProfile();
-                title = notification.getUser().getName() + "님이 공유 폴더에 문서를 추가하였습니다.";
-                content = notification.getRecord().getTitle() + "가 추가됨";
+                title = notification.getUser().getName() + getString(R.string.fragment_share_notification_3_1);
+                content = notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_3_2);
                 Log.d("3번 알림", "공유 폴더 파일 추가 알림(3번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
                         ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "3", isRead));
                 break;
             case "4" :
                 profile = notification.getUser().getProfile();
-                title = notification.getFolder().getTitle() + "폴더에 " + notification.getUser().getName() + "님이 초대되었습니다.";
+                title = notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_4_1) + notification.getUser().getName() + getString(R.string.fragment_share_notification_4_2);
                 content = "";
                 Log.d("4번 알림", "공유 폴더 사람 추가 알림(4번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
                         ", createdTime: " + createdTime + ", isRead: " + isRead);
@@ -118,7 +119,7 @@ public class TotalFragment extends Fragment {
                 break;
             case "5" :
                 profile = notification.getUser().getProfile();
-                title = notification.getUser().getName() + "님이 " + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + "에 댓글을 추가하였습니다.";
+                title = notification.getUser().getName() + getString(R.string.fragment_share_notification_5_1) + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_5_2);
                 content = notification.getComment().getContent();
                 Log.d("5번 알림", "공유 폴더 댓글 추가 알림(5번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
                         ", createdTime: " + createdTime + ", isRead: " + isRead);

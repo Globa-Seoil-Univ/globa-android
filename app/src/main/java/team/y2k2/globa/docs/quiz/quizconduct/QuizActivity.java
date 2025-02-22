@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.y2k2.globa.R;
 import team.y2k2.globa.api.model.entity.Quiz;
 import team.y2k2.globa.api.model.entity.QuizResult;
 import team.y2k2.globa.databinding.ActivityQuizBinding;
@@ -69,7 +70,7 @@ public class QuizActivity extends AppCompatActivity {
                 Log.d("api 수신 여부", "수신 성공");
                 Log.d("퀴즈 시작", "퀴즈 시작");
                 // 1번 문제 설정
-                binding.textviewQuizCount.setText("문제 1/" + quizList.size());
+                binding.textviewQuizCount.setText(getString(R.string.quiz)+"1/" + quizList.size());
                 binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
                 Log.d("퀴즈 정답", String.valueOf(quizList.get(currentIndex).getAnswer()));
             } else {
@@ -91,7 +92,7 @@ public class QuizActivity extends AppCompatActivity {
         }
         currentIndex++;
         if(currentIndex < quizList.size()) {
-            binding.textviewQuizCount.setText("문제 " + (currentIndex + 1) + "/" + quizList.size());
+            binding.textviewQuizCount.setText(getString(R.string.quiz) + (currentIndex + 1) + "/" + quizList.size());
             binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
             Log.d("퀴즈 정답", String.valueOf(quizList.get(currentIndex).getAnswer()));
         } else {

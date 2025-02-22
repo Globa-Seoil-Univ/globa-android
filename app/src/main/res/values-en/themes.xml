@@ -1,0 +1,36 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.Globa" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowLightStatusBar">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.Design.BottomSheetDialog</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+
+    <style name="FolderPermissionSpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:dropDownVerticalOffset">5dp</item> <item name="android:popupBackground">@android:color/white</item> </style>
+
+    <style name="Theme.Globa" parent="Base.Theme.Globa" />
+
+    <style name="Theme.Globa.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Globa.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Globa.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="GlobaButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/main_button</item>
+    </style>
+
+    <style name="GlobaSelectedButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/main_button_selected</item>
+    </style>
+</resources>

@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:textColor="@color/black"
-                    android:text="@string/profile_account_title"
+                    android:text="@string/main_my_info"
                     android:textStyle="bold"
                     android:textSize="@dimen/large" />
 
@@ -85,7 +85,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/normal"
-                        android:text="성빈클론(꼭 지우기)"
                         android:textColor="@color/black"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@+id/linearlayout_profile_background"
@@ -136,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:textColor="@color/black"
-                        android:text="@string/profile_setting_title"
+                        android:text="@string/setting"
                         android:textStyle="bold"
                         android:textSize="@dimen/large" />
 

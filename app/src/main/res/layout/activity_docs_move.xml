@@ -101,7 +101,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="16dp"
-        android:text="폴더"
+        android:text="@string/folder"
         android:textColor="@color/black"
         android:textSize="@dimen/small"
         android:textStyle="bold"
@@ -137,8 +137,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:backgroundTint="@color/twitter"
-            android:text="이동"
-            android:textSize="16sp" />
+            android:text="@string/move"
+            android:textSize="16dp" />
 
     </LinearLayout>
 

@@ -35,6 +35,7 @@ public class DocsUploadActivity extends AppCompatActivity {
         setOnClickListeners();
 
         viewModel.loadFolder();
+        viewModel.loadLanguage();
         setContentView(binding.getRoot());
     }
 

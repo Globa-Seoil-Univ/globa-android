@@ -122,7 +122,7 @@ public class FolderPermissionActivity extends AppCompatActivity{
                         String userRole = "";
 
                         String permission = adapterViewHolder.getPermission();
-                        if (permission.equals("수정")) {
+                        if (permission.equals(getString(R.string.modify))) {
                             userRole = "w";
                         } else {
                             userRole = "r";

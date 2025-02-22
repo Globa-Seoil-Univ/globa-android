@@ -36,9 +36,12 @@
             android:name=".intro.IntroActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="globa" android:host="main"/>
             </intent-filter>
         </activity>
         <activity android:name=".docs.quiz.quizconduct.QuizActivity"
@@ -86,10 +89,15 @@
         <activity android:name=".main.profile.theme.ThemeActivity" />
         <activity android:name=".keyword.detail.KeywordDetailActivity" />
         <activity android:name=".main.folder.permission.FolderPermissionActivity" />
-        <activity
-            android:name=".conditions.ConditionsActivity"
-            android:exported="false"></activity>
-        <activity android:name=".docs.DocsActivity" />
+        <activity android:name=".conditions.ConditionsActivity" android:exported="false"/>
+        <activity android:name=".docs.DocsActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="globa" android:host="docs"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".docs.upload.DocsUploadActivity"
             android:requestLegacyExternalStorage="true" />

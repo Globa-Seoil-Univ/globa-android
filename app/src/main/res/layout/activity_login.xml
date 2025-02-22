@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/kakao_label"
                 android:backgroundTint="@color/twitter"
-                android:text="카카오로 계속하기"
+                android:text="@string/activity_login_kakao"
                 android:textSize="16dp"
                 app:cornerRadius="8dp" />
         </LinearLayout>
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/twitter"
-                android:text="네이버로 계속하기"
+                android:text="@string/activity_login_naver"
                 android:textSize="16dp"
                 app:cornerRadius="8dp" />
         </LinearLayout>
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/twitter"
-                android:text="트위터로 계속하기"
+                android:text="@string/activity_login_twitter"
                 android:textSize="16dp"
                 app:cornerRadius="8dp" />
         </LinearLayout>
@@ -144,7 +144,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="구글로 계속하기　"
+                android:text="@string/activity_login_google"
                 android:textColor="@color/google_label"
                 android:fontFamily="@font/notosans_regular"
                 android:gravity="center"

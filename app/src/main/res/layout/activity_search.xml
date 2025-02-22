@@ -35,7 +35,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/darkGray"
             android:background="@null"
-            android:hint="키워드 입력"/>
+            android:hint="@string/activity_search_keyword"/>
 
     </LinearLayout>
 
@@ -43,7 +43,7 @@
         android:id="@+id/textview_search_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="취소"
+        android:text="@string/cancel"
         android:textSize="16sp"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -57,7 +57,7 @@
         android:id="@+id/textview_search_history_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="최근 검색"
+        android:text="@string/activity_search_currently"
         android:textSize="14sp"
         android:textColor="@color/black"
         android:layout_marginTop="30dp"

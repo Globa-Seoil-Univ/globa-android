@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/profile_alert"
+            android:text="@string/profile_alert_setting"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"

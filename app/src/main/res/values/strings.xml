@@ -1,78 +1,89 @@
 <resources>
     <string name="app_name">Globa</string>
 
+    <string name="delete_confirmation_message">정말 삭제하시겠습니까?</string>
+
     <string name="loading_title">음성 변환은 글로바</string>
     <string name="loading_subtitle">모든 음성을 글로 변환하고, 요약하여 \n사용자가 보기 쉽게 제공해줍니다.</string>
     <string name="loading_start">시작하기</string>
     <string name="login_description">원활한 서비스 이용을 위해 로그인을 해주세요.</string>
-    <string name="main_docs_type_1">최근에 추가됨</string>
-    <string name="main_docs_type_2">자주 사용함</string>
-    <string name="main_docs_type_3">공유함</string>
-    <string name="main_docs_type_4">공유 받음</string>
+    <string name="main_docs_type_1">최근 추가된 문서</string>
+    <string name="main_docs_type_2">자주 사용하는 문서</string>
+    <string name="main_docs_type_3">공유된 문서</string>
+    <string name="main_docs_type_4">공유받은 문서</string>
     <string name="main_docs_empty">문서를 찾을 수 없습니다.</string>
-    <string name="main_docs_model_rename">이름 변경</string>
-    <string name="main_docs_model_">이름 변경</string>
-    <string name="main_docs_model_delete">문서 삭제</string>
-    <string name="docs_modal_delete_title">정말 삭제하시겠습니까?</string>
     <string name="docs_modal_delete_description">한 번 삭제한 문서는 되돌릴 수 없습니다.</string>
     <string name="folder_add_title">추가할 폴더 이름을 입력해주세요.</string>
     <string name="folder_add_share_title">공유 방법을 선택해주세요.</string>
     <string name="folder_add_share_description_1">링크 공유는 링크를 가진 누구나 볼 수 있고,</string>
-    <string name="folder_add_share_description_2">멤버 공유는 초대받은 사람만 볼 수 있으며 권한 수정이 가능합니다.</string>
-    <string name="folder_add_share_select_link">링크 공유</string>
-    <string name="folder_add_share_select_member">멤버 공유</string>
+    <string name="folder_add_share_description_2">멤버 공유는 초대받은 사람만 볼 수 있으며 권한 변경이 가능합니다.</string>
     <string name="notice_folder_add_1">님이</string>
     <string name="notice_folder_add_2">폴더에 추가되었습니다.</string>
+
     <string name="main_home">메인</string>
-    <string name="main_folder">폴더</string>
-    <string name="main_analytics">통계</string>
+    <string name="analytics">통계</string>
     <string name="main_my_info">내 정보</string>
+
+    <string name="folder">폴더</string>
     <string name="all_info">전체</string>
     <string name="notice">공지사항</string>
     <string name="share">공유</string>
     <string name="docs">문서</string>
+    <string name="add">추가</string>
     <string name="cancel">취소</string>
     <string name="delete">삭제</string>
+    <string name="title">제목</string>
+    <string name="description">내용</string>
+    <string name="account">계정</string>
+    <string name="change">변경</string>
+    <string name="quiz">퀴즈</string>
+    <string name="notification">알림</string>
+    <string name="setting">설정</string>
+    <string name="inquiry">문의</string>
+    <string name="move">이동</string>
+    <string name="name">이름</string>
+    <string name="statistics">통계</string>
+    <string name="etcetera">기타</string>
+    <string name="signout">로그아웃</string>
+    <string name="withdraw">회원탈퇴</string>
+    <string name="score">점</string>
+    <string name="count">개</string>
+    <string name="modify">수정</string>
+    <string name="read">읽기</string>
+    <string name="language">언어</string>
+
+    <string name="rename">이름 변경</string>
 
     <string name="upload_title">새로 만들기</string>
     <string name="upload_cloud">업로드</string>
     <string name="upload_record">녹음</string>
 
     <string name="keyword_title">단어 검색</string>
-
-    <string name="login_error_message">로그인 오류가 발생했습니다. </string>
+    <string name="share_link">링크 공유</string>
+    <string name="share_member">멤버 공유</string>
+    <string name="setting_docs">문서 설정</string>
+    <string name="permission_management">권한 관리</string>
 
     <string name="docs_more_title">폴더 삭제 타이틀입니다. 이 값 쓰지 마세요</string>
     <string name="docs_more_datetime">2001-04-24 오후 14:10</string>
-    <string name="docs_more_rename_docs">이름 변경</string>
     <string name="docs_more_move_docs">폴더 이동</string>
     <string name="docs_more_delete_docs">문서 삭제</string>
 
-    <string name="docs_title_sample_1">프로젝트관리캡스톤디자인 10주차</string>
-    <string name="docs_title_datetime_1">2024-05-08 오전 10:20</string>
-
-    <string name="docs_title_sample_2">자바프로그래밍심화</string>
-    <string name="docs_title_datetime_2">2024-05-08 오후 01:42</string>
-
-    <string name="docs_title_sample_3">2024-05-03 프로젝트 회의</string>
-    <string name="docs_title_datetime_3">2024-05-03 오후 04:32</string>
-
-
     <string name="profile_title">내 정보</string>
-    <string name="profile_account_title">계정</string>
-    <string name="profile_setting_title">설정</string>
-    <string name="profile_account_code">계정 코드</string>
+    <string name="profile_account_username">성빈클론(꼭 지우기)</string>
+    <string name="profile_account_code">유저 코드</string>
     <string name="profile_alert_setting">알림 설정</string>
     <string name="profile_inquiry">문의하기</string>
     <string name="profile_clean_data">임시 공간 삭제</string>
     <string name="profile_service_info">서비스 정보</string>
-    <string name="profile_theme">테마 모드</string>
+    <string name="profile_confirm">접수</string>
+
+    <string name="input_title">제목을 입력해주세요.</string>
+    <string name="input_description">내용을 입력해주세요.</string>
+
+    <string name="theme_mode">테마 모드</string>
 
     <string name="profile_inquiry_send">접수</string>
-    <string name="profile_inquiry_title">제목</string>
-    <string name="profile_inquiry_title_hint">제목</string>
-    <string name="profile_inquiry_description">내용</string>
-    <string name="profile_inquiry_description_hint">내용을 입력해주세요.</string>
 
     <string name="profile_service_info_1_title">Globa 서비스 약관</string>
     <string name="profile_service_info_1_description">Globa 서비스 약관 읽기</string>
@@ -86,11 +97,9 @@
     <string name="profile_service_info_4_title">오픈소스 라이선스</string>
     <string name="profile_service_info_4_description">오픈소스 소프트웨어에 대한 라이선스 세부정보</string>
 
-    <string name="main_delete_docs_modal_title">정말 삭제하시겠습니까?</string>
+    <string name="main_delete_folder_modal_description">한 번 삭제한 폴더는 되돌릴 수 없습니다.</string>
     <string name="main_delete_docs_modal_description">한 번 삭제한 문서는 되돌릴 수 없습니다.</string>
 
-
-    <string name="profile_alert">알림</string>
     <string name="profile_alert_1_title">업로드 알림</string>
     <string name="profile_alert_1_description">업로드 진행 또는 완료 상태에 대해 알림이 발생합니다.</string>
 
@@ -100,128 +109,113 @@
     <string name="profile_alert_3_title">이벤트 알림</string>
     <string name="profile_alert_3_description">각종 이벤트, 혜택 등 마케팅 관련 알림이 발생합니다.</string>
 
-    <string name="folder_title">폴더</string>
+    <string name="folder_current">최근에 사용한 폴더</string>
     <string name="folder_permission_title">권한 변경</string>
-    <string name="folder_permission_confirm">변경</string>
 
     <string name="folder_share_type_title">공유 방법을 선택해주세요.</string>
-    <string name="folder_share_type_description">링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 수정이 가능합니다.</string>
-    <string name="folder_share_type_1">링크 공유</string>
-    <string name="folder_share_type_2">멤버 공유</string>
+    <string name="folder_share_type_description">링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 변경이 가능합니다.</string>
 
-    <string name="profile_clean_data_modal_title">정말 삭제하시겠습니까?</string>
     <string name="profile_clean_data_modal_description">Globa를 녹음하기를 통해 저장되었던 모든 음성을 지웁니다. \n삭제된 녹음 파일은 다시 되돌릴 수 없게 됩니다.</string>
+    <string name="activity_docs_name_edit_title">변경할 이름을 입력해주세요.</string>
+    <string name="activity_docs_statistics_title">시각화 자료</string>
+    <string name="activity_nickname_edit_title">변경할 이름을 입력해주세요.</string>
+    <string name="activity_docs_upload_description">설명(선택)</string>
+    <string name="activity_docs_upload_share_confirm">업로드</string>
+    <string name="activity_folder_add_title">추가할 폴더의 이름을 입력해주세요</string>
+    <string name="activity_folder_name_edit_title">변경할 폴더 이름을 입력해주세요.</string>
+    <string name="activity_login_kakao">카카오로 계속하기</string>
+    <string name="activity_login_naver">네이버로 계속하기</string>
+    <string name="activity_login_google">구글로 계속하기</string>
+    <string name="activity_login_twitter">트위터로 계속하기</string>
+    <string name="activity_folder_share_title">공유할 멤버를 선택해주세요.</string>
+    <string name="activity_folder_share_confirm">적용</string>
+    <string name="item_folder_permission_spinner_title">읽기</string>
+    <string name="activity_quiz_result_description">모든 문제를 다 풀었습니다 !</string>
+    <string name="activity_quiz_result_score_title">최종 점수</string>
+    <string name="activity_quiz_result_count_title">맞힌 정답 수</string>
+    <string name="dialog_comment_title">댓글</string>
+    <string name="dialog_comment_hint">댓글 남기기</string>
+    <string name="dialog_delete_comment_title">댓글을 삭제하시겠습니까?</string>
+    <string name="dialog_delete_comment_description">한 번 삭제한 댓글은 되돌릴 수 없습니다.</string>
+    <string name="item_notification_share_title">님이 다음 폴더에 초대했습니다.</string>
+    <string name="item_notification_share_description">내용입니다.</string>
+    <string name="item_notification_share_cancel">거절</string>
+    <string name="item_notification_share_confirm">수락</string>
+
+    <string name="activity_docs_statistics_title_word">시각화 자료</string>
+    <string name="activity_docs_statistics_title_time">학습 시간</string>
+    <string name="activity_docs_statistics_title_score">학습 성적</string>
+    <string name="fragment_statistics_title_word">단어 중요도</string>
 
 
     <string name="twitter_consumer_key">289VE8u31zKqPX9tJGSTbR9ce</string>
     <string name="twitter_consumer_secret">H2zuCbYUOkNDkxX0cCoP0bZ4NPFpVPp3i6Smgp78cp31VdDxeJ</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- 개인정보 처리 약관 -->
+    <string name="conditions_title">개인정보처리방침</string>
     <string name="conditions_title_no1">제 1조 (목적)</string>
     <string name="conditions_title_no2">제 2조 (개인정보 처리의 원칙)</string>
     <string name="conditions_title_no3">제 3조 (본 방침의 공개)</string>
     <string name="conditions_title_no4">제 4조 (본 방침의 변경)</string>
 
-    <string name="conditions_details_no1">
-        Globa(이하 ‘회사’라고 함)는 회사가 제공하고자 하는 서비스(이하 ‘회사 서비스’)를 이용하는 개인(이하 ‘이용자’ 또는 ‘개인’)의 정보(이하 ‘개인정보’)를 보호하기 위해, 개인정보보호법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률(이하 ‘정보통신망법’) 등 관련 법령을 준수하고, 서비스 이용자의 개인정보 보호 관련한 고충을 신속하고 원할하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보처리방침(이하 ‘본 방침’)을 수립합니다.
-    </string>
-    <string name="conditions_details_no2">
-        개인정보 관련 법령 및 본 방침에 따라 회사는 이용자의 개인정보를 수집할 수 있으며 수집된 개인정보는 개인의 동의가 있는 경우에 한해 제3자에게 제공될 수 있습니다. 단, 법령의 규정 등에 의해 적법하게 강제되는 경우 회사는 수집한 이용자의 개인정보를 사전에 개인의 동의 없이 제3자에게 제공할 수도 있습니다.
-    </string>
-    <string name="conditions_details_no3_1">
-        회사는 이용자가 언제든지 쉽게 본 방침을 확인할 수 있도록 회사 홈페이지 첫 화면 또는 첫 화면과의 연결화면을 통해 본 방침을 공개하고 있습니다.
-    </string>
-    <string name="conditions_details_no3_2">
-        회사는 제 1항에 따라 본 방침을 공개하는 경우 글자 크기, 색상 등을 활용하여 이용자가 본 방침을 쉽게 확인할 수 있도록 합니다.
-    </string>
+    <string name="conditions_details_no1">Globa(이하 ‘회사’라고 함)는 회사가 제공하고자 하는 서비스(이하 ‘회사 서비스’)를 이용하는 개인(이하 ‘이용자’ 또는 ‘개인’)의 정보(이하 ‘개인정보’)를 보호하기 위해, 개인정보보호법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률(이하 ‘정보통신망법’) 등 관련 법령을 준수하고, 서비스 이용자의 개인정보 보호 관련한 고충을 신속하고 원할하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보처리방침(이하 ‘본 방침’)을 수립합니다.</string>
+    <string name="conditions_details_no2">개인정보 관련 법령 및 본 방침에 따라 회사는 이용자의 개인정보를 수집할 수 있으며 수집된 개인정보는 개인의 동의가 있는 경우에 한해 제3자에게 제공될 수 있습니다. 단, 법령의 규정 등에 의해 적법하게 강제되는 경우 회사는 수집한 이용자의 개인정보를 사전에 개인의 동의 없이 제3자에게 제공할 수도 있습니다.</string>
+    <string name="conditions_details_no3_1">회사는 이용자가 언제든지 쉽게 본 방침을 확인할 수 있도록 회사 홈페이지 첫 화면 또는 첫 화면과의 연결화면을 통해 본 방침을 공개하고 있습니다.</string>
+    <string name="conditions_details_no3_2">회사는 제 1항에 따라 본 방침을 공개하는 경우 글자 크기, 색상 등을 활용하여 이용자가 본 방침을 쉽게 확인할 수 있도록 합니다.</string>
+    <string name="conditions_details_no4_1">본 방침은 개인정보 관련 법령, 지침, 고시 또는 정부나 회사 서비스의 정책이나 내용의 변경에 따라 개정될 수 있습니다.</string>
+    <string name="conditions_details_no4_2">회사는 제 1항에 따라 본 방침을 개정하는 경우 다음 각 호 하나 이상의 방법으로 공지합니다.</string>
+    <string name="conditions_details_no4_2_a">회사가 운영하는 인터넷 홈페이지의 첫 화면의 공지사항란 또는 별도의 창을 통하여 공지하는 방법</string>
+    <string name="conditions_details_no4_2_b">서면 · 모사전송 · 전자우편 또는 이와 비슷한 방법으로 공지하는 방법</string>
+    <string name="conditions_details_no4_3">회사는 제 2항의 공지는 본 방침 개정의 시행일로부터 최소 7일 이전에 공지합니다. 다만, 이용자 권리의 중요한 변경이 있을 경우에는 최소 30일 전에 공지합니다.</string>
+    <string name="conditions_details_no4_3_a">필수 수집 정보 : 이름, 닉네임</string>
+    <string name="conditions_details_no4_3_b">선택 수집 정보 : 프로필 사진</string>
 
-    <string name="conditions_details_no4_1">
-        본 방침은 개인정보 관련 법령, 지침, 고시 또는 정부나 회사 서비스의 정책이나 내용의 변경에 따라 개정될 수 있습니다.
-    </string>
-    <string name="conditions_details_no4_2">
-        회사는 제 1항에 따라 본 방침을 개정하는 경우 다음 각 호 하나 이상의 방법으로 공지합니다.
-    </string>
-    <string name="conditions_details_no4_2_a">
-        회사가 운영하는 인터넷 홈페이지의 첫 화면의 공지사항란 또는 별도의 창을 통하여 공지하는 방법
-    </string>
-    <string name="conditions_details_no4_2_b">
-        서면 · 모사전송 · 전자우편 또는 이와 비슷한 방법으로 공지하는 방법
-    </string>
-    <string name="conditions_details_no4_3">
-        회사는 제 2항의 공지는 본 방침 개정의 시행일로부터 최소 7일 이전에 공지합니다. 다만, 이용자 권리의 중요한 변경이 있을 경우에는 최소 30일 전에 공지합니다.
-    </string>
-    <string name="conditions_details_no4_3_a">
-        필수 수집 정보 : 이름, 닉네임
-    </string>
-    <string name="conditions_details_no4_3_b">
-        선택 수집 정보 : 프로필 사진
-    </string>
+    <string name="folderadd_dialog_title">공유 방법을 선택해주세요.</string>
+    <string name="folderadd_dialog_detail">링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 변경이 가능합니다.</string>
+    <string name="foldershare_dialog_title">권한을 선택해주세요.</string>
 
-    <string name="folderadd_dialog_title">
-        공유 방법을 선택해주세요.
-    </string>
-    <string name="folderadd_dialog_detail">
-        링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 수정이 가능합니다.
-    </string>
-    <string name="foldershare_dialog_title">
-        권한을 선택해주세요.
-    </string>
+    <string name="foldershare_dialog_read">읽기 권한</string>
+    <string name="foldershare_dialog_write">쓰기 권한</string>
 
-    <string name="title_activity_test">TestActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="activity_folder_move_change_select">변경할 폴더를 선택해주세요.</string>
+    <string name="fragment_folder_inside_title">이것은 아주 긴 제목입니다.</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="activity_docs_move_title">2024-03-12 회의록</string>
+    <string name="activity_docs_move_datetime">2024-03-12 오후 11:07</string>
 
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
+    <string name="item_main_document_processing">요약중..</string>
 
+    <string name="activity_theme_light_title">라이트 모드</string>
+    <string name="activity_theme_dark_title">다크 모드</string>
+    <string name="activity_theme_system_title">시스템 설정과 동일하게</string>
 
+    <string name="activity_docs_summary_title">요약</string>
+    <string name="activity_docs_time_start"> </string>
+    <string name="activity_docs_time_end">다운로드 중...</string>
+
+    <string name="activity_search_currently">최근 검색</string>
+    <string name="activity_search_keyword">키워드 입력</string>
+    <string name="activity_folder_add_input_name">폴더명</string>
+    <string name="activity_fonder_add_input_share">유저 코드(6자리)</string>
+    <string name="activity_docs_more_statistics">시각화 자료 보기</string>
+    <string name="activity_docs_more_quiz">퀴즈 풀기</string>
+
+    <string name="activity_quiz_result_empty">퀴즈를 다시풀면 상승률을 알려드립니다.</string>
+    <string name="activity_quiz_result_last_corrected_1">지난번 성적보다</string>
+    <string name="activity_quiz_result_last_corrected_2">점 올랐어요.</string>
+    <string name="activity_quiz_result_last_corrected_3">점 내려갔어요.</string>
+    <string name="activity_quiz_result_last_corrected_4">지난 번 성적과 같아요.</string>
+    <string name="activity_quiz_result_last_score_zero">지난 성적이 0점이군요...</string>
+
+    <string name="fragment_share_notification_2_1">님이 </string>
+    <string name="fragment_share_notification_2_2"> 폴더 공유 초대를 보냈습니다.</string>
+
+    <string name="fragment_share_notification_3_1">님이 공유 폴더에 문서를 추가하였습니다.</string>
+    <string name="fragment_share_notification_3_2">가 추가됨</string>
+
+    <string name="fragment_share_notification_4_1">폴더에 </string>
+    <string name="fragment_share_notification_4_2">님이 초대되었습니다.</string>
+
+    <string name="fragment_share_notification_5_1">님이 </string>
+    <string name="fragment_share_notification_5_2">에 댓글을 추가하였습니다.</string>
 </resources>
