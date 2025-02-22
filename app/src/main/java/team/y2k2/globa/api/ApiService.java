@@ -27,6 +27,7 @@ import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 import team.y2k2.globa.api.model.request.FolderPermissionChangeRequest;
 import team.y2k2.globa.api.model.request.FolderShareAddRequest;
+import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.NicknameEditRequest;
 import team.y2k2.globa.api.model.request.NotificationRequest;
 import team.y2k2.globa.api.model.request.NotificationTokenRequest;
@@ -44,6 +45,7 @@ import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.InquiryDetailResponse;
 import team.y2k2.globa.api.model.response.KeywordDetailResponse;
+import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
 import team.y2k2.globa.api.model.response.NotificationResponse;
@@ -634,10 +636,7 @@ public interface ApiService {
      * 회원 가입과 로그인 (Todo - 작업 필요)
      */
     @POST("/user")
-    Call<UserInfoResponse> requestSignUp(
-            @Header("Content-Type") String contentType,
-            @Header("Authorization") String authorization
-    );
+    Call<LoginResponse> requestSignIn(@Body LoginRequest requestBody);
     /**
      * Access Token 갱신
      */

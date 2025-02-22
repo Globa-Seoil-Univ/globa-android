@@ -30,6 +30,8 @@ public class DocsUploadViewModel extends ViewModel {
     String userId;
     String folderId;
     DocsUploadFolderAdapter adapter;
+    DocsUploadLanguageAdapter languageAdapter;
+
     String firebasePath;
     long unixTime;
 
@@ -65,6 +67,13 @@ public class DocsUploadViewModel extends ViewModel {
             activity.binding.spinnerDocsUpload.setAdapter(adapter);
             activity.binding.spinnerDocsUpload.setSelection(0);
         }
+    }
+
+    public void loadLanguage() {
+        languageAdapter = new DocsUploadLanguageAdapter(activity, R.layout.item_language);
+        languageAdapter.setDropDownViewResource(R.layout.item_folder);
+        activity.binding.spinnerDocsUploadLanguage.setAdapter(languageAdapter);
+        activity.binding.spinnerDocsUpload.setSelection(0);
     }
 
     public void uploadRecordFile(String oggPath, String folderId) {

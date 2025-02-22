@@ -50,6 +50,8 @@
     <string name="count">箇</string>
     <string name="modify">修整</string>
     <string name="read">読み</string>
+    <string name="language">言語</string>
+
 
     <string name="rename">名前を変更</string>
 
