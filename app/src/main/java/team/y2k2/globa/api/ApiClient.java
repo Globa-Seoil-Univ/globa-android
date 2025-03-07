@@ -47,6 +47,7 @@ import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.request.DocsNameEditRequest;
 import team.y2k2.globa.intro.IntroActivity;
+import team.y2k2.globa.main.MainActivity;
 
 public class ApiClient {
     public static ApiService apiService;
@@ -57,6 +58,12 @@ public class ApiClient {
         this.context = context;
         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         authorization = "Bearer " + preferences.getString("accessToken", "");
+        apiService = getApiService();
+    }
+
+    public ApiClient(String accessToken) {
+        context = null;
+        authorization = "Bearer " + accessToken;
         apiService = getApiService();
     }
 
