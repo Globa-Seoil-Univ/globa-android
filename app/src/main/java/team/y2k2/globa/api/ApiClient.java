@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -52,7 +51,7 @@ import team.y2k2.globa.intro.IntroActivity;
 public class ApiClient {
     public static ApiService apiService;
     public static String authorization;
-    private Context context;
+    private final Context context;
 
     public ApiClient(Context context) {
         this.context = context;

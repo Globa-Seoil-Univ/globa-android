@@ -1,64 +1,25 @@
 package team.y2k2.globa.api;
 
+import static team.y2k2.globa.api.endpoints.CommentApiEndpoint.*;
+import static team.y2k2.globa.api.endpoints.DictionaryApiEndpoint.*;
+import static team.y2k2.globa.api.endpoints.FolderApiEndpoint.*;
+import static team.y2k2.globa.api.endpoints.FolderShareApiEndpoint.*;
+import static team.y2k2.globa.api.endpoints.InquiryApiEndpoint.*;
+import static team.y2k2.globa.api.endpoints.NoticeApiEndpoint.*;
+import static team.y2k2.globa.api.endpoints.NotificationApiEndpoint.*;
+import static team.y2k2.globa.api.endpoints.RecordApiEndpoint.*;
+import static team.y2k2.globa.api.endpoints.UserApiEndpoint.*;
+
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Nullable;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.DELETE;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Multipart;
-import retrofit2.http.PATCH;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Part;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 import team.y2k2.globa.api.model.entity.Quiz;
-import team.y2k2.globa.api.model.request.AlertRequest;
-import team.y2k2.globa.api.model.request.CommentRequest;
-import team.y2k2.globa.api.model.request.FirstCommentRequest;
-import team.y2k2.globa.api.model.request.DocsMoveRequest;
-import team.y2k2.globa.api.model.request.FolderAddRequest;
-import team.y2k2.globa.api.model.request.FolderNameEditRequest;
-import team.y2k2.globa.api.model.request.FolderPermissionChangeRequest;
-import team.y2k2.globa.api.model.request.FolderShareAddRequest;
-import team.y2k2.globa.api.model.request.LoginRequest;
-import team.y2k2.globa.api.model.request.NicknameEditRequest;
-import team.y2k2.globa.api.model.request.NotificationRequest;
-import team.y2k2.globa.api.model.request.NotificationTokenRequest;
-import team.y2k2.globa.api.model.request.QuizResultRequest;
-import team.y2k2.globa.api.model.request.RecordCreateRequest;
-import team.y2k2.globa.api.model.request.StudyTimeRequest;
-import team.y2k2.globa.api.model.request.SubCommentRequest;
-import team.y2k2.globa.api.model.request.TokenRequest;
-import team.y2k2.globa.api.model.request.WithdrawRequest;
-import team.y2k2.globa.api.model.response.AlertResponse;
-import team.y2k2.globa.api.model.response.CommentResponse;
-import team.y2k2.globa.api.model.response.DocsDetailResponse;
-import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
-import team.y2k2.globa.api.model.response.FolderPermissionResponse;
-import team.y2k2.globa.api.model.response.FolderResponse;
-import team.y2k2.globa.api.model.response.InquiryDetailResponse;
-import team.y2k2.globa.api.model.response.KeywordDetailResponse;
-import team.y2k2.globa.api.model.response.LoginResponse;
-import team.y2k2.globa.api.model.response.NoticeResponse;
-import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
-import team.y2k2.globa.api.model.response.NotificationResponse;
-import team.y2k2.globa.api.model.response.RecordResponse;
-import team.y2k2.globa.api.model.response.SearchResponse;
-import team.y2k2.globa.api.model.response.StatisticsResponse;
-import team.y2k2.globa.api.model.response.SubCommentResponse;
-import team.y2k2.globa.api.model.response.TokenResponse;
-import team.y2k2.globa.api.model.response.UnreadNotificationCheckResponse;
-import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
-import team.y2k2.globa.api.model.response.UserInfoResponse;
-import team.y2k2.globa.api.model.response.UserSearchResponse;
-import team.y2k2.globa.api.model.request.DocsNameEditRequest;
+import team.y2k2.globa.api.model.request.*;
+import team.y2k2.globa.api.model.response.*;
 import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 
 public interface ApiService {
@@ -70,7 +31,7 @@ public interface ApiService {
     /**
      * 공유 초대 거절
      */
-    @DELETE("/folder/{folder_id}/share/{share_id}")
+    @DELETE(DELETE_FOLDER_SHARE)
     Call<Void> requestDeniedShareInvite(
             @Path("folder_id") String folderId,
             @Path("share_id") String shareId,
@@ -81,7 +42,7 @@ public interface ApiService {
     /**
      * 사용자 공유 초대 취소
      */
-    @DELETE("/folder/{folder_id}/share/user/{user_id}")
+    @DELETE(DELETE_FOLDER_SHARE_USER)
     Call<Void> requestDeleteSharePermission(
             @Path("folder_id") int folderId,
             @Path("user_id") int user_id,
@@ -91,7 +52,7 @@ public interface ApiService {
     /**
      * 공유된 사용자 조회
      */
-    @GET("/folder/{folder_id}/share/user")
+    @GET(GET_FOLDER_SHARE_USER)
     Call<FolderPermissionResponse> requestFoloderShareUser(
             @Path("folder_id") int folderId,
             @Header("Content-Type") String contentType,
@@ -102,7 +63,7 @@ public interface ApiService {
     /**
      * 사용자 공유 초대 변경
      */
-    @PATCH("/folder/{folder_id}/share/user/{user_id}")
+    @PATCH(PATCH_FOLDER_SHARE_USER)
     Call<Void> requestUpdateSharePermission(
             @Path("folder_id") int folder_id,
             @Path("user_id") int user_id,
@@ -113,7 +74,7 @@ public interface ApiService {
     /**
      * 공유 초대 수락
      */
-    @POST("/folder/{folder_id}/share/{share_id}")
+    @POST(POST_FOLDER_SHARE)
     Call<Void> requestAcceptShareInvite(
             @Path("folder_id") String folderId,
             @Path("share_id") String shareId,
@@ -123,7 +84,7 @@ public interface ApiService {
     /**
      * 사용자 공유 초대
      */
-    @POST("/folder/{folder_id}/share/user/{user_id}")
+    @POST(POST_FOLDER_SHARE_USER)
     Call<Void> requestInsertFolderShareUser(
             @Path("folder_id") int folderId,
             @Path("user_id") int userId,
@@ -138,7 +99,7 @@ public interface ApiService {
     /**
      * 댓글 삭제
      */
-    @DELETE("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{comment_id}")
+    @DELETE(DELETE_COMMENT)
     Call<Void> deleteComment(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -151,7 +112,7 @@ public interface ApiService {
     /**
      * 댓글 목록 조회
      */
-    @GET("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment")
+    @GET(GET_COMMENT)
     Call<CommentResponse> getComments(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -165,7 +126,7 @@ public interface ApiService {
     /**
      * 대댓글 목록 조회
      */
-    @GET("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{parent_id}")
+    @GET(GET_SUB_COMMENT)
     Call<SubCommentResponse> getSubComments(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -180,7 +141,7 @@ public interface ApiService {
     /**
      * 댓글 수정
      */
-    @PATCH("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{comment_id}")
+    @PATCH(PATCH_COMMENT_SHARE_USER)
     Call<Void> updateComment(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -194,7 +155,7 @@ public interface ApiService {
     /**
      * 첫 댓글 추가
      */
-    @POST("/folder/{folder_id}/record/{record_id}/section/{section_id}")
+    @POST(POST_COMMENT_SHARE)
     Call<Void> requestInsertFirstComment(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -206,7 +167,7 @@ public interface ApiService {
     /**
      * 댓글 추가
      */
-    @POST("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment")
+    @POST(POST_COMMENT_SHARE_USER)
     Call<Void> requestInsertComment(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -219,7 +180,7 @@ public interface ApiService {
     /**
      * 대댓글 추가
      */
-    @POST("/folder/{folder_id}/record/{record_id}/section/{section_id}/highlight/{highlight_id}/comment/{parent_id}")
+    @POST(POST_COMMENT_SUB_COMMENT)
     Call<Void> requestInsertSubComment(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -235,18 +196,18 @@ public interface ApiService {
     /**
      * Answer - 답변 관련 API
      */
-//    @DELETE("/inquiry/{inquiry_id}/answer/{answer_id}"); 답변 삭제
-//    @PATCH("/inquiry/{inquiry_id}/answer/{answer_id}"); 답변 수정
-//    @POST("/inquiry/{inquiry_id}/answer"); 답변 추가
+//    @DELETE(DELETE_ANSWER); 답변 삭제
+//    @PATCH(PATCH_ANSWER); 답변 수정
+//    @POST(POST_ANSWER); 답변 추가
 
     /**
      * Record - 음성 관련 API
      */
-//    @DELETE("folder/{folder_id}/record/{record_id}/link"); 문서 링크 공유 취소
+//    @DELETE(DELETE_RECORD_SHARE_LINK); 문서 링크 공유 취소
     /**
      * 문서 삭제
      */
-    @DELETE("/folder/{folder_id}/record/{record_id}")
+    @DELETE(DELETE_RECORD)
     Call<Void> requestDeleteRecord(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -254,9 +215,9 @@ public interface ApiService {
             @Header("Authorization") String authorization
     );
     /**
-     * 폴더 내 녹음 파일 조회
+     * 문서 추가
      */
-    @POST("/folder/{folder_id}/record")
+    @POST(POST_RECORD)
     Call<Void> requestCreateRecord(
             @Path("folder_id") String folderId,
             @Header("Content-Type") String contentType,
@@ -266,7 +227,7 @@ public interface ApiService {
     /**
      * 폴더 내 녹음 파일 조회
      */
-    @GET("/folder/{folder_id}/record")
+    @GET(GET_RECORD_IN_FOLDER)
     Call<FolderInsideRecordResponse> requestGetFolderInside(
             @Path("folder_id") int folderId,
             @Header("Content-Type") String contentType,
@@ -277,7 +238,7 @@ public interface ApiService {
     /**
      * 퀴즈 조회
      */
-    @GET("/folder/{folder_id}/record/{record_id}/quiz")
+    @GET(GET_RECORD_QUIZ)
     Call<List<Quiz>> requestGetQuiz(
             @Path("folder_id") int folderId,
             @Path("record_id") int recordId,
@@ -287,7 +248,7 @@ public interface ApiService {
     /**
      * 모든 녹음 파일 조회
      */
-    @GET("/record")
+    @GET(GET_RECORD_ALL)
     Call<RecordResponse> requestGetRecords(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -296,7 +257,7 @@ public interface ApiService {
     /**
      * 공유 하는 문서 조회
      */
-    @GET("/record/sharing")
+    @GET(GET_RECORD_SHARING)
     Call<RecordResponse> requestGetRecordsOfSharing(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -305,7 +266,7 @@ public interface ApiService {
     /**
      *  문서 검색
      */
-    @GET("/record/search")
+    @GET(GET_RECORD_SEARCH)
     Call<SearchResponse> searchRecordForKeyword(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -316,7 +277,7 @@ public interface ApiService {
     /**
      * 공유 받는 문서 조회
      */
-    @GET("/record/receiving")
+    @GET(GET_RECORD_RECEIVING)
     Call<RecordResponse> requestGetRecordsOfReceiving(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -325,7 +286,7 @@ public interface ApiService {
     /**
      * 녹음 파일 상세 조회
      */
-    @GET("/folder/{folder_id}/record/{record_id}")
+    @GET(GET_RECORD_DETAIL_IN_FOLDER)
     Call<DocsDetailResponse> requestGetDocumentDetail(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -335,7 +296,7 @@ public interface ApiService {
     /**
      * 문서 내 시각화 자료 조회
      */
-    @GET("/folder/{folder_id}/record/{record_id}/analysis")
+    @GET(GET_RECORD_ANALYSIS_IN_FOLDER)
     Call<StatisticsResponse> requestDocStatistics(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -345,7 +306,7 @@ public interface ApiService {
     /**
      * 공부시간 수정
      */
-    @PATCH("/folder/{folder_id}/record/{record_id}/study")
+    @PATCH(PATCH_RECORD_STUDY)
     Call<Void> requestStudyTime(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -356,7 +317,7 @@ public interface ApiService {
     /**
      * 문서 이름 수정
      */
-    @PATCH("/folder/{folder_id}/record/{record_id}/name")
+    @PATCH(PATCH_RECORD_NAME)
     Call<Void> requestUpdateRecordName(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -367,7 +328,7 @@ public interface ApiService {
     /**
      * 문서 폴더 이동
      */
-    @PATCH("/folder/{folder_id}/record/{record_id}/folder")
+    @PATCH(PATCH_RECORD_MOVE_FOLDER)
     Call<Void> requestUpdateDocsMove(
             @Path("folder_id") String folderId,
             @Path("record_id") String recordId,
@@ -378,7 +339,7 @@ public interface ApiService {
     /**
      * 퀴즈 결과 추가
      */
-    @POST("/folder/{folder_id}/record/{record_id}/quiz")
+    @POST(POST_RECORD_QUIZ)
     Call<Void> requestInsertQuizResult(
             @Path("folder_id") int folderId,
             @Path("record_id") int recordId,
@@ -398,7 +359,7 @@ public interface ApiService {
     /**
      * 알림 삭제 - (Todo - 작업 필요)
      */
-    @DELETE("/notification/{notification_id}")
+    @DELETE(DELETE_NOTIFICATION)
     Call<NotificationResponse> requestDeleteNotification(
             @Path("notification_id") String notificationId,
             @Header("Content-Type") String contentType,
@@ -407,7 +368,7 @@ public interface ApiService {
     /**
      * 알림 조회
      */
-    @GET("/notification")
+    @GET(GET_NOTIFICATION)
     Call<NotificationResponse> requestGetNotification(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -418,7 +379,7 @@ public interface ApiService {
     /**
      * 안 읽은 알림 개수 조회
      */
-    @GET("/notification/unread/count")
+    @GET(GET_NOTIFICATION_UNREAD_COUNT)
     Call<UnreadNotificationCountResponse> getUnreadNotificationCount(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
@@ -426,7 +387,7 @@ public interface ApiService {
     /**
      * 안 읽은 알림 여부 조회
      */
-    @GET("/notification/unread/check")
+    @GET(GET_NOTIFICATION_UNREAD_CHECK)
     Call<UnreadNotificationCheckResponse> getUnreadNotificationCheck(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
@@ -434,7 +395,7 @@ public interface ApiService {
     /**
      * 알림 읽음 처리
      */
-    @POST("/notification/{notification_id}")
+    @POST(POST_NOTIFICATION)
     Call<Void> readNotification(
             @Path("notification_id") String notificationId,
             @Header("Content-Type") String contentType,
@@ -447,7 +408,7 @@ public interface ApiService {
     /**
      * 폴더 삭제
      */
-    @DELETE("/folder/{folder_id}")
+    @DELETE(DELETE_FOLDER)
     Call<Void> requestDeleteFolder(
             @Path("folder_id") int folderId,
             @Header("Content-Type") String contentType,
@@ -456,7 +417,7 @@ public interface ApiService {
     /**
      * 폴더 목록 조회
      */
-    @GET("/folder")
+    @GET(GET_FOLDER)
     Call<FolderResponse> requestGetFolders(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -466,7 +427,7 @@ public interface ApiService {
     /**
      * 폴더 이름 수정
      */
-    @PATCH("/folder/{folder_id}/name")
+    @PATCH(PATCH_FOLDER_NAME)
     Call<Void> requestUpdateFolderName(
             @Path("folder_id") int folderId,
             @Header("Content-Type") String contentType,
@@ -476,7 +437,7 @@ public interface ApiService {
     /**
      * 폴더 추가
      */
-    @POST("/folder")
+    @POST(POST_FOLDER)
     Call<Void> requestInsertFolder(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -489,8 +450,8 @@ public interface ApiService {
     /**
      * 단어 조회
      */
-    @GET("/dictionary")
-    Call<KeywordDetailResponse> searchKeyword(
+    @GET(GET_DICTIONARY)
+    Call<KeywordDetailResponse> searchDictionary(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("keyword") String keyword
@@ -498,8 +459,8 @@ public interface ApiService {
     /**
      * 단어 추가 (Todo - 작업 필요)
      */
-    @POST("/dictionary")
-    Call<KeywordDetailResponse> insertKeyword(
+    @POST(POST_DICTIONARY)
+    Call<KeywordDetailResponse> insertDictionary(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("keyword") String keyword
@@ -511,7 +472,7 @@ public interface ApiService {
     /**
      * 문의 조회
      */
-    @GET("/inquiry")
+    @GET(GET_INQUIRY)
     Call<NotificationInquiryResponse> requestGetInquires(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -522,7 +483,7 @@ public interface ApiService {
     /**
      * 문의 상세 조회
      */
-    @GET("/inquiry/{inquiry_id}")
+    @GET(GET_INQUIRY_DETAIL)
     Call<InquiryDetailResponse> requestGetInquiryDetail(
             @Path("inquiry_id") String inquiryId,
             @Header("Content-Type") String contentType,
@@ -531,7 +492,7 @@ public interface ApiService {
     /**
      * 문의 등록
      */
-    @POST("/inquiry")
+    @POST(POST_INQUIRY)
     Call<Void> requestInsertInquiry(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -541,17 +502,17 @@ public interface ApiService {
     /**
      * Notice - 공지 관련 API
      */
-//    @GET("/notice/{notice_id}"); 공지사항 상세 조회
+//    @GET(GET_NOTICE_DETAIL); 공지사항 상세 조회
     /**
      * 간단 공지사항 조회
      */
-    @GET("/notice/intro")
+    @GET(GET_NOTICE)
     Call<List<NoticeResponse>> requestPromotion(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
             @Query("count") int count
     );
-//    @POST("/notice"); 공지사항 추가
+//    @POST(POST_NOTICE); 공지사항 추가
 
     /**
      * User - 사용자 관련 API
@@ -561,7 +522,7 @@ public interface ApiService {
      * @surveyType 1: 서비스 사용 불편, 2: 정확성 낮음, 3: 기능 부족, 4: 다른 서비스 선호
      * @content 추가 내용
      */
-    @DELETE("/user")
+    @DELETE(DELETE_USER)
     Call<Void> requestWithdrawUser(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -570,7 +531,7 @@ public interface ApiService {
     /**
      * 내 알림 정보 가져오기
      */
-    @GET("/user/{user_id}/notification")
+    @GET(GET_USER_NOTIFICATION)
     Call<AlertResponse> getMyAlertStatus(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
@@ -579,7 +540,7 @@ public interface ApiService {
     /**
      * 내 정보 가져오기
      */
-    @GET("/user")
+    @GET(GET_USER)
     Call<UserInfoResponse> requestUserInfo(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization
@@ -587,7 +548,7 @@ public interface ApiService {
     /**
      * 내 분석 정보 가져오기
      */
-    @GET("/user/{user_id}/analysis")
+    @GET(GET_USER_ANALYSIS)
     Call<StatisticsResponse> requestStatistics(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
@@ -596,7 +557,7 @@ public interface ApiService {
     /**
      * 상대 정보 가져오기
      */
-    @GET("/user/search")
+    @GET(GET_USER_SEARCH)
     Call<UserSearchResponse> requestSearchUserInfo(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -605,7 +566,7 @@ public interface ApiService {
     /**
      * 이름 수정
      */
-    @PATCH("/user/{user_id}/name")
+    @PATCH(PATCH_USER_NAME)
     Call<Void> requestUpdateProfileName(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
@@ -616,7 +577,7 @@ public interface ApiService {
      * 프로필 사진 수정
      */
     @Multipart
-    @PATCH("/user/{user_id}/profile")
+    @PATCH(PATCH_USER_PROFILE)
     Call<Void> requestUpdateProfileImage(
             @Path("user_id") String userId,
             @Header("Authorization") String authorization,
@@ -625,7 +586,7 @@ public interface ApiService {
     /**
      * FCM 알림 토큰 등록 (Todo - 작업 필요)
      */
-    @POST("/user/{user_id}/notification/token")
+    @POST(POST_USER_NOTIFICATION_TOKEN)
     Call<Void> InsertToken(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
@@ -635,12 +596,12 @@ public interface ApiService {
     /**
      * 회원 가입과 로그인 (Todo - 작업 필요)
      */
-    @POST("/user")
+    @POST(POST_USER)
     Call<LoginResponse> requestSignIn(@Body LoginRequest requestBody);
     /**
      * Access Token 갱신
      */
-    @POST("/user/auth")
+    @POST(POST_USER_AUTH)
     Call<TokenResponse> getRequestToken(
             @Header("Content-Type") String contentType,
             @Header("Authorization") String authorization,
@@ -649,7 +610,7 @@ public interface ApiService {
     /**
      * 알림 정보 수정
      */
-    @PUT("/user/{user_id}/notification")
+    @PUT(PUT_USER_NOTIFICATION)
     Call<AlertResponse> requestAlertStatus(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,
@@ -659,7 +620,7 @@ public interface ApiService {
     /**
      * FCM 알림 토큰 수정
      */
-    @PUT("/user/{user_id}/notification/token")
+    @PUT(PUT_USER_NOTIFICATION_TOKEN)
     Call<Void> updateToken(
             @Path("user_id") String userId,
             @Header("Content-Type") String contentType,

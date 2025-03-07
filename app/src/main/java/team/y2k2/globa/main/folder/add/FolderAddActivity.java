@@ -189,9 +189,9 @@ public class FolderAddActivity extends AppCompatActivity {
                 }
 
                 if(s.length() == 0) {
-                    binding.buttonFolderaddShareCancel.setVisibility(View.GONE);
+                    binding.buttonFoldershareShareCancel.setVisibility(View.GONE);
                 } else {
-                    binding.buttonFolderaddShareCancel.setVisibility(View.VISIBLE);
+                    binding.buttonFoldershareShareCancel.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -214,7 +214,7 @@ public class FolderAddActivity extends AppCompatActivity {
             binding.edittextFolderaddInputname.setText("");
         });
 
-        binding.buttonFolderaddShareCancel.setOnClickListener(v -> {
+        binding.buttonFoldershareShareCancel.setOnClickListener(v -> {
             binding.edittextFolderaddShareInputname.setText("");
         });
 

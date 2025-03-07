@@ -34,7 +34,7 @@ public class KeywordDetailViewModel extends ViewModel {
     }
 
     public void searchKeyword(String keyword) {
-        apiService.searchKeyword("application/json", authorization, keyword).enqueue(new Callback<KeywordDetailResponse>() {
+        apiService.searchDictionary("application/json", authorization, keyword).enqueue(new Callback<KeywordDetailResponse>() {
             @Override
             public void onResponse(Call<KeywordDetailResponse> call, Response<KeywordDetailResponse> response) {
                 if(response.isSuccessful()) {
