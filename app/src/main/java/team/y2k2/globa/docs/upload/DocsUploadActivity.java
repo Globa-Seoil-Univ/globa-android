@@ -2,23 +2,20 @@ package team.y2k2.globa.docs.upload;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsUploadBinding;
 
 public class DocsUploadActivity extends AppCompatActivity {
-    private MediaPlayer mediaPlayer;
     ActivityDocsUploadBinding binding;
-    private static boolean isAudioPlayed;
     DocsUploadViewModel viewModel;
 
     AlertDialog.Builder builder;
@@ -27,90 +24,65 @@ public class DocsUploadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityDocsUploadBinding.inflate(getLayoutInflater());
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_docs_upload);
         viewModel = new ViewModelProvider(this).get(DocsUploadViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+
         viewModel.setActivity(this);
-
-        setTextViewTitles();
-        setOnClickListeners();
-
         viewModel.loadFolder();
         viewModel.loadLanguage();
-        setContentView(binding.getRoot());
+
+        observeViewModel();
     }
 
+    private void observeViewModel() {
+        // 제목 옵저버
+        viewModel.getDocsTitle().observe(this, title -> {
+            binding.textviewDocsAudioTitle.setText(title);
+            binding.edittextDocsUploadTitle.setHint(title);
+        });
 
-    public void setTextViewTitles() {
-        String docsTitle;
-        if(viewModel.getRecordName().length() >= 20) {
-            docsTitle = viewModel.getRecordName().substring(0, 20);
-        }
-        else
-            docsTitle = viewModel.getRecordName();
-
-        binding.textviewDocsAudioTitle.setText(docsTitle);
-        binding.edittextDocsUploadTitle.setHint(docsTitle);
-    }
-
-    public void setOnClickListeners() {
-        binding.imagebuttonDocumentPlay.setOnClickListener(v -> {
-            if(isAudioPlayed) {
-                releaseMediaPlayer();
+        // 재생 상태에 따라 UI 업데이트
+        viewModel.getAudioPlayState().observe(this, playState -> {
+            if (playState == AudioPlayState.PLAYING) {
+                binding.imagebuttonDocumentPlay.setImageResource(R.drawable.docs_pause);
+            } else {
                 binding.imagebuttonDocumentPlay.setImageResource(R.drawable.docs_play);
-                isAudioPlayed = false;
-                return;
             }
-
-            binding.imagebuttonDocumentPlay.setImageResource(R.drawable.docs_pause);
-            isAudioPlayed = true;
-            playAudio(viewModel.getRecordPath());
         });
 
-        binding.linearlayoutDocsUploadConfirm.setOnClickListener(v -> {
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_loading, null);
-
-            builder = new AlertDialog.Builder(this);
-            builder.setView(dialogView);
-
-            dialog = builder.create();
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-            dialog.show();
-            viewModel.docsUpload();
-        });
-
-        binding.imagebuttonDocsUploadBack.setOnClickListener(v -> {
-            finish();
+        // 업로드 상태에 따른 UI 업데이트
+        viewModel.getUploadStatus().observe(this, status -> {
+            if (status.equals("LOADING")) {
+                showLoadingDialog();
+            } else {
+                dismissLoadingDialog();
+                Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
+                if (status.equals("파일 업로드 성공")) {
+                    finish();
+                }
+            }
         });
     }
-
-    private void playAudio(String audioPath) {
-        try {
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(this, Uri.parse(audioPath));
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-
-            mediaPlayer.setOnCompletionListener(v -> {
-                releaseMediaPlayer();
-            });
-        } catch (Exception e) {
-            Toast.makeText(this, "오류 발생" + e, Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+    private void showLoadingDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_loading, null);
+        builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
-
-    private void releaseMediaPlayer() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
+    private void dismissLoadingDialog() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        releaseMediaPlayer();
+        viewModel.releaseMediaPlayer();
     }
 }

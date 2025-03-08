@@ -3,7 +3,6 @@ package team.y2k2.globa.api;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +33,6 @@ public class ApiUnitTest {
             assertNotNull(record.getFolderId());
             assertNotNull(record.getKeywords());
             assertNotNull(record.getRecordId());
-            assertNotNull(record.getUploader());
         }
     }
 

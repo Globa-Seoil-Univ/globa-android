@@ -1,235 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/constraintlayout_docs"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:id="@+id/relativelayout_docs_upload_tab"
+    <data>
+        <variable
+            name="viewModel"
+            type="team.y2k2.globa.docs.upload.DocsUploadViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout_docs"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/imagebutton_docs_upload_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@null"
-            android:layout_marginLeft="16dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/header_back" />
-
-        <TextView
-            android:id="@+id/textview_docs_upload_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:layout_marginLeft="15dp"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal"
-            android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_toEndOf="@id/imagebutton_docs_upload_back"
-            android:layout_centerVertical="true"
-            tools:text="세부정보 추가" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/linearlayout_document_icon_bg"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="16dp"
-        android:background="@drawable/document_icon_background"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_upload_tab"
-        app:layout_constraintBottom_toBottomOf="@id/textview_docs_audio_datetime">
-
-        <ImageView
-            android:id="@+id/imageview_document_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/document" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textview_docs_audio_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        tools:text="2024-03-12 회의록"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/notosans_regular"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
-        app:layout_constraintEnd_toStartOf="@id/linearlayout_document_play"
-        app:layout_constraintTop_toTopOf="@id/linearlayout_document_icon_bg" />
-
-    <TextView
-        android:id="@+id/textview_docs_audio_datetime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="2024-03-12 오후 11:07"
-        android:layout_marginLeft="8dp"
-        android:fontFamily="@font/notosans_regular"
-        android:textColor="@color/darkGray"
-        app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
-        app:layout_constraintTop_toBottomOf="@id/textview_docs_audio_title" />
-
-    <LinearLayout
-        android:id="@+id/linearlayout_document_play"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/document_play_background"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_upload_tab"
-        app:layout_constraintBottom_toBottomOf="@id/textview_docs_audio_datetime">
-
-        <ImageButton
-            android:id="@+id/imagebutton_document_play"
+        <RelativeLayout
+            android:id="@+id/relative_layout_docs_upload_tab"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:src="@drawable/docs_play" />
-    </LinearLayout>
+            android:layout_height="72dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/linearlayout_docs_upload_border_1"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:background="@color/lightGray"
-        app:layout_constraintTop_toBottomOf="@id/linearlayout_document_icon_bg"
-        app:layout_constraintStart_toStartOf="parent"/>
+            <ImageButton
+                android:id="@+id/image_button_docs_upload_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@null"
+                android:layout_marginStart="16dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/header_back" />
 
-    <TextView
-        android:id="@+id/textview_docs_upload_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="16dp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_1"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="@dimen/small"/>
+            <TextView
+                android:id="@+id/textview_docs_upload_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_toEndOf="@id/image_button_docs_upload_back"
+                android:layout_centerVertical="true"
+                tools:text="세부정보 추가" />
+        </RelativeLayout>
 
-    <EditText
-        android:id="@+id/edittext_docs_upload_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/input_title"
-        android:textSize="@dimen/large"
-        android:background="@null"
-        android:maxLength="32"
-        app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_title"
-        app:layout_constraintStart_toStartOf="@id/textview_docs_upload_title"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <LinearLayout
+            android:id="@+id/linearlayout_document_icon_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/document_icon_background"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relative_layout_docs_upload_tab"
+            app:layout_constraintBottom_toBottomOf="@id/textview_docs_audio_datetime">
 
-    <LinearLayout
-        android:id="@+id/linearlayout_docs_upload_border_3"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:background="@color/lightGray"
-        app:layout_constraintTop_toBottomOf="@id/edittext_docs_upload_title"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/textview_docs_upload_folder_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/folder"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="16dp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_3"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="@dimen/small"/>
-
-    <Spinner
-        android:id="@+id/spinner_docs_upload"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:padding="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_folder_title"/>
-
-    <LinearLayout
-        android:id="@+id/linearlayout_docs_upload_border_4"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:background="@color/lightGray"
-        app:layout_constraintTop_toBottomOf="@id/spinner_docs_upload"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/textview_docs_upload_language_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/language"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="16dp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_4"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="@dimen/small"/>
-
-    <Spinner
-        android:id="@+id/spinner_docs_upload_language"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:padding="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_language_title"/>
-
-    <LinearLayout
-        android:id="@+id/linearlayout_docs_upload_confirm"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-
-        android:background="@drawable/main_button_selected"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center"
-        android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/image_view_document_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/document" />
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/textview_docs_audio_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="2024-03-12 회의록"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/notosans_regular"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
+            app:layout_constraintEnd_toStartOf="@id/linearlayout_document_play"
+            app:layout_constraintTop_toTopOf="@id/linearlayout_document_icon_bg" />
+
+        <TextView
+            android:id="@+id/textview_docs_audio_datetime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/twitter"
-            android:text="@string/activity_docs_upload_share_confirm"
-            android:textSize="16dp"
-            app:cornerRadius="8dp" />
-    </LinearLayout>
+            tools:text="2024-03-12 오후 11:07"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/notosans_regular"
+            android:textColor="@color/darkGray"
+            app:layout_constraintStart_toEndOf="@+id/linearlayout_document_icon_bg"
+            app:layout_constraintTop_toBottomOf="@id/textview_docs_audio_title" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/linearlayout_document_play"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/document_play_background"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relative_layout_docs_upload_tab"
+            app:layout_constraintBottom_toBottomOf="@id/textview_docs_audio_datetime">
+
+            <ImageButton
+                android:id="@+id/imagebutton_document_play"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:onClick="@{() -> viewModel.onPlayButtonClick()}"
+                android:src="@drawable/docs_play" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_docs_upload_border_1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:background="@color/lightGray"
+            app:layout_constraintTop_toBottomOf="@id/linearlayout_document_icon_bg"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/textview_docs_upload_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_1"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/small"/>
+
+        <EditText
+            android:id="@+id/edittext_docs_upload_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/input_title"
+            android:textSize="@dimen/large"
+            android:background="@null"
+            android:maxLength="32"
+            app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_title"
+            app:layout_constraintStart_toStartOf="@id/textview_docs_upload_title"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearlayout_docs_upload_border_3"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:background="@color/lightGray"
+            app:layout_constraintTop_toBottomOf="@id/edittext_docs_upload_title"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/textview_docs_upload_folder_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/folder"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_3"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/small"/>
+
+        <Spinner
+            android:id="@+id/spinner_docs_upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_folder_title"/>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_docs_upload_border_4"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:background="@color/lightGray"
+            app:layout_constraintTop_toBottomOf="@id/spinner_docs_upload"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/textview_docs_upload_language_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_4"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/small"/>
+
+        <Spinner
+            android:id="@+id/spinner_docs_upload_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_language_title"/>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_docs_upload_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/main_button_selected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:onClick="@{() -> viewModel.docsUploadConfirm()}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/twitter"
+                android:text="@string/activity_docs_upload_share_confirm"
+                android:textSize="16sp"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

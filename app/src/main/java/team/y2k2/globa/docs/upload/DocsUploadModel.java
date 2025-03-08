@@ -28,4 +28,12 @@ public class DocsUploadModel {
     public void setRecordName(String recordName) {
         this.recordName = recordName;
     }
+
+    public void setRecordExtension(String recordExtension) {
+        this.recordExtension = recordExtension;
+    }
+
+    public void setRecordPath(String recordPath) {
+        this.recordPath = recordPath;
+    }
 }

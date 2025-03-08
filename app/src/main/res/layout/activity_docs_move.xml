@@ -54,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="@id/textview_docs_audio_datetime">
 
         <ImageView
-            android:id="@+id/imageview_document_icon"
+            android:id="@+id/image_view_document_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/document" />

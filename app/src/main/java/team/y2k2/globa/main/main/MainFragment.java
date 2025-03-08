@@ -1,15 +1,10 @@
 package team.y2k2.globa.main.main;
 
 
-import static team.y2k2.globa.main.main.MainFragmentModel.RECORDS_FILTER_CURRENTLY;
-import static team.y2k2.globa.main.main.MainFragmentModel.RECORDS_FILTER_MOST_VIEWED;
-import static team.y2k2.globa.main.main.MainFragmentModel.RECORDS_FILTER_RECEIVED;
-import static team.y2k2.globa.main.main.MainFragmentModel.RECORDS_FILTER_SHARED;
+import static team.y2k2.globa.main.main.MainFragmentModel.*;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -30,33 +25,18 @@ import androidx.viewpager.widget.ViewPager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.model.entity.Keyword;
-import team.y2k2.globa.api.model.entity.Record;
-import team.y2k2.globa.api.model.response.FolderResponse;
-import team.y2k2.globa.api.model.response.NoticeResponse;
-import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.databinding.FragmentMainBinding;
-import team.y2k2.globa.main.docs.list.DocsListItem;
-import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
-import team.y2k2.globa.main.docs.list.DocsListItemModel;
-import team.y2k2.globa.main.notice.NoticeAutoScrollHandler;
-import team.y2k2.globa.main.notice.NoticeFragmentAdapter;
-import team.y2k2.globa.main.search.SearchActivity;
-import team.y2k2.globa.notification.NotificationActivity;
+import team.y2k2.globa.main.docs.list.*;
+import team.y2k2.globa.main.notice.*;
+import team.y2k2.globa.main.search.*;
+import team.y2k2.globa.notification.*;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     Button[] docsFilterButtons;
-
     Context context;
-
     FragmentMainBinding binding;
-
     MainFragmentViewModel viewModel;
 
     int filterType;
@@ -166,7 +146,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         if(adapter.getItemCount() == 0) {
             ArrayList<DocsListItem> items = new ArrayList<>();
-            items.add(new DocsListItem("","","",""));
+            items.add(new DocsListItem());
             adapter = new DocsListItemAdapter(items, getActivity());
         }
 
@@ -190,10 +170,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
     
-        if (dpWidth >= 600) { // 화면 사이즈가 600dp 이상이면
-            return 2; // 테블릿의 경우 2 컬럼
+        if (dpWidth >= DisplayMetrics.DENSITY_600) {
+            return 2;
         } else {
-            return 1; // 모바일의 경우 1 컬럼
+            return 1;
         }
     }
 
@@ -202,14 +182,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         viewModel.getNotificationCheckLiveData().observe(this, checkResponse -> {
             if(checkResponse != null) {
                 if(checkResponse.isHasUnRead()) {
-                    Log.d("안 읽은 알림 여부", "안 읽은 알림 있음");
                     binding.linearlayoutMainNotificationCheck.setVisibility(View.VISIBLE);
                 } else {
-                    Log.d("안 읽은 알림 여부", "안 읽은 알림 없음");
                     binding.linearlayoutMainNotificationCheck.setVisibility(View.GONE);
                 }
-            } else {
-                Log.d("안 읽은 알림 여부", "안 읽은 알림 여부 오류 : checkResponse = null");
             }
         });
     }

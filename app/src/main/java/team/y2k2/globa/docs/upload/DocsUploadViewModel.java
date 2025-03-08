@@ -2,16 +2,20 @@ package team.y2k2.globa.docs.upload;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-//import com.arthenica.mobileffmpeg.FFmpeg;
+import com.arthenica.ffmpegkit.FFmpegKit;
+import com.arthenica.ffmpegkit.FFmpegSession;
+import com.arthenica.ffmpegkit.ReturnCode;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -24,6 +28,22 @@ import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class DocsUploadViewModel extends ViewModel {
+    private MutableLiveData<String> title = new MutableLiveData<>();
+    private MutableLiveData<AudioPlayState> audioPlayState = new MutableLiveData<>();
+    private MutableLiveData<String> uploadStatus = new MutableLiveData<>();
+
+    public LiveData<String> getDocsTitle() {
+        return title;
+    }
+
+    public LiveData<AudioPlayState> getAudioPlayState() {
+        return audioPlayState;
+    }
+
+    public LiveData<String> getUploadStatus() {
+        return uploadStatus;
+    }
+
     DocsUploadModel model;
     DocsUploadActivity activity;
     private StorageReference storageReference;
@@ -31,6 +51,7 @@ public class DocsUploadViewModel extends ViewModel {
     String folderId;
     DocsUploadFolderAdapter adapter;
     DocsUploadLanguageAdapter languageAdapter;
+    MediaPlayer mediaPlayer;
 
     String firebasePath;
     long unixTime;
@@ -44,7 +65,54 @@ public class DocsUploadViewModel extends ViewModel {
     public void setActivity(DocsUploadActivity activity) {
         this.activity = activity;
         this.model = new DocsUploadModel(activity.getIntent());
+        setDocsTitle();
+        audioPlayState.setValue(AudioPlayState.STOPPED);
     }
+
+    private void setDocsTitle() {
+        String title;
+        if (model.getRecordName().length() >= 20) {
+            title = model.getRecordName().substring(0, 20);
+        } else {
+            title = model.getRecordName();
+        }
+        this.title.setValue(title);
+    }
+
+    public void onPlayButtonClick() {
+        if (audioPlayState.getValue() == AudioPlayState.PLAYING) {
+            pauseAudio();
+        } else {
+            playAudio();
+        }
+    }
+
+    private void playAudio() {
+        try {
+            if (mediaPlayer == null) {
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setDataSource(activity, Uri.parse(model.getRecordPath()));
+                mediaPlayer.prepare();
+            }
+            mediaPlayer.start();
+            audioPlayState.postValue(AudioPlayState.PLAYING);
+
+            mediaPlayer.setOnCompletionListener(v -> {
+                releaseMediaPlayer();
+            });
+        } catch (Exception e) {
+            uploadStatus.postValue("오류 발생" + e);
+            e.printStackTrace();
+        }
+    }
+
+    private void pauseAudio() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            audioPlayState.postValue(AudioPlayState.PAUSED);
+        }
+    }
+
 
     private void requestCreateRecord(String title) {
         // 네트워크 요청 보내기
@@ -102,42 +170,36 @@ public class DocsUploadViewModel extends ViewModel {
     }
 
     // MP3 to OGG 변환 함수 호출
-//    private void convertAudio(String path, String folderId) {
-//        handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                Instant instant = Instant.now();
-//                unixTime = instant.getEpochSecond();
-//
-//                String oggPath = path.replace(".tmp", ".ogg");
-//
-//                String[] cmd = new String[]{"-i", path, "-vn", "-map_metadata", "-1", "-ac", "1", "-c:a", "libopus", "-b:a", "12k", "-application", "voip", oggPath};
-//                int rc = FFmpeg.execute(cmd);
-//                if (rc == 0) {
-//                    // 변환 성공
-//                    Log.d("AudioConverter", "변환 성공");
-//                } else {
-//                    // 변환 실패
-//                    Log.e("AudioConverter", "변환 실패");
-//                }
-//
-//                uploadRecordFile(oggPath, folderId);
-//
-//                // 변환 완료 후 UI 업데이트 (필요시)
-//                activity.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // UI 업데이트 (예: ProgressBar 숨기기, 변환 완료 메시지 표시)
-//                        activity.dialog.dismiss();
-//                        activity.finish();
-//                    }
-//                });
-//            }
-//        });
-//    }
+    private void convertAudio(String path, String folderId) {
+        handler.post(() -> {
+            Instant instant = Instant.now();
+            unixTime = instant.getEpochSecond();
+
+            String oggPath = path.replace(".tmp", ".ogg");
+            String[] cmd = new String[]{"-i", path, "-vn", "-map_metadata", "-1", "-ac", "1", "-c:a", "libopus", "-b:a", "12k", "-application", "voip", oggPath};
+            String ffmpegCommand = String.join(" ", cmd); // 명령 배열을 문자열로 변환
+
+            FFmpegSession session = FFmpegKit.execute(ffmpegCommand);
+            ReturnCode returnCode = session.getReturnCode();
+
+            if (ReturnCode.isSuccess(returnCode)) {
+                Log.d("AudioConverter", "변환 성공");
+            } else {
+                Log.e("AudioConverter", "변환 실패, code: " + returnCode.getValue());
+            }
+
+            uploadRecordFile(oggPath, folderId);
+
+            // 변환 완료 후 UI 업데이트 (필요시)
+            activity.runOnUiThread(() -> {
+                // UI 업데이트 (예: ProgressBar 숨기기, 변환 완료 메시지 표시)
+                activity.finish();
+            });
+        });
+    }
 
 
-    public void docsUpload() {
+    public void docsUploadConfirm() {
         handlerThread = new HandlerThread("FFmpegThread");
         handlerThread.start();
 
@@ -161,14 +223,15 @@ public class DocsUploadViewModel extends ViewModel {
             folderId = String.valueOf(folder.getFolderId());
         }
 
-//        convertAudio(model.getRecordPath(), folderId);
+        convertAudio(model.getRecordPath(), folderId);
     }
 
-    public String getRecordPath() {
-        return model.getRecordPath();
+    public void releaseMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+            audioPlayState.postValue(AudioPlayState.STOPPED);
+        }
     }
 
-    public String getRecordName() {
-        return model.getRecordName();
-    }
 }

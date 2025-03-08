@@ -22,6 +22,13 @@ public class DocsListItem {
         this.folderId = folderId;
     }
 
+    public DocsListItem() {
+        this.title = "";
+        this.datetime = "";
+        this.recordId = "";
+        this.folderId = "";
+    }
+
     public void setKeywordList(List<Keyword> keywords) {
         this.keywords = keywords;
     }

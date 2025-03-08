@@ -8,19 +8,14 @@ import static team.y2k2.globa.main.MainModel.REQUEST_CODE_PICK_RECORD;
 import static team.y2k2.globa.main.MainModel.REQUEST_CODE_UPLOAD_RECORD;
 import static team.y2k2.globa.main.MainModel.TYPE_AUDIO;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 
@@ -46,6 +41,14 @@ import team.y2k2.globa.main.main.MainFragment;
 import team.y2k2.globa.main.profile.ProfileFragment;
 import team.y2k2.globa.main.statistics.StatisticsFragment;
 
+/**
+ * 로그인 이후 사용자 별 필요한 동작 처리
+ * 1. Access Token 호출 및 관리
+ * 2. FCM Token 핸들링
+ * 3. 메인 화면 - 음성 파일 조회 (default)
+ * 4. 프로필, 통계 등 메인 이외 화면 매핑
+ * 5. 음성 파일 업로드 메서드 로직
+ */
 public class MainViewModel extends ViewModel {
     MainActivity activity;
     MainModel model;
@@ -73,20 +76,69 @@ public class MainViewModel extends ViewModel {
         else if(index == R.id.item_main_statistics)
             replaceFragment(statisticsFragment);
         else if(index == R.id.item_main_upload)
-            uploadAudio();
+            showAudioSelectionDialog();
         else if(index == R.id.item_main_profile)
             replaceFragment(profileFragment);
         else if(index == R.id.item_main_folder)
             replaceFragment(folderFragment);
     }
 
-    private void uploadAudio() {
+    private void replaceFragment(Fragment fragment) {
+        androidx.fragment.app.FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fcv_main, fragment, null)
+                .commit();
+    }
+
+    private void showAudioSelectionDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity.getApplication().getApplicationContext());
         bottomSheetDialog.setContentView(R.layout.dialog_upload);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType(TYPE_AUDIO);
         activity.startActivityForResult(intent, REQUEST_CODE_PICK_RECORD);
+    }
+    public void handleUserFcmToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if(! task.isSuccessful())
+                return;
+            String fcmToken = task.getResult();
+            String userId = getUserInfo();
+            updateToken(userId, fcmToken);
+        });
+    }
+
+    public String getUserInfo() {
+        ApiClient apiClient = new ApiClient(activity);
+        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+        return userInfoResponse.getUserId();
+    }
+
+    public void updateToken(String userId, String token) {
+        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
+
+        apiService.updateToken(userId, "application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                    Log.d("알림 토큰", "알림 토큰 업데이트 완료");
+                }
+                else {
+                    Log.d("알림 토큰", "알림 토큰 업데이트 실패 : " + response.code() + ", errorMessage: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("알림 토큰", "알림 토큰 업데이트 요청 실패 : " + t.getMessage());
+            }
+        });
+    }
+
+    public String getUserAccessToken() {
+        SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
+        return preferences.getString("accessToken", "");
     }
 
     public void uploadRecord(Intent data) {
@@ -100,14 +152,6 @@ public class MainViewModel extends ViewModel {
             intent.putExtra(PRF_RECORD_NAME, audioName);
             activity.startActivityForResult(intent, REQUEST_CODE_UPLOAD_RECORD);
         }
-    }
-
-    private void replaceFragment(Fragment fragment) {
-        androidx.fragment.app.FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fcv_main, fragment, null)
-                .commit();
     }
 
     private String getRealPathFromURI(Uri uri) {
@@ -145,55 +189,6 @@ public class MainViewModel extends ViewModel {
             return name;
         }
         return uri.getLastPathSegment();
-    }
-
-    public void getUserIdUpdateToken() {
-//        SharedPreferences fcmPref = activity.getSharedPreferences("fcm_token", activity.MODE_PRIVATE);
-//        String fcmPrefToken = fcmPref.getString("fcm_token", null);
-//        Log.d("FCM 토큰", "프리퍼런스 FCM 토큰: " + fcmPrefToken);
-
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                String fcmToken = task.getResult();
-
-                Log.d("FCM 토큰", "메인 액티비티 FCM 토큰: " + fcmToken);
-
-                String userId = getUserInfo();
-                updateToken(userId, fcmToken);
-            }
-        });
-
-    }
-
-    public String getUserInfo() {
-        ApiClient apiClient = new ApiClient(activity);
-        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
-        return userInfoResponse.getUserId();
-    }
-
-    public void updateToken(String userId, String token) {
-        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
-        apiService.updateToken(userId, "application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
-                    Log.d("알림 토큰", "알림 토큰 업데이트 완료");
-                } else {
-                    Log.d("알림 토큰", "알림 토큰 업데이트 실패 : " + response.code() + ", errorMessage: " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("알림 토큰", "알림 토큰 업데이트 요청 실패 : " + t.getMessage());
-            }
-        });
-    }
-
-    public void getUserAccount() {
-        SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String accessToken = preferences.getString("accessToken", "");
-        Log.d(getClass().getSimpleName(), "AT: " + accessToken);
     }
 
 }
