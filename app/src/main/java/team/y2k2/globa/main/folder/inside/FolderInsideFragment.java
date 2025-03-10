@@ -1,7 +1,5 @@
 package team.y2k2.globa.main.folder.inside;
 
-import static team.y2k2.globa.api.ApiClient.apiService;
-import static team.y2k2.globa.api.ApiService.API_BASE_URL;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
@@ -28,22 +26,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.entity.FolderInsideRecord;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.databinding.FragmentFolderInsideBinding;
-import team.y2k2.globa.main.docs.list.DocsListItem;
-import team.y2k2.globa.main.docs.list.DocsListItemAdapter;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.edit.FolderNameEditActivity;
 import team.y2k2.globa.main.folder.permission.FolderPermissionActivity;
@@ -134,7 +123,6 @@ public class FolderInsideFragment extends Fragment {
             }
 
             FolderInsideDocsAdapter adapter = new FolderInsideDocsAdapter(model.getItems(), this);
-
             binding.recyclerviewFolderInsideDocs.setAdapter(adapter);
             binding.recyclerviewFolderInsideDocs.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         }
