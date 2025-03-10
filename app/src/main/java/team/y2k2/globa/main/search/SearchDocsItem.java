@@ -1,7 +1,5 @@
 package team.y2k2.globa.main.search;
 
-import android.util.Log;
-
 public class SearchDocsItem {
     private final String title;
     private final String datetime;
