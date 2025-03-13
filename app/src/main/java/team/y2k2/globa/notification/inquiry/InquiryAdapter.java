@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.model.entity.Inquiry;
 
 public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.AdapterViewHolder> {
     ArrayList<InquiryItem> items;
@@ -53,7 +52,7 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.AdapterV
             super(itemView);
 
             title = itemView.findViewById(R.id.textview_item_notification_inquiry_title);
-            // description = itemView.findViewById(R.id.textview_item_notification_inquiry_description);
+            description = itemView.findViewById(R.id.textview_item_notification_inquiry_content);
         }
     }
 }

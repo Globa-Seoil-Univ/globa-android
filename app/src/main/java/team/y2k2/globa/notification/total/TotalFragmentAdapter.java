@@ -97,7 +97,6 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
         holder.createdTime.setText(item.getCreatedTime());
 
         holder.layout.setOnClickListener(v -> {
-
             Log.d("아이템 클릭", "아이템 클릭 타입: " + item.getType());
             // 알림 읽음 표시
             if(!item.isRead()) {
@@ -120,6 +119,7 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
         } else {
             holder.layout.setBackgroundColor(whiteColor);
         }
+
 
         if(item.getType().equals("2")) {
             // 공유 초대 알림
