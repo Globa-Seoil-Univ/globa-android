@@ -1,97 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/constraintlayout_intro"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#222222">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/textview_intro_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
-        android:fontFamily="@font/koho_bold"
-        android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="38dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+        <variable
+            name="viewModel"
+            type="team.y2k2.globa.intro.IntroActivityModel" />
+    </data>
 
-    <ImageView
-        android:id="@+id/imageview_intro_logo"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:src="@drawable/intro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_intro_record"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/relativelayout_intro_bottom"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/loading"
-        app:lottie_repeatCount="20" />
-
-    <RelativeLayout
-        android:id="@+id/relativelayout_intro_bottom"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout_intro"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_margin="20dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        android:background="#222222">
 
         <TextView
-            android:id="@+id/textview_intro_bottom_title"
+            android:id="@+id/textview_intro_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/notosans_regular"
-            android:text="@string/loading_title"
+            android:layout_marginTop="170dp"
+            android:fontFamily="@font/koho_bold"
+            android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="26dp" />
+            android:textSize="38dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textview_intro_bottom_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textview_intro_bottom_title"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/notosans_regular"
-            android:layout_marginTop="15dp"
-            android:text="@string/loading_subtitle"
-            android:textAlignment="center"
-            android:textColor="@color/lightGray" />
+        <ImageView
+            android:id="@+id/imageview_intro_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/intro"
+            android:layout_marginTop="60dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
 
-        <LinearLayout
-            android:id="@+id/button_intro_bottom_start"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_intro_record"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/constraintlayout_intro_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading"
+            app:lottie_repeatCount="20" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintlayout_intro_bottom"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/intro_button"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="170dp"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
+                android:id="@+id/textview_intro_bottom_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/twitter"
-                android:textStyle="bold"
-                android:text="@string/loading_start"
+                android:fontFamily="@font/notosans_regular"
+                android:text="@string/loading_title"
                 android:textColor="@color/white"
-                android:textSize="16dp"
-                app:cornerRadius="8dp" />
+                android:textSize="26dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
-    </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textview_intro_bottom_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/notosans_regular"
+                android:text="@string/loading_subtitle"
+                android:textAlignment="center"
+                android:textColor="@color/lightGray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textview_intro_bottom_title" />
+
+            <LinearLayout
+                android:id="@+id/button_intro_bottom_start"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/intro_button"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:onClick="@{() -> viewModel.navigateToLogin()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/twitter"
+                    android:text="@string/loading_start"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

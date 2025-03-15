@@ -3,7 +3,6 @@ package team.y2k2.globa.login;
 import static team.y2k2.globa.login.LoginModel.*;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.request.LoginRequest;
-import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
@@ -90,7 +88,7 @@ public class LoginViewModel extends ViewModel {
         }
 
         public void KakaoLogin(String token) {
-            LoginRequest request = new LoginRequest(model, IntroActivity.isNofiGranted(), token);
+            LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), token);
             LoginResponse response = apiClient.requestSignIn(request);
 
             userPreferences(request, response);
@@ -136,7 +134,7 @@ public class LoginViewModel extends ViewModel {
                         Log.d("ID_TOKEN", "ID Token: " + idToken);
 
                         model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE, idToken);
-                        LoginRequest request = new LoginRequest(model, IntroActivity.isNofiGranted(), idToken);
+                        LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), idToken);
 
                         LoginResponse response = apiClient.requestSignIn(request);
 

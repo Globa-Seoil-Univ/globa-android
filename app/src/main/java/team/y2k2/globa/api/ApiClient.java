@@ -308,9 +308,6 @@ public class ApiClient {
                     if(!handleErrorCode(response.code())) {
                         return response;
                     }
-                    else {
-                        response = null;
-                    }
                 } catch (IOException e) {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
@@ -1050,8 +1047,6 @@ public class ApiClient {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                // 다이얼로그 확인 버튼 클릭 시 finish() 호출
-                                ((Activity) context).finish();
                             }
                         })
                         .setCancelable(false)

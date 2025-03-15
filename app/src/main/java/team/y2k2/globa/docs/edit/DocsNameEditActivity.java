@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.databinding.ActivityDocsNameEditBinding;
@@ -100,7 +101,9 @@ public class DocsNameEditActivity extends AppCompatActivity {
     public void updateDocsName(String title) {
         ApiClient apiClient = new ApiClient(this);
 
-        if (apiClient.requestUpdateRecordName(folderId, recordId, title).isSuccessful()) {
+        Response<Void> response = apiClient.requestUpdateRecordName(folderId, recordId, title);
+
+        if (response != null && response.isSuccessful()) {
             Log.d(getClass().getName(), "folderId = " + folderId +", recordId = " + recordId + ", title =" + title);
             finish();
         }
