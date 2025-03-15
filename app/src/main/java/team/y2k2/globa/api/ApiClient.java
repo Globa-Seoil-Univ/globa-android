@@ -3,9 +3,11 @@ package team.y2k2.globa.api;
 import static team.y2k2.globa.api.ApiModel.*;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -47,6 +49,7 @@ import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.request.DocsNameEditRequest;
 import team.y2k2.globa.intro.IntroActivity;
+import team.y2k2.globa.login.LoginActivity;
 import team.y2k2.globa.main.MainActivity;
 
 public class ApiClient {
@@ -262,6 +265,7 @@ public class ApiClient {
         }
     }
 
+
     // 폴더 추가
     public Response<Void> requestInsertFolder(String title, List<ShareTarget> shareTargets) {
         FolderAddRequest request = new FolderAddRequest(title, shareTargets);
@@ -273,35 +277,21 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                        default: {
-                            Log.d(getClass().getSimpleName(), "폴더 추가 응답 코드 : " + response.code());
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            // CompletableFuture 실행 중 에러 발생 시 에러 처리
+            handleErrorCode(500);
+            return Response.error(500, ResponseBody.create(null, ""));
         }
-        return null;
     }
 
     // 문서 이름 업데이트
@@ -313,26 +303,18 @@ public class ApiClient {
                 Call<Void> call = apiService.requestUpdateRecordName(folderId, recordId, APPLICATION_JSON, authorization, request);
 
                 Response<Void> response;
-
                 try {
                     response = call.execute();
-                    Log.d("문서 수정", "응답 코드: " + response.code());
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
+                    if(!handleErrorCode(response.code())) {
+                        return response;
+                    }
+                    else {
+                        response = null;
                     }
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -353,25 +335,14 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
+
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
@@ -414,27 +385,15 @@ public class ApiClient {
             return CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<Void> call = apiService.requestUpdateDocsMove(folderId, recordId, APPLICATION_JSON, authorization, request);
-
                 Response<Void> response;
+
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -483,23 +442,11 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -520,23 +467,11 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -610,31 +545,11 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않는 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 403: {
-                            response = Response.error(403, ResponseBody.create(null, "소유자 또는 공유되지 않은 사용자가 접근"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                        default: {
-                            Log.d("댓글 추가 API", "댓글 추가 API 응답 코드: " + response.code());
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -655,30 +570,11 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않는 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 403: {
-                            response = Response.error(403, ResponseBody.create(null, "소유자 또는 공유되지 않은 사용자가 접근"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                        default: {
-                            Log.d("대댓글 추가 API", "대댓글 추가 API 응답 코드: " + response.code()); break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -700,29 +596,12 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                        default: {
-                            Log.d("댓글 최초 추가 API", "댓글 최초 추가 API 응답 코드: " + response.code());
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
-                    Log.d("댓글 최초 추가 API", "댓글 최초 추가 IOException 오류 e: " + e.getMessage());
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
@@ -802,27 +681,11 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                        default: {
-                            Log.d("댓글 삭제 API", "댓글 삭제 API 응답 코드: " + response.code()); 
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -844,26 +707,11 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                        default: {
-                            Log.d("댓글 수정 API", "댓글 수정 API 응답 코드: " + response.code());
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -915,23 +763,11 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰")); break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰")); break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러")); break;
-                        }
-                        default: {
-                            Log.d("공부 시간 수정 API", "공부 시간 수정 API 응답 코드: " + response.code());
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -979,23 +815,11 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-
-                    switch (response.code()) {
-                        case 40110: {
-                            response = Response.error(40110, ResponseBody.create(null, "유효하지 않은 토큰"));
-                            break;
-                        }
-                        case 40120: {
-                            response = Response.error(40120, ResponseBody.create(null, "만료된 토큰"));
-                            break;
-                        }
-                        case 500: {
-                            response = Response.error(500, ResponseBody.create(null, "서버 에러"));
-                            break;
-                        }
-                    }
+                    handleErrorCode(response.code());
                 } catch (IOException e) {
-                    response = Response.error(500, ResponseBody.create(null, "IOException: " + e.getMessage()));
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
                     e.printStackTrace();
                 }
                 return response;
@@ -1006,32 +830,41 @@ public class ApiClient {
         return null;
     }
 
-    private boolean handleErrorCode(int code) {
+    public boolean handleErrorCode(int code) {
+        Intent intent;
         switch (code) {
-                // 400 Bad Request 관련 에러: 잘못된 요청, 필요한 인자 누락 등
+            // 400 Bad Request 관련 에러: 잘못된 요청, 필요한 인자 누락 등
             case ERR_BAD_REQUEST: {
-                Intent intent = new Intent(context, IntroActivity.class);
+                intent = new Intent(context, IntroActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
+                return true; // IntroActivity로 이동했으므로 true 반환
             }
             case ERR_EXPIRED_ACCESS_TOKEN: {
                 SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
                 String refreshToken = preferences.getString("refreshToken", "");
                 String accessToken = preferences.getString("accessToken", "");
 
-                if(! refreshToken.equalsIgnoreCase("") && ! accessToken.equalsIgnoreCase("")) {
+                if (!refreshToken.equalsIgnoreCase("") && !accessToken.equalsIgnoreCase("")) {
+                    // TokenRequest, TokenResponse, requestToken()은 기존 코드에서 정의된 대로 사용
                     TokenRequest request = new TokenRequest(refreshToken);
                     TokenResponse response = requestToken(request);
 
-                    String newAccessToken = response.getAccessToken();
-                    String newRefreshToken = response.getRefreshToken();
+                    if (response != null) { // response가 null이 아닌지 확인
+                        String newAccessToken = response.getAccessToken();
+                        String newRefreshToken = response.getRefreshToken();
 
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("accessToken", newAccessToken);
-                    editor.putString("refreshToken", newRefreshToken);
-                    editor.commit();
-                    break;
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("accessToken", newAccessToken);
+                        editor.putString("refreshToken", newRefreshToken);
+                        editor.apply(); // commit() 대신 apply() 사용
+                        return true; // 토큰 갱신 성공
+                    } else {
+                        showErrorDialog(code, "토큰 갱신에 실패했습니다.");
+                        return false; // 토큰 갱신 실패
+                    }
                 }
+                return false; // refreshToken이나 accessToken이 없는 경우
             }
             case ERR_ACTIVE_REFRESH_TOKEN:
             case ERR_NOT_MATCH_REFRESH_TOKEN:
@@ -1045,8 +878,9 @@ public class ApiClient {
             case ERR_REQUIRED_FOLDER_ID:
             case ERR_REQUIRED_QUIZ_ID:
             case ERR_REQUIRED_RECORD_ID:
-                throw new IllegalArgumentException("잘못된 요청 또는 필요한 정보가 누락되었습니다.");
-                // 400 Bad Request 관련 에러 (추가): 잘못된 요청, 필요한 정보 누락 등 (post 관련)
+                showErrorDialog(code, "잘못된 요청 또는 필요한 정보가 누락되었습니다.");
+                return false;
+            // 400 Bad Request 관련 에러 (추가): 잘못된 요청, 필요한 정보 누락 등 (post 관련)
             case ERR_REQUIRED_QUIZ:
             case ERR_RECORD_POST_BAD_REQUEST:
             case ERR_REQUIRED_RECORD_TITLE:
@@ -1059,30 +893,45 @@ public class ApiClient {
             case ERR_NOFI_TYPE_BAD_REQUEST:
             case ERR_REQUIRED_NOTIFICATION_ID:
             case ERR_NOT_PARENT_COMMENT:
-                throw new IllegalArgumentException("잘못된 요청 또는 필요한 정보가 누락되었습니다. (post 관련)");
+                showErrorDialog(code, "잘못된 요청 또는 필요한 정보가 누락되었습니다. (post 관련)");
+                return false;
 
-                // 401 Unauthorized 관련 에러: 인증 실패, 잘못된 토큰
+            // 401 Unauthorized 관련 에러: 인증 실패, 잘못된 토큰
             case ERR_UNAUTHORIZED:
             case ERR_INVALID_TOKEN:
             case ERR_SIGNATURE:
             case ERR_EXPIRED_REFRESH_TOKEN:
-                throw new IllegalArgumentException("인증에 실패했습니다. 토큰을 확인해주세요.");
+                // LoginActivity를 시작하고 현재 액티비티 스택을 모두 제거
+                intent = new Intent(context, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(intent);
+                return false;
 
-                // 403 Forbidden 관련 에러: 권한 없음, 잘못된 접근
+            // 403 Forbidden 관련 에러: 권한 없음, 잘못된 접근
             case ERR_FORBIDDEN:
             case ERR_NOT_NULL_ROLE:
-            case ERR_NOT_DESERVE_ADD_NOTICE:
-            case ERR_NOT_DESERVE_ACCESS_FOLDER:
             case ERR_NOT_DESERVE_MODIFY_INVITATION:
-            case ERR_NOT_DESERVE_POST_COMMENT: {
-                Toast.makeText(context, "댓글을 작성할 권한이 없습니다.", Toast.LENGTH_SHORT).show();
-                throw new IllegalArgumentException("댓글을 작성할 권한이 없습니다.");
-            }
-            case ERR_NOT_DESERVE_FCM:
             case ERR_NOT_DESERVE_DICTIONARY:
-            case ERR_INVALID_TOKEN_USER:
             case ERR_MISMATCH_INQUIRY_OWNER:
             case ERR_MISMATCH_FOLDER_OWNER:
+                showErrorDialog(code, "권한이 없습니다.");
+                return false;
+            case ERR_NOT_DESERVE_ADD_NOTICE:
+                showErrorDialog(code, "공지사항 작성 권한이 없습니다.");
+                return false;
+            case ERR_NOT_DESERVE_ACCESS_FOLDER:
+                showErrorDialog(code, "폴더 접근 권한이 없습니다.");
+                return false;
+
+            case ERR_NOT_DESERVE_POST_COMMENT:
+                showErrorDialog(code, "댓글 작성 권한이 없습니다.");
+                return false;
+            case ERR_NOT_DESERVE_FCM:
+                showErrorDialog(code, "알림을 보낼 수 없습니다.");
+                return false;
+            case ERR_INVALID_TOKEN_USER:
+                showErrorDialog(code, "토큰이 일치하지 않습니다.");
+                return false;
             case ERR_MISMATCH_COMMENT_OWNER:
             case ERR_MISMATCH_NOFI_OWNER:
             case ERR_MISMATCH_ANALYSIS_OWNER:
@@ -1091,43 +940,82 @@ public class ApiClient {
             case ERR_MISMATCH_RECORD_OWNER:
             case ERR_MISMATCH_RECORD_FOLDER:
             case ERR_MISMATCH_NOTIFICATION_OWNER:
-                throw new IllegalArgumentException("권한이 없습니다.");
+                showErrorDialog(code, "권한이 없습니다.");
+                return false;
 
-                // 404 Not Found 관련 에러: 자원을 찾을 수 없음
+            // 404 Not Found 관련 에러: 자원을 찾을 수 없음
             case ERR_NOT_FOUND:
+                showErrorDialog(code, "서버가 응답하지 않습니다.");
+                return false;
             case ERR_NOT_FOUND_USER:
+                showErrorDialog(code, "찾을 수 없는 유저입니다.");
+                return false;
             case ERR_NOT_FOUND_DEFAULT_FOLDER:
+                showErrorDialog(code, "기본 폴더를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_TARGET_USER:
+                showErrorDialog(code, "유저를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_INQUIRY:
+                showErrorDialog(code, "문의를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_NOTICE:
+                showErrorDialog(code, "공지를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_NOTIFICATION:
+                showErrorDialog(code, "알림을 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_ANSWER:
+                showErrorDialog(code, "답변을 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_FOLDER:
-            case ERR_NOT_FOUND_ACCESSIBLE_FOLDER:
             case ERR_NOT_FOUND_ORIGIN_FOLDER:
             case ERR_NOT_FOUND_TARGET_FOLDER:
-            case ERR_NOT_FOUND_SHARE:
             case ERR_NOT_FOUND_FOLDER_FIREBASE:
+                showErrorDialog(code, "폴더를 찾을 수 없습니다.");
+                return false;
+            case ERR_NOT_FOUND_ACCESSIBLE_FOLDER:
+                showErrorDialog(code, "접근 가능한 폴더를 찾을 수 없습니다.");
+                return false;
+            case ERR_NOT_FOUND_SHARE:
+                showErrorDialog(code, "공유 정보를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_HIGHLIGHT:
+                showErrorDialog(code, "하이라이트를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_PARENT_COMMENT:
+                showErrorDialog(code, "댓글을 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_RECORD:
+                showErrorDialog(code, "문서를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_ANALYSIS:
+                showErrorDialog(code, "통계를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_QUIZ:
+                showErrorDialog(code, "퀴즈를 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_RECORD_FIREBASE:
+                showErrorDialog(code, "음성 파일을 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_SECTION:
+                showErrorDialog(code, "섹션을 찾을 수 없습니다.");
+                return false;
             case ERR_NOT_FOUND_COMMENT:
-                throw new IllegalArgumentException("해당 자원을 찾을 수 없습니다.");
+                showErrorDialog(code, "해당 자원을 찾을 수 없습니다.");
+                return false;
 
-                // 409 Conflict 관련 에러: 중복된 데이터 등의 충돌 발생
+            // 409 Conflict 관련 에러: 중복된 데이터 등의 충돌 발생
             case ERR_DUPLICATED:
             case ERR_HIGHLIGHT_DUPLICATED:
             case ERR_FOLDER_NAME_DUPLICATED:
             case ERR_INQUIRY_ANSWER_DUPLICATED:
             case ERR_SHARE_USER_DUPLICATED:
             case ERR_NOTIFICATION_READ_DUPLICATED:
-                throw new IllegalArgumentException("중복된 데이터 또는 충돌이 발생했습니다.");
+                showErrorDialog(code, "중복된 데이터 또는 충돌이 발생했습니다.");
+                return false;
 
-                // 500 Internal Server Error 관련 에러: 서버 내부 오류
+            // 500 Internal Server Error 관련 에러: 서버 내부 오류
             case ERR_INTERNAL_SERVER_ERROR:
             case ERR_FAILED_FILE_UPLOAD:
             case ERR_INTERNAL_SERVER_ERROR_50020:
@@ -1137,11 +1025,40 @@ public class ApiClient {
             case ERR_FAILED_FIREBASE:
             case ERR_FAILED_EXCEL:
             case ERR_NOT_FOUND_KEYWORD_EXCEL:
-                throw new IllegalArgumentException("서버 내부 오류가 발생했습니다.");
+                showErrorDialog(code, "서버 내부 오류가 발생했습니다.");
+                return false;
 
             default:
-                throw new IllegalStateException("알 수 없는 에러: " + code);
+                showErrorDialog(code, "알 수 없는 에러가 발생했습니다.");
+                return false;
         }
-        return false;
     }
+
+    // ErrorHandler 클래스 수정 (showErrorDialog 메서드)
+    private void showErrorDialog(int errorCode, String errorMessage) {
+        if (context == null || !(context instanceof Activity)) {
+            return;
+        }
+
+        ((Activity) context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("에러 발생")
+                        .setMessage("에러 코드: " + errorCode + "\n" + errorMessage)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                // 다이얼로그 확인 버튼 클릭 시 finish() 호출
+                                ((Activity) context).finish();
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
+            }
+        });
+    }
+
+
 }

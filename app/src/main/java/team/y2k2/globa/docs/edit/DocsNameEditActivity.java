@@ -99,8 +99,10 @@ public class DocsNameEditActivity extends AppCompatActivity {
 
     public void updateDocsName(String title) {
         ApiClient apiClient = new ApiClient(this);
-        apiClient.requestUpdateRecordName(folderId, recordId, title);
-        Log.d(getClass().getName(), "folderId = " + folderId +", recordId = " + recordId + ", title =" + title);
-        finish();
+
+        if (apiClient.requestUpdateRecordName(folderId, recordId, title).isSuccessful()) {
+            Log.d(getClass().getName(), "folderId = " + folderId +", recordId = " + recordId + ", title =" + title);
+            finish();
+        }
     }
 }

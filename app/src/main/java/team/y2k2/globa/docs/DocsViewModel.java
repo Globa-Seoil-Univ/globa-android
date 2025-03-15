@@ -1,6 +1,8 @@
 package team.y2k2.globa.docs;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -41,6 +43,9 @@ public class DocsViewModel extends ViewModel {
     ActivityDocsBinding binding;
     DocsSummaryAdapter summaryAdapter;
     private SimpleExoPlayer player;
+
+    private boolean isDownloadFailed = false;
+
 
     public void setActivity(DocsActivity activity) {
         this.activity = activity;
@@ -178,7 +183,25 @@ public class DocsViewModel extends ViewModel {
                         });
                     }
                 })
-                .addOnFailureListener(e-> Log.e("FirebaseStorage", "다운로드 URL 가져오기 실패", e));
+                .addOnFailureListener(e -> {
+                        (activity).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                                builder.setTitle("에러 발생")
+                                        .setMessage("Firebase RDB 에러 : " + e.getMessage())
+                                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .setCancelable(false)
+                                        .show();
+                            }
+                        });
+                    isDownloadFailed = true; // 실패 플래그 설정
+                });
     }
 
     public String getTitle() {
