@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +57,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
 
             ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .replace(R.id.fcv_main, fragment, null)
+                    .replace(R.id.fragment_container_view_main, fragment, null)
                     .addToBackStack(null)
                     .commit();
         });

@@ -81,7 +81,7 @@ public class FolderInsideFragment extends Fragment {
 
         binding.imageviewFolderInsideBack.setOnClickListener(v -> {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fcv_main, FolderFragment.class, null)
+                    .replace(R.id.fragment_container_view_main, FolderFragment.class, null)
                     .commit();
 
             getFragmentManager().popBackStack();
@@ -224,7 +224,7 @@ public class FolderInsideFragment extends Fragment {
                         FolderFragment folderFragment = new FolderFragment();
 
                         requireActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fcv_main, folderFragment)
+                                .replace(R.id.fragment_container_view_main, folderFragment)
                                 .addToBackStack(null)
                                 .commit();
                     }

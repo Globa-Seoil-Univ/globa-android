@@ -5,31 +5,32 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityMainBinding;
 
+import static team.y2k2.globa.main.MainActivityModel.*;
+
 public class MainActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE_PICK_RECORD = 101;
-    private static final int REQUEST_CODE_UPLOAD_RECORD = 102;
     private ActivityMainBinding binding;
-    MainViewModel viewModel;
+    private MainActivityModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MainActivityModel.class);
         viewModel.setActivity(this);
         viewModel.handleUserFcmToken();
 
-        // 유닛 테스트 및 통신 결과 확인을 위해 로그 출력 - 유저 AccessToken
-        Log.i(getClass().getName(), viewModel.getUserAccessToken());
-
         setContentView(binding.getRoot());
-        setNavigationView(binding.navigationMainBottom);
+        setNavigationView(binding.bottomNavigationMainBottom);
+        observeLiveData();
     }
 
     private void setNavigationView(BottomNavigationView view) {
@@ -39,22 +40,53 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * 화면 외부 호출 결과 핸들링
-     * 1. 업로드 버튼 -> 음성 파일 path 정보 가져옴
-     * 2. 업로드 폼 제출 -> 음성 파일 API Request
-     */
+    private void observeLiveData() {
+        viewModel.getSelectedFragment().observe(this, fragment -> {
+            if (fragment != null) {
+                replaceFragment(fragment);
+            }
+        });
+
+        viewModel.getShowBottomSheetDialog().observe(this, show -> {
+            if (show) {
+                showAudioSelectionDialog();
+                viewModel.getShowBottomSheetDialog().setValue(false);
+            }
+        });
+
+        viewModel.getUploadRecordIntent().observe(this, intent -> {
+            if (intent != null) {
+                startActivityForResult(intent, REQUEST_CODE_UPLOAD_RECORD);
+                viewModel.getUploadRecordIntent().setValue(null);
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE_UPLOAD_RECORD && resultCode == RESULT_OK) {
-            viewModel.mainFragment.showRecords(0);
+            viewModel.refreshMainFragmentRecords();
         }
         if (requestCode == REQUEST_CODE_PICK_RECORD && resultCode == RESULT_OK) {
             viewModel.uploadRecord(data);
         }
     }
 
-}
+    private void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container_view_main, fragment, null)
+                .commit();
+    }
 
+    private void showAudioSelectionDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getApplication().getApplicationContext());
+        bottomSheetDialog.setContentView(R.layout.dialog_upload);
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType(TYPE_AUDIO);
+        startActivityForResult(intent, REQUEST_CODE_PICK_RECORD);
+    }
+}

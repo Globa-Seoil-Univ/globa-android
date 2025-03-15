@@ -52,7 +52,7 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
 
             ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .replace(R.id.fcv_main, fragment, null)
+                    .replace(R.id.fragment_container_view_main, fragment, null)
                     .addToBackStack(null)
                     .commit();
 

@@ -1,11 +1,133 @@
 package team.y2k2.globa.main;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.OpenableColumns;
+import android.util.Log;
+
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.request.NotificationTokenRequest;
+import team.y2k2.globa.api.model.response.UserInfoResponse;
+
+import static team.y2k2.globa.api.ApiClient.apiService;
+import static team.y2k2.globa.api.ApiClient.authorization;
+
 public class MainModel {
-    public static final int REQUEST_CODE_PICK_RECORD = 101;
-    public static final int REQUEST_CODE_UPLOAD_RECORD = 102;
+    private Activity activity;
 
-    public static final String TYPE_AUDIO = "audio/*";
+    public MainModel(Activity activity) {
+        this.activity = activity;
+    }
 
-    public static final String PRF_RECORD_NAME = "recordName";
-    public static final String PRF_RECORD_PATH = "recordPath";
+    public void handleUserFcmToken(MainModelCallback callback) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                callback.onTokenFailure(task.getException());
+                return;
+            }
+            String fcmToken = task.getResult();
+            String userId = getUserInfo();
+            updateToken(userId, fcmToken, callback);
+        });
+    }
+
+    public String getUserInfo() {
+        ApiClient apiClient = new ApiClient(activity);
+        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+        return userInfoResponse.getUserId();
+    }
+
+    public void updateToken(String userId, String token, MainModelCallback callback) {
+        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
+
+        apiService.updateToken(userId, "application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onTokenUpdateSuccess();
+                } else {
+                    callback.onTokenUpdateFailure(response.code(), response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.onTokenUpdateFailure(t);
+            }
+        });
+    }
+
+    public String getUserAccessToken() {
+        SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
+        return preferences.getString("accessToken", "");
+    }
+
+    public void uploadRecord(Intent data, MainModelCallback callback) {
+        if (data != null && data.getData() != null) {
+            Uri audioUri = data.getData();
+            String audioPath = getRealPathFromURI(audioUri);
+            String audioName = getFileNameFromURI(audioUri);
+
+            callback.onRecordUploadReady(audioPath, audioName);
+        }
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+        try {
+            InputStream inputStream = activity.getContentResolver().openInputStream(uri);
+            File tempFile = File.createTempFile("downloadedFile", ".tmp", activity.getCacheDir());
+
+            try (OutputStream outputStream = new FileOutputStream(tempFile)) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+
+            return tempFile.getAbsolutePath();
+        } catch (IOException e) {
+            Log.e("Error : ", e.getMessage());
+        }
+
+        return null;
+    }
+
+    private String getFileNameFromURI(Uri uri) {
+        Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            String name = cursor.getString(nameIndex);
+            cursor.close();
+            return name;
+        }
+        return uri.getLastPathSegment();
+    }
+
+    public interface MainModelCallback {
+        void onTokenUpdateSuccess();
+        void onTokenUpdateFailure(int code, String message);
+        void onTokenUpdateFailure(Throwable t);
+        void onTokenFailure(Exception e);
+        void onRecordUploadReady(String audioPath, String audioName);
+    }
 }
