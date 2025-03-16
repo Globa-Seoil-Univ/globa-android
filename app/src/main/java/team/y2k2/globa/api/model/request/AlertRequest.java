@@ -5,25 +5,25 @@ import com.google.gson.annotations.SerializedName;
 public class AlertRequest {
 
     @SerializedName("uploadNofi")
-    private boolean uploadNofi;
+    private final boolean uploadNotification;
     @SerializedName("shareNofi")
-    private boolean shareNofi;
+    private final boolean shareNotification;
     @SerializedName("eventNofi")
-    private boolean eventNofi;
+    private final boolean eventNotification;
 
-    public AlertRequest(boolean uploadNofi, boolean shareNofi, boolean eventNofi) {
-        this.uploadNofi = uploadNofi;
-        this.shareNofi = shareNofi;
-        this.eventNofi = eventNofi;
+    public AlertRequest(boolean uploadNotification, boolean shareNotification, boolean eventNofi) {
+        this.uploadNotification = uploadNotification;
+        this.shareNotification = shareNotification;
+        this.eventNotification = eventNofi;
     }
 
-    public boolean isUploadNofi() {
-        return uploadNofi;
+    public boolean isUploadNotification() {
+        return uploadNotification;
     }
-    public boolean isShareNofi() {
-        return shareNofi;
+    public boolean isShareNotification() {
+        return shareNotification;
     }
     public boolean isEventNofi() {
-        return eventNofi;
+        return eventNotification;
     }
 }

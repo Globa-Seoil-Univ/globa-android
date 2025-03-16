@@ -6,15 +6,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,7 +26,7 @@ import static team.y2k2.globa.api.ApiClient.apiService;
 import static team.y2k2.globa.api.ApiClient.authorization;
 
 public class MainModel {
-    private Activity activity;
+    private final Activity activity;
 
     public MainModel(Activity activity) {
         this.activity = activity;
@@ -91,11 +90,13 @@ public class MainModel {
             InputStream inputStream = activity.getContentResolver().openInputStream(uri);
             File tempFile = File.createTempFile("downloadedFile", ".tmp", activity.getCacheDir());
 
-            try (OutputStream outputStream = new FileOutputStream(tempFile)) {
+            try (OutputStream outputStream = Files.newOutputStream(tempFile.toPath())) {
                 byte[] buffer = new byte[1024];
                 int length;
-                while ((length = inputStream.read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, length);
+                if (inputStream != null) {
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
+                    }
                 }
             } finally {
                 if (inputStream != null) {
@@ -105,10 +106,8 @@ public class MainModel {
 
             return tempFile.getAbsolutePath();
         } catch (IOException e) {
-            Log.e("Error : ", e.getMessage());
+            return null;
         }
-
-        return null;
     }
 
     private String getFileNameFromURI(Uri uri) {

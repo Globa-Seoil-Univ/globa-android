@@ -34,7 +34,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.SubComment;
-import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
@@ -44,7 +43,6 @@ import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 import team.y2k2.globa.main.ProfileImage;
 
 public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCommentAdapter.AdapterViewHolder> {
-
     ArrayList<DocsDetailCommentItem> commentItems;
 
     DocsActivity activity;
@@ -52,7 +50,6 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     String recordId;
     String sectionId;
     String highlightId;
-
     String myProfile;
     String myName;
 
@@ -67,11 +64,11 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
     private Disposable disposable;
 
-    private MutableLiveData<Boolean> subCommentEtFocus = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> subCommentEtFocus = new MutableLiveData<>();
 
     ArrayList<DocsDetailSubCommentItem> subCommentItems = new ArrayList<>();
 
-    private DocsDetailAdapter mainAdapter;
+    private final DocsDetailAdapter mainAdapter;
     private DocsDetailSubCommentAdapter subAdapter;
 
     private final int BUTTON_COMMENT_CONFIRM = 0;
@@ -81,13 +78,13 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
     private int subButtonStatus = BUTTON_COMMENT_SUB_CONFIRM;
 
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
 
     ApiClient apiClient;
 
-    private FocusViewModel focusViewModel;
-    private DocsDetailViewModel docsDetailViewModel;
+    private final FocusViewModel focusViewModel;
+    private final DocsDetailViewModel docsDetailViewModel;
 
     public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailAdapter mainAdapter) {
         this.commentItems = commentItems;
@@ -191,7 +188,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             if(!commentItems.get(position).getProfile().equals(response.getProfile()))
                 return false;
 
-            if(!commentItems.get(position).isDeleted())
+            if(commentItems.get(position).isDeleted())
                 view.showContextMenu();
 
             return true;
@@ -237,7 +234,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         return (commentItems != null ? commentItems.size() : 0);
     }
 
-    public class AdapterViewHolder extends RecyclerView.ViewHolder {
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
 
         ImageView profileImage;
         TextView name;
@@ -289,9 +286,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         subCommentRv.setLayoutManager(new LinearLayoutManager(activity));
         subCommentRv.setAdapter(subAdapter);
 
-        Observable<Object> subCommentBtnClickStream = Observable.create(emitter -> {
-            subCommentBtn.setOnClickListener(v -> emitter.onNext(new Object()));
-        });
+        Observable<Object> subCommentBtnClickStream = Observable.create(emitter -> subCommentBtn.setOnClickListener(v -> emitter.onNext(new Object())));
         disposable = subCommentBtnClickStream.throttleFirst(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
@@ -353,24 +348,25 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
             if(position == 0) {
                 for(int i = 1; i < commentItems.size(); i++) {
-                    if(!commentItems.get(i).isDeleted()) {
+                    if(commentItems.get(i).isDeleted()) {
                         isAllDeleted = false;
                     }
                 }
             } else if(position > 0 && position < commentItems.size() - 1) {
                 for(int i = 0; i < position; i++) {
-                    if(!commentItems.get(i).isDeleted()) {
+                    if (commentItems.get(i).isDeleted()) {
                         isAllDeleted = false;
+                        break;
                     }
                 }
                 for(int i = position + 1; i < commentItems.size(); i++) {
-                    if(!commentItems.get(i).isDeleted()) {
+                    if(commentItems.get(i).isDeleted()) {
                         isAllDeleted = false;
                     }
                 }
             } else {
                 for(int i = 0; i < commentItems.size() - 1; i++) {
-                    if(!commentItems.get(i).isDeleted()) {
+                    if(commentItems.get(i).isDeleted()) {
                         isAllDeleted = false;
                     }
                 }
@@ -380,9 +376,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
                 docsDetailViewModel.setIsAllDeletedLiveData(true);
             }
         });
-        cancelBtn.setOnClickListener(v -> {
-            bottomSheetDialog.dismiss();
-        });
+        cancelBtn.setOnClickListener(v -> bottomSheetDialog.dismiss());
         bottomSheetDialog.show();
     }
 

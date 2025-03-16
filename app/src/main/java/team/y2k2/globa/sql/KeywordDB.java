@@ -40,9 +40,6 @@ public class KeywordDB extends SQLiteOpenHelper {
     private boolean isKeywordExists(int recordId, String keyword) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM keyword WHERE record_id = " + recordId +" AND keyword LIKE '"+ keyword +"';", null);
 
-        if(cursor.getCount() == 0)
-            return true;
-        else
-            return false;
+        return cursor.getCount() == 0;
     }
 }

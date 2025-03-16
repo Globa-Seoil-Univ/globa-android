@@ -1,5 +1,6 @@
 ![image](https://github.com/user-attachments/assets/00f4c3fb-fb21-4821-8771-2092f133b9e4)
 <h2 align=center>소리에서 시작하는 무한한 가능성</h2>
+<!--suppress HtmlDeprecatedAttribute -->
 <h1 align=center>$\huge{\color{#C67C4E}G}loba$</h1>
 
 ## 목차

@@ -15,13 +15,13 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.request.FolderPermissionChangeRequest;
 import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 
-public class FolderPermissionViewModel extends ViewModel {
+public class FolderPermissionActivityModel extends ViewModel {
 
-    private ApiService apiService;
-    private MutableLiveData<FolderPermissionResponse> usersLiveData;
-    private MutableLiveData<String> errorLiveData;
+    private final ApiService apiService;
+    private final MutableLiveData<FolderPermissionResponse> usersLiveData;
+    private final MutableLiveData<String> errorLiveData;
 
-    public FolderPermissionViewModel() {
+    public FolderPermissionActivityModel() {
         apiService = ApiClient.getApiService();
         usersLiveData = new MutableLiveData<>();
         errorLiveData = new MutableLiveData<>();

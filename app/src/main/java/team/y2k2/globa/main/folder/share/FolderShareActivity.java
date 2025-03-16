@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.folder.share;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,8 +20,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +30,12 @@ import team.y2k2.globa.main.ProfileImage;
 public class FolderShareActivity extends AppCompatActivity {
 
     ActivityFolderShareBinding binding;
-    private FolderShareViewModel folderShareViewModel;
+    private FolderShareActivityModel folderShareActivityModel;
     boolean isSearched = false;
     private FolderShareAdapter adapter;
-    private List<FolderShareItem> itemList = new ArrayList<>();
+    private final List<FolderShareItem> itemList = new ArrayList<>();
     private String profile;
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
     private String lastImageUrl;
     private int tempUserId;
@@ -60,17 +57,15 @@ public class FolderShareActivity extends AppCompatActivity {
 
         // 코드 입력하는 EditText가 비어있을 땐 X버튼 안보이게 하기
         String input = binding.edittextFoldershareInputname.getText().toString();
-        if(input.equals("")) {
+        if(input.isEmpty()) {
             binding.buttonFoldershareCancel.setWidth(0);
         }
 
         // 뒤로가기 버튼
-        binding.buttonFoldershareBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.buttonFoldershareBack.setOnClickListener(v -> finish());
 
         // 뷰모델 가져오기
-        folderShareViewModel = new ViewModelProvider(this).get(FolderShareViewModel.class);
+        folderShareActivityModel = new ViewModelProvider(this).get(FolderShareActivityModel.class);
 
         adapter = new FolderShareAdapter(itemList);
         binding.recyclerviewFoldershareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -80,7 +75,7 @@ public class FolderShareActivity extends AppCompatActivity {
 
         binding.constraintlayoutFoldershareSearch.setOnClickListener(v -> {
 
-            if(!binding.textviewFoldershareSearch.equals("")) {
+            if(!binding.textviewFoldershareSearch.getText().toString().isEmpty()) {
                 showBottomSheetDialog();
                 binding.textviewFoldershareConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
             } else {
@@ -102,9 +97,9 @@ public class FolderShareActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() == 6) {
-                    folderShareViewModel.searchUserInfo(s.toString());
+                    folderShareActivityModel.searchUserInfo(s.toString());
 
-                    folderShareViewModel.getUserSearchLiveData().observe(FolderShareActivity.this, userInfoResponse -> {
+                    folderShareActivityModel.getUserSearchLiveData().observe(FolderShareActivity.this, userInfoResponse -> {
                         if(userInfoResponse != null) {
                             binding.textviewFoldershareSearch.setText(userInfoResponse.getName());
                             profile = userInfoResponse.getProfile();
@@ -133,9 +128,7 @@ public class FolderShareActivity extends AppCompatActivity {
                             isSearched = true;
                         }
                     });
-                    folderShareViewModel.getErrorLiveData().observe(FolderShareActivity.this, errorMessage -> {
-                        Log.e("사용자 조회 오류", "사용자 조회 오류: " + errorMessage);
-                    });
+                    folderShareActivityModel.getErrorLiveData().observe(FolderShareActivity.this, errorMessage -> Log.e("사용자 조회 오류", "사용자 조회 오류: " + errorMessage));
                 }
             }
 
@@ -169,12 +162,12 @@ public class FolderShareActivity extends AppCompatActivity {
                         int userId = item.getUserId();
                         String role = item.getRole();
 
-                        folderShareViewModel.addSharedUser(folderId, userId, role);
+                        folderShareActivityModel.addSharedUser(folderId, userId, role);
                         Log.d(getClass().getName(), folderId + ", " + userId + ", " + role);
                     }
                 }
             }
-            folderShareViewModel.getIsSucceedLiveData().observe(FolderShareActivity.this, responseCode -> {
+            folderShareActivityModel.getIsSucceedLiveData().observe(FolderShareActivity.this, responseCode -> {
                 if(responseCode.equals("201")) {
                     Toast.makeText(this, "공유 추가 완료!", Toast.LENGTH_SHORT).show();
                     finish();

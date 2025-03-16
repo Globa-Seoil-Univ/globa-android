@@ -55,6 +55,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_gravity="center"
+                android:importantForAccessibility="no"
                 android:src="@drawable/clip" />
 
             <TextView
@@ -62,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/share_link"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:textColor="@color/black"
                 />
         </LinearLayout>
@@ -78,6 +79,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_gravity="center"
+                android:importantForAccessibility="no"
                 android:src="@drawable/members" />
 
             <TextView
@@ -85,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/share_member"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:textColor="@color/black"
                 />
         </LinearLayout>

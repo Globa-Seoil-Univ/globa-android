@@ -1,6 +1,5 @@
 package team.y2k2.globa.api.model.response;
 
-import com.google.gson.annotations.SerializedName;
 public class DocsUploadResponse {
 
     /*

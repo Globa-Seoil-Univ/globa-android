@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.folder.permission;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,14 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.model.request.FolderPermissionChangeRequest;
 import team.y2k2.globa.api.model.response.UserData;
 import team.y2k2.globa.api.model.response.UserRole;
 import team.y2k2.globa.databinding.ActivityFolderPermissionBinding;
 
 public class FolderPermissionActivity extends AppCompatActivity{
     ActivityFolderPermissionBinding binding;
-    FolderPermissionViewModel folderPermissionViewModel;
+    FolderPermissionActivityModel folderPermissionActivityModel;
 
     FolderPermissionItemAdapter adapter;
 
@@ -52,10 +50,10 @@ public class FolderPermissionActivity extends AppCompatActivity{
 
         ArrayList<FolderPermissionItem> itemList = new ArrayList<>();
 
-        folderPermissionViewModel = new ViewModelProvider(this).get(FolderPermissionViewModel.class);
-        folderPermissionViewModel.fetchSharedUsers(folderId, 1, 10);
+        folderPermissionActivityModel = new ViewModelProvider(this).get(FolderPermissionActivityModel.class);
+        folderPermissionActivityModel.fetchSharedUsers(folderId, 1, 10);
 
-        folderPermissionViewModel.getUsersLiveData().observe(FolderPermissionActivity.this, users -> {
+        folderPermissionActivityModel.getUsersLiveData().observe(FolderPermissionActivity.this, users -> {
             if(users != null) {
                 List<UserRole> userRoles = users.getUsers();
                 for(UserRole userRole : userRoles) {
@@ -64,7 +62,7 @@ public class FolderPermissionActivity extends AppCompatActivity{
                     String name = user.getName();
                     Log.d(getClass().getName(), "사용자 이미지 경로: " + profile);
                     Log.d(getClass().getName(), "사용자 이름: " + name);
-                    String profilePath = "";
+                    String profilePath;
                     if(profile != null) {
                         if(profile.startsWith("http")) {
                             profilePath = profile;
@@ -98,9 +96,7 @@ public class FolderPermissionActivity extends AppCompatActivity{
         });
 
         // 뒤로가기 버튼
-        binding.imagebuttonFolderPermissionBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.imagebuttonFolderPermissionBack.setOnClickListener(v -> finish());
     }
 
     private void onClickConfirmBtn() {
@@ -119,7 +115,7 @@ public class FolderPermissionActivity extends AppCompatActivity{
 
                         int shareId = item.getShareId();
                         int userId = item.getUserId();
-                        String userRole = "";
+                        String userRole;
 
                         String permission = adapterViewHolder.getPermission();
                         if (permission.equals(getString(R.string.modify))) {
@@ -130,7 +126,7 @@ public class FolderPermissionActivity extends AppCompatActivity{
 
                         Log.d("Request 정보", "폴더 아이디: " + folderId + ", 공유 아이디: " + shareId + ", 유저 아이디: " + userId + ", 권한: " + userRole);
 
-                        folderPermissionViewModel.changeSharedUsers(folderId, userId, userRole);
+                        folderPermissionActivityModel.changeSharedUsers(folderId, userId, userRole);
                     }
                 }
 
@@ -153,12 +149,10 @@ public class FolderPermissionActivity extends AppCompatActivity{
             adapter.remove(position);
             FolderPermissionItem item = adapter.getItem(position);
             int userId = item.getUserId();
-            folderPermissionViewModel.deleteSharedUsers(folderId, userId);
+            folderPermissionActivityModel.deleteSharedUsers(folderId, userId);
             bottomSheetDialog.dismiss();
         });
-        btnCancel.setOnClickListener(v -> {
-            bottomSheetDialog.dismiss();
-        });
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
 
         bottomSheetDialog.show();
     }

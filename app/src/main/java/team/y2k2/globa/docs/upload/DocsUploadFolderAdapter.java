@@ -15,7 +15,6 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.model.entity.Folder;
-import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class DocsUploadFolderAdapter extends ArrayAdapter<String> implements SpinnerAdapter {
     List<Folder> items;

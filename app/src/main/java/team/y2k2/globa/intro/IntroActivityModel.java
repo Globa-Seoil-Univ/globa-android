@@ -1,7 +1,6 @@
 package team.y2k2.globa.intro;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 

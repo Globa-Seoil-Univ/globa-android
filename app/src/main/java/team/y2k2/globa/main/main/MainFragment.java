@@ -1,7 +1,7 @@
 package team.y2k2.globa.main.main;
 
 
-import static team.y2k2.globa.main.main.MainFragmentModel.*;
+import static team.y2k2.globa.main.main.MainModel.*;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     Button[] docsFilterButtons;
     Context context;
     FragmentMainBinding binding;
-    MainFragmentViewModel viewModel;
+    MainFragmentModel viewModel;
 
     int filterType;
 
@@ -46,7 +45,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         binding = FragmentMainBinding.inflate(getLayoutInflater());
         context = getContext();
 
-        viewModel = new MainFragmentViewModel(this.getContext());
+        viewModel = new MainFragmentModel(this.getContext());
         
         setLogoColor();
         setFilterButtons();
@@ -128,9 +127,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         filterType = buttonFilterType;
 
         switch (buttonFilterType) {
-            case RECORDS_FILTER_CURRENTLY:
-                adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords(), getActivity());
-                break;
             case RECORDS_FILTER_MOST_VIEWED:
                 adapter = new DocsListItemAdapter(viewModel.getMostViewedRecords(), getActivity());
                 break;
@@ -140,6 +136,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case RECORDS_FILTER_RECEIVED:
                 adapter = new DocsListItemAdapter(viewModel.getReceivedRecords(), getActivity());
                 break;
+            case RECORDS_FILTER_CURRENTLY:
             default:
                 adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords(), getActivity());
         }
@@ -179,7 +176,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private void checkNotification() {
         viewModel.getUnreadNotificationCheck();
-        viewModel.getNotificationCheckLiveData().observe(this, checkResponse -> {
+        viewModel.getNotificationCheckLiveData().observe(getViewLifecycleOwner(), checkResponse -> {
             if(checkResponse != null) {
                 if(checkResponse.isHasUnRead()) {
                     binding.linearlayoutMainNotificationCheck.setVisibility(View.VISIBLE);

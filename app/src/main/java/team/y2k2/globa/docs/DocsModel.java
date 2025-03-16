@@ -9,11 +9,10 @@ import team.y2k2.globa.docs.detail.DocsDetailItem;
 
 public class DocsModel {
     private final ArrayList<DocsDetailItem> detailItems;
-    private final ArrayList<Highlight> highlightItems;
 
     public DocsModel(List<Section> sections) {
         detailItems = new ArrayList<>();
-        highlightItems = new ArrayList<Highlight>();
+        ArrayList<Highlight> highlightItems = new ArrayList<>();
 
         for(int i = 0; i < sections.size(); i++) {
             Section section = sections.get(i);
@@ -21,7 +20,6 @@ public class DocsModel {
             String title = section.getTitle();
             String sectionId = String.valueOf(section.getSectionId());
             int time = section.getStartTime();
-            section.getSummary();
             String content = section.getAnalysis().getContent();
 
             for(int j = 0; j < section.getAnalysis().getHighlights().size(); j++) {
@@ -34,7 +32,7 @@ public class DocsModel {
 
                 highlightItems.add(new Highlight(highlightId, type, startIdx, endIdx));
             }
-            detailItems.add(new DocsDetailItem(title, sectionId , String.valueOf(time), content, (ArrayList<Highlight>) highlightItems.clone()));
+            detailItems.add(new DocsDetailItem(title, sectionId , String.valueOf(time), content, highlightItems));
             highlightItems.clear();
         }
     }

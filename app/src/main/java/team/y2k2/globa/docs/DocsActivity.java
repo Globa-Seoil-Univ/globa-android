@@ -23,26 +23,24 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
-import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.detail.DocsDetailViewModel;
-import team.y2k2.globa.docs.more.DocsMoreViewModel;
+import team.y2k2.globa.docs.more.DocsMoreActivityModel;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
     public ActivityDocsBinding binding;
-    DocsViewModel viewModel;
+    DocsActivityModel viewModel;
     DocsDetailViewModel docsDetailViewModel;
     private SimpleExoPlayer player;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable updateSeekbarRunnable;
-    private long startTime, endTime;
+    private long startTime;
 
-    DocsMoreViewModel docsMoreViewModel;
+    DocsMoreActivityModel docsMoreActivityModel;
     private String profile;
     private String name;
 
     ApiClient apiClient;
-
     SimpleDateFormat dateFormat;
 
     @Override
@@ -61,7 +59,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
 
-        viewModel = new ViewModelProvider(this).get(DocsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(DocsActivityModel.class);
         docsDetailViewModel = new ViewModelProvider(this).get(DocsDetailViewModel.class);
         player = new SimpleExoPlayer.Builder(this).build();
 
@@ -91,28 +89,22 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         binding.textviewDocsTitle.setText(viewModel.getTitle());
 
-        binding.imagebuttonDocsBack.setOnClickListener(v -> {
+        binding.imageButtonDocsBack.setOnClickListener(v -> {
             player.stop();
             finish();
         });
 
-        binding.imageviewDocsMore.setOnClickListener(v -> {
-            startActivity(viewModel.getDocsMoreIntent());
-        });
+        binding.imageviewDocsMore.setOnClickListener(v -> startActivity(viewModel.getDocsMoreIntent()));
 
-        binding.buttonDocsDescription.setOnClickListener(v -> {
-            showDescription();
-        });
+        binding.buttonDocsDescription.setOnClickListener(v -> showDescription());
 
-        binding.buttonDocsSummary.setOnClickListener(v -> {
-            showSummary();
-        });
+        binding.buttonDocsSummary.setOnClickListener(v -> showSummary());
 
         setContentView(binding.getRoot());
 
         // 문서 삭제 시
-        docsMoreViewModel = new ViewModelProvider(this).get(DocsMoreViewModel.class);
-        docsMoreViewModel.getIsDeleted().observe(DocsActivity.this, isDeleted -> {
+        docsMoreActivityModel = new ViewModelProvider(this).get(DocsMoreActivityModel.class);
+        docsMoreActivityModel.getIsDeleted().observe(DocsActivity.this, isDeleted -> {
             // 문서 더보기의 삭제여부 변수(LiveData) 관찰
             if(isDeleted) {
                 finish();
@@ -265,14 +257,14 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         player = null;
 
         // 문서 상세 보기 종료 시
-        endTime = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
         long durationMilliSecond = endTime - startTime;
         int durationMinute = (int)(durationMilliSecond / 60000);
         Log.d("시간", "열려 있던 시간(분): " + durationMinute);
 
         // durationMinute, dateFormat으로 공부시간 API 수정 필요
         Log.d(getClass().getSimpleName(), "공부 시간 수정 요청 (folderId: " + viewModel.getFolderId() + ", recordId: " + viewModel.getRecordId() +
-                ", 분: " + String.valueOf(durationMinute) + ", dateFormat: " + dateFormat.format(new Date()) + ")");
+                ", 분: " + durationMinute + ", dateFormat: " + dateFormat.format(new Date()) + ")");
         apiClient.updateStudyTime(viewModel.getFolderId(), viewModel.getRecordId(), String.valueOf(durationMinute));
 
         // detailAdapter에 생성된 disposable 메모리 해제

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class QuizActivity extends AppCompatActivity {
 
     ActivityQuizBinding binding;
     int folderId, recordId;
-    QuizViewModel quizViewModel;
+    QuizActivityModel quizActivityModel;
     List<Quiz> quizList;
     private int currentIndex = 0;
     private List<Boolean> answerList = new ArrayList<>();
@@ -40,31 +39,25 @@ public class QuizActivity extends AppCompatActivity {
     private void initializeUI() {
 
         // 뒤로가기 버튼
-        binding.buttonQuizBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.buttonQuizBack.setOnClickListener(v -> finish());
 
         loadData();
 
         // O 버튼 선택
-        binding.layoutQuizCorrect.setOnClickListener(v -> {
-            fetchQuiz(1);
-        });
+        binding.layoutQuizCorrect.setOnClickListener(v -> fetchQuiz(1));
 
         // X 버튼 선택
-        binding.layoutQuizWrong.setOnClickListener(v -> {
-            fetchQuiz(0);
-        });
+        binding.layoutQuizWrong.setOnClickListener(v -> fetchQuiz(0));
     }
 
     private void loadData() {
         folderId = Integer.parseInt(getIntent().getStringExtra("folderId"));
         recordId = Integer.parseInt(getIntent().getStringExtra("recordId"));
 
-        quizViewModel = new ViewModelProvider(this).get(QuizViewModel.class);
-        quizViewModel.gatherQuiz(folderId, recordId);
+        quizActivityModel = new ViewModelProvider(this).get(QuizActivityModel.class);
+        quizActivityModel.gatherQuiz(folderId, recordId);
 
-        quizViewModel.getQuizLiveData().observe(this, quiz -> {
+        quizActivityModel.getQuizLiveData().observe(this, quiz -> {
             if(quiz != null) {
                 quizList = quiz;
                 Log.d("api 수신 여부", "수신 성공");
@@ -98,9 +91,9 @@ public class QuizActivity extends AppCompatActivity {
         } else {
             // 결과화면으로 넘어가기전 퀴즈 결과 api 전송
             for(int i = 0; i < quizResultList.size(); i++) {
-                Log.d("퀴즈 결과", "퀴즈 결과: " + String.valueOf(quizResultList.get(i).getQuizId()) + ", " + String.valueOf(quizResultList.get(i).isCorrect()));
+                Log.d("퀴즈 결과", "퀴즈 결과: " + (quizResultList.get(i).getQuizId()) + ", " + (quizResultList.get(i).isCorrect()));
             }
-            quizViewModel.submitQuizResult(folderId, recordId, quizResultList);
+            quizActivityModel.submitQuizResult(folderId, recordId, quizResultList);
 
             // 결과화면으로 넘어가기전 결과 계산
             int totalQuestion = quizList.size(); // 총 문제 수

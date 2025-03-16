@@ -2,8 +2,8 @@ package team.y2k2.globa.notification.share;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -19,22 +19,17 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationShareBinding;
 import team.y2k2.globa.notification.NotificationActivity;
-import team.y2k2.globa.notification.NotificationViewModel;
-import team.y2k2.globa.notification.total.TotalFragmentItem;
 
 public class ShareFragment extends Fragment {
-
     FragmentNotificationShareBinding binding;
-    private NotificationViewModel notificationViewModel;
-    private List<Notification> notificationList = new ArrayList<>();
-    private List<ShareFragmentItem> shareFragmentItems = new ArrayList<>();
+    private final List<ShareFragmentItem> shareFragmentItems = new ArrayList<>();
     String notificationId, profile, title, content, createdTime, notificationType;
     boolean isRead;
     ShareFragmentAdapter adapter;
     ApiClient apiClient;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNotificationShareBinding.inflate(getLayoutInflater());
 
@@ -44,32 +39,9 @@ public class ShareFragment extends Fragment {
     }
 
     private void initializeUI() {
-//        notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
-//        notificationViewModel.getNotification("s");
-//
-//        notificationViewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
-//            if(notificationResponse != null) {
-//                notificationList = notificationResponse.getNotifications();
-//                shareFragmentItems.clear();
-//                for(Notification notification : notificationList) {
-//
-//                    settingNotification(notification);
-//
-//                }
-//
-//                adapter = new ShareFragmentAdapter(shareFragmentItems, (NotificationActivity) requireActivity(), this);
-//
-//                binding.recyclerviewNotificationShareContent.setAdapter(adapter);
-//                binding.recyclerviewNotificationShareContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-//
-//            } else {
-//                Log.d("오류", "공유 알림 수신 오류 : notificationResponse = null");
-//            }
-//        });
-
         apiClient = new ApiClient(this.getContext());
 
-        notificationList = apiClient.requestNotification("s").getNotifications();
+        List<Notification> notificationList = apiClient.requestNotification("s").getNotifications();
         shareFragmentItems.clear();
 
         if(notificationList != null) {

@@ -44,9 +44,7 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
             Glide.with(context).load(R.mipmap.ic_launcher).error(R.drawable.profile_user).into(holder.image);
         }
 
-        holder.layout.setOnClickListener(v -> {
-            removeItem(position);
-        });
+        holder.layout.setOnClickListener(v -> removeItem(position));
 
     }
 

@@ -2,7 +2,6 @@ package team.y2k2.globa.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,13 +16,12 @@ import team.y2k2.globa.databinding.ActivityMainBinding;
 import static team.y2k2.globa.main.MainActivityModel.*;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
     private MainActivityModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(MainActivityModel.class);
         viewModel.setActivity(this);
         viewModel.handleUserFcmToken();

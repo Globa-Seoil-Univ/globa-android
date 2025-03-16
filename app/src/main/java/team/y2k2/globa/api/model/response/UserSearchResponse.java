@@ -16,10 +16,6 @@ public class UserSearchResponse {
         return userId;
     }
 
-    public void setUserId(int userid) {
-        this.userId = userId;
-    }
-
     public String getProfile() {
         return profile;
     }

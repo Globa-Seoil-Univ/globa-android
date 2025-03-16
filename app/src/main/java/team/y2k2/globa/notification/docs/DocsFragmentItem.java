@@ -2,13 +2,13 @@ package team.y2k2.globa.notification.docs;
 
 public class DocsFragmentItem {
 
-    private String notificationId;
-    private String profile;
-    private String title;
-    private String content;
-    private String createdTime;
-    private String type;
-    private boolean isRead;
+    private final String notificationId;
+    private final String profile;
+    private final String title;
+    private final String content;
+    private final String createdTime;
+    private final String type;
+    private final boolean isRead;
 
     public DocsFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String type, boolean isRead) {
         this.notificationId = notificationId;

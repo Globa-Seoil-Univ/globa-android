@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -25,8 +23,6 @@ import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
@@ -34,13 +30,12 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
 import team.y2k2.globa.main.ProfileImage;
-import team.y2k2.globa.main.profile.edit.NicknameEditViewModel;
 import team.y2k2.globa.main.profile.info.MyinfoActivity;
 
 public class ProfileFragment extends Fragment {
     ProfileModel model;
     FragmentProfileBinding binding;
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
 
     private String name, userId, profile;
@@ -70,7 +65,7 @@ public class ProfileFragment extends Fragment {
         binding.recyclerviewProfileSetting.setAdapter(adapter);
         binding.recyclerviewProfileSetting.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
 
-        ApiClient apiClient = new ApiClient(getContext());
+        ApiClient apiClient = new ApiClient(inflater.getContext());
 
         UserInfoResponse response = apiClient.requestUserInfo();
         // userInfo를 사용하여 필요한 작업 수행
@@ -125,18 +120,18 @@ public class ProfileFragment extends Fragment {
     }
 
     public void userPreferences(UserInfoResponse response) {
-        SharedPreferences preferences = getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getLayoutInflater().getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("userName", response.getName());
         editor.putString("userId", response.getUserId());
         editor.putString("publicFolderId", response.getPublicFolderId());
         editor.putString("userCode", response.getCode());
-        editor.commit();
+        editor.apply();
     }
 
     public void showLogMessages(UserInfoResponse response) {
         Log.d(getClass().getName(), "프로필 조회 성공");
-        ArrayList<String> logs = new ArrayList();
+        ArrayList<String> logs = new ArrayList<>();
         logs.add("userName      :" + response.getName());
         logs.add("userId        :" + response.getUserId());
         logs.add("publicFolderId:" + response.getPublicFolderId());
@@ -187,17 +182,10 @@ public class ProfileFragment extends Fragment {
         } else if(newProfile != null) {
             Log.d(getClass().getSimpleName(), "newProfile만 옴: " + newProfile);
             binding.textviewProfileAccountUsername.setText(name);
-            if(newProfile.startsWith("http")) {
-                Glide.with(getContext())
-                        .load(newProfile)
-                        .error(R.drawable.profile_user)
-                        .into(binding.imageviewProfileAccountImage);
-            } else {
-                Glide.with(getContext())
-                        .load(newProfile)
-                        .error(R.drawable.profile_user)
-                        .into(binding.imageviewProfileAccountImage);
-            }
+            Glide.with(getContext())
+                    .load(newProfile)
+                    .error(R.drawable.profile_user)
+                    .into(binding.imageviewProfileAccountImage);
         } else {
             Log.d(getClass().getSimpleName(), "둘다 안 옴");
             binding.textviewProfileAccountUsername.setText(name);
@@ -222,11 +210,4 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
 }

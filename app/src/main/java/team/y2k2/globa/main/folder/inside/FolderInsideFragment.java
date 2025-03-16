@@ -41,7 +41,7 @@ import team.y2k2.globa.main.folder.share.FolderShareActivity;
 public class FolderInsideFragment extends Fragment {
     FragmentFolderInsideBinding binding;
     FolderInsideModel model;
-    FolderInsideViewModel folderInsideViewModel;
+    FolderInsideFragmentModel folderInsideFragmentModel;
 
     int folderId;
     String folderTitle;
@@ -60,7 +60,7 @@ public class FolderInsideFragment extends Fragment {
         setBundleParams();
         loadFolderInside();
 
-        folderInsideViewModel = new ViewModelProvider(this).get(FolderInsideViewModel.class);
+        folderInsideFragmentModel = new ViewModelProvider(this).get(FolderInsideFragmentModel.class);
 
         binding.textviewFolderInsideTitle.setText(folderTitle);
 
@@ -87,13 +87,7 @@ public class FolderInsideFragment extends Fragment {
             getFragmentManager().popBackStack();
         });
 
-        binding.textviewFolderInsideMore.setOnClickListener(v -> {
-//            Intent intent = new Intent(getContext(), FolderNameEditActivity.class);
-//            intent.putExtra("folderTitle", binding.textviewFolderInsideTitle.getText());
-//            intent.putExtra("folderId", folderId);
-//            startActivityForResult(intent, REQUEST_CODE);
-            showBottomSheetDialog();
-        });
+        binding.textviewFolderInsideMore.setOnClickListener(v -> showBottomSheetDialog());
 
         return binding.getRoot();
     }
@@ -118,7 +112,7 @@ public class FolderInsideFragment extends Fragment {
                 model.addItem(Integer.toString(folderId), recordId, title, datetime);
             }
 
-            if(model.getItems().size() == 0) {
+            if(model.getItems().isEmpty()) {
                 model.addItem("", "", "", "");
             }
 
@@ -196,9 +190,7 @@ public class FolderInsideFragment extends Fragment {
         TextView cancelButton = bottomSheetView.findViewById(R.id.textview_delete_docs_cancel);
         TextView confirmButton = bottomSheetView.findViewById(R.id.textview_delete_docs_confirm);
 
-        cancelButton.setOnClickListener(v -> {
-            bottomSheetDialog.dismiss();
-        });
+        cancelButton.setOnClickListener(v -> bottomSheetDialog.dismiss());
 
         confirmButton.setOnClickListener(v -> {
             deleteFolder();
@@ -211,23 +203,20 @@ public class FolderInsideFragment extends Fragment {
     }
 
     private void deleteFolder() {
-        folderInsideViewModel.deleteFolder(folderId);
-        folderInsideViewModel.getResponseCodeLiveData().observe(getViewLifecycleOwner(), responseCode -> {
+        folderInsideFragmentModel.deleteFolder(folderId);
+        folderInsideFragmentModel.getResponseCodeLiveData().observe(getViewLifecycleOwner(), responseCode -> {
             if(responseCode == 200) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
                         .remove(FolderInsideFragment.this)
                         .commit();
 
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        FolderFragment folderFragment = new FolderFragment();
+                new Handler().post(() -> {
+                    FolderFragment folderFragment = new FolderFragment();
 
-                        requireActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container_view_main, folderFragment)
-                                .addToBackStack(null)
-                                .commit();
-                    }
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_view_main, folderFragment)
+                            .addToBackStack(null)
+                            .commit();
                 });
             } else {
                 Toast.makeText(getContext(), "폴더 삭제 실패", Toast.LENGTH_SHORT).show();

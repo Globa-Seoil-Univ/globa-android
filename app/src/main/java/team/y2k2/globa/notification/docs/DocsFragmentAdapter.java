@@ -1,6 +1,5 @@
 package team.y2k2.globa.notification.docs;
 
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.Collection;
 import java.util.List;
 
 import team.y2k2.globa.R;

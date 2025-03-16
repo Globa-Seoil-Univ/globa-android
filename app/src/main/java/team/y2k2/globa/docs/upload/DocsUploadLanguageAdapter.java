@@ -1,7 +1,6 @@
 package team.y2k2.globa.docs.upload;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class DocsUploadLanguageAdapter extends ArrayAdapter<String> implements S
     @Nullable
     @Override
     public String getItem(int position) {
-        return items.get(position).toString();
+        return items.get(position);
     }
 
     public ArrayList<String> getItems() {

@@ -2,11 +2,8 @@ package team.y2k2.globa.docs.more;
 
 import static team.y2k2.globa.api.ApiClient.authorization;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -16,15 +13,13 @@ import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 
-public class DocsMoreViewModel extends ViewModel {
+public class DocsMoreActivityModel extends ViewModel {
+    private final ApiService apiService;
+    private final MutableLiveData<Boolean> isDeleted = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
-    private ApiService apiService;
-    private ApiClient apiClient;
-    private MutableLiveData<Boolean> isDeleted = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
-
-    public DocsMoreViewModel() {
-        apiService = apiClient.getApiService();
+    public DocsMoreActivityModel() {
+        apiService = ApiClient.getApiService();
     }
 
     public MutableLiveData<Boolean> getIsDeleted() {

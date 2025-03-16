@@ -5,17 +5,13 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityNotificationBinding;
@@ -35,17 +31,7 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
-
-//        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-//           if(task.isSuccessful()) {
-//               Log.d("FCM 토큰", "FCM 토큰 수령 성공 : " + task.getResult());
-//           } else {
-//               Log.d("FCM 토큰", "FCM 토큰 수령 실패 : " + task.getException());
-//           }
-//        });
-
         initializeUI();
-
         setContentView(binding.getRoot());
     }
 
@@ -85,9 +71,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void buttonClickEvent() {
 
-        binding.imagebuttonNotificationBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.imagebuttonNotificationBack.setOnClickListener(v -> finish());
 
         binding.constraintlayoutNotificationTotal.setOnClickListener(v -> {
             replaceFragment(new TotalFragment());

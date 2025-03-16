@@ -67,10 +67,14 @@ public class DocsUploadActivity extends AppCompatActivity {
     }
     private void showLoadingDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_loading, null);
-        builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
-        dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        AlertDialog dialog = builder.create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
         dialog.show();
     }
 

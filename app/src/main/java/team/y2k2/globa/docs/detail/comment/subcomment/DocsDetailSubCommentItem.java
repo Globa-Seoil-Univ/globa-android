@@ -6,7 +6,7 @@ public class DocsDetailSubCommentItem {
     private String name;
     private String createdTime;
     private String content;
-    private String commentId;
+    private final String commentId;
     private boolean deleted;
 
     public DocsDetailSubCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean deleted) {

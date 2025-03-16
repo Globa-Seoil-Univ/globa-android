@@ -65,7 +65,7 @@
     <string name="permission_management">Permission Management</string>
 
     <string name="docs_more_title">Folder deletion title. Do not use this value</string>
-    <string name="docs_more_datetime">2001-04-24 14:10</string>
+    <string name="docs_more_datetime">2001–04-24 14:10</string>
     <string name="docs_more_move_docs">Move Folder</string>
     <string name="docs_more_delete_docs">Delete Document</string>
 
@@ -188,7 +188,7 @@
     <string name="activity_theme_system_title">Same as system settings</string>
 
     <string name="activity_docs_summary_title">Summary</string>
-    <string name="activity_docs_time_start"></string>
+    <string name="activity_docs_time_start"> </string>
     <string name="activity_docs_time_end">Downloading...</string>
 
     <string name="activity_search_currently">Recent Searches</string>
@@ -206,14 +206,14 @@
     <string name="activity_quiz_result_last_score_zero">Your last score was 0 points...</string>
 
     <string name="fragment_share_notification_2_1"> sent you a folder sharing invitation.</string>
-    <string name="fragment_share_notification_2_2"></string>
+    <string name="fragment_share_notification_2_2"> </string>
 
-    <string name="fragment_share_notification_3_1"></string>
+    <string name="fragment_share_notification_3_1"> </string>
     <string name="fragment_share_notification_3_2"> added a document to the shared folder.</string>
 
-    <string name="fragment_share_notification_4_1"></string>
+    <string name="fragment_share_notification_4_1"> </string>
     <string name="fragment_share_notification_4_2"> have been invited to the folder.</string>
 
-    <string name="fragment_share_notification_5_1"></string>
+    <string name="fragment_share_notification_5_1"> </string>
     <string name="fragment_share_notification_5_2"> Added a comment.</string>
 </resources>

@@ -15,13 +15,12 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 
-public class DocsStatisticsViewModel extends ViewModel {
+public class DocsStatisticsActivityModel extends ViewModel {
+    private final ApiService apiService;
+    private final MutableLiveData<StatisticsResponse> docsStatisticsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
-    private ApiService apiService;
-    private MutableLiveData<StatisticsResponse> docsStatisticsLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
-
-    public DocsStatisticsViewModel() {
+    public DocsStatisticsActivityModel() {
         apiService = ApiClient.getApiService();
     }
     public LiveData<StatisticsResponse> getDocsStatisticsLiveData() {

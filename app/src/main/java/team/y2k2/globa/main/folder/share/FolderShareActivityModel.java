@@ -8,8 +8,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.io.IOException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,14 +16,14 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.request.FolderShareAddRequest;
 import team.y2k2.globa.api.model.response.UserSearchResponse;
 
-public class FolderShareViewModel extends ViewModel {
+public class FolderShareActivityModel extends ViewModel {
 
     private ApiService apiService;
     private MutableLiveData<UserSearchResponse> userSearchLiveData = new MutableLiveData<>();
     private MutableLiveData<String> isSucceedLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
-    public FolderShareViewModel() {
+    public FolderShareActivityModel() {
         apiService = ApiClient.getApiService();
     }
 

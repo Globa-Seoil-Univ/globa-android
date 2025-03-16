@@ -40,8 +40,8 @@ public class SystemDB extends SQLiteOpenHelper {
     }
 
     public void onDefault(){
-        String systemsSQL[] = {
-                "INSERT INTO system VALUES(" + R.string.profile_alert_setting + "," + new AlertActivity().getClass().getName() + ");",
+        String[] systemsSQL = {
+                "INSERT INTO system VALUES(" + R.string.profile_alert_setting + "," + AlertActivity.class.getName() + ");",
                 "INSERT INTO system VALUES("
         };
     }
@@ -49,9 +49,6 @@ public class SystemDB extends SQLiteOpenHelper {
     private boolean isSystemExists(String systemName) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM system WHERE systemName LIKE '"+ systemName +"';", null);
 
-        if(cursor.getCount() == 0)
-            return true;
-        else
-            return false;
+        return cursor.getCount() == 0;
     }
 }

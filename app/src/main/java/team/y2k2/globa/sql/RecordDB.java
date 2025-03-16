@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,9 +86,6 @@ public class RecordDB extends SQLiteOpenHelper {
     private boolean isRecordIdExists(int recordId) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM Record WHERE record_id = " + recordId +";", null);
 
-        if(cursor.getCount() == 0)
-            return true;
-        else
-            return false;
+        return cursor.getCount() == 0;
     }
 }

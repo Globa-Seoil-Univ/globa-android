@@ -13,7 +13,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
-import team.y2k2.globa.api.model.entity.User;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 

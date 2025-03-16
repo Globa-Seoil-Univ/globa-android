@@ -21,7 +21,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +30,14 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.ShareTarget;
 import team.y2k2.globa.databinding.ActivityFolderAddBinding;
 import team.y2k2.globa.main.ProfileImage;
-import team.y2k2.globa.main.folder.share.FolderShareActivity;
-import team.y2k2.globa.main.folder.share.FolderShareViewModel;
+import team.y2k2.globa.main.folder.share.FolderShareActivityModel;
 
 public class FolderAddActivity extends AppCompatActivity {
 
     ActivityFolderAddBinding binding;
     ApiClient apiClient;
 
-    FolderShareViewModel folderShareViewModel;
+    FolderShareActivityModel folderShareActivityModel;
 
     String profile;
     String newProfile;
@@ -50,8 +48,8 @@ public class FolderAddActivity extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference imageRef;
 
-    private List<FolderAddItem> itemList = new ArrayList<>();
-    private List<ShareTarget> shareTargetList = new ArrayList<>();
+    private final List<FolderAddItem> itemList = new ArrayList<>();
+    private final List<ShareTarget> shareTargetList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +57,7 @@ public class FolderAddActivity extends AppCompatActivity {
         binding = ActivityFolderAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        folderShareViewModel = new ViewModelProvider(this).get(FolderShareViewModel.class);
+        folderShareActivityModel = new ViewModelProvider(this).get(FolderShareActivityModel.class);
 
         apiClient = new ApiClient(this);
 
@@ -67,9 +65,7 @@ public class FolderAddActivity extends AppCompatActivity {
         binding.recyclerviewFolderaddShareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.recyclerviewFolderaddShareSelected.setAdapter(adapter);
 
-        binding.buttonFolderaddBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.buttonFolderaddBack.setOnClickListener(v -> finish());
 
         binding.textviewFolderAddConfirm.setOnClickListener(v -> {
 
@@ -159,9 +155,9 @@ public class FolderAddActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() == 6) {
-                    folderShareViewModel.searchUserInfo(s.toString());
+                    folderShareActivityModel.searchUserInfo(s.toString());
 
-                    folderShareViewModel.getUserSearchLiveData().observe(FolderAddActivity.this, userResponse -> {
+                    folderShareActivityModel.getUserSearchLiveData().observe(FolderAddActivity.this, userResponse -> {
                         if(userResponse != null) {
                             binding.textviewFolderaddShareSearch.setText(userResponse.getName());
                             profile = userResponse.getProfile();
@@ -202,7 +198,7 @@ public class FolderAddActivity extends AppCompatActivity {
         });
 
         binding.constraintlayoutFolderaddShareSearch.setOnClickListener(v -> {
-            if(!binding.textviewFolderaddShareSearch.equals("")) {
+            if(!binding.textviewFolderaddShareSearch.getText().toString().isEmpty()) {
                 showBottomSheetDialog();
                 code = binding.edittextFolderaddShareInputname.getText().toString();
             } else {
@@ -210,13 +206,9 @@ public class FolderAddActivity extends AppCompatActivity {
             }
         });
 
-        binding.buttonFolderaddCancel.setOnClickListener(v -> {
-            binding.edittextFolderaddInputname.setText("");
-        });
+        binding.buttonFolderaddCancel.setOnClickListener(v -> binding.edittextFolderaddInputname.setText(""));
 
-        binding.buttonFoldershareShareCancel.setOnClickListener(v -> {
-            binding.edittextFolderaddShareInputname.setText("");
-        });
+        binding.buttonFoldershareShareCancel.setOnClickListener(v -> binding.edittextFolderaddShareInputname.setText(""));
 
     }
 

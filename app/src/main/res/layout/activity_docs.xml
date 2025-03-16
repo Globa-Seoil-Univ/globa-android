@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imagebutton_docs_back"
+            android:id="@+id/image_button_docs_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@null"
@@ -37,7 +37,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_toStartOf="@+id/imageview_docs_more"
-            android:layout_toEndOf="@id/imagebutton_docs_back"
+            android:layout_toEndOf="@id/image_button_docs_back"
             android:layout_centerVertical="true"
             tools:text="지구온난화 시나리오 기반의 동아시아 기후변화 분석" />
 

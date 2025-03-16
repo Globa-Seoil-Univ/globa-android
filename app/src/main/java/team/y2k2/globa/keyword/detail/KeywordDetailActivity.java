@@ -44,9 +44,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
 
         loadAPIResponse();
 
-        binding.imageviewKeywordDetailTop.setOnClickListener(v -> {
-            finish();
-        });
+        binding.imageviewKeywordDetailTop.setOnClickListener(v -> finish());
     }
 
     public void loadAPIResponse() {
@@ -57,7 +55,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
             if(!response.getDictionary().isEmpty()) {
                 List<KeywordDetail> keywordDetailList = response.getDictionary();
 
-                if(keywordDetailList.size() != 0)
+                if(!keywordDetailList.isEmpty())
                     pronunciation = keywordDetailList.get(0).getPronunciation();
                 else
                     pronunciation = "입력된 정보가 없습니다.";

@@ -2,13 +2,13 @@ package team.y2k2.globa.notification.inquiry;
 
 public class InquiryFragmentItem {
 
-    private String notificationId;
-    private String profile;
-    private String inquiryId;
-    private String title;
-    private String content;
-    private String createdTime;
-    private boolean isRead;
+    private final String notificationId;
+    private final String profile;
+    private final String inquiryId;
+    private final String title;
+    private final String content;
+    private final String createdTime;
+    private final boolean isRead;
 
     public InquiryFragmentItem(String notificationId, String profile, String inquiryId, String title, String content, String createdTime, boolean isRead) {
         this.notificationId = notificationId;

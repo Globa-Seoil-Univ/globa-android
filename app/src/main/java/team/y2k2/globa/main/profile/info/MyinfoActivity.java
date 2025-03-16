@@ -37,14 +37,10 @@ public class MyinfoActivity extends AppCompatActivity {
     private ActivityMyinfoBinding binding;
     private MyinfoAdapter myinfoAdapter;
     private MyinfoViewModel myInfoViewModel;
-    private ActivityResultLauncher<Intent> nicknameEditLauncher;
     private String profile, name, code, userId;
     private String newName, newProfile;
 
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference imageRef;
-
-    private ApiClient apiClient;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,7 @@ public class MyinfoActivity extends AppCompatActivity {
         binding = ActivityMyinfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        apiClient = new ApiClient(this);
+        ApiClient apiClient = new ApiClient(this);
 
         UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
         profile = userInfoResponse.getProfile();
@@ -91,7 +87,10 @@ public class MyinfoActivity extends AppCompatActivity {
 
                 try{
                     InputStream inputStream = getContentResolver().openInputStream(uri);
-                    byte[] fileBytes = IOUtils.toByteArray(inputStream);
+                    byte[] fileBytes = null;
+                    if (inputStream != null) {
+                        fileBytes = IOUtils.toByteArray(inputStream);
+                    }
 
                     RequestBody requestBody = RequestBody.create(fileBytes, MediaType.parse("image/*"));
 
@@ -100,7 +99,7 @@ public class MyinfoActivity extends AppCompatActivity {
                     myInfoViewModel.uploadImage(profilePart, userId);
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    return;
                 }
 
                 newProfile = uri.toString();
@@ -112,11 +111,9 @@ public class MyinfoActivity extends AppCompatActivity {
         });
 
         // 사진 변경 버튼 클릭 시 PhotoPicker 실행
-        binding.buttonMyinfoChangephoto.setOnClickListener(v -> {
-            pickMedia.launch(new PickVisualMediaRequest.Builder()
-                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                    .build());
-        });
+        binding.buttonMyinfoChangephoto.setOnClickListener(v -> pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build()));
     }
 
     // 초기 화면 구성
@@ -132,7 +129,7 @@ public class MyinfoActivity extends AppCompatActivity {
                         .error(R.drawable.profile_user)
                         .into(binding.imageviewMyinfoPhoto);
             } else {
-                imageRef = storage.getReference().child(profile);
+                StorageReference imageRef = storage.getReference().child(profile);
                 Glide.with(this).load(ProfileImage.convertGsToHttps(imageRef.toString()))
                         .error(R.drawable.profile_user)
                         .into(binding.imageviewMyinfoPhoto);
@@ -150,10 +147,10 @@ public class MyinfoActivity extends AppCompatActivity {
         itemList.add(new MyinfoItem(getString(R.string.withdraw), "", R.drawable.arrow_right, new WithdrawActivity()));
 
         // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
-        nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if(result.getResultCode() == RESULT_OK) {
+        ActivityResultLauncher<Intent> nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
-                if(data != null && data.hasExtra("updated_name")) {
+                if (data != null && data.hasExtra("updated_name")) {
                     String updatedName = data.getStringExtra("updated_name");
                     itemList.get(0).setName(updatedName);
                     myinfoAdapter.notifyDataSetChanged();

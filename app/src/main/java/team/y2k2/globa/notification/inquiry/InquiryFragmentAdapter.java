@@ -1,7 +1,6 @@
 package team.y2k2.globa.notification.inquiry;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,6 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.main.ProfileImage;
-import team.y2k2.globa.main.profile.inquiry.InquiryActivity;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
 

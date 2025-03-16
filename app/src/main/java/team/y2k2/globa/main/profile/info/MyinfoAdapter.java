@@ -54,24 +54,24 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
         holder.layout.setOnClickListener(v -> {
             if(item.getActivity() != null) {
 
-                if(item.getTitle().toString().equals("이름")) {
+                if(item.getTitle().equals("이름")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
-                    intent.putExtra("current_name", item.getName().toString());
+                    intent.putExtra("current_name", item.getName());
                     intent.putExtra("userId", activity.getUserId());
                     nicknameEditLauncher.launch(intent);
-                } else if(item.getTitle().toString().equals("회원탈퇴")) {
+                } else if(item.getTitle().equals("회원탈퇴")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
                     holder.itemView.getContext().startActivity(intent);
                 }
 
             } else {
 
-                if(item.getTitle().toString().equals("계정 코드")) {
+                if(item.getTitle().equals("계정 코드")) {
                     // 계정코드 클립보드 복사
-                    copyToClipboard(context, item.getName().toString());
+                    copyToClipboard(context, item.getName());
                     Toast.makeText(context, "코드 복사완료!", Toast.LENGTH_SHORT).show();
                     Log.d(getClass().getName(), "클립보드 복사 완료");
-                } else if(item.getTitle().toString().equals("로그아웃")) {
+                } else if(item.getTitle().equals("로그아웃")) {
                     // 로그아웃 로직
                     Log.d(getClass().getName(), "프리퍼런스 리셋 시작");
                     SharedPreferences preferences = context.getSharedPreferences("account", Context.MODE_PRIVATE);

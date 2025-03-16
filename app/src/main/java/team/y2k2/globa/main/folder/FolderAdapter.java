@@ -2,7 +2,6 @@ package team.y2k2.globa.main.folder;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,17 +40,19 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        String title = items.get(position).getTitle();
-        String datetime = getDateFormat(items.get(position).getDatetime());
+        int adapterPosition = position;
+
+        String title = items.get(adapterPosition).getTitle();
+        String datetime = getDateFormat(items.get(adapterPosition).getDatetime());
 
         holder.title.setText(title);
         holder.datetime.setText(datetime);
 
         holder.layout.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("folderId", items.get(position).getFolderId());
-            bundle.putString("folderTitle", items.get(position).getTitle());
-            bundle.putString("folderDatetime", items.get(position).getDatetime());
+            bundle.putInt("folderId", items.get(adapterPosition).getFolderId());
+            bundle.putString("folderTitle", items.get(adapterPosition).getTitle());
+            bundle.putString("folderDatetime", items.get(adapterPosition).getDatetime());
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 
@@ -67,14 +68,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
             builder.setTitle("폴더 삭제");
             builder.setMessage("폴더를 삭제하시겠습니까?");
 
-            builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    deleteFolder(position);
-                    Toast.makeText(activity, "폴더를 삭제했습니다", Toast.LENGTH_LONG);
-                }
+            builder.setPositiveButton("예", (dialog, which) -> {
+                deleteFolder(adapterPosition);
+                Toast.makeText(activity, "폴더를 삭제했습니다", Toast.LENGTH_LONG).show();
             });
-
+            builder.setNegativeButton("아니오", null);
+            builder.show();
             return true;
         });
     }
@@ -103,19 +102,16 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
 
     public String getDateFormat(String datetime) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
-        // 출력 형식
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA);
 
         Date date;
-        String outputDate = "";
+        String outputDate;
 
         try {
-            // 입력 날짜 문자열을 Date 객체로 파싱
             date = inputFormat.parse(datetime);
-            // Date 객체를 원하는 출력 형식의 문자열로 변환
             outputDate = outputFormat.format(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            return null;
         }
 
         return outputDate;

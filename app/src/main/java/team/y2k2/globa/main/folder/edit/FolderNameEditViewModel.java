@@ -16,12 +16,12 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 
 public class FolderNameEditViewModel extends ViewModel {
-    private ApiService apiService;
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     public MutableLiveData<String> folderName = new MutableLiveData<>("");
     public MutableLiveData<Integer> textCount = new MutableLiveData<>(0);
     public MutableLiveData<Boolean> isConfirmEnabled = new MutableLiveData<>(false);
-    private MutableLiveData<Boolean> finishActivity = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> finishActivity = new MutableLiveData<>(false);
     private int folderId;
 
     public FolderNameEditViewModel() {

@@ -18,16 +18,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Observable;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.docs.DocsActivity;
-import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;
 import team.y2k2.globa.docs.detail.comment.FocusViewModel;
 import team.y2k2.globa.main.ProfileImage;
@@ -42,17 +38,16 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
     String sectionId;
     String highlightId;
 
-    private DocsDetailCommentAdapter commentAdapter;
+    private final DocsDetailCommentAdapter commentAdapter;
 
     private final int BUTTON_COMMENT_SUB_CONFIRM = 2;
     private final int BUTTON_COMMENT_SUB_UPDATE = 3;
 
     private ApiClient apiClient;
 
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference profileImageRef;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    private FocusViewModel focusViewModel;
+    private final FocusViewModel focusViewModel;
 
     public DocsDetailSubCommentAdapter(List<DocsDetailSubCommentItem> subCommentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailCommentAdapter commentAdapter) {
         this.subCommentItems = subCommentItems;
@@ -67,11 +62,12 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
     }
 
     public void addNewItem(DocsDetailSubCommentItem newItem) {
-        if(subCommentItems == null) {
+        if (subCommentItems == null) {
             subCommentItems = new ArrayList<>();
         }
+        int position = subCommentItems.size();
         subCommentItems.add(newItem);
-        notifyDataSetChanged();
+        notifyItemInserted(position);
     }
 
     public void updateItem(String text, int position) {
@@ -104,7 +100,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
             if(profile.startsWith("http")) {
                 Glide.with(activity).load(profile).error(R.mipmap.ic_launcher).into(holder.profileImage);
             } else {
-                profileImageRef = storage.getReference().child(profile);
+                StorageReference profileImageRef = storage.getReference().child(profile);
                 Glide.with(activity).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
             }
         } else {
@@ -194,9 +190,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
             apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
             bottomSheetDialog.dismiss();
         });
-        cancelBtn.setOnClickListener(v -> {
-            bottomSheetDialog.dismiss();
-        });
+        cancelBtn.setOnClickListener(v -> bottomSheetDialog.dismiss());
         bottomSheetDialog.show();
     }
 

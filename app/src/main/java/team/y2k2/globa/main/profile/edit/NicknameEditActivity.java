@@ -1,8 +1,6 @@
 package team.y2k2.globa.main.profile.edit;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,15 +14,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityNicknameEditBinding;
-import team.y2k2.globa.api.model.request.LoginRequest;
 
 public class NicknameEditActivity extends AppCompatActivity {
 
     ActivityNicknameEditBinding binding;
     private NicknameEditViewModel nicknameEditViewModel;
     boolean isChanged = false;
-    private String userId;
-    private String currentName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +28,17 @@ public class NicknameEditActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         nicknameEditViewModel = new ViewModelProvider(this).get(NicknameEditViewModel.class);
-        userId = getIntent().getStringExtra("userId");
-        currentName = getIntent().getStringExtra("current_name");
+        String userId = getIntent().getStringExtra("userId");
+        String currentName = getIntent().getStringExtra("current_name");
 
         initializeUI(userId, currentName);
     }
 
     private void initializeUI(String userId, String currentName) {
-
-        binding.buttonNicknameeditBack.setOnClickListener(v -> {
-            finish();
-        });
-
+        binding.buttonNicknameeditBack.setOnClickListener(v -> finish());
         binding.edittextNicknameeditInputname.setText(currentName);
         int currentNameCount = binding.edittextNicknameeditInputname.getText().length();
         binding.textviewNicknameeditCount.setText(currentNameCount + "/32");
-
         binding.edittextNicknameeditInputname.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -107,7 +97,7 @@ public class NicknameEditActivity extends AppCompatActivity {
 
         // 글자 모두 지우기 버튼
         binding.buttonNicknameEditCancel.setOnClickListener(v -> {
-            if(binding.edittextNicknameeditInputname.getText().toString().equals("")){
+            if(binding.edittextNicknameeditInputname.getText().toString().isEmpty()){
                 binding.buttonNicknameEditCancel.setVisibility(View.GONE);
             } else {
                 binding.edittextNicknameeditInputname.setText("");

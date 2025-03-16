@@ -2,12 +2,12 @@ package team.y2k2.globa.notification.notice;
 
 public class NoticeFragmentItem {
 
-    private String notificationId;;
-    private String profile;
-    private String title;
-    private String content;
-    private String createdTime;
-    private boolean isRead;
+    private final String notificationId;
+    private final String profile;
+    private final String title;
+    private final String content;
+    private final String createdTime;
+    private final boolean isRead;
 
     public NoticeFragmentItem(String notificationId, String profile, String title, String content, String createdTime, boolean isRead) {
         this.notificationId = notificationId;

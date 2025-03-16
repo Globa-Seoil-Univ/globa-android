@@ -1,6 +1,5 @@
 package team.y2k2.globa.notification.notice;
 
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

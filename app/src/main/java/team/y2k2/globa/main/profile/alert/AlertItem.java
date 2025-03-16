@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.profile.alert;
 
-import android.app.Activity;
 
 public class AlertItem {
     private final int title;

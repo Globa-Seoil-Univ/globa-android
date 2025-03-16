@@ -28,14 +28,9 @@ import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.main.MainActivity;
 
-public class LoginViewModel extends ViewModel {
-    Activity activity;
+public class LoginActivityModel extends ViewModel {
 
     LoginModel model;
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
 
     public static class LoginListener implements OnCompleteListener<AuthResult> {
         ApiClient apiClient;
@@ -68,21 +63,6 @@ public class LoginViewModel extends ViewModel {
         }
 
         public void autoLogin() {
-//            TokenRequest request = new TokenRequest(refreshToken);
-//            TokenResponse response = apiClient.requestToken(request, activity);
-//
-//            if(response == null)
-//                return;
-//            else {
-//                Toast.makeText(activity, "at:" + response.getAccessToken() +", rt : " + response.getRefreshToken(), Toast.LENGTH_SHORT).show();
-//            }
-//
-//            userPreferences(response);
-//            sendLogMessage(response);
-//
-//            activity.dialog.dismiss();
-
-
             Intent intent = new Intent(activity, MainActivity.class);
             activity.startActivity(intent);
         }
@@ -109,7 +89,7 @@ public class LoginViewModel extends ViewModel {
 
         public void showLogMessages(UserInfoResponse response) {
             Log.d(getClass().getName(), "프로필 조회 성공");
-            ArrayList<String> logs = new ArrayList();
+            ArrayList<String> logs = new ArrayList<>();
             logs.add("userName      :" + response.getName());
             logs.add("userId        :" + response.getUserId());
             logs.add("publicFolderId:" + response.getPublicFolderId());
@@ -127,39 +107,41 @@ public class LoginViewModel extends ViewModel {
                 // Firebase 로그인 성공
 
                 FirebaseUser user = mAuth.getCurrentUser();
-                user.getIdToken(false).addOnCompleteListener(task2 -> {
-                    if (task2.isSuccessful()) {
-                        String idToken = task2.getResult().getToken();
-                        // 여기에서 새로운 ID 토큰을 처리합니다.
-                        Log.d("ID_TOKEN", "ID Token: " + idToken);
+                if (user != null) {
+                    user.getIdToken(false).addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+                            String idToken = task2.getResult().getToken();
+                            // 여기에서 새로운 ID 토큰을 처리합니다.
+                            Log.d("ID_TOKEN", "ID Token: " + idToken);
 
-                        model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE, idToken);
-                        LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), idToken);
+                            model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE, idToken);
+                            LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), idToken);
 
-                        LoginResponse response = apiClient.requestSignIn(request);
+                            LoginResponse response = apiClient.requestSignIn(request);
 
-                        if(response == null){
-                            Toast.makeText(activity, "로그인 실패 : 탈퇴한 사용자 ", Toast.LENGTH_SHORT).show();
-                        } else{
+                            if(response == null){
+                                Toast.makeText(activity, "로그인 실패 : 탈퇴한 사용자 ", Toast.LENGTH_SHORT).show();
+                            } else{
 
-                            userPreferences(request, response);
-                            sendLogMessage(request,response);
+                                userPreferences(request, response);
+                                sendLogMessage(request,response);
 
-                            ApiClient apiNewClient = new ApiClient(activity);
-                            UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
-                            userProfilePreferences(userInfoResponse);
-                            showLogMessages(userInfoResponse);
+                                ApiClient apiNewClient = new ApiClient(activity);
+                                UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
+                                userProfilePreferences(userInfoResponse);
+                                showLogMessages(userInfoResponse);
 
 
-                            activity.dialog.dismiss();
-                            Intent intent = new Intent(activity, MainActivity.class);
-                            activity.startActivity(intent);
+                                activity.dialog.dismiss();
+                                Intent intent = new Intent(activity, MainActivity.class);
+                                activity.startActivity(intent);
 
-                            Toast.makeText(activity, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
-
-                    }
-                });
+                    });
+                }
 
             }
             else {
@@ -176,7 +158,7 @@ public class LoginViewModel extends ViewModel {
             editor.putString("userId", response.getUserId());
             editor.putString("publicFolderId", response.getPublicFolderId());
             editor.putString("userCode", response.getCode());
-            editor.commit();
+            editor.apply();
         }
 
         public void userPreferences(LoginRequest request, LoginResponse response) {
@@ -192,34 +174,29 @@ public class LoginViewModel extends ViewModel {
             editor.putString("uid", request.getSnsId());
             editor.putString("name", request.getName());
             editor.putString("profile", request.getProfile());
-            editor.commit();
+            editor.apply();
         }
 
         public void sendLogMessage(TokenResponse response) {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
 
-            ArrayList list = new ArrayList();
-            list.add("accessToken : " + accessToken);
-            list.add("refreshToken: " + refreshToken);
+            Log.d(getClass().getName(), "AT: " + accessToken);
+            Log.d(getClass().getName(), "RT: " + refreshToken);
         }
 
         public void sendLogMessage(LoginRequest request, LoginResponse response) {
             String accessToken = response.getAccessToken();
             String refreshToken = response.getRefreshToken();
 
-            ArrayList list = new ArrayList();
-            list.add("accessToken : " + accessToken);
-            list.add("refreshToken: " + refreshToken);
-            list.add("snsId       : " + request.getSnsId());
-            list.add("name        : " + request.getName());
-            list.add("profile     : " + request.getProfile());
+            Log.d(getClass().getName(), "AT: " + accessToken);
+            Log.d(getClass().getName(), "RT: " + refreshToken);
         }
     }
 
 
 
     public String getAppKeyForKakao() {
-        return model.APP_KEY_KAKAO;
+        return APP_KEY_KAKAO;
     }
 }

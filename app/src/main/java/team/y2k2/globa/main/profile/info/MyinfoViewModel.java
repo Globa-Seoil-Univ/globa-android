@@ -1,32 +1,23 @@
 package team.y2k2.globa.main.profile.info;
 
 import static team.y2k2.globa.api.ApiClient.authorization;
-import static team.y2k2.globa.api.ApiModel.MULTIPART_FORM_DATA;
 
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.io.File;
-import java.io.InputStream;
-
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.model.response.UserInfoResponse;
 
 public class MyinfoViewModel extends ViewModel {
 
     private ApiService apiService; // Retrofit2
-    private MutableLiveData<UserInfoResponse> userInfoResponseLiveData = new MutableLiveData<UserInfoResponse>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public MyinfoViewModel() {

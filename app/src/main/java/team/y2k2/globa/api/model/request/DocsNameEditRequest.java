@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class DocsNameEditRequest {
     @SerializedName("title")
-    private String title;
+    private final String title;
 
     public DocsNameEditRequest(String title){
         this.title = title;

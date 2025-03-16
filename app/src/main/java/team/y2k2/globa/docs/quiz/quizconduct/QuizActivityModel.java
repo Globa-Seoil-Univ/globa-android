@@ -17,15 +17,14 @@ import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.entity.Quiz;
 import team.y2k2.globa.api.model.entity.QuizResult;
 import team.y2k2.globa.api.model.request.QuizResultRequest;
-import team.y2k2.globa.api.model.response.QuizResponse;
 
-public class QuizViewModel extends ViewModel {
+public class QuizActivityModel extends ViewModel {
 
     private ApiService apiService;
     private MutableLiveData<List<Quiz>> quizLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
-    public QuizViewModel() {
+    public QuizActivityModel() {
         apiService = ApiClient.getApiService();
     }
     public MutableLiveData<List<Quiz>> getQuizLiveData() {
@@ -52,7 +51,7 @@ public class QuizViewModel extends ViewModel {
             @Override
             public void onFailure(Call<List<Quiz>> call, Throwable t) {
                 Log.d("api 송신", "실패 : " + t.getMessage());
-                Log.d("폴더id, 문서id", String.valueOf(folderId) + ", " + String.valueOf(recordId));
+                Log.d("폴더id, 문서id", (folderId) + ", " + (recordId));
             }
         });
     }

@@ -4,13 +4,20 @@ import com.google.gson.annotations.SerializedName;
 
 public class WithdrawRequest {
     @SerializedName("surveyType")
-    private int surveyType;
+    private final int surveyType;
     @SerializedName("content")
-    private String content;
+    private final String content;
 
     public WithdrawRequest(int surveyType, String content) {
         this.surveyType = surveyType;
         this.content = content;
     }
 
+    public int getSurveyType() {
+        return surveyType;
+    }
+
+    public String getContent() {
+        return content;
+    }
 }

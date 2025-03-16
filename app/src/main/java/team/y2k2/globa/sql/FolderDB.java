@@ -45,9 +45,6 @@ public class FolderDB extends SQLiteOpenHelper {
     private boolean isFolderIdExists(int folderId) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM folder WHERE folder_id = " + folderId +";", null);
 
-        if(cursor.getCount() == 0)
-            return true;
-        else
-            return false;
+        return cursor.getCount() == 0;
     }
 }

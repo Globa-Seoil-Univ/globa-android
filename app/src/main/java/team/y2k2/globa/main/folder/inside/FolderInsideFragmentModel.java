@@ -12,13 +12,13 @@ import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 
-public class FolderInsideViewModel extends ViewModel {
+public class FolderInsideFragmentModel extends ViewModel {
 
-    private ApiService apiService;
-    private MutableLiveData<Integer> responseCodeLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<Integer> responseCodeLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
-    public FolderInsideViewModel() {
+    public FolderInsideFragmentModel() {
         apiService = ApiClient.getApiService();
     }
     public MutableLiveData<Integer> getResponseCodeLiveData() {

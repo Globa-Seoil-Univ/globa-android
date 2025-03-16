@@ -5,10 +5,13 @@ import com.google.gson.annotations.SerializedName;
 public class CommentRequest {
 
     @SerializedName("content")
-    private String content;
+    private final String content;
 
     public CommentRequest(String content) {
         this.content = content;
     }
 
+    public String getContent() {
+        return content;
+    }
 }

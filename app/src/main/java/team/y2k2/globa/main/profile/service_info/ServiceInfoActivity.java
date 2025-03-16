@@ -20,9 +20,7 @@ public class ServiceInfoActivity extends AppCompatActivity {
         binding = ActivityServiceInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.imageviewServiceBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.imageviewServiceBack.setOnClickListener(v -> finish());
 
         ServiceInfoItemAdapter adapter = new ServiceInfoItemAdapter(this, model.getItems());
 

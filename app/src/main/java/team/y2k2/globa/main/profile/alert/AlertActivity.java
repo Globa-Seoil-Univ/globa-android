@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.profile.alert;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityAlertBinding;
@@ -27,7 +25,7 @@ public class AlertActivity extends AppCompatActivity {
     private boolean uploadNofi, shareNofi, eventNofi;
     private boolean newUploadNofi, newShareNofi, newEventNofi;
 
-    private ArrayList<AlertItem> alertItems = new ArrayList<>();
+    private final ArrayList<AlertItem> alertItems = new ArrayList<>();
 
     private AlertItemAdapter adapter;
 
@@ -68,7 +66,7 @@ public class AlertActivity extends AppCompatActivity {
 
         });
 
-        binding.imagebuttonAlertBack.setOnClickListener(v -> {
+        binding.imageButtonAlertBack.setOnClickListener(v -> {
 
             newUploadNofi = adapter.isUploadChecked();
             newShareNofi = adapter.isShareChecked();

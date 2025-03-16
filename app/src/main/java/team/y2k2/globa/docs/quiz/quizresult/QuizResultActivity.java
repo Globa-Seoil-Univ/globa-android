@@ -4,13 +4,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import java.util.Map;
 
@@ -18,17 +14,14 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityQuizResultBinding;
 
 public class QuizResultActivity extends AppCompatActivity {
-
     private ActivityQuizResultBinding binding;
     private SharedPreferences quizResultPref;
     private SharedPreferences.Editor quizResultEditor;
 
     private int gradeInt;
-    private int correctedInt;
 
     private String grade;
     private String corrected;
-    private String percentString;
     private Map<String, ?> allEntries;
 
     int color;
@@ -47,9 +40,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
     private void initializeUI() {
 
-        binding.buttonQuizresultBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.buttonQuizresultBack.setOnClickListener(v -> finish());
 
         // 데이터 수집
         loadData();
@@ -68,7 +59,7 @@ public class QuizResultActivity extends AppCompatActivity {
     private void loadData() {
         // 띄어줄 점수와 정답 수
         gradeInt = getIntent().getIntExtra("grade", 0);
-        correctedInt = getIntent().getIntExtra("correctAnswer", 0);
+        int correctedInt = getIntent().getIntExtra("correctAnswer", 0);
         grade = gradeInt + getString(R.string.score);
         corrected = correctedInt + getString(R.string.count);
     }
@@ -95,14 +86,13 @@ public class QuizResultActivity extends AppCompatActivity {
 
         loadPreference();
 
+        String percentString;
         if(allEntries.isEmpty()) {
             // 문제 푼 이력이 없는 경우
             percentString = getString(R.string.activity_quiz_result_empty);
             SpannableStringBuilder percentSpannable = new SpannableStringBuilder(percentString);
             percentSpannable.setSpan(new ForegroundColorSpan(color), 9, 12, 0); // "상승률" 글자에만 색 입히기
             binding.textviewQuizresultPercent.setText(percentSpannable);
-            quizResultEditor.putInt("lastGrade", gradeInt);
-            quizResultEditor.apply();
         } else {
             // 문제 푼 이력이 있는 경우
             int lastCorrected = quizResultPref.getInt("lastGrade", 0);
@@ -136,9 +126,9 @@ public class QuizResultActivity extends AppCompatActivity {
                 percentString = getString(R.string.activity_quiz_result_last_score_zero);
                 binding.textviewQuizresultPercent.setText(percentString);
             }
-            quizResultEditor.putInt("lastGrade", gradeInt);
-            quizResultEditor.apply();
         }
+        quizResultEditor.putInt("lastGrade", gradeInt);
+        quizResultEditor.apply();
     }
 
     private void loadPreference() {

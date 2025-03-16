@@ -38,7 +38,7 @@ public class PreferencesHelper {
 
             sharedPreferences.edit().putString(DATA_KEY, dataArray.toString()).apply();
         } catch (JSONException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -47,7 +47,6 @@ public class PreferencesHelper {
         try {
             return new JSONArray(dataString);
         } catch (JSONException e) {
-            e.printStackTrace();
             return new JSONArray();
         }
     }

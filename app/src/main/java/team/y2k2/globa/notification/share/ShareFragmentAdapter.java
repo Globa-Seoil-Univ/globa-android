@@ -1,6 +1,5 @@
 package team.y2k2.globa.notification.share;
 
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +18,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.checkerframework.checker.units.qual.C;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 
 import team.y2k2.globa.R;
@@ -35,7 +31,6 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
     NotificationActivity activity;
     List<ShareFragmentItem> items;
     NotificationViewModel notificationViewModel;
-    ProfileImage profileImage;
     int whiteColor, primaryColor;
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -47,7 +42,6 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
         notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
         this.whiteColor = ContextCompat.getColor(activity, R.color.white);
         this.primaryColor = ContextCompat.getColor(activity, R.color.primary_1);
-        this.profileImage = new ProfileImage();
     }
 
     @NonNull

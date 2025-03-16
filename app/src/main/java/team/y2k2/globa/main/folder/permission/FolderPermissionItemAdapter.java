@@ -16,8 +16,6 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
@@ -28,7 +26,7 @@ import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerMod
 public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPermissionItemAdapter.AdapterViewHolder> {
     ArrayList<FolderPermissionItem> items;
     FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
-    private onItemLongClickListener longClickListener;
+    private final onItemLongClickListener longClickListener;
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference imageRef;
@@ -85,7 +83,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
             items.remove(position);
             notifyItemRemoved(position);
         } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

@@ -14,13 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.firebase.messaging.RemoteMessage;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.intro.IntroActivity;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
@@ -28,11 +25,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private static final String CHANNEL_ID = "firebase_channel";
     private static final int NOTIFICATION_ID = 1001;
 
-    private NotificationViewModel notificationViewModel;
-
-    public FirebaseMessagingService() {
-        this.notificationViewModel = new NotificationViewModel();
-    }
+    public FirebaseMessagingService() { }
 
     @Override
     public void onNewToken(@NonNull String token) {
@@ -49,18 +42,33 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
     }
 
+    // 메시지가 오지 않는 경우도 존재함.
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
         Log.d(getClass().getSimpleName(), "알림 리시버 시작");
 
-        String title = remoteMessage.getNotification().getTitle();
-        String message = remoteMessage.getNotification().getBody();
+        String title = null;
+        String message = null;
 
-        sendNotification(title, message);
+        RemoteMessage.Notification notification = remoteMessage.getNotification();
+        if (notification != null) {
+            title = notification.getTitle();
+            message = notification.getBody();
+        } else {
+            // 데이터 메시지 처리 또는 기본값 설정
+            Log.d(getClass().getSimpleName(), "데이터 메시지 수신");
+            if (remoteMessage.getData().containsKey("title")) {
+                title = remoteMessage.getData().get("title");
+                message = remoteMessage.getData().get("body");
+            }
+        }
 
-
+        if (title != null && message != null) {
+            sendNotification(title, message);
+        } else {
+            Log.w(getClass().getSimpleName(), "알림 또는 데이터 메시지에서 title 또는 body가 누락됨.");
+        }
     }
 
     private void sendNotification(String title, String message) {

@@ -57,7 +57,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        if(items.get(0).getRecordId().equals(""))
+        if(items.get(0).getRecordId().isEmpty())
             return;
 
         String title = items.get(position).getTitle();
@@ -84,20 +84,25 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             SharedPreferences preferences = holder.itemView.getContext().getSharedPreferences("record_" + items.get(position).getRecordId(), Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("count", preferences.getInt("count", 0) + 1);
-            editor.commit();
+            editor.apply();
 
             holder.itemView.getContext().startActivity(intent);
         });
 
         // 버튼 클릭 리스너를 별도의 메서드로 분리
-        confirm.setOnClickListener(d2 -> {
-            bottomSheetDialog.dismiss();
-            deleteDocs(items.get(position).getFolderId(), items.get(position).getRecordId());
-        });
-        cancel.setOnClickListener(d2 -> {
-            bottomSheetDialog.dismiss();
-            moreBottomSheet.show();
-        });
+        if (confirm != null) {
+            confirm.setOnClickListener(d2 -> {
+                bottomSheetDialog.dismiss();
+                deleteDocs(items.get(position).getFolderId(), items.get(position).getRecordId());
+            });
+        }
+
+        if (cancel != null) {
+            cancel.setOnClickListener(d2 -> {
+                bottomSheetDialog.dismiss();
+                moreBottomSheet.show();
+            });
+        }
 
         holder.itemView.setOnLongClickListener(view -> {
             moreBottomSheet.show();
@@ -105,22 +110,29 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
             TextView moreTitle = moreBottomSheet.findViewById(R.id.textview_more_docs_title);
 
-            moreTitle.setText(title);
+            if (moreTitle != null) {
+                moreTitle.setText(title);
+            }
 
 
-            rename.setOnClickListener(d1 -> {
-                moreBottomSheet.dismiss();
-                Intent intent = new Intent(holder.itemView.getContext(), DocsNameEditActivity.class);
-                intent.putExtra("recordId", items.get(position).getRecordId());
-                intent.putExtra("folderId", items.get(position).getFolderId());
-                intent.putExtra("title", items.get(position).getTitle());
-                holder.itemView.getContext().startActivity(intent);
-            });
+            if (rename != null) {
+                rename.setOnClickListener(d1 -> {
+                    moreBottomSheet.dismiss();
+                    Intent intent = new Intent(holder.itemView.getContext(), DocsNameEditActivity.class);
+                    intent.putExtra("recordId", items.get(position).getRecordId());
+                    intent.putExtra("folderId", items.get(position).getFolderId());
+                    intent.putExtra("title", items.get(position).getTitle());
+                    holder.itemView.getContext().startActivity(intent);
+                });
+            }
             RelativeLayout delete = moreBottomSheet.findViewById(R.id.relativelayout_more_delete);
-            delete.setOnClickListener(d1 -> {
-                moreBottomSheet.dismiss();
-                bottomSheetDialog.show();
-            });
+
+            if (delete != null) {
+                delete.setOnClickListener(d1 -> {
+                    moreBottomSheet.dismiss();
+                    bottomSheetDialog.show();
+                });
+            }
             return true;
         });
 
@@ -129,10 +141,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         DocsKeywordAdapter adapter = new DocsKeywordAdapter(keywordModel.getItems());
 
 
-        if(items.get(position).getKeywords().size() == 0) {
-            // 아직 STT 트렌젝션이 완료되지 않았을 때.
-        }
-        else {
+        if(! items.get(position).getKeywords().isEmpty()) {
             holder.processing.setLayoutParams(new LinearLayout.LayoutParams(0,0));
             holder.lottieAnimationView.setLayoutParams(new LinearLayout.LayoutParams(0,0));
         }
@@ -181,7 +190,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             date = inputFormat.parse(datetime);
             outputDate = outputFormat.format(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            return null;
         }
 
         return outputDate;

@@ -20,7 +20,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -39,7 +38,6 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityLoginBinding;
-import team.y2k2.globa.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
@@ -53,12 +51,12 @@ public class LoginActivity extends AppCompatActivity {
     public final String LOGIN_ERR_MSG = "로그인 오류가 발생했습니다." ;
 
     private ActivityLoginBinding binding;
-    LoginViewModel viewModel;
+    LoginActivityModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        viewModel = new ViewModelProvider(this).get(LoginActivityModel.class);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_loading, null);
@@ -87,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         if(accessToken.equalsIgnoreCase(""))
             return;
 
-        LoginViewModel.LoginListener listener = new LoginViewModel.LoginListener(this, accessToken, refreshToken);
+        LoginActivityModel.LoginListener listener = new LoginActivityModel.LoginListener(this, accessToken, refreshToken);
 
         listener.autoLogin();
     }
@@ -155,9 +153,8 @@ public class LoginActivity extends AppCompatActivity {
      * @param requestCode SNS Type
      * @param resultCode SNS 계정 정보 요청 성공 여부
      * @param data SNS 계정 정보
-     *
-     * @KAKAO = 1001
-     * @GOOGLE = 1004
+     * KAKAO = 1001
+     * GOOGLE = 1004
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -201,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = GoogleAuthProvider.getCredential(accessToken, null);
 
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new LoginViewModel.LoginListener(this, mAuth, accessToken));
+                .addOnCompleteListener(this, new LoginActivityModel.LoginListener(this, mAuth, accessToken));
     }
 
     private void signInKakao(String token) {
@@ -211,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
             if (meError != null) {
                 Toast.makeText(this, LOGIN_ERR_MSG + ":" + meError.getMessage(), Toast.LENGTH_LONG);
             } else {
-                LoginViewModel.LoginListener listener = new LoginViewModel.LoginListener(user, this);
+                LoginActivityModel.LoginListener listener = new LoginActivityModel.LoginListener(user, this);
                 listener.KakaoLogin(token);
             }
             return null;

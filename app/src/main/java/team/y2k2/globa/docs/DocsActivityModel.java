@@ -2,7 +2,6 @@ package team.y2k2.globa.docs;
 
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -28,7 +27,7 @@ import team.y2k2.globa.docs.more.DocsMoreActivity;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
-public class DocsViewModel extends ViewModel {
+public class DocsActivityModel extends ViewModel {
 
     DocsActivity activity;
     String title;
@@ -52,9 +51,9 @@ public class DocsViewModel extends ViewModel {
     }
 
     public void setIntent(Intent intent){
-        title = intent.getStringExtra("title").toString();
-        folderId = intent.getStringExtra("folderId").toString();
-        recordId = intent.getStringExtra("recordId").toString();
+        title = intent.getStringExtra("title");
+        folderId = intent.getStringExtra("folderId");
+        recordId = intent.getStringExtra("recordId");
     }
 
     public void setPlayer(SimpleExoPlayer player) {
@@ -184,21 +183,13 @@ public class DocsViewModel extends ViewModel {
                     }
                 })
                 .addOnFailureListener(e -> {
-                        (activity).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                                builder.setTitle("에러 발생")
-                                        .setMessage("Firebase RDB 에러 : " + e.getMessage())
-                                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .setCancelable(false)
-                                        .show();
-                            }
+                        (activity).runOnUiThread(() -> {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                            builder.setTitle("에러 발생")
+                                    .setMessage("Firebase RDB 에러 : " + e.getMessage())
+                                    .setPositiveButton("확인", (dialog, which) -> dialog.dismiss())
+                                    .setCancelable(false)
+                                    .show();
                         });
                     isDownloadFailed = true; // 실패 플래그 설정
                 });

@@ -24,14 +24,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.ApiClient;
@@ -41,9 +39,9 @@ import team.y2k2.globa.api.model.entity.Studytime;
 import team.y2k2.globa.databinding.FragmentStatisticsBinding;
 
 public class StatisticsFragment extends Fragment {
-    //String[] dayX = { "딥러닝", "학습", "지능", "데이터", "예측", "인공신경망", "사용", "입력", "패턴", "이미지" };
+    // String[] dayX = { "딥러닝", "학습", "지능", "데이터", "예측", "인공신경망", "사용", "입력", "패턴", "이미지" };
     String[] wordX, timeX, gradeX; // 수평 막대 그래프 카테고리 배열
-    int[] wordValues, timeValues, gradeValues;
+    int[] timeValues, gradeValues;
     double[] doubleWordValues, doubleGradeValues;
     FragmentStatisticsBinding binding;
     private HorizontalBarChart barChart;
@@ -51,9 +49,8 @@ public class StatisticsFragment extends Fragment {
     StatisticsViewModel statisticsViewModel;
     String userId;
     private List<Keyword> keywords;
-    private List<Studytime> studytimes;
-    private List<Quizgrade> quizgrades;
-    private int maxStudyTime;
+    private List<Studytime> studyTimes;
+    private List<Quizgrade> quizGrades;
     private double maxWordValue;
 
     @Nullable
@@ -93,8 +90,8 @@ public class StatisticsFragment extends Fragment {
         statisticsViewModel.getStatisticsLiveData().observe(getViewLifecycleOwner(), statistics -> {
             if(statistics != null) {
                 keywords = statistics.getKeywords();
-                studytimes = statistics.getStudyTimes();
-                quizgrades = statistics.getQuizGrades();
+                studyTimes = statistics.getStudyTimes();
+                quizGrades = statistics.getQuizGrades();
 
                 // 단어 중요도 차트 그리기
                 drawKeywordsChart();
@@ -116,11 +113,9 @@ public class StatisticsFragment extends Fragment {
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
 
         maxWordValue = 0;
-        if(doubleWordValues.length != 0) {
-            for(int i = 0; i < doubleWordValues.length; i++) {
-                if(doubleWordValues[i] > maxWordValue) {
-                    maxWordValue = doubleWordValues[i];
-                }
+        for (double doubleWordValue : doubleWordValues) {
+            if (doubleWordValue > maxWordValue) {
+                maxWordValue = doubleWordValue;
             }
         }
 
@@ -142,15 +137,13 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void drawStudyTimeChart() {
-        timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
-        timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
+        timeX = studyTimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
+        timeValues = studyTimes.stream().mapToInt(Studytime::getStudyTime).toArray();
 
-        maxStudyTime = 0;
-        if(timeValues.length != 0) {
-            for(int i = 0; i < timeValues.length; i++) {
-                if(timeValues[i] > maxStudyTime) {
-                    maxStudyTime = timeValues[i];
-                }
+        int maxStudyTime = 0;
+        for (int timeValue : timeValues) {
+            if (timeValue > maxStudyTime) {
+                maxStudyTime = timeValue;
             }
         }
 
@@ -195,8 +188,8 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void drawQuizGradeChart() {
-        gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
-        doubleGradeValues = quizgrades.stream().mapToDouble(Quizgrade::getScore).toArray();
+        gradeX = quizGrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
+        doubleGradeValues = quizGrades.stream().mapToDouble(Quizgrade::getScore).toArray();
         gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
         if(gradeX.length < 10 && gradeX.length > 0) {
             List<String> gradeXList = new ArrayList<>();
@@ -245,7 +238,7 @@ public class StatisticsFragment extends Fragment {
         }
 
         // 내림차순으로 정렬 (values를 기준으로)
-        Collections.sort(sortedList, (o1, o2) -> Double.compare(o1.first, o2.first));
+        sortedList.sort(Comparator.comparingDouble(o -> o.first));
 
         // 정렬된 값을 entries와 labels에 추가
         for (int i = 0; i < sortedList.size(); i++) {

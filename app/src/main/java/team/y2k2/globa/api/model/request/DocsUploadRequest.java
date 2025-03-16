@@ -4,13 +4,21 @@ import com.google.gson.annotations.SerializedName;
 
 public class DocsUploadRequest {
     @SerializedName("title")
-    private String title;
+    private final String title;
 
     @SerializedName("path")
-    private String path;
+    private final String path;
 
     public DocsUploadRequest(String title, String path) {
         this.title = title;
         this.path = path;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPath() {
+        return path;
     }
 }

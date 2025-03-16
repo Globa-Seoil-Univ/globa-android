@@ -85,7 +85,7 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
         SimpleDateFormat outputFormat = new SimpleDateFormat("yy-MM-dd", Locale.KOREA);
 
         Date date;
-        String outputDate = "";
+        String outputDate;
 
         try {
             // 입력 날짜 문자열을 Date 객체로 파싱
@@ -93,7 +93,7 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
             // Date 객체를 원하는 출력 형식의 문자열로 변환
             outputDate = outputFormat.format(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            return null;
         }
 
         return outputDate;

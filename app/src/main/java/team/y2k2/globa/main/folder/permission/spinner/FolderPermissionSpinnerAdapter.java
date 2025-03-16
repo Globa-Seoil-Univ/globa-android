@@ -15,8 +15,7 @@ import java.util.List;
 import team.y2k2.globa.R;
 
 public class FolderPermissionSpinnerAdapter extends ArrayAdapter<String> {
-
-    private List<String> options;
+    private final List<String> options;
 
     public FolderPermissionSpinnerAdapter(Context context, List<String> options) {
         super(context, R.layout.item_folder_permission_spinner, options);

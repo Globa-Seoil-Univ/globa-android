@@ -2,9 +2,9 @@ package team.y2k2.globa.main.folder.add;
 
 public class FolderAddItem {
 
-    private String profile;
-    private String code;
-    private String role;
+    private final String profile;
+    private final String code;
+    private final String role;
 
     public FolderAddItem(String profile, String code, String role) {
         this.profile = profile;

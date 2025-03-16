@@ -6,7 +6,6 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.main.profile.alert.AlertActivity;
 import team.y2k2.globa.main.profile.inquiry.InquiryActivity;
 import team.y2k2.globa.main.profile.service_info.ServiceInfoActivity;
-import team.y2k2.globa.main.profile.theme.ThemeActivity;
 
 public class ProfileModel {
     private final ArrayList<SettingItem> items;

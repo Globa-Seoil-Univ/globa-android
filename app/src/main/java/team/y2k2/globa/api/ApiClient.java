@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,7 +49,6 @@ import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.request.DocsNameEditRequest;
 import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.login.LoginActivity;
-import team.y2k2.globa.main.MainActivity;
 
 public class ApiClient {
     public static ApiService apiService;
@@ -99,12 +97,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -115,10 +111,8 @@ public class ApiClient {
     public RecordResponse requestGetRecords(int count) {
         try {
             return CompletableFuture.supplyAsync(() -> {
-                // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<RecordResponse> call = apiService.requestGetRecords(APPLICATION_JSON, authorization, count);
-                Response<RecordResponse> response = null;
-
+                Response<RecordResponse> response;
                 try {
                     response = call.execute();
 
@@ -129,12 +123,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -142,9 +134,8 @@ public class ApiClient {
     public RecordResponse requestGetRecordsOfReceiving(int count) {
         try {
             return CompletableFuture.supplyAsync(() -> {
-                // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<RecordResponse> call = apiService.requestGetRecordsOfReceiving(APPLICATION_JSON, authorization, count);
-                Response<RecordResponse> response = null;
+                Response<RecordResponse> response;
 
                 try {
                     response = call.execute();
@@ -156,12 +147,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -169,9 +158,8 @@ public class ApiClient {
     public RecordResponse requestGetRecordsOfSharing(int count) {
         try {
             return CompletableFuture.supplyAsync(() -> {
-                // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<RecordResponse> call = apiService.requestGetRecordsOfSharing(APPLICATION_JSON, authorization, count);
-                Response<RecordResponse> response = null;
+                Response<RecordResponse> response;
 
                 try {
                     response = call.execute();
@@ -183,12 +171,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -210,13 +196,11 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
             copyToClipboard(context, e.getMessage() + request.getRefreshToken());
-            e.printStackTrace();
             return null;
         }
     }
@@ -243,15 +227,12 @@ public class ApiClient {
                 try {
                     response = call.execute();
 
-                    if (response.isSuccessful() && response.code() != 400) {
-                        return response.body();
-                    } else {
+                    if (!response.isSuccessful() || response.code() == 400) {
                         handleErrorCode(response.code());
                         isSuccess.set(false);
-                        return response.body();
                     }
+                    return response.body();
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
@@ -260,7 +241,6 @@ public class ApiClient {
                 parentResponse = null;
             return parentResponse;
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -282,12 +262,10 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             // CompletableFuture 실행 중 에러 발생 시 에러 처리
             handleErrorCode(500);
             return Response.error(500, ResponseBody.create(null, ""));
@@ -312,12 +290,10 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -337,13 +313,11 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
 
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -365,12 +339,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -391,12 +363,10 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -418,12 +388,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -444,12 +412,10 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -469,12 +435,10 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -495,12 +459,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -522,12 +484,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -547,14 +507,12 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     // 대댓글 추가
@@ -572,14 +530,12 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     // 댓글 최초 추가
@@ -598,12 +554,10 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             Log.d("댓글 최초 추가 API", "댓글 최초 추가 InterruptedException/ExecutionException 오류 e: " + e.getMessage());
         }
         return null;
@@ -629,12 +583,10 @@ public class ApiClient {
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -657,13 +609,11 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     Log.d("대댓글 가져오기", "ApiClient IOException 발생");
                     return null;
                 }
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -683,14 +633,12 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     // 댓글 수정
@@ -709,14 +657,12 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     // 알림 가져오기
@@ -739,7 +685,6 @@ public class ApiClient {
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get();
@@ -765,14 +710,12 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get();
         }catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public SearchResponse searchForKeyword(String keyword) {
@@ -792,12 +735,10 @@ public class ApiClient {
                         return null;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -817,14 +758,12 @@ public class ApiClient {
                     // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
-                    e.printStackTrace();
                 }
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public boolean handleErrorCode(int code) {
@@ -1037,23 +976,15 @@ public class ApiClient {
             return;
         }
 
-        ((Activity) context).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        if(! ((Activity) context).isFinishing()) {
+            ((Activity) context).runOnUiThread(() -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("에러 발생")
                         .setMessage("에러 코드: " + errorCode + "\n" + errorMessage)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setPositiveButton("확인", (dialog, which) -> dialog.dismiss())
                         .setCancelable(false)
                         .show();
-            }
-        });
+            });
+        }
     }
-
-
 }

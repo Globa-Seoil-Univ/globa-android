@@ -33,9 +33,7 @@ public class InquiryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityInquiryBinding.inflate(getLayoutInflater());
 
-        binding.imageviewInquiryTopBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.imageviewInquiryTopBack.setOnClickListener(v -> finish());
 
         binding.textviewInquiryTopConfirm.setOnClickListener(v -> {
             String title = binding.edittextInquiryTitle.getText().toString();
@@ -58,13 +56,11 @@ public class InquiryActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(binding.getRoot().getContext(), "문의를 보냈습니다.", Toast.LENGTH_LONG);
-                        // 성공적으로 응답을 받았을 때 처리
+                        Toast.makeText(binding.getRoot().getContext(), "문의를 보냈습니다.", Toast.LENGTH_LONG).show();
                         Log.d("INQUIRY_RESULT", "문의 추가 성공");
                         finish();
                     } else {
-                        // 서버로부터 실패 응답을 받았을 때 처리
-                        Toast.makeText(binding.getRoot().getContext(), response.code(), Toast.LENGTH_LONG);
+                        Toast.makeText(binding.getRoot().getContext(), response.code(), Toast.LENGTH_LONG).show();
                         Log.d("INQUIRY_RESULT", "문의 추가 실패" + response.code());
 
                     }

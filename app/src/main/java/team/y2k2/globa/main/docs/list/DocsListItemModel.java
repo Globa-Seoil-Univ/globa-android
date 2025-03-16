@@ -13,14 +13,6 @@ public class DocsListItemModel {
 
     public DocsListItemModel() {
         items = new ArrayList<>();
-//        DocsListItem item1 = new DocsListItem(R.string.docs_title_sample_1,R.string.docs_title_datetime_1);
-//        List<String> keywordList_1 = new ArrayList<>();
-//        keywordList_1.add("글로바");
-//        keywordList_1.add("테스트");
-//        keywordList_1.add("생성형 AI");
-//        keywordList_1.add("서일대학교");
-//        item1.setKeywordList(keywordList_1);
-//        item1.setImage(R.drawable.profile_image_2, R.drawable.profile_image_1, R.drawable.profile_image_3);
     }
 
 

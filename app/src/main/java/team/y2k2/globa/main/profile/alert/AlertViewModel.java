@@ -18,8 +18,8 @@ import team.y2k2.globa.api.model.response.AlertResponse;
 
 public class AlertViewModel extends ViewModel {
 
-    private ApiService apiService;
-    private MutableLiveData<AlertResponse> alertLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<AlertResponse> alertLiveData = new MutableLiveData<>();
 
     public AlertViewModel() {
         apiService = ApiClient.getApiService();

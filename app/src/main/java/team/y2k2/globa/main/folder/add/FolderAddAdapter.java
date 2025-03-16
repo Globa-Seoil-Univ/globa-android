@@ -17,8 +17,8 @@ import team.y2k2.globa.R;
 
 public class FolderAddAdapter extends RecyclerView.Adapter<FolderAddAdapter.MyViewHolder> {
 
-    private List<FolderAddItem> itemList;
-    private FolderAddActivity activity;
+    private final List<FolderAddItem> itemList;
+    private final FolderAddActivity activity;
 
     public FolderAddAdapter(List<FolderAddItem> itemList, FolderAddActivity activity) {
         this.itemList = itemList;
@@ -46,9 +46,7 @@ public class FolderAddAdapter extends RecyclerView.Adapter<FolderAddAdapter.MyVi
                     .into(holder.profile);
         }
 
-        holder.layout.setOnClickListener(v -> {
-            removeItem(position);
-        });
+        holder.layout.setOnClickListener(v -> removeItem(position));
 
     }
 

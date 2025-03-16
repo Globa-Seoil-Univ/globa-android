@@ -2,6 +2,7 @@ package team.y2k2.globa.notification.total;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,15 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
-import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.databinding.FragmentNotificationTotalBinding;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
@@ -27,16 +25,15 @@ import team.y2k2.globa.notification.NotificationViewModel;
 public class TotalFragment extends Fragment {
 
     FragmentNotificationTotalBinding binding;
-    private NotificationViewModel notificationViewModel;
     private List<Notification> notificationList = new ArrayList<>();
-    private List<TotalFragmentItem> totalFragmentItems = new ArrayList<>();
+    private final List<TotalFragmentItem> totalFragmentItems = new ArrayList<>();
     String notificationId, profile, title, content, createdTime, notificationType;
     boolean isRead;
     TotalFragmentAdapter adapter;
     private String myProfile;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNotificationTotalBinding.inflate(getLayoutInflater());
 
@@ -50,7 +47,7 @@ public class TotalFragment extends Fragment {
 
     private void initializeUI() {
 
-        notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
+        NotificationViewModel notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
 
         Log.d("전체 알림", "전체 알림 조회 시작");
         notificationViewModel.getNotification("a");

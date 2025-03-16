@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
@@ -61,9 +60,7 @@ public class DocsMoveActivity extends AppCompatActivity {
     }
 
     public void setOnClickListeners() {
-        binding.imagebuttonDocsMoveBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.imagebuttonDocsMoveBack.setOnClickListener(v -> finish());
 
         binding.linearlayoutDocsMoveConfirm.setOnClickListener(v -> {
             moveDocs();

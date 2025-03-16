@@ -25,9 +25,10 @@ import team.y2k2.globa.main.profile.inquiry.InquiryRequest;
 public interface ApiService {
     String API_BASE_URL = "http://192.168.219.111";
 
-    /**
+    /*
      * Folder Share - 공유 관련 API
      */
+
     /**
      * 공유 초대 거절
      */
@@ -93,7 +94,7 @@ public interface ApiService {
             @Body FolderShareAddRequest folderShareAddRequest
     );
 
-    /**
+    /*
      * Comment - 댓글 관련 API
      */
     /**
@@ -193,14 +194,14 @@ public interface ApiService {
     );
 
 
-    /**
+    /*
      * Answer - 답변 관련 API
      */
 //    @DELETE(DELETE_ANSWER); 답변 삭제
 //    @PATCH(PATCH_ANSWER); 답변 수정
 //    @POST(POST_ANSWER); 답변 추가
 
-    /**
+    /*
      * Record - 음성 관련 API
      */
 //    @DELETE(DELETE_RECORD_SHARE_LINK); 문서 링크 공유 취소
@@ -348,12 +349,12 @@ public interface ApiService {
             @Body QuizResultRequest result
     );
 
-    /**
+    /*
      * FCM - Firebase Cloud Messaging을 사용하여 알림을 보내는 API
      */
 //    @POST("/fcm/send"); 특정 토픽 알림 전송
 
-    /**
+    /*
      * Notification - 알림 관련 API
      */
     /**
@@ -402,7 +403,7 @@ public interface ApiService {
             @Header("Authorization") String authorization
     );
 
-    /**
+    /*
      * Folder - 폴더 관련 API
      */
     /**
@@ -444,7 +445,7 @@ public interface ApiService {
             @Nullable @Body FolderAddRequest folderAddRequest
     );
 
-    /**
+    /*
      * Dictionary - 단어 관련 API
      */
     /**
@@ -466,7 +467,7 @@ public interface ApiService {
             @Query("keyword") String keyword
     );
 
-    /**
+    /*
      * Inquiry 문의 관련 API
      */
     /**
@@ -499,7 +500,7 @@ public interface ApiService {
             @Body InquiryRequest inquiryRequest
     );
 
-    /**
+    /*
      * Notice - 공지 관련 API
      */
 //    @GET(GET_NOTICE_DETAIL); 공지사항 상세 조회
@@ -514,13 +515,12 @@ public interface ApiService {
     );
 //    @POST(POST_NOTICE); 공지사항 추가
 
-    /**
+    /*
      * User - 사용자 관련 API
      */
     /**
      * 회원 탈퇴
-     * @surveyType 1: 서비스 사용 불편, 2: 정확성 낮음, 3: 기능 부족, 4: 다른 서비스 선호
-     * @content 추가 내용
+     * 1: 서비스 사용 불편, 2: 정확성 낮음, 3: 기능 부족, 4: 다른 서비스 선호
      */
     @DELETE(DELETE_USER)
     Call<Void> requestWithdrawUser(

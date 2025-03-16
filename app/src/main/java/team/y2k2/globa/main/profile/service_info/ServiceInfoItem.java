@@ -1,7 +1,5 @@
 package team.y2k2.globa.main.profile.service_info;
 
-import android.app.Activity;
-
 public class ServiceInfoItem {
     private final int title;
     private final int description;

@@ -46,9 +46,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
             updateDocsName(newName);
         });
 
-        binding.buttonDocsNameCancel.setOnClickListener(v -> {
-            binding.edittextDocsNameInputname.setText("");
-        });
+        binding.buttonDocsNameCancel.setOnClickListener(v -> binding.edittextDocsNameInputname.setText(""));
 
         binding.textviewDocsNameCount.setText(title.length() + "/32");
 
@@ -91,9 +89,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
             }
         });
 
-        binding.buttonDocsNameBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.buttonDocsNameBack.setOnClickListener(v -> finish());
 
         setContentView(binding.getRoot());
     }

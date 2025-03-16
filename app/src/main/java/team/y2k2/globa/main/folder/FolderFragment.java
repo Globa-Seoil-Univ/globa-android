@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;

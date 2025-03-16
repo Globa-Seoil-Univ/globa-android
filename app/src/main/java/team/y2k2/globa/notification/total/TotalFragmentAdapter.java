@@ -1,7 +1,6 @@
 package team.y2k2.globa.notification.total;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +19,6 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 
 import team.y2k2.globa.R;
@@ -35,7 +32,6 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
     NotificationActivity activity;
     List<TotalFragmentItem> items;
     NotificationViewModel notificationViewModel;
-    ProfileImage profileImage;
     int whiteColor, primaryColor;
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -45,7 +41,6 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
         this.items = items;
         this.activity = activity;
         notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
-        this.profileImage = new ProfileImage();
         this.whiteColor = ContextCompat.getColor(activity, R.color.white);
         this.primaryColor = ContextCompat.getColor(activity, R.color.primary_1);
     }
@@ -105,7 +100,7 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
                 notificationViewModel.readNotification(item.getNotificationId());
             }
 
-            if(item.getType() == "8") {
+            if(item.getType().equals("8")) {
                 Intent intent = new Intent(activity, InquiryDetailActivity.class);
                 Log.d(getClass().getSimpleName(), "문의 아이디: " + item.getInquiryId());
                 intent.putExtra("inquiryId", item.getInquiryId());

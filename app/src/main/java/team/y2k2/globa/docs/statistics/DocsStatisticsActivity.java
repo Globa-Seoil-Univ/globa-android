@@ -19,40 +19,31 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Quizgrade;
 import team.y2k2.globa.api.model.entity.Studytime;
 import team.y2k2.globa.databinding.ActivityDocsStatisticsBinding;
-import team.y2k2.globa.docs.PreferencesHelper;
 
 public class DocsStatisticsActivity extends AppCompatActivity {
 
     String[] wordX, timeX, gradeX;
-    int[] wordValues, timeValues, gradeValues;
+    int[] timeValues, gradeValues;
     double[] doubleWordValues, doubleGradeValues;
     ActivityDocsStatisticsBinding binding;
     private HorizontalBarChart docsBarChart;
     private LineChart docsTimeLineChart, docsGradeLineChart;
-    DocsStatisticsViewModel docsStatisticsViewModel;
+    DocsStatisticsActivityModel docsStatisticsActivityModel;
     String folderId, recordId;
     private List<Keyword> keywords;
     private List<Studytime> studytimes;
     private List<Quizgrade> quizgrades;
-    private int maxStudyTime;
     private double maxWordValue;
 
     @Override
@@ -68,9 +59,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
     private void initializeUI() {
 
         // 뒤로가기 버튼
-        binding.buttonDocsStatisticsBack.setOnClickListener(v -> {
-            finish();
-        });
+        binding.buttonDocsStatisticsBack.setOnClickListener(v -> finish());
 
         // API Request를 통한 데이터 수집
         requestData();
@@ -88,13 +77,13 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         docsTimeLineChart = binding.docsTimeLineChart;
         docsGradeLineChart = binding.docsGradeLineChart;
 
-        docsStatisticsViewModel = new ViewModelProvider(this).get(DocsStatisticsViewModel.class);
-        docsStatisticsViewModel.getDocsStatistics(folderId, recordId);
+        docsStatisticsActivityModel = new ViewModelProvider(this).get(DocsStatisticsActivityModel.class);
+        docsStatisticsActivityModel.getDocsStatistics(folderId, recordId);
     }
 
     private void receiveLiveData() {
         // 단어, 퀴즈 점수는 데이터베이스에서 데이터를 받아와 차트 그림 (공부 시간은 일단 주석 처리)
-        docsStatisticsViewModel.getDocsStatisticsLiveData().observe(this, docsStatistics -> {
+        docsStatisticsActivityModel.getDocsStatisticsLiveData().observe(this, docsStatistics -> {
             if(docsStatistics != null) {
                 keywords = docsStatistics.getKeywords();
                 studytimes = docsStatistics.getStudyTimes();
@@ -121,11 +110,9 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();
 
         maxWordValue = 0;
-        if(doubleWordValues.length != 0) {
-            for(int i = 0; i < doubleWordValues.length; i++) {
-                if(doubleWordValues[i] > maxWordValue) {
-                    maxWordValue = doubleWordValues[i];
-                }
+        for (double doubleWordValue : doubleWordValues) {
+            if (doubleWordValue > maxWordValue) {
+                maxWordValue = doubleWordValue;
             }
         }
 
@@ -151,12 +138,10 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
         timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
 
-        maxStudyTime = 0;
-        if(timeValues.length != 0) {
-            for(int i = 0; i < timeValues.length; i++) {
-                if(timeValues[i] > maxStudyTime) {
-                    maxStudyTime = timeValues[i];
-                }
+        int maxStudyTime = 0;
+        for (int timeValue : timeValues) {
+            if (timeValue > maxStudyTime) {
+                maxStudyTime = timeValue;
             }
         }
 
@@ -253,7 +238,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         }
 
         // 내림차순으로 정렬 (values를 기준으로)
-        Collections.sort(sortedList, (o1, o2) -> Double.compare(o1.first, o2.first));
+        sortedList.sort((o1, o2) -> Double.compare(o2.first, o1.first));
 
         // 정렬된 값을 entries와 labels에 추가
         for (int i = 0; i < sortedList.size(); i++) {

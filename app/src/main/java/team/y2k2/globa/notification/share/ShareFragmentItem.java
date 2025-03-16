@@ -2,15 +2,15 @@ package team.y2k2.globa.notification.share;
 
 public class ShareFragmentItem {
 
-    private String notificationId;
-    private String profile;
-    private String title;
-    private String content;
-    private String createdTime;
-    private String folderId;
-    private String shareId;
-    private String type;
-    private boolean isRead;
+    private final String notificationId;
+    private final String profile;
+    private final String title;
+    private final String content;
+    private final String createdTime;
+    private final String folderId;
+    private final String shareId;
+    private final String type;
+    private final boolean isRead;
 
     public ShareFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String type, boolean isRead) {
         this.notificationId = notificationId;

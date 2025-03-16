@@ -2,16 +2,16 @@ package team.y2k2.globa.notification.total;
 
 public class TotalFragmentItem {
 
-    private String notificationId;
-    private String profile;
-    private String title;
-    private String content;
-    private String createdTime;
-    private String folderId;
-    private String shareId;
-    private String inquiryId;
-    private String type;
-    private boolean isRead;
+    private final String notificationId;
+    private final String profile;
+    private final String title;
+    private final String content;
+    private final String createdTime;
+    private final String folderId;
+    private final String shareId;
+    private final String inquiryId;
+    private final String type;
+    private final boolean isRead;
 
     public TotalFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String inquiryId, String type, boolean isRead) {
         this.notificationId = notificationId;

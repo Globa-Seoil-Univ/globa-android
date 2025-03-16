@@ -3,15 +3,11 @@ package team.y2k2.globa.withdraw;
 import static team.y2k2.globa.api.ApiClient.authorization;
 import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 

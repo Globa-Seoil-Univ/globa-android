@@ -8,8 +8,8 @@ public class DocsListItem {
     private final String title;
     private final String datetime;
     private List<Keyword> keywords;
-    private String recordId;
-    private String folderId;
+    private final String recordId;
+    private final String folderId;
 
     private int image_1;
     private int image_2;

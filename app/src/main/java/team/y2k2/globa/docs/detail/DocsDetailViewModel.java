@@ -4,10 +4,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class DocsDetailViewModel extends ViewModel {
-
-    private MutableLiveData<Boolean> commentLiveData = new MutableLiveData<>(false);
-    private MutableLiveData<Boolean> isFirstCommentLiveData = new MutableLiveData<>(false);
-    private MutableLiveData<Boolean> isAllDeletedLiveData = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> commentLiveData = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isFirstCommentLiveData = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isAllDeletedLiveData = new MutableLiveData<>(false);
 
     public MutableLiveData<Boolean> getCommentLiveData() {
         return commentLiveData;

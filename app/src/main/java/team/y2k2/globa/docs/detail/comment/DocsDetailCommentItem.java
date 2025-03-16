@@ -1,9 +1,5 @@
 package team.y2k2.globa.docs.detail.comment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 
 public class DocsDetailCommentItem {
 
@@ -11,18 +7,18 @@ public class DocsDetailCommentItem {
     private String name;
     private String createdTime;
     private String content;
-    private String commentId;
-    private boolean hasReply;
-    private boolean isDeleted;
+    private final String commentId;
+    private final boolean hasReply;
+    private final boolean deleted;
 
-    public DocsDetailCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean hasReply, boolean isDeleted) {
+    public DocsDetailCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean hasReply, boolean deleted) {
         this.profile = profile;
         this.name = name;
         this.createdTime = createdTime;
         this.content = content;
         this.commentId = commentId;
         this.hasReply = hasReply;
-        this.isDeleted = isDeleted;
+        this.deleted = deleted;
     }
 
     public String getProfile() {
@@ -43,9 +39,7 @@ public class DocsDetailCommentItem {
     public boolean isHasSubComment() {
         return hasReply;
     }
-    public boolean isDeleted() {
-        return isDeleted;
-    }
+    public boolean isDeleted() { return deleted; }
 
     public void setProfile(String profile) {
         this.profile = profile;

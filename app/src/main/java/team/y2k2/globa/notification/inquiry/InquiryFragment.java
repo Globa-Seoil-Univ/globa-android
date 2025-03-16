@@ -9,10 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +18,11 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationInquiryBinding;
 import team.y2k2.globa.notification.NotificationActivity;
-import team.y2k2.globa.notification.NotificationViewModel;
-import team.y2k2.globa.notification.notice.NoticeFragmentItem;
 
 public class InquiryFragment extends Fragment {
 
     FragmentNotificationInquiryBinding binding;
-    private NotificationViewModel notificationViewModel;
-    private List<Notification> notificationList = new ArrayList<>();
-    private List<InquiryFragmentItem> inquiryFragmentItems = new ArrayList<>();
+    private final List<InquiryFragmentItem> inquiryFragmentItems = new ArrayList<>();
     String notificationId, profile, inquiryId, title, content, createdTime;
     boolean isRead;
     InquiryFragmentAdapter adapter;
@@ -47,42 +40,15 @@ public class InquiryFragment extends Fragment {
     }
 
     private void initializeUI() {
-
-//        notificationViewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
-//
-//        notificationViewModel.getNotification("i");
-//
-//        notificationViewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
-//            if(notificationResponse != null) {
-//                notificationList = notificationResponse.getNotifications();
-//                inquiryFragmentItems.clear();
-//                for(Notification notification : notificationList) {
-//
-//                    settingNotification(notification);
-//
-//                }
-//
-//                adapter = new InquiryFragmentAdapter(inquiryFragmentItems, (NotificationActivity) requireActivity(), this);
-//
-//                binding.recyclerviewNotificationInquiryContent.setAdapter(adapter);
-//                binding.recyclerviewNotificationInquiryContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-//
-//            } else {
-//                Log.d("오류", "문의사항 알림 수신 오류 : notificationResponse = null");
-//            }
-//        });
-
         apiClient = new ApiClient(this.getContext());
         profile = apiClient.requestUserInfo().getProfile();
 
-        notificationList = apiClient.requestNotification("i").getNotifications();
+        List<Notification> notificationList = apiClient.requestNotification("i").getNotifications();
         inquiryFragmentItems.clear();
 
         if(notificationList != null) {
             for(Notification notification : notificationList) {
-
                 settingNotification(notification);
-
             }
 
             adapter = new InquiryFragmentAdapter(inquiryFragmentItems, (NotificationActivity) requireActivity(), this);
@@ -93,7 +59,6 @@ public class InquiryFragment extends Fragment {
         } else {
             Log.d(getClass().getSimpleName(), "문의 알림 오류 : notificationResponse = null");
         }
-
     }
 
     private void settingNotification(Notification notification) {

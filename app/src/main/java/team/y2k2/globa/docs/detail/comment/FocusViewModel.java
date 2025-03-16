@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class FocusViewModel extends ViewModel {
-    private MutableLiveData<Boolean> commentFocusLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> subCommentFocusLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> commentFocusLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> subCommentFocusLiveData = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> getCommentFocusLiveData() {
         return commentFocusLiveData;

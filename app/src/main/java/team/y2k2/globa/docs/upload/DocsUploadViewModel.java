@@ -28,9 +28,9 @@ import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class DocsUploadViewModel extends ViewModel {
-    private MutableLiveData<String> title = new MutableLiveData<>();
-    private MutableLiveData<AudioPlayState> audioPlayState = new MutableLiveData<>();
-    private MutableLiveData<String> uploadStatus = new MutableLiveData<>();
+    private final MutableLiveData<String> title = new MutableLiveData<>();
+    private final MutableLiveData<AudioPlayState> audioPlayState = new MutableLiveData<>();
+    private final MutableLiveData<String> uploadStatus = new MutableLiveData<>();
 
     public LiveData<String> getDocsTitle() {
         return title;
@@ -44,21 +44,15 @@ public class DocsUploadViewModel extends ViewModel {
         return uploadStatus;
     }
 
-    DocsUploadModel model;
-    DocsUploadActivity activity;
+    private DocsUploadModel model;
+    private DocsUploadActivity activity;
     private StorageReference storageReference;
-    String userId;
-    String folderId;
-    DocsUploadFolderAdapter adapter;
-    DocsUploadLanguageAdapter languageAdapter;
-    MediaPlayer mediaPlayer;
-
-    String firebasePath;
-    long unixTime;
+    private String folderId;
+    private DocsUploadFolderAdapter adapter;
+    private MediaPlayer mediaPlayer;
+    private long unixTime;
 
     FolderResponse response;
-
-    private HandlerThread handlerThread;
     private Handler handler;
 
 
@@ -97,12 +91,9 @@ public class DocsUploadViewModel extends ViewModel {
             mediaPlayer.start();
             audioPlayState.postValue(AudioPlayState.PLAYING);
 
-            mediaPlayer.setOnCompletionListener(v -> {
-                releaseMediaPlayer();
-            });
+            mediaPlayer.setOnCompletionListener(v -> releaseMediaPlayer());
         } catch (Exception e) {
             uploadStatus.postValue("오류 발생" + e);
-            e.printStackTrace();
         }
     }
 
@@ -138,7 +129,7 @@ public class DocsUploadViewModel extends ViewModel {
     }
 
     public void loadLanguage() {
-        languageAdapter = new DocsUploadLanguageAdapter(activity, R.layout.item_language);
+        DocsUploadLanguageAdapter languageAdapter = new DocsUploadLanguageAdapter(activity, R.layout.item_language);
         languageAdapter.setDropDownViewResource(R.layout.item_folder);
         activity.binding.spinnerDocsUploadLanguage.setAdapter(languageAdapter);
         activity.binding.spinnerDocsUpload.setSelection(0);
@@ -146,7 +137,7 @@ public class DocsUploadViewModel extends ViewModel {
 
     public void uploadRecordFile(String oggPath, String folderId) {
         this.folderId = folderId;
-        firebasePath = folderId + "/" + unixTime + ".ogg";
+        String firebasePath = folderId + "/" + unixTime + ".ogg";
         StorageReference audioRef = storageReference.child(firebasePath);
 
         Log.d(getClass().getName(), "firebase path : " + firebasePath);
@@ -164,9 +155,7 @@ public class DocsUploadViewModel extends ViewModel {
 
 
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show());
     }
 
     // MP3 to OGG 변환 함수 호출
@@ -200,7 +189,7 @@ public class DocsUploadViewModel extends ViewModel {
 
 
     public void docsUploadConfirm() {
-        handlerThread = new HandlerThread("FFmpegThread");
+        HandlerThread handlerThread = new HandlerThread("FFmpegThread");
         handlerThread.start();
 
         // Handler 생성 및 연결
@@ -213,12 +202,7 @@ public class DocsUploadViewModel extends ViewModel {
         // Firebase Storage 참조 가져오기
         storageReference = FirebaseStorage.getInstance().getReference("folders");
 
-
-        if(preferences.getString("userId", "").length() != 0) {
-            userId = preferences.getString("userId", "");
-        }
-
-        if(preferences.getString("publicFolderId", "").length() != 0) {
+        if(!preferences.getString("publicFolderId", "").isEmpty()) {
             Folder folder = adapter.getItems().get(activity.binding.spinnerDocsUpload.getSelectedItemPosition());
             folderId = String.valueOf(folder.getFolderId());
         }
