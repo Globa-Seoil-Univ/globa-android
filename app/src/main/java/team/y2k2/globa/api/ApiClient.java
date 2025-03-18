@@ -7,11 +7,9 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -238,7 +235,7 @@ public class ApiClient {
                 } catch (IOException e) {
                     return null;
                 }
-            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+            }).get();
 
             if (!isSuccess.get())
                 parentResponse = null;
@@ -250,10 +247,10 @@ public class ApiClient {
 
 
     // 폴더 추가
-    public Response<Void> requestInsertFolder(String title, List<ShareTarget> shareTargets) {
+    public void requestInsertFolder(String title, List<ShareTarget> shareTargets) {
         FolderAddRequest request = new FolderAddRequest(title, shareTargets);
         try {
-            return CompletableFuture.supplyAsync(() -> {
+            CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<Void> call = apiService.requestInsertFolder(APPLICATION_JSON, authorization, request);
 
@@ -267,11 +264,11 @@ public class ApiClient {
                     response = Response.error(500, ResponseBody.create(null, ""));
                 }
                 return response;
-            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+            }).get();
         } catch (InterruptedException | ExecutionException e) {
             // CompletableFuture 실행 중 에러 발생 시 에러 처리
             handleErrorCode(500);
-            return Response.error(500, ResponseBody.create(null, ""));
+            Response.error(500, ResponseBody.create(null, ""));
         }
     }
 
@@ -297,14 +294,14 @@ public class ApiClient {
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
+            return null;
         }
-        return null;
     }
 
-    public Response<Void> requestDeleteFolder(int folderId) {
+    public void requestDeleteFolder(int folderId) {
         FolderDeleteRequest request = new FolderDeleteRequest(folderId);
         try {
-            return CompletableFuture.supplyAsync(() -> {
+            CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<Void> call = apiService.requestDeleteFolder(folderId, APPLICATION_JSON, authorization);
 
@@ -319,10 +316,10 @@ public class ApiClient {
                 }
 
                 return response;
-            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+            }).get();
         } catch (InterruptedException | ExecutionException e) {
+            return;
         }
-        return null;
     }
 
     public FolderResponse requestGetFolders(int page, int count) {
@@ -370,8 +367,8 @@ public class ApiClient {
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
+            return null;
         }
-        return null;
     }
 
     public FolderInsideRecordResponse requestGetFolderInside(int folderId, int page, int count) {
@@ -399,11 +396,11 @@ public class ApiClient {
         }
     }
 
-    public Response<Void> requestCreateRecord(String folderId, String title, String path, String size) {
+    public void requestCreateRecord(String folderId, String title, String path, String size) {
         RecordCreateRequest request = new RecordCreateRequest(title, path, size);
 
         try {
-            return CompletableFuture.supplyAsync(() -> {
+            CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<Void> call = apiService.requestCreateRecord(folderId, APPLICATION_JSON, authorization, request);
 
@@ -417,10 +414,10 @@ public class ApiClient {
                     response = Response.error(500, ResponseBody.create(null, ""));
                 }
                 return response;
-            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+            }).get();
         } catch (InterruptedException | ExecutionException e) {
+            return;
         }
-        return null;
     }
 
     public Response<Void> requestAcceptShareInvite(String folderId, String shareId) {
@@ -442,8 +439,8 @@ public class ApiClient {
                 return response;
             }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
         } catch (InterruptedException | ExecutionException e) {
+            return null;
         }
-        return null;
     }
 
     public UserInfoResponse requestUserInfo() {
@@ -992,6 +989,12 @@ public class ApiClient {
             case ERR_NOT_FOUND_KEYWORD_EXCEL:
                 showErrorDialog(code, "서버 내부 오류가 발생했습니다.");
                 return false;
+            case 200:
+            case 201:
+            case 202:
+            case 203:
+            case 204:
+                return true;
 
             default:
                 showErrorDialog(code, "알 수 없는 에러가 발생했습니다.");

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 
 public class DocsSummaryDescriptionAdapter extends RecyclerView.Adapter<DocsSummaryDescriptionAdapter.AdapterViewHolder> {
-    ArrayList<String> items;
+    private final ArrayList<String> items;
 
     public DocsSummaryDescriptionAdapter(ArrayList<String> items) {
         this.items = items;
@@ -36,7 +36,7 @@ public class DocsSummaryDescriptionAdapter extends RecyclerView.Adapter<DocsSumm
         return (null != items ? items.size() : 0);
     }
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
+        private final TextView title;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

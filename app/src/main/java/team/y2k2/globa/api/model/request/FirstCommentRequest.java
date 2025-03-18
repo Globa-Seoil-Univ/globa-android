@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class FirstCommentRequest {
     @SerializedName("startIdx")
-    String startIdx;
+    private final String startIdx;
 
     @SerializedName("endIdx")
-    String endIdx;
+    private final String endIdx;
 
     @SerializedName("content")
-    String content;
+    private final String content;
 
     public FirstCommentRequest(String startIdx, String endIdx, String content) {
         this.startIdx = startIdx;
@@ -18,5 +18,15 @@ public class FirstCommentRequest {
         this.content = content;
     }
 
+    public String getContent() {
+        return content;
+    }
 
+    public String getEndIdx() {
+        return endIdx;
+    }
+
+    public String getStartIdx() {
+        return startIdx;
+    }
 }

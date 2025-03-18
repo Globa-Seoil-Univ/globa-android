@@ -17,14 +17,13 @@ import team.y2k2.globa.databinding.ActivityKeywordDetailBinding;
 
 public class KeywordDetailActivity extends AppCompatActivity {
 
-    ActivityKeywordDetailBinding binding;
-    KeywordDetailViewModel keywordDetailViewModel;
-    KeywordDetailAdapter adapter;
+    private ActivityKeywordDetailBinding binding;
+    private KeywordDetailAdapter adapter;
 
-    String keyword;
-    String pronunciation;
+    private String keyword;
+    private String pronunciation;
 
-    ArrayList<KeywordDetailItem> itemList = new ArrayList<>();
+    private final ArrayList<KeywordDetailItem> itemList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +47,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
     }
 
     public void loadAPIResponse() {
-        keywordDetailViewModel = new ViewModelProvider(this).get(KeywordDetailViewModel.class);
+        KeywordDetailViewModel keywordDetailViewModel = new ViewModelProvider(this).get(KeywordDetailViewModel.class);
         keywordDetailViewModel.searchKeyword(keyword);
 
         keywordDetailViewModel.getKeywordDetailResponseLiveData().observe(KeywordDetailActivity.this, response -> {

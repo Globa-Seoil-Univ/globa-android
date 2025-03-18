@@ -185,8 +185,8 @@ public class FolderShareActivity extends AppCompatActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_folder_share_authority, null);
         bottomSheetDialog.setContentView(dialogView);
 
-        RelativeLayout readButton = dialogView.findViewById(R.id.relativelayout_foldershare_read);
-        RelativeLayout writeButton = dialogView.findViewById(R.id.relativelayout_foldershare_write);
+        RelativeLayout readButton = dialogView.findViewById(R.id.relative_layout_folder_share_read);
+        RelativeLayout writeButton = dialogView.findViewById(R.id.relative_layout_folder_share_write);
 
         readButton.setOnClickListener(v -> {
             if(lastImageUrl != null) {

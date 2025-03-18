@@ -2,7 +2,7 @@ package team.y2k2.globa.main.folder.share;
 
 public class FolderShareItem {
 
-    private String imageUrl;
+    private final String imageUrl;
     private int userId;
     private String role;
 

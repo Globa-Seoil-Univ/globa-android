@@ -121,7 +121,7 @@ public class MyinfoActivity extends AppCompatActivity {
         // 리사이클러뷰 레이아웃 매니저 설정
         binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyinfoActivity.this));
         // 리사이클러 뷰에 넣을 아이템 리스트
-        List<MyinfoItem> itemList = new ArrayList<>();
+        List<MyInfoItem> itemList = new ArrayList<>();
 
         if(profile != null) {
             if(profile.startsWith("http")) {
@@ -141,10 +141,10 @@ public class MyinfoActivity extends AppCompatActivity {
             Log.d("이미지 로드 오류", "profile 값이 null입니다");
         }
 
-        itemList.add(new MyinfoItem(getString(R.string.name), name, R.drawable.arrow_right, new NicknameEditActivity()));
-        itemList.add(new MyinfoItem(getString(R.string.profile_account_code), code, R.drawable.item_docs_frame, null));
-        itemList.add(new MyinfoItem(getString(R.string.signout), "", R.drawable.arrow_right, null));
-        itemList.add(new MyinfoItem(getString(R.string.withdraw), "", R.drawable.arrow_right, new WithdrawActivity()));
+        itemList.add(new MyInfoItem(getString(R.string.name), name, R.drawable.arrow_right, new NicknameEditActivity()));
+        itemList.add(new MyInfoItem(getString(R.string.profile_account_code), code, R.drawable.item_docs_frame, null));
+        itemList.add(new MyInfoItem(getString(R.string.sign_out), "", R.drawable.arrow_right, null));
+        itemList.add(new MyInfoItem(getString(R.string.withdraw), "", R.drawable.arrow_right, new WithdrawActivity()));
 
         // 이름 수정을 위한 registerForActivity 객체 초기화 (어뎁터에서 초기화가 안댐)
         ActivityResultLauncher<Intent> nicknameEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {

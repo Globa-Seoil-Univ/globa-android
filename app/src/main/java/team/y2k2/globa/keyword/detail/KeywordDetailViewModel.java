@@ -17,9 +17,9 @@ import team.y2k2.globa.api.model.response.KeywordDetailResponse;
 
 public class KeywordDetailViewModel extends ViewModel {
 
-    private ApiService apiService;
-    private MutableLiveData<KeywordDetailResponse> keywordDetailResponseLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<KeywordDetailResponse> keywordDetailResponseLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public KeywordDetailViewModel() {
         apiService = ApiClient.getApiService();
@@ -52,6 +52,4 @@ public class KeywordDetailViewModel extends ViewModel {
             }
         });
     }
-
-
 }

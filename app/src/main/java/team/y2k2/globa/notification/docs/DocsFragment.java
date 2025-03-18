@@ -2,6 +2,7 @@ package team.y2k2.globa.notification.docs;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -28,16 +29,15 @@ public class DocsFragment extends Fragment {
     String myProfile;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNotificationDocsBinding.inflate(getLayoutInflater());
-
         initializeUI();
         return binding.getRoot();
     }
 
     private void initializeUI() {
-        apiClient = new ApiClient(getActivity());
+        apiClient = new ApiClient(binding.getRoot().getContext());
         myProfile = apiClient.requestUserInfo().getProfile();
 
         List<Notification> notificationList = apiClient.requestNotification("r").getNotifications();

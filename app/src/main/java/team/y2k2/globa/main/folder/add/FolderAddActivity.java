@@ -45,7 +45,7 @@ public class FolderAddActivity extends AppCompatActivity {
 
     FolderAddAdapter adapter;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference imageRef;
 
     private final List<FolderAddItem> itemList = new ArrayList<>();
@@ -65,7 +65,7 @@ public class FolderAddActivity extends AppCompatActivity {
         binding.recyclerviewFolderaddShareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.recyclerviewFolderaddShareSelected.setAdapter(adapter);
 
-        binding.buttonFolderaddBack.setOnClickListener(v -> finish());
+        binding.buttonFolderAddBack.setOnClickListener(v -> finish());
 
         binding.textviewFolderAddConfirm.setOnClickListener(v -> {
 
@@ -77,10 +77,10 @@ public class FolderAddActivity extends AppCompatActivity {
             if(adapter.getItemCount() != 0) {
                 LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFolderaddShareSelected.getLayoutManager();
                 if(collectNewUserManager != null) {
-                    int firtPosition = collectNewUserManager.findFirstVisibleItemPosition();
+                    int firstPosition = collectNewUserManager.findFirstVisibleItemPosition();
                     int lastPosition = collectNewUserManager.findLastVisibleItemPosition();
 
-                    for(int i = firtPosition; i <= lastPosition; i++) {
+                    for(int i = firstPosition; i <= lastPosition; i++) {
                         RecyclerView.ViewHolder viewHolder = binding.recyclerviewFolderaddShareSelected.findViewHolderForAdapterPosition(i);
                         if(viewHolder instanceof FolderAddAdapter.MyViewHolder) {
                             FolderAddAdapter.MyViewHolder adapterViewHolder = (FolderAddAdapter.MyViewHolder) viewHolder;
@@ -218,8 +218,8 @@ public class FolderAddActivity extends AppCompatActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_folder_share_authority, null);
         bottomSheetDialog.setContentView(dialogView);
 
-        RelativeLayout readButton = dialogView.findViewById(R.id.relativelayout_foldershare_read);
-        RelativeLayout writeButton = dialogView.findViewById(R.id.relativelayout_foldershare_write);
+        RelativeLayout readButton = dialogView.findViewById(R.id.relative_layout_folder_share_read);
+        RelativeLayout writeButton = dialogView.findViewById(R.id.relative_layout_folder_share_write);
 
         readButton.setOnClickListener(v -> {
             // 읽기 권한

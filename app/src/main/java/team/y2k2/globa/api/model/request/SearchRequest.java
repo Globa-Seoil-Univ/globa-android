@@ -5,10 +5,13 @@ import com.google.gson.annotations.SerializedName;
 public class SearchRequest {
 
     @SerializedName("keyword")
-    private String keyword;
-    private int page;
-    private int count;
+    private final String keyword;
 
+    @SerializedName("page")
+    private final int page;
+
+    @SerializedName("count")
+    private final int count;
 
     public SearchRequest(String keyword, int page, int count) {
         this.keyword = keyword;

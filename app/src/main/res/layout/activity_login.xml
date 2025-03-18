@@ -54,25 +54,26 @@
                 android:id="@+id/button_sign_in_kakao"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
                 android:layout_above="@+id/button_sign_in_naver"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/login_button_kakao"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:onClick="@{(v) -> viewModel.signInKakao()}">
+                android:onClick="@{(v) -> viewModel.signInKakao()}"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/kakao_symbol" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/kakao_label"
                     android:backgroundTint="@color/twitter"
                     android:text="@string/activity_login_kakao"
+                    android:textColor="@color/kakao_label"
                     android:textSize="16dp"
                     app:cornerRadius="8dp" />
             </LinearLayout>
@@ -85,21 +86,22 @@
                 android:layout_above="@+id/button_sign_in_twitter"
                 android:background="@drawable/login_button_naver"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:onClick="@{(v) -> viewModel.startSignIn(1002)}">
+                android:onClick="@{(v) -> viewModel.startSignIn(1002)}"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/naver_symbol" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:backgroundTint="@color/twitter"
                     android:text="@string/activity_login_naver"
+                    android:textColor="@color/white"
                     android:textSize="16dp"
                     app:cornerRadius="8dp" />
             </LinearLayout>
@@ -112,21 +114,22 @@
                 android:layout_above="@+id/button_sign_in_google"
                 android:background="@drawable/login_button_twitter"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:onClick="@{(v) -> viewModel.startSignIn(1003)}">
+                android:onClick="@{(v) -> viewModel.startSignIn(1003)}"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/twitter_symbol" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:backgroundTint="@color/twitter"
                     android:text="@string/activity_login_twitter"
+                    android:textColor="@color/white"
                     android:textSize="16dp"
                     app:cornerRadius="8dp" />
             </LinearLayout>
@@ -143,18 +146,19 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/google_symbol" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/activity_login_google"
-                    android:textColor="@color/google_label"
                     android:fontFamily="@font/notosans_regular"
                     android:gravity="center"
-                    android:textSize="16dp"
-                    android:outlineProvider="none" />
+                    android:outlineProvider="none"
+                    android:text="@string/activity_login_google"
+                    android:textColor="@color/google_label"
+                    android:textSize="16dp" />
             </LinearLayout>
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

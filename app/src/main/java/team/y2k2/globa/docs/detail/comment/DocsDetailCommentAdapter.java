@@ -43,48 +43,36 @@ import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 import team.y2k2.globa.main.ProfileImage;
 
 public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCommentAdapter.AdapterViewHolder> {
+    private final DocsActivity activity;
+    private final String folderId;
+    private final String recordId;
+    private final String sectionId;
+    private final String highlightId;
+    private final MutableLiveData<Boolean> subCommentEtFocus = new MutableLiveData<>();
+    private final ArrayList<DocsDetailSubCommentItem> subCommentItems = new ArrayList<>();
+    private final DocsDetailAdapter mainAdapter;
+    private final int BUTTON_COMMENT_CONFIRM = 0;
+    private final int BUTTON_COMMENT_UPDATE = 1;
+    private final int BUTTON_COMMENT_SUB_CONFIRM = 2;
+    private final int BUTTON_COMMENT_SUB_UPDATE = 3;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final FocusViewModel focusViewModel;
+    private final DocsDetailViewModel docsDetailViewModel;
     ArrayList<DocsDetailCommentItem> commentItems;
-
-    DocsActivity activity;
-    String folderId;
-    String recordId;
-    String sectionId;
-    String highlightId;
     String myProfile;
     String myName;
-
     int selectedPosition;
     String selectedId;
-
     ImageView subCommentImg;
     TextView subCommentTv;
     RecyclerView subCommentRv;
     EditText subCommentEt;
     ImageButton subCommentBtn;
-
-    private Disposable disposable;
-
-    private final MutableLiveData<Boolean> subCommentEtFocus = new MutableLiveData<>();
-
-    ArrayList<DocsDetailSubCommentItem> subCommentItems = new ArrayList<>();
-
-    private final DocsDetailAdapter mainAdapter;
-    private DocsDetailSubCommentAdapter subAdapter;
-
-    private final int BUTTON_COMMENT_CONFIRM = 0;
-    private final int BUTTON_COMMENT_UPDATE = 1;
-    private final int BUTTON_COMMENT_SUB_CONFIRM = 2;
-    private final int BUTTON_COMMENT_SUB_UPDATE = 3;
-
-    private int subButtonStatus = BUTTON_COMMENT_SUB_CONFIRM;
-
-    private final FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference profileImageRef;
-
     ApiClient apiClient;
-
-    private final FocusViewModel focusViewModel;
-    private final DocsDetailViewModel docsDetailViewModel;
+    private Disposable disposable;
+    private DocsDetailSubCommentAdapter subAdapter;
+    private int subButtonStatus = BUTTON_COMMENT_SUB_CONFIRM;
+    private StorageReference profileImageRef;
 
     public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailAdapter mainAdapter) {
         this.commentItems = commentItems;
@@ -99,7 +87,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     }
 
     public void addNewItem(DocsDetailCommentItem newItem) {
-        if(commentItems == null) {
+        if (commentItems == null) {
             commentItems = new ArrayList<>();
         }
         commentItems.add(0, newItem);
@@ -127,8 +115,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         String content = commentItems.get(position).getContent();
         String commentId = commentItems.get(position).getCommentId();
 
-        if(profile != null) {
-            if(profile.startsWith("http")) {
+        if (profile != null) {
+            if (profile.startsWith("http")) {
                 Glide.with(activity).load(profile).error(R.drawable.profile_user).into(holder.profileImage);
             } else {
                 profileImageRef = storage.getReference().child(profile);
@@ -155,15 +143,14 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 100).getSubComments();
 
             subCommentItems.clear();
-            for(SubComment subComment : subCommentList) {
+            for (SubComment subComment : subCommentList) {
                 String subProfile = subComment.getUser().getProfile();
                 String subName = subComment.getUser().getName();
                 String subCreatedTime = subComment.getCreatedTime();
                 String subContent = subComment.getContent();
                 String subId = subComment.getCommentId();
                 boolean subDeleted = subComment.isDeleted();
-                Log.d("대댓글 호출", "subProfile: " + subProfile + ", subName: " + subName + ", subCreatedTime: " + subCreatedTime +
-                        ", subContent: " + subContent);
+                Log.d("대댓글 호출", "subProfile: " + subProfile + ", subName: " + subName + ", subCreatedTime: " + subCreatedTime + ", subContent: " + subContent);
                 subCommentItems.add(new DocsDetailSubCommentItem(subProfile, subName, subCreatedTime, subContent, subId, subDeleted));
             }
 
@@ -183,13 +170,12 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             apiClient = new ApiClient(activity);
             UserInfoResponse response = apiClient.requestUserInfo();
 
-            Log.d(getClass().getName(),commentItems.get(position).getProfile());
+            Log.d(getClass().getName(), commentItems.get(position).getProfile());
 
-            if(!commentItems.get(position).getProfile().equals(response.getProfile()))
+            if (!commentItems.get(position).getProfile().equals(response.getProfile()))
                 return false;
 
-            if(commentItems.get(position).isDeleted())
-                view.showContextMenu();
+            if (commentItems.get(position).isDeleted()) view.showContextMenu();
 
             return true;
         });
@@ -203,7 +189,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
                 mainAdapter.focusOnCommentEt();
 
                 focusViewModel.getCommentFocusLiveData().observe(activity, hasFocus -> {
-                    if(hasFocus) {
+                    if (hasFocus) {
                         // 댓글 수정 동작 (버튼 상태 변경)
                         Log.d("댓글 버튼 상태", "댓글 버튼 상태 수정 상태로 전환 시작");
                         mainAdapter.setButtonStatus(BUTTON_COMMENT_UPDATE);
@@ -234,28 +220,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         return (commentItems != null ? commentItems.size() : 0);
     }
 
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView profileImage;
-        TextView name;
-        TextView createdTime;
-        TextView content;
-        TextView showSubComments;
-
-        public AdapterViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            profileImage = itemView.findViewById(R.id.imageview_item_comment_icon);
-            name = itemView.findViewById(R.id.textview_item_comment_username);
-            createdTime = itemView.findViewById(R.id.textview_item_comment_datetime);
-            content = itemView.findViewById(R.id.textview_item_comment_content);
-            showSubComments = itemView.findViewById(R.id.textview_item_comment_visible);
-
-        }
-    }
-
-    private void showSubCommentSheetDialog(ArrayList<DocsDetailSubCommentItem> subCommentItems, String profile, String content,
-                                           String sectionId, String highlightId, String parentId) {
+    private void showSubCommentSheetDialog(ArrayList<DocsDetailSubCommentItem> subCommentItems, String profile, String content, String sectionId, String highlightId, String parentId) {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
         View bottomSheetView = activity.getLayoutInflater().inflate(R.layout.dialog_comment_sub, null);
@@ -269,8 +234,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         Log.d("대댓글 창", "대댓글 창 열림 subButtonStatus: " + subButtonStatus);
 
-        if(profile != null) {
-            if(profile.startsWith("http")) {
+        if (profile != null) {
+            if (profile.startsWith("http")) {
                 Glide.with(activity).load(profile).error(R.drawable.profile_user).into(subCommentImg);
             } else {
                 profileImageRef = storage.getReference().child(profile);
@@ -287,37 +252,33 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         subCommentRv.setAdapter(subAdapter);
 
         Observable<Object> subCommentBtnClickStream = Observable.create(emitter -> subCommentBtn.setOnClickListener(v -> emitter.onNext(new Object())));
-        disposable = subCommentBtnClickStream.throttleFirst(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    String text = subCommentEt.getText().toString();
-                    if(!text.isEmpty()) {
-                        Log.d(getClass().getSimpleName(), "대댓글 버튼 상태: " + subButtonStatus);
-                        if(subButtonStatus == BUTTON_COMMENT_SUB_CONFIRM) {
-                            Log.d("대댓글 추가", "내 프로필: " + myProfile + ", 내 이름: " + myName + ", 작성 내용: " + text);
-                            // 대댓글 아이템 리스트 추가
-                            subAdapter.addNewItem(new DocsDetailSubCommentItem(myProfile, myName, "방금전", text, "commentId", false));
+        disposable = subCommentBtnClickStream.throttleFirst(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(event -> {
+            String text = subCommentEt.getText().toString();
+            if (!text.isEmpty()) {
+                Log.d(getClass().getSimpleName(), "대댓글 버튼 상태: " + subButtonStatus);
+                if (subButtonStatus == BUTTON_COMMENT_SUB_CONFIRM) {
+                    Log.d("대댓글 추가", "내 프로필: " + myProfile + ", 내 이름: " + myName + ", 작성 내용: " + text);
+                    // 대댓글 아이템 리스트 추가
+                    subAdapter.addNewItem(new DocsDetailSubCommentItem(myProfile, myName, "방금전", text, "commentId", false));
 
-                            // API Request
-                            apiClient.requestInsertSubComment(folderId, recordId,sectionId, highlightId, parentId, text);
-                        } else if(subButtonStatus == BUTTON_COMMENT_SUB_UPDATE) {
-                            // 대댓글 아이템 수정
-                            subAdapter.updateItem(text, selectedPosition);
+                    // API Request
+                    apiClient.requestInsertSubComment(folderId, recordId, sectionId, highlightId, parentId, text);
+                } else if (subButtonStatus == BUTTON_COMMENT_SUB_UPDATE) {
+                    // 대댓글 아이템 수정
+                    subAdapter.updateItem(text, selectedPosition);
 
-                            // API Request
-                            apiClient.updateComment(folderId, recordId, sectionId, highlightId, selectedId, text);
-                        }
-
-                        subCommentEt.setText("");
-                    } else {
-                        Toast.makeText(activity, "답글을 입력해주세요", Toast.LENGTH_SHORT).show();
-                    }
-                },
-                error -> {
-                    Log.d("RxJavaError", "RxJavaError 대댓글 오류 내용: " + error);
-                    Toast.makeText(activity, "답글 처리중 오류 발생", Toast.LENGTH_SHORT).show();
+                    // API Request
+                    apiClient.updateComment(folderId, recordId, sectionId, highlightId, selectedId, text);
                 }
-            );
+
+                subCommentEt.setText("");
+            } else {
+                Toast.makeText(activity, "답글을 입력해주세요", Toast.LENGTH_SHORT).show();
+            }
+        }, error -> {
+            Log.d("RxJavaError", "RxJavaError 대댓글 오류 내용: " + error);
+            Toast.makeText(activity, "답글 처리중 오류 발생", Toast.LENGTH_SHORT).show();
+        });
 
         subCommentEt.setOnFocusChangeListener((v, hasFocus) -> {
             // 포커스를 얻으면 true, 읽으면 false;
@@ -339,40 +300,40 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         confirmBtn.setOnClickListener(v -> {
             updateItem("삭제된 댓글입니다", position);
-            if(apiClient == null) {
+            if (apiClient == null) {
                 apiClient = new ApiClient(activity);
             }
             apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
             bottomSheetDialog.dismiss();
             boolean isAllDeleted = true;
 
-            if(position == 0) {
-                for(int i = 1; i < commentItems.size(); i++) {
-                    if(commentItems.get(i).isDeleted()) {
+            if (position == 0) {
+                for (int i = 1; i < commentItems.size(); i++) {
+                    if (commentItems.get(i).isDeleted()) {
                         isAllDeleted = false;
                     }
                 }
-            } else if(position > 0 && position < commentItems.size() - 1) {
-                for(int i = 0; i < position; i++) {
+            } else if (position > 0 && position < commentItems.size() - 1) {
+                for (int i = 0; i < position; i++) {
                     if (commentItems.get(i).isDeleted()) {
                         isAllDeleted = false;
                         break;
                     }
                 }
-                for(int i = position + 1; i < commentItems.size(); i++) {
-                    if(commentItems.get(i).isDeleted()) {
+                for (int i = position + 1; i < commentItems.size(); i++) {
+                    if (commentItems.get(i).isDeleted()) {
                         isAllDeleted = false;
                     }
                 }
             } else {
-                for(int i = 0; i < commentItems.size() - 1; i++) {
-                    if(commentItems.get(i).isDeleted()) {
+                for (int i = 0; i < commentItems.size() - 1; i++) {
+                    if (commentItems.get(i).isDeleted()) {
                         isAllDeleted = false;
                     }
                 }
             }
 
-            if(isAllDeleted) {
+            if (isAllDeleted) {
                 docsDetailViewModel.setIsAllDeletedLiveData(true);
             }
         });
@@ -381,7 +342,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     }
 
     public void clearSubDisposable() {
-        if(disposable != null && !disposable.isDisposed()) {
+        if (disposable != null && !disposable.isDisposed()) {
             Log.d("대댓글", "대댓글 disposable 메모리 해제 시작");
             disposable.dispose();
         }
@@ -393,18 +354,40 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         imm.showSoftInput(subCommentEt, InputMethodManager.SHOW_IMPLICIT);
     }
 
-    public void setSubButtonStatus(int subButtonStatus) {
-        this.subButtonStatus = subButtonStatus;
-    }
     public int getSubButtonStatus() {
         return subButtonStatus;
+    }
+
+    public void setSubButtonStatus(int subButtonStatus) {
+        this.subButtonStatus = subButtonStatus;
     }
 
     public void setSelectedPosition(int selectedPosition) {
         this.selectedPosition = selectedPosition;
     }
+
     public void setSelectedId(String selectedId) {
         this.selectedId = selectedId;
+    }
+
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+
+        private final ImageView profileImage;
+        private final TextView name;
+        private final TextView createdTime;
+        private final TextView content;
+        private final TextView showSubComments;
+
+        public AdapterViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            profileImage = itemView.findViewById(R.id.imageview_item_comment_icon);
+            name = itemView.findViewById(R.id.textview_item_comment_username);
+            createdTime = itemView.findViewById(R.id.textview_item_comment_datetime);
+            content = itemView.findViewById(R.id.textview_item_comment_content);
+            showSubComments = itemView.findViewById(R.id.textview_item_comment_visible);
+
+        }
     }
 
 }

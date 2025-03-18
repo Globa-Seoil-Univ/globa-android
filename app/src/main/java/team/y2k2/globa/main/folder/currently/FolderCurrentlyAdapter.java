@@ -21,7 +21,7 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.main.folder.inside.FolderInsideFragment;
 
 public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrentlyAdapter.AdapterViewHolder> {
-    ArrayList<FolderCurrentlyItem> items;
+    private final ArrayList<FolderCurrentlyItem> items;
 
     public FolderCurrentlyAdapter(ArrayList<FolderCurrentlyItem> items) {
         this.items = items;
@@ -50,11 +50,7 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 
-            ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.fragment_container_view_main, fragment, null)
-                    .addToBackStack(null)
-                    .commit();
+            ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.fragment_container_view_main, fragment, null).addToBackStack(null).commit();
 
         });
     }
@@ -62,21 +58,6 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
     @Override
     public int getItemCount() {
         return (null != items ? items.size() : 0);
-    }
-
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView datetime;
-        ConstraintLayout layout;
-
-
-        public AdapterViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            title = itemView.findViewById(R.id.textview_folder_item_currently_title);
-            datetime = itemView.findViewById(R.id.textview_folder_item_currently_datetime);
-            layout = itemView.findViewById(R.id.constraintlayout_folder_item_currently);
-        }
     }
 
     public String getDateFormat(String datetime) {
@@ -97,5 +78,19 @@ public class FolderCurrentlyAdapter extends RecyclerView.Adapter<FolderCurrently
         }
 
         return outputDate;
+    }
+
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+        private final TextView title;
+        private final TextView datetime;
+        private final ConstraintLayout layout;
+
+        public AdapterViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            title = itemView.findViewById(R.id.textview_folder_item_currently_title);
+            datetime = itemView.findViewById(R.id.textview_folder_item_currently_datetime);
+            layout = itemView.findViewById(R.id.constraintlayout_folder_item_currently);
+        }
     }
 }

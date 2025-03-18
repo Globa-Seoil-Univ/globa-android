@@ -18,10 +18,10 @@ import team.y2k2.globa.api.model.response.UserInfoResponse;
 
 public class StatisticsViewModel extends ViewModel {
 
-    private ApiService apiService;
-    private MutableLiveData<StatisticsResponse> statisticsLiveData = new MutableLiveData<>();
-    private MutableLiveData<UserInfoResponse> userInfoLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<StatisticsResponse> statisticsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<UserInfoResponse> userInfoLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public StatisticsViewModel() {
         apiService = ApiClient.getApiService();

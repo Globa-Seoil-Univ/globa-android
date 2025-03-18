@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class TokenRequest {
 
     @SerializedName("requestToken")
-    private String refreshToken;
+    private final String refreshToken;
 
     public TokenRequest(String refreshToken) {
         this.refreshToken = refreshToken;

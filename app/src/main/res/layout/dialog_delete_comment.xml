@@ -77,7 +77,6 @@
             android:id="@+id/textview_delete_comment_confirm"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
             android:textColor="@color/red"
             android:gravity="center"
             android:layout_weight="9"

@@ -131,8 +131,8 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView datetime;
+        private final TextView title;
+        private final TextView datetime;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

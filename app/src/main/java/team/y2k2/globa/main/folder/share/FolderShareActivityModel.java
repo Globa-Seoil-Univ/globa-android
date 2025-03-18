@@ -18,10 +18,10 @@ import team.y2k2.globa.api.model.response.UserSearchResponse;
 
 public class FolderShareActivityModel extends ViewModel {
 
-    private ApiService apiService;
-    private MutableLiveData<UserSearchResponse> userSearchLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> isSucceedLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<UserSearchResponse> userSearchLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> isSucceedLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public FolderShareActivityModel() {
         apiService = ApiClient.getApiService();

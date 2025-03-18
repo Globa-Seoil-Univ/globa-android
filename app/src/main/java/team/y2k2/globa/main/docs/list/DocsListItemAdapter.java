@@ -34,8 +34,8 @@ import team.y2k2.globa.main.docs.keyword.DocsKeywordAdapter;
 import team.y2k2.globa.main.docs.keyword.DocsKeywordModel;
 
 public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapter.AdapterViewHolder> {
-    ArrayList<DocsListItem> items;
-    Activity activity;
+    private final ArrayList<DocsListItem> items;
+    private final Activity activity;
 
     public DocsListItemAdapter(ArrayList<DocsListItem> items, Activity activity) {
         this.items = items;
@@ -158,12 +158,12 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView datetime;
-        RecyclerView keywordRecyclerView;
-        ConstraintLayout layout;
-        TextView processing;
-        LottieAnimationView lottieAnimationView;
+        private final TextView title;
+        private final TextView datetime;
+        private final RecyclerView keywordRecyclerView;
+        private final ConstraintLayout layout;
+        private final TextView processing;
+        private final LottieAnimationView lottieAnimationView;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -184,7 +184,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA);
 
         Date date;
-        String outputDate = "";
+        String outputDate;
 
         try {
             date = inputFormat.parse(datetime);

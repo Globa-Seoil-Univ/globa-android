@@ -16,10 +16,10 @@ import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 
 public class FolderInsideFragmentModel extends ViewModel {
     ApiClient apiClient;
-    private final MutableLiveData<List<FolderInsideRecord>> folderInsideRecords = new MutableLiveData<>();
-    private final MutableLiveData<Integer> deleteResponseCode = new MutableLiveData<>();
-    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
-    private final MutableLiveData<String> folderTitle = new MutableLiveData<>();
+    private MutableLiveData<List<FolderInsideRecord>> folderInsideRecords = new MutableLiveData<>();
+    private MutableLiveData<Integer> deleteResponseCode = new MutableLiveData<>();
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private MutableLiveData<String> folderTitle = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
         apiClient = new ApiClient(context);

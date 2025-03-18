@@ -54,7 +54,7 @@ public class DocsMoveActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        binding.imagebuttonDocsMoveBack.setOnClickListener(v -> finish());
+        binding.imageButtonDocsMoveBack.setOnClickListener(v -> finish());
         binding.linearlayoutDocsMoveConfirm.setOnClickListener(v -> {
             int selectedFolderPosition = binding.spinnerDocsMove.getSelectedItemPosition();
             viewModel.moveDocs(folderId, recordId, selectedFolderPosition, viewModel.getFolderResponseLiveData().getValue());

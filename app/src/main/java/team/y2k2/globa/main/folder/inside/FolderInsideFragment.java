@@ -7,12 +7,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,14 +23,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.FolderInsideRecord;
-import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 import team.y2k2.globa.databinding.FragmentFolderInsideBinding;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.edit.FolderNameEditActivity;
@@ -46,8 +41,6 @@ public class FolderInsideFragment extends Fragment {
     private int folderId;
     private String folderTitle;
     private String folderDatetime;
-
-    private SharedPreferences preferences;
 
     private ActivityResultLauncher<Intent> nameEditLauncher;
 
@@ -99,7 +92,7 @@ public class FolderInsideFragment extends Fragment {
     }
 
     private void setPreferences() {
-        preferences = requireContext().getSharedPreferences("folderId", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = requireContext().getSharedPreferences("folderId", Activity.MODE_PRIVATE);
         preferences.edit().putInt("folderId", folderId).apply();
     }
 

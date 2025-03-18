@@ -43,8 +43,8 @@
     <string name="move">移動</string>
     <string name="name">名前</string>
     <string name="statistics">統計</string>
-    <string name="etcetera">その他</string>
-    <string name="signout">ログアウト</string>
+    <string name="etc">その他</string>
+    <string name="sign_out">ログアウト</string>
     <string name="withdraw">アカウント削除</string>
     <string name="score">点</string>
     <string name="count">箇</string>
@@ -66,7 +66,7 @@
     <string name="permission_management">権限を管理</string>
 
     <string name="docs_more_title">폴더 삭제 타이틀입니다. 이 값 쓰지 마세요</string>
-    <string name="docs_more_datetime">2001-04-24 午後 14:10</string>
+    <string name="docs_more_datetime">2001/04/24 午後 14:10</string>
     <string name="docs_more_move_docs">フォルダ移動</string>
     <string name="docs_more_delete_docs">ドキュメントを削除</string>
 
@@ -178,10 +178,10 @@
     <string name="foldershare_dialog_write">書き込み権限</string>
 
     <string name="activity_folder_move_change_select">フォルダを選択してください。</string>
-    <string name="fragment_folder_inside_title">タイトルをもっと短く書いてください。</string>
+    <string name="long_title">タイトルをもっと短く書いてください。</string>
 
-    <string name="activity_docs_move_title">2024-03-12 会議録</string>
-    <string name="activity_docs_move_datetime">2024-03-12 午後 11:07</string>
+    <string name="activity_docs_move_title">2024/03/12 会議録</string>
+    <string name="activity_docs_move_datetime">2024/03/12 午後 11:07</string>
 
     <string name="item_main_document_processing">要約中..</string>
 
@@ -191,7 +191,7 @@
 
     <string name="activity_docs_summary_title">要約</string>
     <string name="activity_docs_time_start"> </string>
-    <string name="activity_docs_time_end">ダウンロード中...</string>
+    <string name="activity_docs_time_end">ダウンロード中…</string>
 
     <string name="activity_search_currently">ヒストリー</string>
     <string name="activity_search_keyword">キーワード作成</string>
@@ -199,6 +199,8 @@
     <string name="activity_fonder_add_input_share">ユーザーコード(6桁)</string>
     <string name="activity_docs_more_statistics">視覚化資料を見る</string>
     <string name="activity_docs_more_quiz">クイズ解き</string>
+    <string name="activity_docs_tools_folder_title">デフォルトフォルダ</string>
+
 
     <string name="activity_quiz_result_empty">クイズをもう一度解くと、上昇率をお知らせします。</string>
     <string name="activity_quiz_result_last_corrected_1">前回の成績より</string>
@@ -218,4 +220,10 @@
 
     <string name="fragment_share_notification_5_1">さんが </string>
     <string name="fragment_share_notification_5_2">にコメントを追加しました。</string>
+
+    <string name="activity_inquiry_detail_title">ヘルプセンターディテール</string>
+    <string name="activity_keyword_detail_tools_title">増進</string>
+    <string name="activity_keyword_detail_tools_pronunciation">[ 増進 ]</string>
+    <string name="activity_keyword_detail_tools_source">source :</string>
+
 </resources>

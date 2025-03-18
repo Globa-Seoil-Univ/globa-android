@@ -21,8 +21,8 @@ import team.y2k2.globa.R;
 
 public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.AdapterViewHolder> {
 
-    ProfileFragment fragment;
-    ArrayList<SettingItem> items;
+    private final ProfileFragment fragment;
+    private final ArrayList<SettingItem> items;
 
     public SettingItemAdapter(ArrayList<SettingItem> items, ProfileFragment fragment) {
         this.items = items;
@@ -62,10 +62,10 @@ public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        ImageView icon;
-        TextView title;
+        private final ImageView icon;
+        private final TextView title;
 
-        ConstraintLayout layout;
+        private final ConstraintLayout layout;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

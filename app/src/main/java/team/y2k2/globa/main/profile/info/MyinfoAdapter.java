@@ -23,14 +23,14 @@ import java.util.List;
 import team.y2k2.globa.R;
 import team.y2k2.globa.intro.IntroActivity;
 
-public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHolder>{
+public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHolder> {
+    private final List<MyInfoItem> itemList;
+    private final ActivityResultLauncher<Intent> nicknameEditLauncher;
+    private final MyinfoActivity activity;
 
-    private List<MyinfoItem> itemList;
     private Context context;
-    private ActivityResultLauncher<Intent> nicknameEditLauncher;
-    private MyinfoActivity activity;
 
-    public MyinfoAdapter(List<MyinfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher, MyinfoActivity activity) {
+    public MyinfoAdapter(List<MyInfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher, MyinfoActivity activity) {
         this.itemList = itemList;
         this.nicknameEditLauncher = nicknameEditLauncher;
         this.activity = activity;
@@ -46,32 +46,32 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        MyinfoItem item = itemList.get(position);
+        MyInfoItem item = itemList.get(position);
         holder.title.setText(item.getTitle());
         holder.name.setText(item.getName());
         holder.image.setImageResource(item.getImage());
 
         holder.layout.setOnClickListener(v -> {
-            if(item.getActivity() != null) {
+            if (item.getActivity() != null) {
 
-                if(item.getTitle().equals("이름")) {
+                if (item.getTitle().equals("이름")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
                     intent.putExtra("current_name", item.getName());
                     intent.putExtra("userId", activity.getUserId());
                     nicknameEditLauncher.launch(intent);
-                } else if(item.getTitle().equals("회원탈퇴")) {
+                } else if (item.getTitle().equals("회원탈퇴")) {
                     Intent intent = new Intent(context, item.getActivity().getClass());
                     holder.itemView.getContext().startActivity(intent);
                 }
 
             } else {
 
-                if(item.getTitle().equals("계정 코드")) {
+                if (item.getTitle().equals("계정 코드")) {
                     // 계정코드 클립보드 복사
                     copyToClipboard(context, item.getName());
                     Toast.makeText(context, "코드 복사완료!", Toast.LENGTH_SHORT).show();
                     Log.d(getClass().getName(), "클립보드 복사 완료");
-                } else if(item.getTitle().equals("로그아웃")) {
+                } else if (item.getTitle().equals("로그아웃")) {
                     // 로그아웃 로직
                     Log.d(getClass().getName(), "프리퍼런스 리셋 시작");
                     SharedPreferences preferences = context.getSharedPreferences("account", Context.MODE_PRIVATE);
@@ -89,7 +89,6 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
         });
 
 
-
     }
 
     @Override
@@ -98,11 +97,11 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView name;
-        ImageView image;
+        private final TextView title;
+        private final TextView name;
+        private final ImageView image;
 
-        ConstraintLayout layout;
+        private final ConstraintLayout layout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -117,7 +116,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     // 클립보드 복사 메소드
     public void copyToClipboard(Context context, String text) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if(clipboard != null) {
+        if (clipboard != null) {
             ClipData clip = ClipData.newPlainText("code", text);
             clipboard.setPrimaryClip(clip);
         }

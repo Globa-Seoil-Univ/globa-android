@@ -106,10 +106,11 @@
             app:layout_constraintBottom_toBottomOf="@id/textview_docs_audio_datetime">
 
             <ImageButton
-                android:id="@+id/imagebutton_document_play"
+                android:id="@+id/image_button_document_play"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
+                android:importantForAccessibility="no"
                 android:onClick="@{() -> viewModel.onPlayButtonClick()}"
                 android:src="@drawable/docs_play" />
         </LinearLayout>

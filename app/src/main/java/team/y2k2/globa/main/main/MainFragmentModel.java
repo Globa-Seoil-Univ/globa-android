@@ -38,7 +38,7 @@ public class MainFragmentModel extends ViewModel {
     RecordResponse recordResponse;
     FolderResponse folderResponse;
 
-    private MutableLiveData<UnreadNotificationCheckResponse> notificationCheckLiveData = new MutableLiveData<>();
+    private final MutableLiveData<UnreadNotificationCheckResponse> notificationCheckLiveData = new MutableLiveData<>();
 
     public void setContext(Context context) {
         this.context = context;

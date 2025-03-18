@@ -153,9 +153,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView time;
-        TextView description;
+        final TextView title;
+        final TextView time;
+        final TextView description;
         long downTime;
 
         public AdapterViewHolder(@NonNull View itemView) {

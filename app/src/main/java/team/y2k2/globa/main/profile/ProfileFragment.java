@@ -33,8 +33,8 @@ import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.main.profile.info.MyinfoActivity;
 
 public class ProfileFragment extends Fragment {
-    ProfileModel model;
-    FragmentProfileBinding binding;
+    private final ProfileModel model;
+    private FragmentProfileBinding binding;
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference profileImageRef;
 

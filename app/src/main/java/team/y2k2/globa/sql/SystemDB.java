@@ -9,7 +9,7 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.main.profile.alert.AlertActivity;
 
 public class SystemDB extends SQLiteOpenHelper {
-    SQLiteDatabase sqlDB;
+    private final SQLiteDatabase sqlDB;
     public SystemDB(Context context) {
         super(context, "system", null, 1);
         sqlDB = this.getWritableDatabase();
@@ -48,7 +48,7 @@ public class SystemDB extends SQLiteOpenHelper {
 
     private boolean isSystemExists(String systemName) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM system WHERE systemName LIKE '"+ systemName +"';", null);
-
+        cursor.close();
         return cursor.getCount() == 0;
     }
 }

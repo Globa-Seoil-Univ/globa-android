@@ -11,7 +11,7 @@ public class PreferencesHelper {
     private static final String PREF_NAME = "activity_data";
     private static final String DATA_KEY = "data_list";
     private static final int MAX_DATA_COUNT = 10;
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     public PreferencesHelper(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

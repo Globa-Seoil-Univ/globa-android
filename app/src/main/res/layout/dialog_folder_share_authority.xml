@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="20dp"
-    android:background="@drawable/modal_background">
+    android:background="@drawable/modal_background"
+    android:paddingBottom="20dp">
 
     <RelativeLayout
-        android:id="@+id/relativelayout_foldershare_method"
+        android:id="@+id/relative_layout_folder_share_method"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
         android:paddingLeft="20dp"
+        android:paddingTop="20dp"
         android:paddingRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/linearlayout_foldershare_method_tab"
+            android:id="@+id/linear_layout_folder_share_method_tab"
             android:layout_width="44dp"
             android:layout_height="8dp"
-            android:background="@drawable/alert_tab"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/alert_tab"
             android:orientation="horizontal" />
 
         <TextView
-            android:id="@+id/textview_foldershare_method_title"
+            android:id="@+id/text_view_folder_share_method_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -40,74 +39,67 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/relativelayout_more_docs_2"
+        android:id="@+id/relative_layout_more_docs_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
-        android:rowCount="1"
-        android:orientation="vertical"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/relativelayout_foldershare_method">
+        android:orientation="vertical"
+        android:rowCount="1"
+        app:layout_constraintTop_toBottomOf="@+id/relative_layout_folder_share_method">
 
         <RelativeLayout
-            android:id="@+id/relativelayout_foldershare_read"
+            android:id="@+id/relative_layout_folder_share_read"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
 
             <ImageButton
-                android:id="@+id/imagebutton_foldershare_read"
+                android:id="@+id/image_button_folder_share_read"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:src="@drawable/eye"/>
+                android:background="@android:color/transparent"
+                android:src="@drawable/eye" />
 
             <TextView
-                android:id="@+id/textview_foldershare_read"
+                android:id="@+id/textview_folder_share_read"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_folder_share_read"
                 android:text="읽기 권한"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/imagebutton_foldershare_read"/>
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/relativelayout_foldershare_write"
+            android:id="@+id/relative_layout_folder_share_write"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="20dp">
 
             <ImageButton
-                android:id="@+id/imagebutton_foldershare_write"
+                android:id="@+id/image_button_folder_share_write"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:src="@drawable/pencil"/>
+                android:background="@android:color/transparent"
+                android:src="@drawable/pencil" />
 
             <TextView
-                android:id="@+id/textview_foldershare_write"
+                android:id="@+id/text_view_folder_share_write"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_folder_share_write"
                 android:text="편집 권한"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/imagebutton_foldershare_write"/>
+                android:textColor="@color/black" />
 
         </RelativeLayout>
-
-
-
     </LinearLayout>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

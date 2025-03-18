@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class InquiryRequest {
     @SerializedName("title")
-    String title;
+    private final String title;
 
     @SerializedName("content")
-    String content;
+    private final String content;
 
     public InquiryRequest(String title, String content){
         this.title = title;

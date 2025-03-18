@@ -7,10 +7,8 @@ import androidx.viewpager.widget.ViewPager;
 public class NoticeAutoScrollHandler {
     private static final long AUTO_SCROLL_DELAY = 5000; // 5초마다 자동 스크롤
 
-    private Handler handler;
-    private Runnable runnable;
-
-
+    private final Handler handler;
+    private final Runnable runnable;
 
     public NoticeAutoScrollHandler(ViewPager viewPager) {
         handler = new Handler();

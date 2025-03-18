@@ -17,7 +17,7 @@ import com.google.firebase.storage.StorageReference;
 import team.y2k2.globa.R;
 
 public class NoticeFragment extends Fragment {
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     // 'images/image.jpg' 파일에 대한 참조 생성
     StorageReference storageRef;
     private String imageURL;
@@ -65,7 +65,7 @@ public class NoticeFragment extends Fragment {
                 .addOnFailureListener(exception -> {
                     // 다운로드 URL을 가져오는 데 실패했을 때 처리
                     Log.e("NOTICE_ERROR", "다운로드 URL 가져오기 실패", exception);
-                    if(!getActivity().isFinishing()) {
+                    if (!getActivity().isFinishing()) {
                         (getActivity()).runOnUiThread(() -> {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setTitle("에러 발생")

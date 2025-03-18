@@ -13,10 +13,10 @@ import team.y2k2.globa.main.MainActivity;
 
 public class IntroActivityModel extends ViewModel {
 
-    private MutableLiveData<Boolean> autoLoginSuccess = new MutableLiveData<>();
-    private MutableLiveData<Boolean> notificationPermissionGranted = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private MutableLiveData<Boolean> startButtonEnabled = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> autoLoginSuccess = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> notificationPermissionGranted = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> startButtonEnabled = new MutableLiveData<>();
 
     private IntroModel model;
 

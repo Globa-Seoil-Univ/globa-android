@@ -23,9 +23,11 @@ import java.util.Locale;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.main.folder.inside.FolderInsideFragment;
+
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterViewHolder> {
-    ArrayList<FolderItem> items;
-    Activity activity;
+    private final ArrayList<FolderItem> items;
+    private final Activity activity;
+
     public FolderAdapter(ArrayList<FolderItem> items, Activity activity) {
         this.items = items;
         this.activity = activity;
@@ -56,11 +58,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 
-            ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.fragment_container_view_main, fragment, null)
-                    .addToBackStack(null)
-                    .commit();
+            ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.fragment_container_view_main, fragment, null).addToBackStack(null).commit();
         });
 
         holder.layout.setOnLongClickListener(v -> {
@@ -77,22 +75,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
             return true;
         });
     }
+
     @Override
     public int getItemCount() {
         return (null != items ? items.size() : 0);
-    }
-
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView datetime;
-        ConstraintLayout layout;
-        public AdapterViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            title = itemView.findViewById(R.id.textview_folder_item_title);
-            datetime = itemView.findViewById(R.id.textview_folder_item_datetime);
-            layout = itemView.findViewById(R.id.constraintlayout_folder_item);
-        }
     }
 
     public void deleteFolder(int position) {
@@ -115,5 +101,19 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
         }
 
         return outputDate;
+    }
+
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+        private final TextView title;
+        private final TextView datetime;
+        private final ConstraintLayout layout;
+
+        public AdapterViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            title = itemView.findViewById(R.id.textview_folder_item_title);
+            datetime = itemView.findViewById(R.id.textview_folder_item_datetime);
+            layout = itemView.findViewById(R.id.constraintlayout_folder_item);
+        }
     }
 }

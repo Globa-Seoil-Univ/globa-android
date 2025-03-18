@@ -29,7 +29,7 @@ import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
 public class DocsActivityModel extends ViewModel {
 
-    DocsActivity activity;
+    private DocsActivity activity;
     String title;
     String folderId;
     String recordId;
@@ -116,7 +116,7 @@ public class DocsActivityModel extends ViewModel {
 
                                     binding.lottieAudioDownload.setVisibility(View.INVISIBLE);
 
-                                    binding.imagebuttonDocumentAudioPlay.setVisibility(View.VISIBLE);
+                                    binding.imageButtonDocumentAudioPlay.setVisibility(View.VISIBLE);
                                     binding.imageviewDocumentReplay.setVisibility(View.VISIBLE);
                                     binding.imageviewDocumentForward.setVisibility(View.VISIBLE);
                                 }
@@ -125,17 +125,17 @@ public class DocsActivityModel extends ViewModel {
 
                         isMusicStarted = false;
 
-                        binding.imagebuttonDocumentAudioPlay.setOnClickListener(v -> {
+                        binding.imageButtonDocumentAudioPlay.setOnClickListener(v -> {
                             if (!isMusicStarted) {
                                 isMusicStarted = true;
-                                binding.imagebuttonDocumentAudioPlay.setImageResource(R.drawable.docs_pause);
+                                binding.imageButtonDocumentAudioPlay.setImageResource(R.drawable.docs_pause);
                                 player.play();
                                 activity.startUpdatingSeekBar();
 
                             } else {
                                 isMusicStarted = false;
                                 player.pause();
-                                binding.imagebuttonDocumentAudioPlay.setImageResource(R.drawable.docs_play);
+                                binding.imageButtonDocumentAudioPlay.setImageResource(R.drawable.docs_play);
                                 activity.stopUpdatingSeekBar();
                             }
                         });

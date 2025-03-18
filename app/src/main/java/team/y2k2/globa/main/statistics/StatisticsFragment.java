@@ -34,8 +34,8 @@ import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.entity.Keyword;
-import team.y2k2.globa.api.model.entity.Quizgrade;
-import team.y2k2.globa.api.model.entity.Studytime;
+import team.y2k2.globa.api.model.entity.QuizGrade;
+import team.y2k2.globa.api.model.entity.StudyTime;
 import team.y2k2.globa.databinding.FragmentStatisticsBinding;
 
 public class StatisticsFragment extends Fragment {
@@ -49,8 +49,8 @@ public class StatisticsFragment extends Fragment {
     StatisticsViewModel statisticsViewModel;
     String userId;
     private List<Keyword> keywords;
-    private List<Studytime> studyTimes;
-    private List<Quizgrade> quizGrades;
+    private List<StudyTime> studyTimes;
+    private List<QuizGrade> quizGrades;
     private double maxWordValue;
 
     @Nullable
@@ -137,8 +137,8 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void drawStudyTimeChart() {
-        timeX = studyTimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
-        timeValues = studyTimes.stream().mapToInt(Studytime::getStudyTime).toArray();
+        timeX = studyTimes.stream().map(StudyTime::getCreatedTime).toArray(String[]::new);
+        timeValues = studyTimes.stream().mapToInt(StudyTime::getStudyTime).toArray();
 
         int maxStudyTime = 0;
         for (int timeValue : timeValues) {
@@ -188,8 +188,8 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void drawQuizGradeChart() {
-        gradeX = quizGrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
-        doubleGradeValues = quizGrades.stream().mapToDouble(Quizgrade::getScore).toArray();
+        gradeX = quizGrades.stream().map(QuizGrade::getCreatedTime).toArray(String[]::new);
+        doubleGradeValues = quizGrades.stream().mapToDouble(QuizGrade::getScore).toArray();
         gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
         if(gradeX.length < 10 && gradeX.length > 0) {
             List<String> gradeXList = new ArrayList<>();

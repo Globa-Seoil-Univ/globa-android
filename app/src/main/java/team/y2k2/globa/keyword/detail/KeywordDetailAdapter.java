@@ -15,11 +15,9 @@ import team.y2k2.globa.R;
 
 public class KeywordDetailAdapter extends RecyclerView.Adapter<KeywordDetailAdapter.AdapterViewHolder> {
 
-    KeywordDetailActivity activity;
-    ArrayList<KeywordDetailItem> items;
+    private final ArrayList<KeywordDetailItem> items;
 
     public KeywordDetailAdapter(ArrayList<KeywordDetailItem> items, KeywordDetailActivity activity) {
-        this.activity = activity;
         this.items = items;
     }
 
@@ -44,10 +42,10 @@ public class KeywordDetailAdapter extends RecyclerView.Adapter<KeywordDetailAdap
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView index;
-        TextView keyword;
-        TextView tag;
-        TextView description;
+        private final TextView index;
+        private final TextView keyword;
+        private final TextView tag;
+        private final TextView description;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

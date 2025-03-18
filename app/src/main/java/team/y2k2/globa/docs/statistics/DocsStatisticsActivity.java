@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.model.entity.Keyword;
-import team.y2k2.globa.api.model.entity.Quizgrade;
-import team.y2k2.globa.api.model.entity.Studytime;
+import team.y2k2.globa.api.model.entity.QuizGrade;
+import team.y2k2.globa.api.model.entity.StudyTime;
 import team.y2k2.globa.databinding.ActivityDocsStatisticsBinding;
 
 public class DocsStatisticsActivity extends AppCompatActivity {
@@ -42,8 +42,8 @@ public class DocsStatisticsActivity extends AppCompatActivity {
     DocsStatisticsActivityModel viewModel;
     String folderId, recordId;
     private List<Keyword> keywords;
-    private List<Studytime> studytimes;
-    private List<Quizgrade> quizgrades;
+    private List<StudyTime> studyTimes;
+    private List<QuizGrade> quizGrades;
     private double maxWordValue;
 
     @Override
@@ -87,8 +87,8 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         viewModel.getDocsStatisticsLiveData().observe(this, docsStatistics -> {
             if(docsStatistics != null) {
                 keywords = docsStatistics.getKeywords();
-                studytimes = docsStatistics.getStudyTimes();
-                quizgrades = docsStatistics.getQuizGrades();
+                studyTimes = docsStatistics.getStudyTimes();
+                quizGrades = docsStatistics.getQuizGrades();
 
                 // 단어 중요도 차트 그리기
                 drawKeywordsChart();
@@ -136,8 +136,8 @@ public class DocsStatisticsActivity extends AppCompatActivity {
 
     private void drawStudyTimeChart() {
         // 공부 시간 차트
-        timeX = studytimes.stream().map(Studytime::getCreatedTime).toArray(String[]::new);
-        timeValues = studytimes.stream().mapToInt(Studytime::getStudyTime).toArray();
+        timeX = studyTimes.stream().map(StudyTime::getCreatedTime).toArray(String[]::new);
+        timeValues = studyTimes.stream().mapToInt(StudyTime::getStudyTime).toArray();
 
         int maxStudyTime = 0;
         for (int timeValue : timeValues) {
@@ -188,8 +188,8 @@ public class DocsStatisticsActivity extends AppCompatActivity {
 
     private void drawQuizGradeChart() {
         // 퀴즈 성적 차트
-        gradeX = quizgrades.stream().map(Quizgrade::getCreatedTime).toArray(String[]::new);
-        doubleGradeValues = quizgrades.stream().mapToDouble(Quizgrade::getScore).toArray();
+        gradeX = quizGrades.stream().map(QuizGrade::getCreatedTime).toArray(String[]::new);
+        doubleGradeValues = quizGrades.stream().mapToDouble(QuizGrade::getScore).toArray();
         gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
 
         if(gradeX.length < 10 && gradeX.length > 0) {

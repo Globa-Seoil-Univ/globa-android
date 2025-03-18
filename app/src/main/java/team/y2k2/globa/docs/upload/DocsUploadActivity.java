@@ -46,9 +46,9 @@ public class DocsUploadActivity extends AppCompatActivity {
         // 재생 상태에 따라 UI 업데이트
         viewModel.getAudioPlayState().observe(this, playState -> {
             if (playState == AudioPlayState.PLAYING) {
-                binding.imagebuttonDocumentPlay.setImageResource(R.drawable.docs_pause);
+                binding.imageButtonDocumentPlay.setImageResource(R.drawable.docs_pause);
             } else {
-                binding.imagebuttonDocumentPlay.setImageResource(R.drawable.docs_play);
+                binding.imageButtonDocumentPlay.setImageResource(R.drawable.docs_play);
             }
         });
 

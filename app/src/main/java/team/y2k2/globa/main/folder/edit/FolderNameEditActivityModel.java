@@ -18,10 +18,10 @@ import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 public class FolderNameEditActivityModel extends ViewModel {
     private final ApiService apiService;
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> finishActivity = new MutableLiveData<>(false);
     public MutableLiveData<String> folderName = new MutableLiveData<>("");
     public MutableLiveData<Integer> textCount = new MutableLiveData<>(0);
     public MutableLiveData<Boolean> isConfirmEnabled = new MutableLiveData<>(false);
-    private final MutableLiveData<Boolean> finishActivity = new MutableLiveData<>(false);
     private int folderId;
 
     public FolderNameEditActivityModel() {
@@ -55,19 +55,19 @@ public class FolderNameEditActivityModel extends ViewModel {
                     finishActivity.setValue(true);
                 } else {
                     switch (response.code()) {
-                        case 40110 :
+                        case 40110:
                             Log.d("API 수신 오류", "유효하지 않은 토큰" + response.code());
                             errorLiveData.setValue("폴더 이름 변경 실패");
                             break;
-                        case 40120 :
+                        case 40120:
                             Log.d("API 수신 오류", "토큰 파싱 실패" + response.code());
                             errorLiveData.setValue("토큰 파싱 실패");
                             break;
-                        case 40130 :
+                        case 40130:
                             Log.d("API 수신 오류", "만료된 갱신 토큰" + response.code());
                             errorLiveData.setValue("만료된 갱신 토큰");
                             break;
-                        case 40140 :
+                        case 40140:
                             Log.d("API 수신 오류", "유효하지 않은 SNS 토큰" + response.code());
                             errorLiveData.setValue("유효하지 않은 SNS 토큰");
                             break;

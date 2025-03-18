@@ -5,19 +5,19 @@ import com.google.gson.annotations.SerializedName;
 public class InquiryItem {
 
     @SerializedName("title")
-    private String title;
+    private final String title;
 
     @SerializedName("content")
-    private String content;
+    private final String content;
 
     @SerializedName("solved")
-    private boolean solved;
+    private final boolean solved;
 
     @SerializedName("inquiryId")
-    private String inquiryId;
+    private final String inquiryId;
 
     @SerializedName("createdTime")
-    private String createdTime;
+    private final String createdTime;
 
     public InquiryItem(String inquiryId, String title, String content, String createdTime,boolean solved) {
         this.inquiryId = inquiryId;

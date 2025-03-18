@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class ShareTarget {
     @SerializedName("code")
-    String code;
+    private final String code;
 
     @SerializedName("role")
-    String role;
+    private final String role;
 
     public ShareTarget(String code, String role) {
         this.code = code;

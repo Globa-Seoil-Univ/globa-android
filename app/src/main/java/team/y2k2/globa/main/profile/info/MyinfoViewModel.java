@@ -17,8 +17,8 @@ import team.y2k2.globa.api.ApiClient;
 
 public class MyinfoViewModel extends ViewModel {
 
-    private ApiService apiService; // Retrofit2
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService; // Retrofit2
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public MyinfoViewModel() {
         apiService = ApiClient.getApiService();
@@ -29,7 +29,6 @@ public class MyinfoViewModel extends ViewModel {
     }
 
     public void uploadImage(MultipartBody.Part multipartBody, String userId) {
-
         apiService.requestUpdateProfileImage(userId, authorization, multipartBody).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

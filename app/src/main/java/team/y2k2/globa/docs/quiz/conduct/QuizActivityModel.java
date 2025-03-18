@@ -20,16 +20,18 @@ import team.y2k2.globa.api.model.request.QuizResultRequest;
 
 public class QuizActivityModel extends ViewModel {
 
-    private ApiService apiService;
-    private MutableLiveData<List<Quiz>> quizLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<List<Quiz>> quizLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public QuizActivityModel() {
         apiService = ApiClient.getApiService();
     }
+
     public MutableLiveData<List<Quiz>> getQuizLiveData() {
         return quizLiveData;
     }
+
     public MutableLiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
@@ -61,7 +63,7 @@ public class QuizActivityModel extends ViewModel {
         apiService.requestInsertQuizResult(folderId, recordId, "application/json", authorization, quizRequestBody).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Log.d("API 응답 성공", "퀴즈 결과 전송 완료");
                 } else {
                     Log.d("API 응답 오류", "퀴즈 결과 전송 실패: " + response.code());

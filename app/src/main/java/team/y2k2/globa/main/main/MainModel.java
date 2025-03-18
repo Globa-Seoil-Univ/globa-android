@@ -11,7 +11,7 @@ public class MainModel {
     public static final int RECORDS_FILTER_SHARED = 2;
     public static final int RECORDS_FILTER_RECEIVED = 3;
 
-    List<Record> records;
+    public List<Record> records;
 
     public MainModel() {
         this.records = new ArrayList<>(); // 또는 초기화할 다른 List 객체

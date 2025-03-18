@@ -39,16 +39,11 @@
         android:id="@+id/constraintlayout_setting_clean_data_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:columnCount="3"
         android:rowCount="1"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/relativelayout_setting_clean_data_1">
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -67,6 +62,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/upload_cloud"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true" />
@@ -83,11 +79,6 @@
 
 
         </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"/>
 
         <RelativeLayout
             android:id="@+id/textView3"
@@ -107,6 +98,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/upload_record"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true" />
@@ -120,16 +112,6 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/black"
                 android:text="@string/upload_record"/>
-
-
         </RelativeLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"/>
-
-
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

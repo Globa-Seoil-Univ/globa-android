@@ -18,7 +18,7 @@ import team.y2k2.globa.R;
 
 public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.MyViewHolder> {
 
-    private List<FolderShareItem> itemList;
+    private final List<FolderShareItem> itemList;
     private Context context;
 
     public FolderShareAdapter(List<FolderShareItem> itemList) {
@@ -66,8 +66,8 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
-        ConstraintLayout layout;
+        private final ImageView image;
+        private final ConstraintLayout layout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

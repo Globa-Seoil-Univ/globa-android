@@ -2,15 +2,14 @@ package team.y2k2.globa.main.profile.info;
 
 import android.app.Activity;
 
-public class MyinfoItem {
-
+public class MyInfoItem {
     private String title;
     private String name;
-    private int image;
+    private final int image;
 
-    private Activity activity;
+    private final Activity activity;
 
-    public MyinfoItem(String title, String name, int image, Activity activity) {
+    public MyInfoItem(String title, String name, int image, Activity activity) {
         this.title = title;
         this.name = name;
         this.image = image;

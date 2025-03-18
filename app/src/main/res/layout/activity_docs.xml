@@ -48,6 +48,7 @@
             android:layout_marginEnd="20dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:importantForAccessibility="no"
             android:src="@drawable/more" />
     </RelativeLayout>
 
@@ -130,18 +131,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:importantForAccessibility="no"
         android:visibility="invisible"
         android:layout_marginEnd="20dp"
         android:src="@drawable/docs_replay_5"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
-        app:layout_constraintEnd_toStartOf="@id/imagebutton_document_audio_play"/>
+        app:layout_constraintEnd_toStartOf="@id/image_button_document_audio_play"/>
 
     <ImageButton
-        android:id="@+id/imagebutton_document_audio_play"
+        android:id="@+id/image_button_document_audio_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:importantForAccessibility="no"
         android:visibility="invisible"
         android:src="@drawable/docs_play"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
@@ -173,7 +176,7 @@
         android:src="@drawable/docs_forward_5"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
-        app:layout_constraintStart_toEndOf="@id/imagebutton_document_audio_play"/>
+        app:layout_constraintStart_toEndOf="@id/image_button_document_audio_play"/>
 
     <SeekBar
         android:id="@+id/seekbar_audio_progress"

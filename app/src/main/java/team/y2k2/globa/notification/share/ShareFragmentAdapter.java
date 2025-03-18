@@ -28,16 +28,13 @@ import team.y2k2.globa.notification.NotificationViewModel;
 
 public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdapter.MyViewHolder> {
 
-    NotificationActivity activity;
-    List<ShareFragmentItem> items;
-    NotificationViewModel notificationViewModel;
-    int whiteColor, primaryColor;
+    private final List<ShareFragmentItem> items;
+    private final NotificationViewModel notificationViewModel;
+    private final int whiteColor, primaryColor;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference imageRef;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public ShareFragmentAdapter(List<ShareFragmentItem> items, NotificationActivity activity, ShareFragment fragment) {
-        this.activity = activity;
         this.items = items;
         notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
         this.whiteColor = ContextCompat.getColor(activity, R.color.white);
@@ -56,26 +53,17 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
 
         ShareFragmentItem item = items.get(position);
 
-        if(item.getProfile() != null) {
+        if (item.getProfile() != null) {
             // 프로필이 있을 때
-            if(item.getProfile().startsWith("http")) {
-                Glide.with(holder.itemView.getContext())
-                        .load(item.getProfile())
-                        .error(R.mipmap.ic_launcher)
-                        .into(holder.profileImage);
+            if (item.getProfile().startsWith("http")) {
+                Glide.with(holder.itemView.getContext()).load(item.getProfile()).error(R.mipmap.ic_launcher).into(holder.profileImage);
             } else {
-                imageRef = storage.getReference().child(item.getProfile());
-                Glide.with(holder.itemView.getContext())
-                        .load(ProfileImage.convertGsToHttps(imageRef.toString()))
-                        .error(R.mipmap.ic_launcher)
-                        .into(holder.profileImage);
+                StorageReference imageRef = storage.getReference().child(item.getProfile());
+                Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
             }
         } else {
             // 프로필이 없을 때
-            Glide.with(holder.itemView.getContext())
-                    .load(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+            Glide.with(holder.itemView.getContext()).load(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.profileImage);
             Log.d("알림 프로필", "알림 프로필 없음, 아이템 위치: " + position);
         }
 
@@ -83,7 +71,7 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
 
-        if(!item.isRead()) {
+        if (!item.isRead()) {
             holder.layout.setBackgroundColor(primaryColor);
         } else {
             holder.layout.setBackgroundColor(whiteColor);
@@ -91,14 +79,14 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
 
         holder.layout.setOnClickListener(v -> {
             // 알림 읽음 표시
-            if(!item.isRead()){
+            if (!item.isRead()) {
                 Log.d("알림 읽음", "공유 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
                 notificationViewModel.readNotification(item.getNotificationId());
             }
         });
 
-        if(item.getType().equals("2")) {
+        if (item.getType().equals("2")) {
             // 공유 초대 알림
             holder.confirmBtn.setOnClickListener(v -> {
                 // 공유 수락 버튼 이벤트
@@ -133,13 +121,13 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ConstraintLayout layout;
-        ImageView profileImage;
-        TextView title;
-        TextView content;
-        TextView createdTime;
-        Button confirmBtn;
-        Button cancelBtn;
+        private final ConstraintLayout layout;
+        private final ImageView profileImage;
+        private final TextView title;
+        private final TextView content;
+        private final TextView createdTime;
+        private final Button confirmBtn;
+        private final Button cancelBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

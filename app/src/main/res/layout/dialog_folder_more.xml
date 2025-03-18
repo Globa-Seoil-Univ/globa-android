@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/modal_background">
 
     <RelativeLayout
         android:id="@+id/relativelayout_more_folder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
         android:paddingLeft="20dp"
+        android:paddingTop="20dp"
         android:paddingRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +21,8 @@
             android:id="@+id/linearlayout_more_folder_tab"
             android:layout_width="44dp"
             android:layout_height="8dp"
-            android:background="@drawable/alert_tab"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/alert_tab"
             android:orientation="horizontal" />
 
         <TextView
@@ -30,21 +30,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            tools:text="@string/docs_more_title"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="@string/docs_more_title" />
 
         <TextView
             android:id="@+id/textview_more_folder_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/darkGray"
             android:layout_below="@+id/textview_more_folder_title"
             android:layout_marginTop="5dp"
             android:text="@string/docs_more_datetime"
-            android:textSize="@dimen/small"
-            />
+            android:textColor="@color/darkGray"
+            android:textSize="@dimen/small" />
     </RelativeLayout>
 
     <LinearLayout
@@ -52,9 +51,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
-        android:rowCount="1"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
+        android:rowCount="1"
         app:layout_constraintTop_toBottomOf="@+id/relativelayout_more_folder">
 
 
@@ -62,26 +61,26 @@
             android:id="@+id/relativelayout_more_rename"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp">
 
             <ImageButton
-                android:id="@+id/imagebutton_more_rename"
+                android:id="@+id/image_button_more_rename"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:src="@drawable/rename"/>
+                android:background="@android:color/transparent"
+                android:src="@drawable/rename" />
 
             <TextView
                 android:id="@+id/textview_more_rename"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_more_rename"
                 android:text="@string/rename"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/imagebutton_more_rename"/>
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 
@@ -89,86 +88,83 @@
             android:id="@+id/relativelayout_more_share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="20dp">
 
             <ImageButton
-                android:id="@+id/imagebutton_more_move"
+                android:id="@+id/image_button_more_move"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:src="@drawable/share_foldermore"/>
+                android:background="@android:color/transparent"
+                android:src="@drawable/share_foldermore" />
 
             <TextView
                 android:id="@+id/textview_more_move"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_more_move"
                 android:text="@string/share"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/imagebutton_more_move"/>
+                android:textColor="@color/black" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/relativelayout_more_authority"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="20dp">
 
             <ImageButton
                 android:id="@+id/imagebutton_more_authority"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:src="@drawable/authority_foldermore"/>
+                android:background="@android:color/transparent"
+                android:src="@drawable/authority_foldermore" />
 
             <TextView
                 android:id="@+id/textview_more_authority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/imagebutton_more_authority"
                 android:text="@string/permission_management"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/imagebutton_more_authority"/>
+                android:textColor="@color/black" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/relativelayout_more_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="30dp">
 
             <ImageButton
-                android:id="@+id/imagebutton_more_delete"
+                android:id="@+id/image_button_more_delete"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:src="@drawable/delete_foldermore"/>
+                android:background="@android:color/transparent"
+                android:src="@drawable/delete_foldermore" />
 
             <TextView
                 android:id="@+id/textview_more_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_more_delete"
                 android:text="폴더 삭제"
-                android:textColor="@color/red"
-                android:layout_toEndOf="@+id/imagebutton_more_delete"/>
+                android:textColor="@color/red" />
         </RelativeLayout>
 
 
-
-
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

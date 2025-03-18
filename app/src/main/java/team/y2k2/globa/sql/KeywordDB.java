@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class KeywordDB extends SQLiteOpenHelper {
-    SQLiteDatabase sqlDB;
+    private final SQLiteDatabase sqlDB;
 
     public KeywordDB(Context context) {
         super(context, "keyword", null, 1);
@@ -39,7 +39,6 @@ public class KeywordDB extends SQLiteOpenHelper {
 
     private boolean isKeywordExists(int recordId, String keyword) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM keyword WHERE record_id = " + recordId +" AND keyword LIKE '"+ keyword +"';", null);
-
         return cursor.getCount() == 0;
     }
 }

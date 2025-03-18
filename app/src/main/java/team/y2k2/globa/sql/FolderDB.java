@@ -6,13 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class FolderDB extends SQLiteOpenHelper {
-    SQLiteDatabase sqlDB;
-    Context context;
+    private final SQLiteDatabase sqlDB;
 
     public FolderDB(Context context) {
         super(context, "folder", null, 1);
-        this.context = context;
-
         sqlDB = this.getWritableDatabase();
     }
 
@@ -44,7 +41,7 @@ public class FolderDB extends SQLiteOpenHelper {
 
     private boolean isFolderIdExists(int folderId) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM folder WHERE folder_id = " + folderId +";", null);
-
+        cursor.close();
         return cursor.getCount() == 0;
     }
 }

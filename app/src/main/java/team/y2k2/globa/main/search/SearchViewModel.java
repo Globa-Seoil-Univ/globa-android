@@ -15,8 +15,8 @@ import team.y2k2.globa.sql.RecordDB;
 
 public class SearchViewModel extends ViewModel {
 
-    public MutableLiveData<String> searchText = new MutableLiveData<>("");
-    public MutableLiveData<Boolean> isCancelClick = new MutableLiveData<>();
+    final public MutableLiveData<String> searchText = new MutableLiveData<>("");
+    final public MutableLiveData<Boolean> isCancelClick = new MutableLiveData<>();
 
     private final SearchDocsAdapter adapter;
     private RecordDB recordDB;

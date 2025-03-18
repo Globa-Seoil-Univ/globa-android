@@ -42,7 +42,7 @@ public class DocsMoreActivity extends AppCompatActivity {
     private void initializeUI() {
 
         // 뒤로 가기 버튼
-        binding.imagebuttonDocsMoreBack.setOnClickListener(v -> finish());
+        binding.imageButtonDocsMoreBack.setOnClickListener(v -> finish());
 
         // 문서 제목, 폴더 ID, 문서 ID, 폴더 제목
         title = getIntent().getStringExtra("title");

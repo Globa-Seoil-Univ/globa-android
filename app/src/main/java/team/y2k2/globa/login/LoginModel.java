@@ -17,10 +17,10 @@ public class LoginModel {
     /**
      * SNS 계정에 등록된 사용자 개인정보
      */
-    String uid;
-    String name;
-    String profileImageUrl;
-    int snsKind;
+    private final String uid;
+    private final String name;
+    private final String profileImageUrl;
+    private final int snsKind;
     String token;
 
     public LoginModel(FirebaseUser user, int snsKind, String token) {

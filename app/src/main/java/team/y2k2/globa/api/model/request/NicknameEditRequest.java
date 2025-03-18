@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class NicknameEditRequest {
     @SerializedName("name")
-    String name;
+    private final String name;
 
     public NicknameEditRequest(String name) {
         this.name = name;

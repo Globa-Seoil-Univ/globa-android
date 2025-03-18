@@ -8,10 +8,10 @@ import team.y2k2.globa.api.model.entity.ShareTarget;
 
 public class FolderAddRequest {
     @SerializedName("title")
-    String title;
+    private final String title;
 
     @SerializedName("shareTarget")
-    List<ShareTarget> shareTarget;
+    private List<ShareTarget> shareTarget;
 
     public FolderAddRequest(String title, List<ShareTarget> shareTarget){
         this.title = title;

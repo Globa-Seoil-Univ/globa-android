@@ -2,7 +2,7 @@ package team.y2k2.globa.api.model.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Quizgrade {
+public class QuizGrade {
 
     @SerializedName("quizGrade")
     private double score;

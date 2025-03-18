@@ -28,8 +28,8 @@ public class FolderPermissionActivity extends AppCompatActivity {
 
     FolderPermissionItemAdapter adapter;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef;
 
     int folderId;
 

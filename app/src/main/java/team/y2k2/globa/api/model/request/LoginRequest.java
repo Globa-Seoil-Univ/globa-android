@@ -6,24 +6,22 @@ import team.y2k2.globa.login.LoginModel;
 
 public class LoginRequest {
     @SerializedName("snsKind")
-    private int snsKind;
+    private final int snsKind;
 
     @SerializedName("snsId")
-    private String snsId;
+    private final String snsId;
 
     @SerializedName("name")
-    private String name;
+    private final String name;
 
     @SerializedName("profile")
-
-    private String profile;
+    private final String profile;
 
     @SerializedName("notification")
-    private boolean notification;
+    private final boolean notification;
 
     @SerializedName("token")
-    private String token;
-
+    private final String token;
 
     public LoginRequest(LoginModel model, boolean notification, String token) {
         this.snsKind = model.getSnsKind();

@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class RecordCreateRequest {
     @SerializedName("title")
-    String title;
+    private final String title;
 
     @SerializedName("path")
-    String path;
+    private final String path;
 
     @SerializedName("size")
-    String size;
+    private final String size;
 
     public RecordCreateRequest(String title, String path, String size) {
         this.title = title;

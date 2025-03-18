@@ -102,7 +102,7 @@
                             android:textColor="@color/white"
                             android:textSize="26dp"
                             android:textStyle="bold"
-                            android:text="증진"/>
+                            android:text="@string/activity_keyword_detail_tools_title"/>
 
                         <TextView
                             android:id="@+id/textview_keyword_detail_pronunciation"
@@ -111,16 +111,17 @@
                             android:textColor="@color/lightGray"
                             android:layout_marginStart="20dp"
                             android:layout_below="@+id/textview_keyword_detail_word"
-                            android:text="[ 증진 ]"/>
+                            android:text="@string/activity_keyword_detail_tools_pronunciation"/>
 
                         <TextView
+                            android:id="@+id/textview_keyword_detail_source"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/lightGray"
                             android:layout_marginEnd="20dp"
                             android:layout_alignTop="@id/textview_keyword_detail_pronunciation"
-                            android:layout_alignParentRight="true"
-                            android:text="출처 : 우리말샘"/>
+                            android:layout_alignParentEnd="true"
+                            android:text="@string/activity_keyword_detail_tools_source"/>
 
                     </RelativeLayout>
                 </RelativeLayout>

@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 import team.y2k2.globa.api.model.entity.Keyword;
-import team.y2k2.globa.api.model.entity.Quizgrade;
-import team.y2k2.globa.api.model.entity.Studytime;
+import team.y2k2.globa.api.model.entity.QuizGrade;
+import team.y2k2.globa.api.model.entity.StudyTime;
 
 
 public class StatisticsResponse {
@@ -14,11 +14,11 @@ public class StatisticsResponse {
     @SerializedName("keywords")
     private List<Keyword> keywords;
     @SerializedName("studyTimes")
-    private List<Studytime> studyTimes;
+    private List<StudyTime> studyTimes;
     @SerializedName("quizGrades")
-    private List<Quizgrade> quizGrades;
+    private List<QuizGrade> quizGrades;
 
-    public StatisticsResponse(List<Keyword> keywords, List<Studytime> studyTimes, List<Quizgrade> quizGrades) {
+    public StatisticsResponse(List<Keyword> keywords, List<StudyTime> studyTimes, List<QuizGrade> quizGrades) {
         this.keywords = keywords;
         this.studyTimes = studyTimes;
         this.quizGrades = quizGrades;
@@ -31,17 +31,17 @@ public class StatisticsResponse {
         this.keywords = keywords;
     }
 
-    public List<Studytime> getStudyTimes() {
+    public List<StudyTime> getStudyTimes() {
         return studyTimes;
     }
-    public void setStudyTimes(List<Studytime> studyTimes) {
+    public void setStudyTimes(List<StudyTime> studyTimes) {
         this.studyTimes = studyTimes;
     }
 
-    public List<Quizgrade> getQuizGrades() {
+    public List<QuizGrade> getQuizGrades() {
         return quizGrades;
     }
-    public void setQuizGrades(List<Quizgrade> quizGrades) {
+    public void setQuizGrades(List<QuizGrade> quizGrades) {
         this.quizGrades = quizGrades;
     }
 }

@@ -28,10 +28,8 @@ public class ProfileImage {
         }
 
         // Construct the HTTPS URL
-        String httpsUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
+        return "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
                 "/o/" + encodedFilePath + "?alt=media";
-
-        return httpsUrl;
     }
 
 }

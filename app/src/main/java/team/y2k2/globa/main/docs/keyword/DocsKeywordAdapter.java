@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 
 public class DocsKeywordAdapter extends RecyclerView.Adapter<DocsKeywordAdapter.AdapterViewHolder> {
-    ArrayList<DocsKeywordItem> items;
+    private final ArrayList<DocsKeywordItem> items;
 
     public DocsKeywordAdapter(ArrayList<DocsKeywordItem> items) {
         this.items = items;
@@ -37,8 +37,7 @@ public class DocsKeywordAdapter extends RecyclerView.Adapter<DocsKeywordAdapter.
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView keyword;
-//        ConstraintLayout layout;
+        private final TextView keyword;
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             keyword = itemView.findViewById(R.id.textview_keyword);

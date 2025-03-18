@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 
 public class ServiceInfoItemAdapter extends RecyclerView.Adapter<ServiceInfoItemAdapter.AdapterViewHolder> {
-    ArrayList<ServiceInfoItem> items;
-    Activity activity;
+    private final ArrayList<ServiceInfoItem> items;
+    private final Activity activity;
 
     public ServiceInfoItemAdapter(Activity activity, ArrayList<ServiceInfoItem> items) {
         this.activity = activity;
@@ -54,10 +54,10 @@ public class ServiceInfoItemAdapter extends RecyclerView.Adapter<ServiceInfoItem
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView description;
+        private final TextView title;
+        private final TextView description;
 
-        LinearLayout layout;
+        private final LinearLayout layout;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

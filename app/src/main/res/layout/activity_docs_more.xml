@@ -15,12 +15,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imagebutton_docs_more_back"
+            android:id="@+id/image_button_docs_more_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@null"
             android:layout_marginStart="20dp"
             android:layout_centerVertical="true"
+            android:importantForAccessibility="no"
             android:src="@drawable/header_back" />
 
         <TextView
@@ -56,17 +57,18 @@
             android:layout_height="18dp"
             android:background="@android:color/transparent"
             android:layout_centerVertical="true"
+            android:importantForAccessibility="no"
             android:src="@drawable/folder_2"/>
 
         <TextView
             android:id="@+id/textview_docs_more_folder_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="기본 폴더"
-            android:textSize="@dimen/small"
+            android:layout_marginStart="7dp"
+            android:layout_toEndOf="@+id/imageview_docs_more_folder"
+            tools:text="@string/activity_docs_tools_folder_title"
             android:textColor="@color/darkGray"
-            android:layout_toEndOf="@+id/imageview_docs_more_folder"/>
+            android:textSize="@dimen/small" />
 
     </RelativeLayout>
 
@@ -74,7 +76,7 @@
         android:id="@+id/textview_docs_more_docs_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="이것은 정말 긴 제목입니다."
+        android:text="@string/long_title"
         android:textSize="@dimen/large"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -115,12 +117,12 @@
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_docs">
 
         <ImageButton
-            android:id="@+id/imagebutton_docs_more_rename"
+            android:id="@+id/image_button_docs_more_rename"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@android:color/transparent"
             android:layout_centerVertical="true"
-            android:src="@drawable/rename"/>
+            android:importantForAccessibility="no" android:src="@drawable/rename"/>
 
         <TextView
             android:id="@+id/textview_docs_more_rename"
@@ -129,7 +131,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/rename"
             android:textColor="@color/black"
-            android:layout_toEndOf="@+id/imagebutton_docs_more_rename"/>
+            android:layout_toEndOf="@+id/image_button_docs_more_rename"/>
 
     </RelativeLayout>
 
@@ -142,11 +144,12 @@
         app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_rename">
 
         <ImageButton
-            android:id="@+id/imagebutton_docs_more_move"
+            android:id="@+id/image_button_docs_more_move"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@android:color/transparent"
             android:layout_centerVertical="true"
+            android:importantForAccessibility="no"
             android:src="@drawable/move_docs"/>
 
         <TextView
@@ -156,7 +159,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/docs_more_move_docs"
             android:textColor="@color/black"
-            android:layout_toEndOf="@+id/imagebutton_docs_more_move"/>
+            android:layout_toEndOf="@+id/image_button_docs_more_move"/>
     </RelativeLayout>
 
 
@@ -169,11 +172,12 @@
         app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_move">
 
         <ImageButton
-            android:id="@+id/imagebutton_docs_more_delete"
+            android:id="@+id/image_button_docs_more_delete"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@android:color/transparent"
             android:layout_centerVertical="true"
+            android:importantForAccessibility="no"
             android:src="@drawable/delete_docs"/>
 
         <TextView
@@ -183,7 +187,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/docs_more_delete_docs"
             android:textColor="@color/red"
-            android:layout_toEndOf="@+id/imagebutton_docs_more_delete"/>
+            android:layout_toEndOf="@+id/image_button_docs_more_delete"/>
     </RelativeLayout>
 
     <TextView
@@ -207,11 +211,12 @@
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_share_title">
 
         <ImageButton
-            android:id="@+id/imagebutton_docs_more_share"
+            android:id="@+id/image_button_docs_more_share"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@android:color/transparent"
             android:layout_centerVertical="true"
+            android:importantForAccessibility="no"
             android:src="@drawable/share"/>
 
         <TextView
@@ -221,7 +226,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/share_link"
             android:textColor="@color/black"
-            android:layout_toEndOf="@+id/imagebutton_docs_more_share"/>
+            android:layout_toEndOf="@+id/image_button_docs_more_share"/>
     </RelativeLayout>
 
     <TextView
@@ -229,7 +234,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/etcetera"
+        android:text="@string/etc"
         android:textSize="@dimen/normal"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -245,11 +250,12 @@
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_etc_title">
 
         <ImageButton
-            android:id="@+id/imagebutton_docs_more_statistics"
+            android:id="@+id/image_button_docs_more_statistics"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@android:color/transparent"
             android:layout_centerVertical="true"
+            android:importantForAccessibility="no"
             android:src="@drawable/statistics_2"/>
 
         <TextView
@@ -259,7 +265,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/activity_docs_more_statistics"
             android:textColor="@color/black"
-            android:layout_toEndOf="@+id/imagebutton_docs_more_statistics"/>
+            android:layout_toEndOf="@+id/image_button_docs_more_statistics"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -271,12 +277,12 @@
         app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_statistics">
 
         <ImageButton
-            android:id="@+id/imagebutton_docs_more_quiz"
+            android:id="@+id/image_button_docs_more_quiz"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@android:color/transparent"
             android:layout_centerVertical="true"
-            android:src="@drawable/quiz"/>
+            android:importantForAccessibility="no" android:src="@drawable/quiz"/>
 
         <TextView
             android:id="@+id/textview_docs_more_quiz"
@@ -285,7 +291,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/activity_docs_more_quiz"
             android:textColor="@color/black"
-            android:layout_toEndOf="@+id/imagebutton_docs_more_quiz"/>
+            android:layout_toEndOf="@+id/image_button_docs_more_quiz"/>
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

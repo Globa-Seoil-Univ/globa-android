@@ -34,11 +34,11 @@ public class DocsNameEditActivity extends AppCompatActivity {
         title = intent.getStringExtra("title");
         folderId = intent.getStringExtra("folderId");
 
-        binding.edittextDocsNameInputname.setText(title);
+        binding.edittextDocsNameInputName.setText(title);
 
         binding.textviewDocsNameChangeConfirm.setOnClickListener(v -> {
-            String newName = binding.edittextDocsNameInputname.getText().toString();
-            if(binding.edittextDocsNameInputname.getText().toString().isEmpty()) {
+            String newName = binding.edittextDocsNameInputName.getText().toString();
+            if(binding.edittextDocsNameInputName.getText().toString().isEmpty()) {
                 Toast.makeText(this, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -46,11 +46,11 @@ public class DocsNameEditActivity extends AppCompatActivity {
             updateDocsName(newName);
         });
 
-        binding.buttonDocsNameCancel.setOnClickListener(v -> binding.edittextDocsNameInputname.setText(""));
+        binding.buttonDocsNameCancel.setOnClickListener(v -> binding.edittextDocsNameInputName.setText(""));
 
         binding.textviewDocsNameCount.setText(title.length() + "/32");
 
-        binding.edittextDocsNameInputname.addTextChangedListener(new TextWatcher() {
+        binding.edittextDocsNameInputName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 binding.textviewDocsNameCount.setText(s.length() + "/32");
@@ -71,11 +71,11 @@ public class DocsNameEditActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
                 if (s.length() > 32) {
-                    binding.edittextDocsNameInputname.removeTextChangedListener(this);
+                    binding.edittextDocsNameInputName.removeTextChangedListener(this);
                     String text = s.toString().substring(0, 32);
-                    binding.edittextDocsNameInputname.setText(text);
-                    binding.edittextDocsNameInputname.setSelection(text.length());
-                    binding.edittextDocsNameInputname.addTextChangedListener(this);
+                    binding.edittextDocsNameInputName.setText(text);
+                    binding.edittextDocsNameInputName.setSelection(text.length());
+                    binding.edittextDocsNameInputName.addTextChangedListener(this);
                 }
 
                 if (s.length() <= 32) {

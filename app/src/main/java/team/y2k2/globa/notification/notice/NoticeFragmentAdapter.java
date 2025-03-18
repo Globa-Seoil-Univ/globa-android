@@ -26,17 +26,15 @@ import team.y2k2.globa.notification.NotificationViewModel;
 
 public class NoticeFragmentAdapter extends RecyclerView.Adapter<NoticeFragmentAdapter.MyViewHolder> {
 
-    NotificationActivity activity;
-    List<NoticeFragmentItem> items;
-    NotificationViewModel notificationViewModel;
-    int whiteColor, primaryColor;
+    private final List<NoticeFragmentItem> items;
+    private final NotificationViewModel notificationViewModel;
+    private final int whiteColor;
+    private final int primaryColor;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference imageRef;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public NoticeFragmentAdapter(List<NoticeFragmentItem> items, NotificationActivity activity, NoticeFragment fragment) {
         this.items = items;
-        this.activity = activity;
         this.notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
         this.whiteColor = ContextCompat.getColor(activity, R.color.white);
         this.primaryColor = ContextCompat.getColor(activity, R.color.primary_1);
@@ -54,7 +52,7 @@ public class NoticeFragmentAdapter extends RecyclerView.Adapter<NoticeFragmentAd
 
         NoticeFragmentItem item = items.get(position);
 
-        imageRef = storage.getReference().child(item.getProfile());
+        StorageReference imageRef = storage.getReference().child(item.getProfile());
 
         Glide.with(holder.itemView.getContext())
                 .load(ProfileImage.convertGsToHttps(imageRef.toString()))
@@ -88,11 +86,11 @@ public class NoticeFragmentAdapter extends RecyclerView.Adapter<NoticeFragmentAd
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ConstraintLayout layout;
-        ImageView profileImage;
-        TextView title;
-        TextView content;
-        TextView createdTime;
+        private final ConstraintLayout layout;
+        private final ImageView profileImage;
+        private final TextView title;
+        private final TextView content;
+        private final TextView createdTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

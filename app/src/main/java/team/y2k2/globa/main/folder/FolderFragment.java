@@ -49,7 +49,7 @@ public class FolderFragment extends Fragment {
     }
 
     public void loadFolder() {
-        ApiClient apiClient = new ApiClient(getContext());
+        ApiClient apiClient = new ApiClient(binding.getRoot().getContext());
         FolderResponse response = apiClient.requestGetFolders(1, 100);
 
         model = new FolderModel();
@@ -59,14 +59,16 @@ public class FolderFragment extends Fragment {
             Log.d(getClass().getSimpleName(), "response = null");
         }
 
-        for(int i = 0; i < response.getFolders().size(); i++) {
-            Folder folder = response.getFolders().get(i);
+        if (response != null) {
+            for(int i = 0; i < response.getFolders().size(); i++) {
+                Folder folder = response.getFolders().get(i);
 
-            model.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
-            currentlyModel.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
+                model.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
+                currentlyModel.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
 
-            // 각 폴더에 대한 처리 작업 수행
-            Log.d("FOLDER_TEST", folder.getTitle()+" | " + folder.getCreatedTime() + " | " + folder.getFolderId());
+                // 각 폴더에 대한 처리 작업 수행
+                Log.d("FOLDER_TEST", folder.getTitle()+" | " + folder.getCreatedTime() + " | " + folder.getFolderId());
+            }
         }
 
         FolderAdapter adapter = new FolderAdapter(model.getItems(), this.getActivity());

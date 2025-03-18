@@ -26,13 +26,13 @@ import team.y2k2.globa.notification.NotificationViewModel;
 
 public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapter.MyViewHolder> {
 
-    List<DocsFragmentItem> items;
-    NotificationActivity activity;
-    NotificationViewModel notificationViewModel;
-    int whiteColor, primaryColor;
+    private final List<DocsFragmentItem> items;
+    private final NotificationActivity activity;
+    private final NotificationViewModel notificationViewModel;
+    private final int whiteColor;
+    private final int primaryColor;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference imageRef;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public DocsFragmentAdapter(List<DocsFragmentItem> items, NotificationActivity activity, DocsFragment fragment) {
         this.items = items;
@@ -60,7 +60,7 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
                     .error(R.mipmap.ic_launcher)
                     .into(holder.profileImage);
         } else {
-            imageRef = storage.getReference().child(item.getProfile());
+            StorageReference imageRef = storage.getReference().child(item.getProfile());
             Glide.with(holder.itemView.getContext())
                     .load(ProfileImage.convertGsToHttps(imageRef.toString()))
                     .error(R.mipmap.ic_launcher)
@@ -94,11 +94,11 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ConstraintLayout layout;
-        ImageView profileImage;
-        TextView title;
-        TextView content;
-        TextView createdTime;
+        private final ConstraintLayout layout;
+        private final ImageView profileImage;
+        private final TextView title;
+        private final TextView content;
+        private final TextView createdTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

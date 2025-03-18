@@ -24,10 +24,10 @@ import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
 public class NotificationViewModel extends ViewModel {
 
     private NotificationActivity activity;
-    private ApiService apiService;
-    private MutableLiveData<NotificationResponse> notificationLiveData = new MutableLiveData<>();
-    private MutableLiveData<UnreadNotificationCountResponse> unreadCount = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<NotificationResponse> notificationLiveData = new MutableLiveData<>();
+    private final MutableLiveData<UnreadNotificationCountResponse> unreadCount = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public NotificationViewModel() {
         apiService = ApiClient.getApiService();

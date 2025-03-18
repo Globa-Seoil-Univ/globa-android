@@ -12,8 +12,8 @@ import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
 
 public class RecordDB extends SQLiteOpenHelper {
-    SQLiteDatabase sqlDB;
-    Context context;
+    private final SQLiteDatabase sqlDB;
+    private final Context context;
 
     public RecordDB(Context context) {
         super(context, "record", null, 1);
@@ -85,7 +85,6 @@ public class RecordDB extends SQLiteOpenHelper {
 
     private boolean isRecordIdExists(int recordId) {
         Cursor cursor = sqlDB.rawQuery("SELECT * FROM Record WHERE record_id = " + recordId +";", null);
-
         return cursor.getCount() == 0;
     }
 }

@@ -32,11 +32,11 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
 
     List<DocsDetailSubCommentItem> subCommentItems;
 
-    DocsActivity activity;
-    String folderId;
-    String recordId;
-    String sectionId;
-    String highlightId;
+    private final DocsActivity activity;
+    private final String folderId;
+    private final String recordId;
+    private final String sectionId;
+    private final String highlightId;
 
     private final DocsDetailCommentAdapter commentAdapter;
 
@@ -159,10 +159,10 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView profileImage;
-        TextView name;
-        TextView createdTime;
-        TextView content;
+        private final ImageView profileImage;
+        private final TextView name;
+        private final TextView createdTime;
+        private final TextView content;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

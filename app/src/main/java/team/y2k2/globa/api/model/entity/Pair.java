@@ -1,8 +1,8 @@
 package team.y2k2.globa.api.model.entity;
 
 public class Pair implements Comparable<Pair> {
-    int number;
-    String text;
+    private final int number;
+    private final String text;
 
     public Pair(int number, String text) {
         this.number = number;

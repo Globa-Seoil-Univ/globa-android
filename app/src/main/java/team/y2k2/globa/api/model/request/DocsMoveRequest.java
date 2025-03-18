@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class DocsMoveRequest {
     @SerializedName("targetId")
-    String targetId;
+    private final String targetId;
 
     public DocsMoveRequest(String targetId) {
         this.targetId = targetId;

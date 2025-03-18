@@ -29,13 +29,13 @@ import team.y2k2.globa.notification.inquiry.InquiryDetailActivity;
 
 public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdapter.MyViewHolder> {
 
-    NotificationActivity activity;
-    List<TotalFragmentItem> items;
-    NotificationViewModel notificationViewModel;
-    int whiteColor, primaryColor;
+    private final NotificationActivity activity;
+    private final List<TotalFragmentItem> items;
+    private final NotificationViewModel notificationViewModel;
+    private final int whiteColor;
+    private final int primaryColor;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference imageRef;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public TotalFragmentAdapter(List<TotalFragmentItem> items, NotificationActivity activity, TotalFragment fragment) {
         this.items = items;
@@ -66,7 +66,7 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
                         .into(holder.profileImage);
             } else {
                 if(!item.getProfile().isEmpty()) {
-                    imageRef = storage.getReference().child(item.getProfile());
+                    StorageReference imageRef = storage.getReference().child(item.getProfile());
                     Glide.with(holder.itemView.getContext())
                             .load(ProfileImage.convertGsToHttps(imageRef.toString()))
                             .error(R.drawable.profile_user)
@@ -157,13 +157,13 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ConstraintLayout layout;
-        ImageView profileImage;
-        TextView title;
-        TextView content;
-        TextView createdTime;
-        Button confirmBtn;
-        Button cancelBtn;
+        private final ConstraintLayout layout;
+        private final ImageView profileImage;
+        private final TextView title;
+        private final TextView content;
+        private final TextView createdTime;
+        private final Button confirmBtn;
+        private final Button cancelBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

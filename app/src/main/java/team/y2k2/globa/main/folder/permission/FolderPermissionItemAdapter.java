@@ -24,12 +24,11 @@ import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerAda
 import team.y2k2.globa.main.folder.permission.spinner.FolderPermissionSpinnerModel;
 
 public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPermissionItemAdapter.AdapterViewHolder> {
-    ArrayList<FolderPermissionItem> items;
-    FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
+    private final ArrayList<FolderPermissionItem> items;
+    private final FolderPermissionSpinnerModel model = new FolderPermissionSpinnerModel();
     private final onItemLongClickListener longClickListener;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference imageRef;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public interface onItemLongClickListener {
         void onItemLongClick(int position);
@@ -57,7 +56,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
                     .error(R.mipmap.ic_launcher)
                     .into(holder.profileImage);
         } else {
-            imageRef = storage.getReference().child(item.getProfileImageUrl());
+            StorageReference imageRef = storage.getReference().child(item.getProfileImageUrl());
             Glide.with(holder.itemView.getContext())
                     .load(ProfileImage.convertGsToHttps(imageRef.toString()))
                     .error(R.mipmap.ic_launcher)
@@ -97,10 +96,9 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
     }
 
     public class AdapterViewHolder extends RecyclerView.ViewHolder {
-        Spinner spinner;
-        TextView name;
-        ImageView profileImage;
-        FolderPermissionSpinnerAdapter adapter;
+        private final Spinner spinner;
+        private final TextView name;
+        private final ImageView profileImage;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,7 +106,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
             name = itemView.findViewById(R.id.textview_folder_permission_name);
             profileImage = itemView.findViewById(R.id.imageview_folder_permission_profile_image);
 
-            adapter = new FolderPermissionSpinnerAdapter(itemView.getContext(), model.getOptions(itemView.getContext()));
+            FolderPermissionSpinnerAdapter adapter = new FolderPermissionSpinnerAdapter(itemView.getContext(), model.getOptions(itemView.getContext()));
             spinner.setAdapter(adapter);
             spinner.setDropDownVerticalOffset(5);
 

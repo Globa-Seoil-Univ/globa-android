@@ -22,10 +22,9 @@ import team.y2k2.globa.api.model.request.WithdrawRequest;
 import team.y2k2.globa.intro.IntroActivity;
 
 public class WithdrawViewModel extends ViewModel {
-
-    private ApiService apiService;
-    private MutableLiveData<Integer> responseLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final ApiService apiService;
+    private final MutableLiveData<Integer> responseLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public WithdrawViewModel() {
         apiService = ApiClient.apiService;
@@ -41,7 +40,7 @@ public class WithdrawViewModel extends ViewModel {
         apiService.requestWithdrawUser(APPLICATION_JSON, authorization, withdrawRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Intent withDrawIntent = new Intent(context, IntroActivity.class);
                     withDrawIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(withDrawIntent);
@@ -55,6 +54,7 @@ public class WithdrawViewModel extends ViewModel {
                     Log.d(getClass().getName(), "회원 탈퇴 실패 : " + response.code());
                 }
             }
+
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 errorLiveData.setValue(t.getMessage());

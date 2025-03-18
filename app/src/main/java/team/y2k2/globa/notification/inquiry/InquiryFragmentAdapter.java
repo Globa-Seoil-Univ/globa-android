@@ -27,12 +27,13 @@ import team.y2k2.globa.notification.NotificationViewModel;
 
 public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragmentAdapter.MyViewHolder> {
 
-    NotificationActivity activity;
-    List<InquiryFragmentItem> items;
-    NotificationViewModel notificationViewModel;
-    int whiteColor, primaryColor;
+    private final NotificationActivity activity;
+    private final List<InquiryFragmentItem> items;
+    private final NotificationViewModel notificationViewModel;
+    private final int whiteColor;
+    private final int primaryColor;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference imageRef;
 
     public InquiryFragmentAdapter(List<InquiryFragmentItem> items, NotificationActivity activity, InquiryFragment fragment) {
@@ -100,11 +101,11 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        ConstraintLayout layout;
-        ImageView profileImage;
-        TextView title;
-        TextView content;
-        TextView createdTime;
+        private final ConstraintLayout layout;
+        private final ImageView profileImage;
+        private final TextView title;
+        private final TextView content;
+        private final TextView createdTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class NoticeFragmentAdapter extends FragmentPagerAdapter {
 
-    private String[] images;
+    private final String[] images;
 
     public NoticeFragmentAdapter(FragmentManager fm, String[] images) {
         super(fm);

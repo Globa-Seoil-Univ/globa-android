@@ -17,10 +17,10 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.api.model.entity.Folder;
 
 public class DocsUploadFolderAdapter extends ArrayAdapter<String> implements SpinnerAdapter {
-    List<Folder> items;
-    LayoutInflater inflater;
-    int dropResource;
-    int topResources;
+    private final List<Folder> items;
+    private final LayoutInflater inflater;
+    private int dropResource;
+    private final int topResources;
 
     public DocsUploadFolderAdapter(@NonNull Context context, int resource, @Nullable List<Folder> folders) {
         super(context, resource);

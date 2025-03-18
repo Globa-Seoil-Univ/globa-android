@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 
 public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.AdapterViewHolder> {
-    ArrayList<InquiryItem> items;
+    private final ArrayList<InquiryItem> items;
 
     public InquiryAdapter(ArrayList<InquiryItem> items) {
         this.items = items;
@@ -45,8 +45,8 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.AdapterV
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView description;
+        private final TextView title;
+        private final TextView description;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -19,7 +19,7 @@ public class IntroModel {
     private static final int REQUEST_NOTIFICATION_PERMISSION = 1001;
     private static boolean isNofiGranted = false;
 
-    private Context context;
+    private final Context context;
 
     public IntroModel(Context context) {
         this.context = context;

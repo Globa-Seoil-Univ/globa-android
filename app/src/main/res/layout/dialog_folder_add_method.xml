@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="20dp"
-    android:background="@drawable/modal_background">
+    android:background="@drawable/modal_background"
+    android:paddingBottom="20dp">
 
     <RelativeLayout
-        android:id="@+id/relativelayout_folderadd_method"
+        android:id="@+id/relativelayout_folder_add_method"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
         android:paddingLeft="20dp"
+        android:paddingTop="20dp"
         android:paddingRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/linearlayout_folderadd_method_tab"
+            android:id="@+id/linearlayout_folder_add_method_tab"
             android:layout_width="44dp"
             android:layout_height="8dp"
-            android:background="@drawable/alert_tab"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/alert_tab"
             android:orientation="horizontal" />
 
         <TextView
-            android:id="@+id/textview_folderadd_method_title"
+            android:id="@+id/textview_folder_add_method_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -37,85 +36,81 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textview_folderadd_method_description"
+            android:id="@+id/textview_folder_add_method_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/darkGray"
-            android:layout_below="@+id/textview_folderadd_method_title"
+            android:layout_below="@+id/textview_folder_add_method_title"
             android:layout_marginTop="5dp"
             android:text="@string/folderadd_dialog_detail"
+            android:textColor="@color/darkGray"
             android:textSize="@dimen/small" />
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/relativelayout_more_docs_2"
+        android:id="@+id/relative_layout_more_docs_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
-        android:rowCount="1"
-        android:orientation="vertical"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/relativelayout_folderadd_method">
+        android:orientation="vertical"
+        android:rowCount="1"
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_folder_add_method">
 
         <RelativeLayout
-            android:id="@+id/relativelayout_folderadd_link"
+            android:id="@+id/relative_layout_folder_add_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp">
 
             <ImageButton
-                android:id="@+id/imagebutton_folderadd_link"
+                android:id="@+id/image_button_folder_add_link"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:src="@drawable/clip"/>
+                android:background="@android:color/transparent"
+                android:importantForAccessibility="no"
+                android:src="@drawable/clip" />
 
             <TextView
                 android:id="@+id/textview_more_rename"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_folder_add_link"
                 android:text="@string/share_link"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/imagebutton_folderadd_link"/>
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/relativelayout_folderadd_member"
+            android:id="@+id/relative_layout_folder_add_member"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="20dp">
 
             <ImageButton
-                android:id="@+id/imagebutton_folderadd_member"
+                android:id="@+id/image_button_folder_add_member"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
-                android:src="@drawable/groups"/>
+                android:background="@android:color/transparent"
+                android:importantForAccessibility="no"
+                android:src="@drawable/groups" />
 
             <TextView
-                android:id="@+id/textview_folderadd_member"
+                android:id="@+id/textview_folder_add_member"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_folder_add_member"
                 android:text="@string/share_member"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/imagebutton_folderadd_member"/>
+                android:textColor="@color/black" />
 
         </RelativeLayout>
-
-
-
     </LinearLayout>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

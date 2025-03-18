@@ -43,8 +43,8 @@
     <string name="move">Move</string>
     <string name="name">Name</string>
     <string name="statistics">Statistics</string>
-    <string name="etcetera">Etcetera</string>
-    <string name="signout">Sign Out</string>
+    <string name="etc">Etcetera</string>
+    <string name="sign_out">Sign Out</string>
     <string name="withdraw">Withdraw</string>
     <string name="score">Score</string>
     <string name="count">Count</string>
@@ -65,7 +65,7 @@
     <string name="permission_management">Permission Management</string>
 
     <string name="docs_more_title">Folder deletion title. Do not use this value</string>
-    <string name="docs_more_datetime">2001–04-24 14:10</string>
+    <string name="docs_more_datetime">2001/04/24 14:10</string>
     <string name="docs_more_move_docs">Move Folder</string>
     <string name="docs_more_delete_docs">Delete Document</string>
 
@@ -176,10 +176,10 @@
     <string name="foldershare_dialog_write">Write Permission</string>
 
     <string name="activity_folder_move_change_select">Please select the folder to change.</string>
-    <string name="fragment_folder_inside_title">This is a very long title.</string>
+    <string name="long_title">This is a very long title.</string>
 
-    <string name="activity_docs_move_title">2024-03-12 Meeting Minutes</string>
-    <string name="activity_docs_move_datetime">2024-03-12 11:07 PM</string>
+    <string name="activity_docs_move_title">2024/03/12 Meeting Minutes</string>
+    <string name="activity_docs_move_datetime">2024/03/12 11:07 PM</string>
 
     <string name="item_main_document_processing">Summarizing..</string>
 
@@ -189,7 +189,7 @@
 
     <string name="activity_docs_summary_title">Summary</string>
     <string name="activity_docs_time_start"> </string>
-    <string name="activity_docs_time_end">Downloading...</string>
+    <string name="activity_docs_time_end">Downloading…</string>
 
     <string name="activity_search_currently">Recent Searches</string>
     <string name="activity_search_keyword">Enter Keyword</string>
@@ -197,13 +197,14 @@
     <string name="activity_fonder_add_input_share">User Code (6 digits)</string>
     <string name="activity_docs_more_statistics">View Visualization Data</string>
     <string name="activity_docs_more_quiz">Take Quiz</string>
+    <string name="activity_docs_tools_folder_title">Default folder</string>
 
     <string name="activity_quiz_result_empty">If you retake the quiz, we will show you the increase rate.</string>
     <string name="activity_quiz_result_last_corrected_1">Compared to your last score,</string>
     <string name="activity_quiz_result_last_corrected_2">points increased.</string>
     <string name="activity_quiz_result_last_corrected_3">points decreased.</string>
     <string name="activity_quiz_result_last_corrected_4">It\'s the same as your last score.</string>
-    <string name="activity_quiz_result_last_score_zero">Your last score was 0 points...</string>
+    <string name="activity_quiz_result_last_score_zero">Your last score was 0 points…</string>
 
     <string name="fragment_share_notification_2_1"> sent you a folder sharing invitation.</string>
     <string name="fragment_share_notification_2_2"> </string>
@@ -216,4 +217,10 @@
 
     <string name="fragment_share_notification_5_1"> </string>
     <string name="fragment_share_notification_5_2"> Added a comment.</string>
+
+    <string name="activity_inquiry_detail_title">Inquiry detail</string>
+    <string name="activity_keyword_detail_tools_title">promotion</string>
+    <string name="activity_keyword_detail_tools_pronunciation">[ promotion ]</string>
+    <string name="activity_keyword_detail_tools_source">source :</string>
+
 </resources>

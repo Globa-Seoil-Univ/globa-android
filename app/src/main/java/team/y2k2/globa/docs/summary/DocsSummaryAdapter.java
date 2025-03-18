@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 
 public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.AdapterViewHolder> {
-    ArrayList<DocsSummaryItem> items;
+    private final ArrayList<DocsSummaryItem> items;
 
     public DocsSummaryAdapter(ArrayList<DocsSummaryItem> items) {
         this.items = items;
@@ -46,9 +46,9 @@ public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.
         return (null != items ? items.size() : 0);
     }
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView time;
-        RecyclerView descriptions;
+        private final TextView title;
+        private final TextView time;
+        private final RecyclerView descriptions;
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);

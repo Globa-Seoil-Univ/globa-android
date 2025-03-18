@@ -4,16 +4,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class Highlight {
     @SerializedName("highlightId")
-    private int highlightId;
+    private final int highlightId;
 
     @SerializedName("type")
-    private String type;
+    private final String type;
 
     @SerializedName("startIndex")
-    private int startIndex;
+    private final int startIndex;
 
     @SerializedName("endIndex")
-    private int endIndex;
+    private final int endIndex;
 
     public Highlight(int highlightId, String type, int startIndex, int endIndex) {
         this.highlightId = highlightId;
