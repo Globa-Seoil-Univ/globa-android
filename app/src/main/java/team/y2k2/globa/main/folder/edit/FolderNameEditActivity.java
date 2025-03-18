@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import team.y2k2.globa.databinding.ActivityFolderNameEditBinding;
 
 public class FolderNameEditActivity extends AppCompatActivity {
-    private FolderNameEditViewModel viewModel;
+    private FolderNameEditActivityModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class FolderNameEditActivity extends AppCompatActivity {
         ActivityFolderNameEditBinding binding = ActivityFolderNameEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        viewModel = new ViewModelProvider(this).get(FolderNameEditViewModel.class);
+        viewModel = new ViewModelProvider(this).get(FolderNameEditActivityModel.class);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 

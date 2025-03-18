@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".withdraw.WithdrawActivity">
+    tools:context=".main.profile.withdraw.WithdrawActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_withdraw_header"

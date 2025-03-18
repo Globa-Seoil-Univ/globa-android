@@ -6,12 +6,22 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 파일 접근 권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" android:minSdkVersion="34"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" android:minSdkVersion="34"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" android:minSdkVersion="34"/>
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_AUDIO"
+        android:minSdkVersion="34" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        android:minSdkVersion="34" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_VIDEO"
+        android:minSdkVersion="34" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="33" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="33" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="33" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="33" />
 
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
@@ -23,12 +33,14 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Globa"
         android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
         tools:targetApi="34">
+        <profileable android:shell="true" />
+
         <activity
             android:name=".docs.statistics.DocsStatisticsActivity"
             android:exported="false" />
@@ -36,18 +48,23 @@
             android:name=".intro.IntroActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="globa" android:host="main"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="main"
+                    android:scheme="globa" />
             </intent-filter>
         </activity>
-        <activity android:name=".docs.quiz.quizconduct.QuizActivity"
+        <activity
+            android:name=".docs.quiz.conduct.QuizActivity"
             android:exported="false" />
         <activity
-            android:name=".docs.quiz.quizresult.QuizResultActivity"
+            android:name=".docs.quiz.result.QuizResultActivity"
             android:exported="false"
             android:theme="@style/Theme.Globa" />
         <activity
@@ -60,21 +77,23 @@
             android:name=".theme.ThemeActivity"
             android:exported="false" />
         <activity
-            android:name=".withdraw.WithdrawActivity"
+            android:name=".main.profile.withdraw.WithdrawActivity"
             android:exported="false" />
         <activity
             android:name=".main.profile.edit.NicknameEditActivity"
             android:exported="false" />
         <activity android:name=".main.profile.info.MyinfoActivity" />
-        <activity android:name=".main.search.SearchActivity"/>
+        <activity android:name=".main.search.SearchActivity" />
         <activity
             android:name=".login.LoginActivity"
-            android:requestLegacyExternalStorage="true"
-            android:exported="true">
+            android:exported="true"
+            android:requestLegacyExternalStorage="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="oauth"
                     android:scheme="kakao8a572ba277b6059bd51f23fe58474f13" />
@@ -89,13 +108,18 @@
         <activity android:name=".main.profile.theme.ThemeActivity" />
         <activity android:name=".keyword.detail.KeywordDetailActivity" />
         <activity android:name=".main.folder.permission.FolderPermissionActivity" />
-        <activity android:name=".conditions.ConditionsActivity" android:exported="false"/>
-        <activity android:name=".docs.DocsActivity" android:exported="true">
+        <activity
+            android:name=".docs.DocsActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="globa" android:host="docs"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="docs"
+                    android:scheme="globa" />
             </intent-filter>
         </activity>
         <activity
@@ -110,12 +134,14 @@
         <activity android:name=".notification.inquiry.InquiryDetailActivity" />
         <activity android:name=".notification.NotificationActivity" />
         <activity android:name=".docs.edit.DocsNameEditActivity" />
-        <activity android:name=".main.profile.service_info.WebViewActivity"/>
+        <activity android:name=".main.profile.service_info.WebViewActivity" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="8a572ba277b6059bd51f23fe58474f13" />
 
-        <service android:name=".notification.FirebaseMessagingService"
+        <service
+            android:name=".notification.FirebaseMessagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

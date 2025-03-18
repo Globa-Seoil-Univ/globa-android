@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.folder.inside;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -12,27 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.entity.FolderInsideRecord;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.docs.move.DocsMoveActivity;
 
 public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDocsAdapter.AdapterViewHolder> {
-    ArrayList<FolderInsideDocsItem> items;
+    private List<FolderInsideRecord> items;
+    private final FolderInsideFragment fragment;
+    private final Context context;
 
-    BottomSheetDialog bottomSheetDialog;
-    BottomSheetDialog moreBottomSheet;
-
-    Context context;
-    FolderInsideFragment fragment;
-
-    public FolderInsideDocsAdapter(ArrayList<FolderInsideDocsItem> items, FolderInsideFragment fragment) {
+    public FolderInsideDocsAdapter(List<FolderInsideRecord> items, FolderInsideFragment fragment) {
         this.items = items;
         this.fragment = fragment;
         this.context = fragment.getContext();
@@ -41,108 +35,99 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-        if (items.get(0).getFolderId().isEmpty())
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_docs_null, parent, false);
-        else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_docs, parent, false);
-        }
-
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_docs, parent, false);
         return new AdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        if(items.get(0).getFolderId().isEmpty()) {
-            holder.title.setText("문서를 찾을 수 없습니다.");
-            return;
-        }
+        FolderInsideRecord item = items.get(position);
+        holder.title.setText(item.getTitle());
+        String datetime = item.getCreatedTime().replace("T", "  ");
+        holder.datetime.setText(datetime);
 
-
-        holder.title.setText(items.get(position).getTitle());
-        holder.datetime.setText(items.get(position).getDatetime());
-
-        moreBottomSheet = new BottomSheetDialog(holder.itemView.getContext());
-        bottomSheetDialog = new BottomSheetDialog(moreBottomSheet.getContext());
-
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
-
-            intent.putExtra("title", items.get(position).getTitle());
-            intent.putExtra("folderId", items.get(position).getFolderId());
-            intent.putExtra("recordId", items.get(position).getRecordId());
-
-            holder.itemView.getContext().startActivity(intent);
-        });
-
+        holder.itemView.setOnClickListener(v -> navigateToDocsActivity(item));
         holder.itemView.setOnLongClickListener(v -> {
-            viewRecordMore(holder, position);
-            return false;
+            showRecordMoreDialog(holder, item);
+            return true;
         });
     }
 
-    public void viewRecordMore(AdapterViewHolder holder, int position) {
-        moreBottomSheet.setContentView(R.layout.dialog_more_docs);
-        bottomSheetDialog.setContentView(R.layout.dialog_delete_docs);
+    private void navigateToDocsActivity(FolderInsideRecord item) {
+        Intent intent = new Intent(context, DocsActivity.class);
+        intent.putExtra("title", item.getTitle());
+        intent.putExtra("folderId", String.valueOf(fragment.getFolderId()));
+        intent.putExtra("recordId", item.getRecordId());
+        context.startActivity(intent);
+    }
 
-        moreBottomSheet.show();
+    private void showRecordMoreDialog(AdapterViewHolder holder, FolderInsideRecord item) {
+        BottomSheetDialog moreBottomSheet = new BottomSheetDialog(context);
+        moreBottomSheet.setContentView(R.layout.dialog_more_docs);
 
         TextView title = moreBottomSheet.findViewById(R.id.textview_more_docs_title);
         TextView datetime = moreBottomSheet.findViewById(R.id.textview_more_docs_description);
 
-        title.setText(items.get(position).getTitle());
-        datetime.setText(items.get(position).getDatetime());
+        if (title != null) title.setText(item.getTitle());
+        if (datetime != null) datetime.setText(item.getCreatedTime().replace("T", " "));
 
         RelativeLayout rename = moreBottomSheet.findViewById(R.id.relativelayout_more_rename);
-        rename.setOnClickListener(d1 -> {
+        if (rename != null) rename.setOnClickListener(v -> {
             moreBottomSheet.dismiss();
-            Intent intent = new Intent(holder.itemView.getContext(), DocsNameEditActivity.class);
-            intent.putExtra("recordId", items.get(position).getRecordId());
-            intent.putExtra("folderId", items.get(position).getFolderId());
-            intent.putExtra("title", items.get(position).getTitle());
-            holder.itemView.getContext().startActivity(intent);
+            navigateToDocsNameEditActivity(item);
         });
 
         RelativeLayout move = moreBottomSheet.findViewById(R.id.relativelayout_more_move);
-        move.setOnClickListener(d1 -> {
+        if (move != null) move.setOnClickListener(v -> {
             moreBottomSheet.dismiss();
-            Intent intent = new Intent(holder.itemView.getContext(), DocsMoveActivity.class);
-            intent.putExtra("recordId", items.get(position).getRecordId());
-            intent.putExtra("folderId", items.get(position).getFolderId());
-            intent.putExtra("title", items.get(position).getTitle());
-            holder.itemView.getContext().startActivity(intent);
+            navigateToDocsMoveActivity(item);
         });
 
         RelativeLayout delete = moreBottomSheet.findViewById(R.id.relativelayout_more_delete);
-        delete.setOnClickListener(d1 -> {
+        if (delete != null) delete.setOnClickListener(v -> {
             moreBottomSheet.dismiss();
-            bottomSheetDialog.show();
+            showDeleteConfirmationDialog(item);
         });
 
-        TextView confirm = bottomSheetDialog.findViewById(R.id.textview_delete_docs_confirm);
-        TextView cancel = bottomSheetDialog.findViewById(R.id.textview_delete_docs_cancel);
+        moreBottomSheet.show();
+    }
 
-        // 버튼 클릭 리스너를 별도의 메서드로 분리
-        confirm.setOnClickListener(d2 -> {
-            bottomSheetDialog.dismiss();
-            ApiClient client = new ApiClient(context);
-            String folderId = items.get(position).getFolderId();
-            String recordId = items.get(position).getRecordId();
-            client.deleteRecord(folderId,recordId);
+    private void navigateToDocsNameEditActivity(FolderInsideRecord item) {
+        Intent intent = new Intent(context, DocsNameEditActivity.class);
+        intent.putExtra("recordId", item.getRecordId());
+        intent.putExtra("folderId", String.valueOf(fragment.getFolderId()));
+        intent.putExtra("title", item.getTitle());
+        context.startActivity(intent);
+    }
 
+    private void navigateToDocsMoveActivity(FolderInsideRecord item) {
+        Intent intent = new Intent(context, DocsMoveActivity.class);
+        intent.putExtra("recordId", item.getRecordId());
+        intent.putExtra("folderId", String.valueOf(fragment.getFolderId()));
+        intent.putExtra("title", item.getTitle());
+        context.startActivity(intent);
+    }
 
-            fragment.loadFolderInside();
+    private void showDeleteConfirmationDialog(FolderInsideRecord item) {
+        BottomSheetDialog deleteBottomSheet = new BottomSheetDialog(context);
+        deleteBottomSheet.setContentView(R.layout.dialog_delete_docs);
+
+        TextView confirm = deleteBottomSheet.findViewById(R.id.textview_delete_docs_confirm);
+        TextView cancel = deleteBottomSheet.findViewById(R.id.textview_delete_docs_cancel);
+
+        if (confirm != null) confirm.setOnClickListener(v -> {
+            deleteBottomSheet.dismiss();
+            fragment.getViewModel().deleteDocs(String.valueOf(fragment.getFolderId()), item.getRecordId());
         });
-        cancel.setOnClickListener(d2 -> {
-            bottomSheetDialog.dismiss();
-            moreBottomSheet.show();
-        });
 
+        if (cancel != null) cancel.setOnClickListener(v -> deleteBottomSheet.dismiss());
+
+        deleteBottomSheet.show();
     }
 
     @Override
     public int getItemCount() {
-        return (null != items ? items.size() : 0);
+        return items != null ? items.size() : 0;
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
@@ -151,11 +136,12 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
 
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
-
             title = itemView.findViewById(R.id.textview_document_title);
             datetime = itemView.findViewById(R.id.textview_document_datetime);
         }
     }
 
-
+    public void setItems(List<FolderInsideRecord> items) {
+        this.items = items;
+    }
 }

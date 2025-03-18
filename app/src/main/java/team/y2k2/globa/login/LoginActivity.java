@@ -1,63 +1,47 @@
 package team.y2k2.globa.login;
 
-import static team.y2k2.globa.login.LoginModel.*;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import team.y2k2.globa.databinding.ActivityLoginBinding;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
+import androidx.appcompat.app.AlertDialog;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.content.Intent;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.common.KakaoSdk;
-import com.kakao.sdk.user.UserApiClient;
-
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
 import team.y2k2.globa.R;
-import team.y2k2.globa.databinding.ActivityLoginBinding;
+import team.y2k2.globa.main.MainActivity;
+
+import android.widget.Toast;
+import android.util.Log;
 
 public class LoginActivity extends AppCompatActivity {
-    private GoogleSignInClient mGoogleSignInClient;
-    private FirebaseAuth mAuth;
-    public int GOOGLE = R.id.button_sign_in_google;
-    public int KAKAO = R.id.button_sign_in_kakao;
-
+    private ActivityLoginBinding binding;
+    private LoginActivityModel viewModel;
     AlertDialog.Builder builder;
     public AlertDialog dialog;
-
     public final String LOGIN_ERR_MSG = "로그인 오류가 발생했습니다." ;
 
-    private ActivityLoginBinding binding;
-    LoginActivityModel viewModel;
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(LoginActivityModel.class);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        if(getIntent().getBooleanExtra("expired", false))
+            Toast.makeText(this, "세션이 만료되었습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
+
+        viewModel = new ViewModelProvider(this).get(LoginActivityModel.class);
+        viewModel.setContext(this);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_loading, null);
 
@@ -68,50 +52,36 @@ public class LoginActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         setFirstCharColorPrimary();
-
         initKakaoSdk();
         initGoogleSdk();
-        setContentView(binding.getRoot());
+
+        observeViewModel();
     }
 
-    public void autoLogin() {
-        SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
-        String refreshToken = preferences.getString("refreshToken", "");
-        String accessToken = preferences.getString("accessToken", "");
-
-        if(refreshToken.equalsIgnoreCase(""))
-            return;
-
-        if(accessToken.equalsIgnoreCase(""))
-            return;
-
-        LoginActivityModel.LoginListener listener = new LoginActivityModel.LoginListener(this, accessToken, refreshToken);
-
-        listener.autoLogin();
-    }
-
-    /**
-     * LGN-1. SNS 로그인 종류에 따라 실행될 메서드를 지정합니다.
-     */
-    public void onSignInClick(View v) {
-        dialog.show();
-
-        final int SIGN_IN_TYPE = v.getId();
-
-        if(SIGN_IN_TYPE == GOOGLE) {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_GOOGLE);
-        }
-        else if(SIGN_IN_TYPE == KAKAO) {
-            UserApiClient userApiClient = UserApiClient.getInstance();
-            // 카카오톡 설치 여부 확인
-            if (userApiClient.isKakaoTalkLoginAvailable(this)) {
-                userApiClient.loginWithKakaoTalk(this, signInKakaoOfCallback);
-
+    private void observeViewModel() {
+        viewModel.getLoading().observe(this, isLoading -> {
+            if (isLoading) {
+                dialog.show();
             } else {
-                userApiClient.loginWithKakaoAccount(this, signInKakaoOfCallback);
+                dialog.dismiss();
             }
-        }
+        });
+
+        viewModel.getLoginSuccess().observe(this, isSuccess -> {
+            if (isSuccess) {
+                Toast.makeText(this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        viewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                Toast.makeText(this, LOGIN_ERR_MSG + ": " + errorMessage, Toast.LENGTH_LONG).show();
+                viewModel.clearErrorMessage(); // Clear the message after displaying it
+            }
+        });
     }
 
     /**
@@ -128,102 +98,34 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void initKakaoSdk() {
         KakaoSdk.init(this, viewModel.getAppKeyForKakao());
-
-        Log.d("KAKAO_KEY",KakaoSdk.INSTANCE.getKeyHash());
+        Log.d("KAKAO_KEY", KakaoSdk.INSTANCE.getKeyHash());
     }
 
     private void initGoogleSdk() {
-        //Google의 로그인 구성을 설정해준다.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(this.getString(R.string.default_web_client_id))
                 .requestServerAuthCode(this.getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mAuth = FirebaseAuth.getInstance();
+        GoogleSignIn.getClient(this, gso);
+        FirebaseAuth.getInstance();
     }
 
 
     /**
      * SNS 계정 선택 후 해당 엑티비티로 돌아왔을 때 결과값을 가져옵니다.
      * 가져온 SNS 계정 정보와 requestCode를 구분해 Spring에 정보를 전달합니다.
-
      *
      * @param requestCode SNS Type
-     * @param resultCode SNS 계정 정보 요청 성공 여부
-     * @param data SNS 계정 정보
+     * @param resultCode  SNS 계정 정보 요청 성공 여부
+     * @param data        SNS 계정 정보
      * KAKAO = 1001
      * GOOGLE = 1004
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case RC_KAKAO:
-                break;
-            case RC_NAVER:
-            case RC_TWITTER:
-            case RC_GOOGLE:
-                signInGoogle(data);
-                break;
-        }
+        viewModel.handleActivityResult(requestCode, resultCode, data);
     }
-
-    private void signInGoogle(Intent data) {
-        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-        try {
-            GoogleSignInAccount account = task.getResult(ApiException.class);
-            signInGoogleOfFirebaseAuth(account);
-        }
-        catch (ApiException e) {
-            Toast.makeText(this, LOGIN_ERR_MSG + ":" + e.getMessage() , Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void signInGoogleOfFirebaseAuth(GoogleSignInAccount acct) {
-        String accessToken = acct.getIdToken();
-        String authCode = acct.getServerAuthCode();
-
-        if (accessToken == null) {
-            String e = "액세스 토큰 없음";
-            Toast.makeText(this,  LOGIN_ERR_MSG + ":" + e, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Log.d(getClass().getSimpleName(), "구글 AT: " + accessToken);
-        Log.d(getClass().getSimpleName(), "구글 Code: " + authCode);
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(accessToken, null);
-
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new LoginActivityModel.LoginListener(this, mAuth, accessToken));
-    }
-
-    private void signInKakao(String token) {
-        UserApiClient userApiClient = UserApiClient.getInstance();
-
-        userApiClient.me((user, meError) -> {
-            if (meError != null) {
-                Toast.makeText(this, LOGIN_ERR_MSG + ":" + meError.getMessage(), Toast.LENGTH_LONG);
-            } else {
-                LoginActivityModel.LoginListener listener = new LoginActivityModel.LoginListener(user, this);
-                listener.KakaoLogin(token);
-            }
-            return null;
-        });
-    }
-
-    Function2<OAuthToken, Throwable, Unit> signInKakaoOfCallback = (token, error) -> {
-        if (error != null) {
-            Toast.makeText(this, LOGIN_ERR_MSG +":"+ error.getMessage(), Toast.LENGTH_LONG);
-        }
-        else if (token != null) {
-            Log.d(getClass().getName(), token.getIdToken());
-            Log.d(getClass().getName(), token.getAccessToken());
-            signInKakao(token.getAccessToken());
-        }
-        return null;
-    };
 }

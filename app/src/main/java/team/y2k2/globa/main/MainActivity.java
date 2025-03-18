@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(MainActivityModel.class);
-        viewModel.setActivity(this);
+        viewModel.setContext(this);
         viewModel.handleUserFcmToken();
 
         setContentView(binding.getRoot());

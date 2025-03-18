@@ -22,7 +22,7 @@ import team.y2k2.globa.api.model.response.UserData;
 import team.y2k2.globa.api.model.response.UserRole;
 import team.y2k2.globa.databinding.ActivityFolderPermissionBinding;
 
-public class FolderPermissionActivity extends AppCompatActivity{
+public class FolderPermissionActivity extends AppCompatActivity {
     ActivityFolderPermissionBinding binding;
     FolderPermissionActivityModel folderPermissionActivityModel;
 
@@ -54,17 +54,17 @@ public class FolderPermissionActivity extends AppCompatActivity{
         folderPermissionActivityModel.fetchSharedUsers(folderId, 1, 10);
 
         folderPermissionActivityModel.getUsersLiveData().observe(FolderPermissionActivity.this, users -> {
-            if(users != null) {
+            if (users != null) {
                 List<UserRole> userRoles = users.getUsers();
-                for(UserRole userRole : userRoles) {
+                for (UserRole userRole : userRoles) {
                     UserData user = userRole.getUser();
                     String profile = user.getProfile();
                     String name = user.getName();
                     Log.d(getClass().getName(), "사용자 이미지 경로: " + profile);
                     Log.d(getClass().getName(), "사용자 이름: " + name);
                     String profilePath;
-                    if(profile != null) {
-                        if(profile.startsWith("http")) {
+                    if (profile != null) {
+                        if (profile.startsWith("http")) {
                             profilePath = profile;
                         } else {
                             storageRef = storage.getReference().child(profile);
@@ -77,7 +77,7 @@ public class FolderPermissionActivity extends AppCompatActivity{
                     int userId = user.getUserId();
                     String role = userRole.getRoleId();
 
-                    if(role.equals("3")) {
+                    if (role.equals("3")) {
                         // 읽기 권한
                         itemList.add(new FolderPermissionItem(name, profilePath, 0, shareId, userId));
                     } else {

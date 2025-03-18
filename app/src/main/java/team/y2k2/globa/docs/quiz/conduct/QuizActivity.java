@@ -1,4 +1,4 @@
-package team.y2k2.globa.docs.quiz.quizconduct;
+package team.y2k2.globa.docs.quiz.conduct;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.api.model.entity.Quiz;
 import team.y2k2.globa.api.model.entity.QuizResult;
 import team.y2k2.globa.databinding.ActivityQuizBinding;
-import team.y2k2.globa.docs.quiz.quizresult.QuizResultActivity;
+import team.y2k2.globa.docs.quiz.result.QuizResultActivity;
 
 public class QuizActivity extends AppCompatActivity {
 

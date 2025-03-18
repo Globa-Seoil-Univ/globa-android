@@ -45,9 +45,7 @@ public class DocsFragment extends Fragment {
 
         if(notificationList != null) {
             for(Notification notification : notificationList) {
-
                 settingNotification(notification);
-
             }
 
             adapter = new DocsFragmentAdapter(docsFragmentItems, (NotificationActivity) requireActivity(), this);

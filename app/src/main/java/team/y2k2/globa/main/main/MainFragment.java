@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.main;
 
-
 import static team.y2k2.globa.main.main.MainModel.*;
 
 import android.content.Context;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -34,7 +34,6 @@ import team.y2k2.globa.notification.*;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     Button[] docsFilterButtons;
-    Context context;
     FragmentMainBinding binding;
     MainFragmentModel viewModel;
 
@@ -43,19 +42,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(getLayoutInflater());
-        context = getContext();
 
-        viewModel = new MainFragmentModel(this.getContext());
-        
+        viewModel = new ViewModelProvider(this).get(MainFragmentModel.class);
+        viewModel.setContext(getContext());
+
         setLogoColor();
         setFilterButtons();
         setOnClickListeners();
         setOnRefreshListener(binding.swiperefreshlayoutMain);
-
         showPromotions();
         filterType = RECORDS_FILTER_CURRENTLY;
         showRecords(filterType);
-
         checkNotification();
 
         return binding.getRoot();
@@ -101,7 +98,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void setLogoColor() {
         SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewMainTitle.getText());
-        spanTitle.setSpan(new ForegroundColorSpan(context.getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanTitle.setSpan(new ForegroundColorSpan(getContext().getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.textviewMainTitle.setText(spanTitle);
     }
 
@@ -166,7 +163,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private int calculateNoOfColumns(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-    
+
         if (dpWidth >= DisplayMetrics.DENSITY_600) {
             return 2;
         } else {
@@ -186,5 +183,4 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
 }

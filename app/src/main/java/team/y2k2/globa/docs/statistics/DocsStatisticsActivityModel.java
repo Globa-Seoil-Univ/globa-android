@@ -1,28 +1,23 @@
 package team.y2k2.globa.docs.statistics;
 
-import static team.y2k2.globa.api.ApiClient.authorization;
-
-import android.util.Log;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 
 public class DocsStatisticsActivityModel extends ViewModel {
-    private final ApiService apiService;
     private final MutableLiveData<StatisticsResponse> docsStatisticsLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private ApiClient apiClient;
 
-    public DocsStatisticsActivityModel() {
-        apiService = ApiClient.getApiService();
+    public void setApiClient(Context context) {
+        apiClient = new ApiClient(context);
     }
+
     public LiveData<StatisticsResponse> getDocsStatisticsLiveData() {
         return docsStatisticsLiveData;
     }
@@ -31,22 +26,8 @@ public class DocsStatisticsActivityModel extends ViewModel {
     }
 
     public void getDocsStatistics(String folderId, String recordId) {
-        apiService.requestDocStatistics(folderId, recordId, "application/json", authorization).enqueue(new Callback<StatisticsResponse>() {
-            @Override
-            public void onResponse(Call<StatisticsResponse> call, Response<StatisticsResponse> response) {
-                if(response.isSuccessful()) {
-                    docsStatisticsLiveData.postValue(response.body());
-                    Log.d(getClass().getName(), "문서 시각화 자료 요청 응답 코드 : " + response.code());
-                } else {
-                    Log.d(getClass().getName(), "문서 시각화 자료 요청 응답 코드 : " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<StatisticsResponse> call, Throwable t) {
-                Log.e(getClass().getName(), "서버 통신 실패: " + t.getMessage());
-            }
-        });
+        StatisticsResponse response = apiClient.requestDocsStatistics(folderId, recordId);
+        docsStatisticsLiveData.postValue(response);
     }
 
 }

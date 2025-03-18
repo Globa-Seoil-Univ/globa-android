@@ -1,4 +1,4 @@
-package team.y2k2.globa.docs.quiz.quizresult;
+package team.y2k2.globa.docs.quiz.result;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -39,21 +39,16 @@ public class QuizResultActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-
         binding.buttonQuizresultBack.setOnClickListener(v -> finish());
 
         // 데이터 수집
         loadData();
-
         // 정답 표시
         setScoreText();
-
         // 점수 표시
         setCorrectedText();
-
         // 상승률 표시
         setIncreasedText();
-
     }
 
     private void loadData() {
@@ -87,7 +82,7 @@ public class QuizResultActivity extends AppCompatActivity {
         loadPreference();
 
         String percentString;
-        if(allEntries.isEmpty()) {
+        if (allEntries.isEmpty()) {
             // 문제 푼 이력이 없는 경우
             percentString = getString(R.string.activity_quiz_result_empty);
             SpannableStringBuilder percentSpannable = new SpannableStringBuilder(percentString);
@@ -97,8 +92,8 @@ public class QuizResultActivity extends AppCompatActivity {
             // 문제 푼 이력이 있는 경우
             int lastCorrected = quizResultPref.getInt("lastGrade", 0);
             int different;
-            if(lastCorrected != 0) {
-                if(gradeInt > lastCorrected) {
+            if (lastCorrected != 0) {
+                if (gradeInt > lastCorrected) {
                     // 점수 상승 경우
                     different = gradeInt - lastCorrected;
                     percentString = getString(R.string.activity_quiz_result_last_corrected_1) + " " + different + getString(R.string.activity_quiz_result_last_corrected_2);

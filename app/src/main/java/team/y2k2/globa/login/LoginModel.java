@@ -4,7 +4,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.kakao.sdk.user.model.User;
 
 public class LoginModel {
-
     /**
      * SNS 로그인 방식
      */
@@ -27,7 +26,7 @@ public class LoginModel {
     public LoginModel(FirebaseUser user, int snsKind, String token) {
         uid = user.getUid();
         name = user.getDisplayName();
-        profileImageUrl = user.getPhotoUrl().toString();
+        profileImageUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "";
         this.snsKind = snsKind;
         this.token = token;
     }

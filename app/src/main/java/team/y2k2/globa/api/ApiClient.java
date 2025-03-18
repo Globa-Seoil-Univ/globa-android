@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -43,6 +45,7 @@ import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.SearchResponse;
+import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
@@ -718,6 +721,31 @@ public class ApiClient {
         }
     }
 
+    public StatisticsResponse requestDocsStatistics(String folderId, String recordId) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<StatisticsResponse> call = apiService.requestDocStatistics(folderId, recordId, APPLICATION_JSON, authorization);
+                Response<StatisticsResponse> response;
+
+                try {
+                    response = call.execute();
+
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        return null;
+                    }
+                } catch (IOException e) {
+                    return null;
+                }
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
     public SearchResponse searchForKeyword(String keyword) {
         try {
             return CompletableFuture.supplyAsync(() -> {
@@ -840,6 +868,7 @@ public class ApiClient {
                 // LoginActivity를 시작하고 현재 액티비티 스택을 모두 제거
                 intent = new Intent(context, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("expired", true);
                 context.startActivity(intent);
                 return false;
 

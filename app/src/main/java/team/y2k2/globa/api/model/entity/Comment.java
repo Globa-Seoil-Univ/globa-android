@@ -5,10 +5,8 @@ import com.google.gson.annotations.SerializedName;
 public class Comment {
     @SerializedName("commentId")
     private String commentId;
-
     @SerializedName("content")
     private String content;
-
     @SerializedName("hasReply")
     private boolean hasReply;
     @SerializedName("deleted")
@@ -17,7 +15,6 @@ public class Comment {
     private String createdTime;
     @SerializedName("user")
     private User user;
-
 
     public String getCommentId() {
         return commentId;

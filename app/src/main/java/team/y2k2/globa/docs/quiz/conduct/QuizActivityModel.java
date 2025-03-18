@@ -1,4 +1,4 @@
-package team.y2k2.globa.docs.quiz.quizconduct;
+package team.y2k2.globa.docs.quiz.conduct;
 
 import static team.y2k2.globa.api.ApiClient.authorization;
 

@@ -1,7 +1,6 @@
 package team.y2k2.globa.api.model.entity;
 
 public class Pair implements Comparable<Pair> {
-
     int number;
     String text;
 

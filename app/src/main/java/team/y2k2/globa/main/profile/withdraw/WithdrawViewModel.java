@@ -1,4 +1,4 @@
-package team.y2k2.globa.withdraw;
+package team.y2k2.globa.main.profile.withdraw;
 
 import static team.y2k2.globa.api.ApiClient.authorization;
 import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;

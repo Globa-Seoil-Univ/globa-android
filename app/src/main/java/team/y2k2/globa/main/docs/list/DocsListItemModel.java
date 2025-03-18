@@ -31,7 +31,6 @@ public class DocsListItemModel {
             String datetime = record.getCreatedTime();
             List<Keyword> keywords = record.getKeywords();
 
-
             DocsListItem item = new DocsListItem(recordId, folderId, title, datetime);
             item.setKeywordList(keywords);
 

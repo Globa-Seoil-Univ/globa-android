@@ -51,7 +51,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         FolderPermissionItem item = items.get(position);
 
-        if(item.getProfileImageUrl().startsWith("http")) {
+        if (item.getProfileImageUrl().startsWith("http")) {
             Glide.with(holder.itemView.getContext())
                     .load(item.getProfileImageUrl())
                     .error(R.mipmap.ic_launcher)
@@ -69,7 +69,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
 
         holder.itemView.setOnLongClickListener(v -> {
             Log.d("롱클릭", "롱클릭 발생!");
-            if(longClickListener != null) {
+            if (longClickListener != null) {
                 longClickListener.onItemLongClick(position);
             }
 
@@ -127,6 +127,7 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
             });
 
         }
+
         public String getPermission() {
             return spinner.getSelectedItem().toString();
         }

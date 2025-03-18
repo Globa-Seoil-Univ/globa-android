@@ -1,5 +1,6 @@
 package team.y2k2.globa.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -23,16 +24,16 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
     public static final String PRF_RECORD_NAME = "recordName";
     public static final String PRF_RECORD_PATH = "recordPath";
 
-    private MainActivity activity;
+    private Context context;
     private MainModel model;
-    private MainFragment mainFragment;
-    private StatisticsFragment statisticsFragment;
-    private ProfileFragment profileFragment;
-    private FolderFragment folderFragment;
+    private final MainFragment mainFragment;
+    private final StatisticsFragment statisticsFragment;
+    private final ProfileFragment profileFragment;
+    private final FolderFragment folderFragment;
 
-    private MutableLiveData<Fragment> selectedFragment = new MutableLiveData<>();
-    private MutableLiveData<Boolean> showBottomSheetDialog = new MutableLiveData<>();
-    private MutableLiveData<Intent> uploadRecordIntent = new MutableLiveData<>();
+    private final MutableLiveData<Fragment> selectedFragment = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> showBottomSheetDialog = new MutableLiveData<>();
+    private final MutableLiveData<Intent> uploadRecordIntent = new MutableLiveData<>();
 
     public MutableLiveData<Fragment> getSelectedFragment() {
         return selectedFragment;
@@ -46,8 +47,8 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
         return uploadRecordIntent;
     }
 
-    public void setActivity(MainActivity activity) {
-        this.activity = activity;
+    public void setContext(MainActivity activity) {
+        this.context = activity;
         this.model = new MainModel(activity);
     }
 
@@ -111,7 +112,7 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
 
     @Override
     public void onRecordUploadReady(String audioPath, String audioName) {
-        Intent intent = new Intent(activity, DocsUploadActivity.class);
+        Intent intent = new Intent(context, DocsUploadActivity.class);
         intent.putExtra(PRF_RECORD_PATH, audioPath);
         intent.putExtra(PRF_RECORD_NAME, audioName);
         uploadRecordIntent.setValue(intent);

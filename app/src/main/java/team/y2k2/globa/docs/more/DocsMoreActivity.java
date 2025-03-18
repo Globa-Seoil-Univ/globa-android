@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsMoreBinding;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
-import team.y2k2.globa.docs.quiz.quizconduct.QuizActivity;
+import team.y2k2.globa.docs.quiz.conduct.QuizActivity;
 import team.y2k2.globa.docs.statistics.DocsStatisticsActivity;
 
 public class DocsMoreActivity extends AppCompatActivity {

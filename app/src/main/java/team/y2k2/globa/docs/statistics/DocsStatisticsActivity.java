@@ -39,7 +39,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
     ActivityDocsStatisticsBinding binding;
     private HorizontalBarChart docsBarChart;
     private LineChart docsTimeLineChart, docsGradeLineChart;
-    DocsStatisticsActivityModel docsStatisticsActivityModel;
+    DocsStatisticsActivityModel viewModel;
     String folderId, recordId;
     private List<Keyword> keywords;
     private List<Studytime> studytimes;
@@ -77,13 +77,14 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         docsTimeLineChart = binding.docsTimeLineChart;
         docsGradeLineChart = binding.docsGradeLineChart;
 
-        docsStatisticsActivityModel = new ViewModelProvider(this).get(DocsStatisticsActivityModel.class);
-        docsStatisticsActivityModel.getDocsStatistics(folderId, recordId);
+        viewModel = new ViewModelProvider(this).get(DocsStatisticsActivityModel.class);
+        viewModel.setApiClient(this);
+        viewModel.getDocsStatistics(folderId, recordId);
     }
 
     private void receiveLiveData() {
         // 단어, 퀴즈 점수는 데이터베이스에서 데이터를 받아와 차트 그림 (공부 시간은 일단 주석 처리)
-        docsStatisticsActivityModel.getDocsStatisticsLiveData().observe(this, docsStatistics -> {
+        viewModel.getDocsStatisticsLiveData().observe(this, docsStatistics -> {
             if(docsStatistics != null) {
                 keywords = docsStatistics.getKeywords();
                 studytimes = docsStatistics.getStudyTimes();

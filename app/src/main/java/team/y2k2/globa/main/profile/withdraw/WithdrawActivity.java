@@ -1,4 +1,4 @@
-package team.y2k2.globa.withdraw;
+package team.y2k2.globa.main.profile.withdraw;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

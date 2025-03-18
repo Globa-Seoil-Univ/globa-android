@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="team.y2k2.globa.main.folder.edit.FolderNameEditViewModel" />
+            type="team.y2k2.globa.main.folder.edit.FolderNameEditActivityModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

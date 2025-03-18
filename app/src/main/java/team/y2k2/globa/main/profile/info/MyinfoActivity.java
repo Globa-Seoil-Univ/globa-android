@@ -31,7 +31,7 @@ import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.ActivityMyinfoBinding;
 import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.main.profile.edit.NicknameEditActivity;
-import team.y2k2.globa.withdraw.WithdrawActivity;
+import team.y2k2.globa.main.profile.withdraw.WithdrawActivity;
 
 public class MyinfoActivity extends AppCompatActivity {
     private ActivityMyinfoBinding binding;

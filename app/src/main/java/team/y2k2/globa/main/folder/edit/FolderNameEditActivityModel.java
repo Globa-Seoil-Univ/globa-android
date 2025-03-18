@@ -15,7 +15,7 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 
-public class FolderNameEditViewModel extends ViewModel {
+public class FolderNameEditActivityModel extends ViewModel {
     private final ApiService apiService;
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     public MutableLiveData<String> folderName = new MutableLiveData<>("");
@@ -24,7 +24,7 @@ public class FolderNameEditViewModel extends ViewModel {
     private final MutableLiveData<Boolean> finishActivity = new MutableLiveData<>(false);
     private int folderId;
 
-    public FolderNameEditViewModel() {
+    public FolderNameEditActivityModel() {
         apiService = ApiClient.getApiService();
     }
 

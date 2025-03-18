@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ import team.y2k2.globa.main.docs.list.DocsListItem;
 import team.y2k2.globa.main.docs.list.DocsListItemModel;
 import team.y2k2.globa.sql.RecordDB;
 
-public class MainFragmentModel {
+public class MainFragmentModel extends ViewModel {
     ApiClient apiClient;
     ApiService apiService;
     Context context;
@@ -39,7 +40,7 @@ public class MainFragmentModel {
 
     private MutableLiveData<UnreadNotificationCheckResponse> notificationCheckLiveData = new MutableLiveData<>();
 
-    public MainFragmentModel(Context context) {
+    public void setContext(Context context) {
         this.context = context;
         apiClient = new ApiClient(context);
         apiService = ApiClient.getApiService();
@@ -62,7 +63,7 @@ public class MainFragmentModel {
     }
 
     public ArrayList<DocsListItem> getCurrentlyRecords() {
-        recordResponse = apiClient.requestGetRecords( 100);
+        recordResponse = apiClient.requestGetRecords(100);
         folderResponse = apiClient.requestGetFolders(1, 100);
 
         DocsListItemModel listItems = new DocsListItemModel();
@@ -129,7 +130,7 @@ public class MainFragmentModel {
             recordDB.onInsert(Integer.parseInt(recordId), Integer.parseInt(folderId), title, datetime, keywords);
         }
 
-        model = new MainModel(records);
+        model = new MainModel();
 
         listItems.addItems(model.records);
         return listItems.getItems();
@@ -154,7 +155,7 @@ public class MainFragmentModel {
             recordDB.onInsert(Integer.parseInt(recordId), Integer.parseInt(folderId), title, datetime, keywords);
         }
 
-        model = new MainModel(records);
+        model = new MainModel();
 
         listItems.addItems(model.records);
         return listItems.getItems();
@@ -178,5 +179,4 @@ public class MainFragmentModel {
             }
         });
     }
-
 }
