@@ -82,7 +82,7 @@
         <activity
             android:name=".main.profile.edit.NicknameEditActivity"
             android:exported="false" />
-        <activity android:name=".main.profile.info.MyinfoActivity" />
+        <activity android:name=".main.profile.info.MyInfoActivity" />
         <activity android:name=".main.search.SearchActivity" />
         <activity
             android:name=".login.LoginActivity"

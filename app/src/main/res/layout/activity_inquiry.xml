@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintlayout_inquiry"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-     <RelativeLayout
+    <RelativeLayout
         android:id="@+id/relativelayout_inquiry_top"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        
+
         <ImageView
             android:id="@+id/imageview_inquiry_top_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="24dp"
             android:layout_centerVertical="true"
+            android:layout_marginStart="24dp"
             android:src="@drawable/header_back" />
 
         <TextView
@@ -41,11 +41,11 @@
             android:id="@+id/textview_inquiry_top_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
             android:text="@string/profile_confirm"
-            android:textSize="@dimen/normal"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
+            android:textSize="@dimen/normal" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -60,28 +60,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title"
-            android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="@dimen/large" />
+            android:textSize="@dimen/large"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/edittext_inquiry_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textview_inquiry_title"
             android:layout_marginTop="10dp"
-            android:hint="@string/input_title"
-            android:layout_below="@+id/textview_inquiry_title"/>
+            android:hint="@string/input_title" />
 
         <TextView
             android:id="@+id/textview_folder_name_count"
-            tools:text="3/32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/edittext_inquiry_title"
+            android:layout_alignParentEnd="true"
             android:fontFamily="@font/notosans_regular"
             android:textColor="@color/gray"
             android:textSize="13sp"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/edittext_inquiry_title"/>
+            tools:text="3/32" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -96,18 +96,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/description"
-            android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="@dimen/large" />
+            android:textSize="@dimen/large"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/edittext_inquiry_description"
             android:layout_width="match_parent"
             android:layout_height="320dp"
-            android:layout_marginTop="10dp"
-            android:gravity="top"
-            android:hint="@string/input_description"
             android:layout_below="@+id/textview_inquiry_description"
-            android:background="@null"/>
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="@string/input_description" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

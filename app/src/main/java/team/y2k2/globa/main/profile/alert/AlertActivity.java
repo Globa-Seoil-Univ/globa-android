@@ -22,7 +22,7 @@ public class AlertActivity extends AppCompatActivity {
     AlertViewModel viewModel;
 
     private String userId;
-    private boolean uploadNofi, shareNofi, eventNofi;
+    private boolean uploadNotification, shareNotification, eventNotification;
     private boolean newUploadNofi, newShareNofi, newEventNofi;
 
     private final ArrayList<AlertItem> alertItems = new ArrayList<>();
@@ -51,10 +51,10 @@ public class AlertActivity extends AppCompatActivity {
         viewModel.getMyAlertStatus(userId);
         viewModel.getAlertLiveData().observe(this, alertResponse -> {
             if(alertResponse != null) {
-                uploadNofi = alertResponse.isUploadNofi();
-                shareNofi = alertResponse.isShareNofi();
-                eventNofi = alertResponse.isEventNofi();
-                Log.d(getClass().getSimpleName(), "업로드 알림: " + uploadNofi + ", 공유 알림: " + shareNofi + ", 이벤트 알림: " + eventNofi);
+                uploadNotification = alertResponse.isUploadNofi();
+                shareNotification = alertResponse.isShareNofi();
+                eventNotification = alertResponse.isEventNofi();
+                Log.d(getClass().getSimpleName(), "업로드 알림: " + uploadNotification + ", 공유 알림: " + shareNotification + ", 이벤트 알림: " + eventNotification);
             }
 
             loadToggleList();
@@ -82,9 +82,9 @@ public class AlertActivity extends AppCompatActivity {
     }
 
     private void loadToggleList() {
-        alertItems.add(new AlertItem(R.string.profile_alert_1_title, R.string.profile_alert_1_description, uploadNofi));
-        alertItems.add(new AlertItem(R.string.profile_alert_2_title, R.string.profile_alert_2_description, shareNofi));
-        alertItems.add(new AlertItem(R.string.profile_alert_3_title, R.string.profile_alert_3_description, eventNofi));
+        alertItems.add(new AlertItem(R.string.profile_alert_1_title, R.string.profile_alert_1_description, uploadNotification));
+        alertItems.add(new AlertItem(R.string.profile_alert_2_title, R.string.profile_alert_2_description, shareNotification));
+        alertItems.add(new AlertItem(R.string.profile_alert_3_title, R.string.profile_alert_3_description, eventNotification));
     }
 
     public void setNewUploadNofi(boolean newUploadNofi) {

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_profile_items"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/item_profile_items"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingStart="20dp"
-    android:paddingEnd="20dp"
     android:paddingTop="12dp"
+    android:paddingEnd="20dp"
     android:paddingBottom="12dp">
-
 
     <LinearLayout
         android:id="@+id/linearlayout_profile_icon_bg_sub"
@@ -29,14 +27,13 @@
 
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/textview_item_comment_sub_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/normal"
         android:layout_marginStart="10dp"
         android:textColor="@color/black"
+        android:textSize="@dimen/normal"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/linearlayout_profile_icon_bg_sub"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,35 +43,34 @@
         android:id="@+id/linearlayout_comment_sub_split"
         android:layout_width="6dp"
         android:layout_height="6dp"
-        android:layout_marginLeft="10dp"
-        android:orientation="horizontal"
+        android:layout_marginStart="10dp"
         android:background="@drawable/profile_icon_background"
         android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@id/textview_item_comment_sub_datetime"
         app:layout_constraintStart_toEndOf="@id/textview_item_comment_sub_username"
-        app:layout_constraintTop_toTopOf="@id/textview_item_comment_sub_datetime"/>
+        app:layout_constraintTop_toTopOf="@id/textview_item_comment_sub_datetime" />
 
     <TextView
         android:id="@+id/textview_item_comment_sub_datetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:textColor="@color/black"
         android:textSize="@dimen/small"
-        app:layout_constraintStart_toEndOf="@id/linearlayout_comment_sub_split"
         app:layout_constraintBottom_toBottomOf="@id/textview_item_comment_sub_username"
-        tools:text="5분 전"/>
+        app:layout_constraintStart_toEndOf="@id/linearlayout_comment_sub_split"
+        tools:text="5분 전" />
 
     <TextView
         android:id="@+id/textview_item_comment_sub_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:maxLines="3"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/textview_item_comment_sub_username"
-        app:layout_constraintStart_toStartOf="@id/textview_item_comment_sub_username"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="이것은 댓글입니다.이것은 댓글입니다.이것은 댓글입니다.이것은 댓글입니다."
-        android:maxLines="3"/>
-
+        app:layout_constraintStart_toStartOf="@id/textview_item_comment_sub_username"
+        app:layout_constraintTop_toBottomOf="@id/textview_item_comment_sub_username"
+        tools:text="이것은 댓글입니다.이것은 댓글입니다.이것은 댓글입니다.이것은 댓글입니다." />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,11 +14,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imagebutton_inquiry_detail_back"
+            android:id="@+id/image_button_inquiry_detail_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@null"
-            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
             android:layout_centerVertical="true"
             android:src="@drawable/header_back" />
 
@@ -33,7 +33,7 @@
             android:textStyle="bold"
             android:ellipsize="end"
             android:maxLines="1"
-            android:layout_toEndOf="@id/imagebutton_inquiry_detail_back"
+            android:layout_toEndOf="@id/image_button_inquiry_detail_back"
             android:layout_centerVertical="true"
             android:text="@string/activity_inquiry_detail_title" />
     </RelativeLayout>

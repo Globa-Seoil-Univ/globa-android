@@ -18,9 +18,9 @@ public class ThemeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.radiogroupThemeButtongroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.radiobutton_theme_lightmode) {
+            if (checkedId == R.id.radiobutton_theme_light_mode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            } else if (checkedId == R.id.radiobutton_theme_darkmode) {
+            } else if (checkedId == R.id.radiobutton_theme_dark_mode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else if(checkedId == R.id.radiobutton_theme_system) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);

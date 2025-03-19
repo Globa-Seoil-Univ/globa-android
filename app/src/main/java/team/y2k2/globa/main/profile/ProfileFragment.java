@@ -30,7 +30,7 @@ import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
 import team.y2k2.globa.main.ProfileImage;
-import team.y2k2.globa.main.profile.info.MyinfoActivity;
+import team.y2k2.globa.main.profile.info.MyInfoActivity;
 
 public class ProfileFragment extends Fragment {
     private final ProfileModel model;
@@ -109,7 +109,7 @@ public class ProfileFragment extends Fragment {
 
         binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
 
-            Intent intent = new Intent(binding.getRoot().getContext(), MyinfoActivity.class);
+            Intent intent = new Intent(binding.getRoot().getContext(), MyInfoActivity.class);
             if(resultLauncher != null) {
                 resultLauncher.launch(intent);
             }

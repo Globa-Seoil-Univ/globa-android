@@ -25,6 +25,7 @@
             android:id="@+id/imageview_folder_item_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/folder" />
     </LinearLayout>
 
@@ -34,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="2024 회의록"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
         android:textStyle="bold"

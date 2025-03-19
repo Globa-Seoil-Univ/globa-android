@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_profile"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,10 +18,10 @@
                 android:id="@+id/relativelayout_help_top"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:gravity="center">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/textView"
@@ -49,20 +48,20 @@
                     android:id="@+id/textview_profile_account_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:textColor="@color/black"
+                    android:layout_marginStart="20dp"
                     android:text="@string/main_my_info"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/large" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large"
+                    android:textStyle="bold" />
 
                 <RelativeLayout
                     android:id="@+id/relativelayout_profile_account_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textview_profile_account_title"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp">
 
                     <LinearLayout
                         android:id="@+id/linearlayout_profile_background"
@@ -84,30 +83,30 @@
                         android:id="@+id/textview_profile_account_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/normal"
-                        android:textColor="@color/black"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@+id/linearlayout_profile_background"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/normal"
                         tools:text="윤성빈" />
 
                     <TextView
                         android:id="@+id/textview_profile_account_usercode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/small"
-                        android:textColor="@color/darkGray"
-                        android:text="@string/profile_account_code"
+                        android:layout_below="@+id/textview_profile_account_username"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
-                        android:layout_below="@+id/textview_profile_account_username"
-                        android:layout_toEndOf="@+id/linearlayout_profile_background" />
+                        android:layout_toEndOf="@+id/linearlayout_profile_background"
+                        android:text="@string/profile_account_code"
+                        android:textColor="@color/darkGray"
+                        android:textSize="@dimen/small" />
 
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        android:src="@drawable/arrow_right"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/arrow_right" />
 
                 </RelativeLayout>
 
@@ -115,12 +114,12 @@
                     android:id="@+id/linearlayout_profile_border"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/lightGray"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginBottom="25dp"
                     android:layout_below="@+id/relativelayout_profile_account_user"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="25dp"
+                    android:background="@color/lightGray"
                     android:orientation="horizontal" />
 
 
@@ -133,24 +132,23 @@
                         android:id="@+id/textview_profile_setting_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:textColor="@color/black"
+                        android:layout_marginStart="20dp"
                         android:text="@string/setting"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/large" />
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/large"
+                        android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerview_profile_setting"
                         android:layout_width="match_parent"
-                        android:scrollbarFadeDuration="0"
-                        android:scrollbars="vertical"
                         android:layout_height="500dp"
+                        android:layout_below="@+id/textview_profile_setting_title"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:layout_below="@+id/textview_profile_setting_title" />
+                        android:scrollbarFadeDuration="0"
+                        android:scrollbars="vertical" />
                 </RelativeLayout>
             </RelativeLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,226 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/primary"
+    android:fitsSystemWindows="true"
     tools:context=".docs.quiz.result.QuizResultActivity">
 
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/layout_quizresult_header"
-      android:layout_width="match_parent"
-      android:layout_height="72dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      android:background="@color/primary">
-
-    <Button
-        android:id="@+id/button_quizresult_back"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/header_back"
-        android:backgroundTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_quiz_result_header"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button_quiz_result_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/header_back"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textview_quiz_result_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_regular"
+            android:text="@string/quiz"
+            android:textColor="@color/white"
+            android:textSize="@dimen/large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textview_quizresult_title"
+        android:id="@+id/textview_quiz_result_clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/notosans_regular"
-        android:text="@string/quiz"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/notosans_bold"
+        android:text="@string/activity_quiz_result_description"
         android:textColor="@color/white"
-        android:textSize="@dimen/large"
+        android:textSize="@dimen/big"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_quiz_result_header" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_quiz_result_details"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/quiz_details"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_quiz_result_clear">
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/quiz_clear" />
 
-  <TextView
-      android:id="@+id/textview_quizresult_clear"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/activity_quiz_result_description"
-      android:fontFamily="@font/notosans_bold"
-      android:textSize="@dimen/big"
-      android:textColor="@color/white"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/layout_quizresult_header"
-      android:layout_marginStart="20dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_quiz_result_total_score"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/item_docs_frame"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/layout_quiz_result_count"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/layout_quizresult_details"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:background="@drawable/quiz_details"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_quizresult_clear"
-      app:layout_constraintBottom_toBottomOf="parent"
-      android:layout_marginTop="30dp">
+            <View
+                android:id="@+id/view_quiz_result_score"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/quiz_score"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/quiz_clear"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"/>
+            <TextView
+                android:id="@+id/textview_quiz_result_score_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/notosans_bold"
+                android:text="@string/activity_quiz_result_score_title"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view_quiz_result_score"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_quizresult_totalscore"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:background="@drawable/item_docs_frame"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/layout_quizresult_count"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="12dp"
-        android:elevation="2dp" >
+            <TextView
+                android:id="@+id/textview_quiz_result_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/notosans_bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="80 점" />
 
-      <View
-          android:id="@+id/view_quizresult_score"
-          android:layout_width="35dp"
-          android:layout_height="35dp"
-          android:background="@drawable/quiz_score"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginStart="16dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-      <TextView
-          android:id="@+id/textview_quizresult_scoretitle"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/activity_quiz_result_score_title"
-          android:fontFamily="@font/notosans_bold"
-          android:textColor="@color/black"
-          android:textSize="@dimen/normal"
-          app:layout_constraintStart_toEndOf="@+id/view_quizresult_score"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginStart="8dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_quiz_result_count"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/item_docs_frame"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/layout_quiz_result_percent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-      <TextView
-          android:id="@+id/textview_quizresult_score"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          tools:text="80 점"
-          android:fontFamily="@font/notosans_bold"
-          android:textColor="@color/black"
-          android:textSize="@dimen/normal"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginEnd="16dp" />
+            <View
+                android:id="@+id/view_quiz_result_count"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/check"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textview_quiz_result_count_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/notosans_bold"
+                android:text="@string/activity_quiz_result_count_title"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view_quiz_result_count"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textview_quiz_result_correct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/notosans_bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="80 개" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_quiz_result_percent"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/item_docs_frame"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <View
+                android:id="@+id/view_quiz_result_thumb"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/quiz_thumb"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textview_quiz_result_percent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/notosans_bold"
+                android:maxLines="1"
+                android:text="@string/activity_quiz_result_description"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view_quiz_result_thumb"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_quizresult_count"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:background="@drawable/item_docs_frame"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/layout_quizresult_percent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="12dp"
-        android:elevation="2dp" >
-
-      <View
-          android:id="@+id/view_quizresult_count"
-          android:layout_width="30dp"
-          android:layout_height="30dp"
-          android:background="@drawable/check"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginStart="16dp" />
-
-      <TextView
-          android:id="@+id/textview_quizresult_counttitle"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/activity_quiz_result_count_title"
-          android:fontFamily="@font/notosans_bold"
-          android:textColor="@color/black"
-          android:textSize="@dimen/normal"
-          app:layout_constraintStart_toEndOf="@+id/view_quizresult_count"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginStart="8dp" />
-
-      <TextView
-          android:id="@+id/textview_quizresult_correct"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          tools:text="80 개"
-          android:fontFamily="@font/notosans_bold"
-          android:textColor="@color/black"
-          android:textSize="@dimen/normal"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginEnd="16dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_quizresult_percent"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:background="@drawable/item_docs_frame"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:elevation="2dp" >
-
-      <View
-          android:id="@+id/view_quizresult_thumb"
-          android:layout_width="30dp"
-          android:layout_height="30dp"
-          android:background="@drawable/quiz_thumb"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginStart="16dp" />
-
-      <TextView
-          android:id="@+id/textview_quizresult_percent"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:text="@string/activity_quiz_result_description"
-          android:fontFamily="@font/notosans_bold"
-          android:textColor="@color/black"
-          android:textSize="@dimen/normal"
-          android:ellipsize="end"
-          android:maxLines="1"
-          app:layout_constraintStart_toEndOf="@+id/view_quizresult_thumb"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginStart="8dp"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

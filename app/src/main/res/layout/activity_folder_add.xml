@@ -41,7 +41,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textview_folderadd_announce"
+        android:id="@+id/textview_folder_add_announce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/layout_folder_add_header" />
 
     <EditText
-        android:id="@+id/edittext_folderadd_inputname"
+        android:id="@+id/edittext_folder_add_input_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -66,33 +66,33 @@
         android:textSize="@dimen/normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_folderadd_announce" />
+        app:layout_constraintTop_toBottomOf="@id/textview_folder_add_announce" />
 
     <Button
-        android:id="@+id/button_folderadd_cancel"
+        android:id="@+id/button_folder_add_cancel"
         android:layout_width="17dp"
         android:layout_height="17dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/cancel"
         android:backgroundTint="@color/gray"
-        app:layout_constraintBottom_toBottomOf="@id/edittext_folderadd_inputname"
-        app:layout_constraintEnd_toEndOf="@id/edittext_folderadd_inputname"
-        app:layout_constraintTop_toTopOf="@id/edittext_folderadd_inputname" />
+        app:layout_constraintBottom_toBottomOf="@id/edittext_folder_add_input_name"
+        app:layout_constraintEnd_toEndOf="@id/edittext_folder_add_input_name"
+        app:layout_constraintTop_toTopOf="@id/edittext_folder_add_input_name" />
 
     <TextView
-        android:id="@+id/textview_folderadd_count"
+        android:id="@+id/textview_folder_add_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/gray"
         android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="@id/button_folderadd_cancel"
-        app:layout_constraintStart_toStartOf="@id/button_folderadd_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname"
+        app:layout_constraintEnd_toEndOf="@id/button_folder_add_cancel"
+        app:layout_constraintStart_toStartOf="@id/button_folder_add_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folder_add_input_name"
         tools:text="0/32" />
 
     <TextView
-        android:id="@+id/textview_folderadd_share_title"
+        android:id="@+id/textview_folder_add_share_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -102,10 +102,10 @@
         android:textColor="@color/black"
         android:textSize="@dimen/big"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_inputname" />
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folder_add_input_name" />
 
     <EditText
-        android:id="@+id/edittext_folderadd_share_inputname"
+        android:id="@+id/edittext_folder_add_share_input_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -118,35 +118,35 @@
         android:textSize="@dimen/normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_folderadd_share_title" />
+        app:layout_constraintTop_toBottomOf="@id/textview_folder_add_share_title" />
 
     <Button
-        android:id="@+id/button_foldershare_share_cancel"
+        android:id="@+id/button_folder_share_share_cancel"
         android:layout_width="17dp"
         android:layout_height="17dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/cancel"
         android:backgroundTint="@color/gray"
-        app:layout_constraintBottom_toBottomOf="@+id/edittext_folderadd_share_inputname"
-        app:layout_constraintEnd_toEndOf="@+id/edittext_folderadd_share_inputname"
-        app:layout_constraintTop_toTopOf="@+id/edittext_folderadd_share_inputname" />
+        app:layout_constraintBottom_toBottomOf="@+id/edittext_folder_add_share_input_name"
+        app:layout_constraintEnd_toEndOf="@+id/edittext_folder_add_share_input_name"
+        app:layout_constraintTop_toTopOf="@+id/edittext_folder_add_share_input_name" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintlayout_folderadd_share_search"
+        android:id="@+id/constraintlayout_folder_add_share_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/foldershare_item"
+        android:background="@drawable/folder_share_item"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_folderadd_share_inputname">
+        app:layout_constraintTop_toBottomOf="@+id/edittext_folder_add_share_input_name">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageview_folderadd_share_search"
+            android:id="@+id/imageview_folder_add_share_search"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/profile_user"
@@ -155,21 +155,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textview_folderadd_share_search"
+            android:id="@+id/textview_folder_add_share_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="@font/notosans_regular"
             android:textColor="@color/black"
             android:textSize="@dimen/large"
-            app:layout_constraintBottom_toBottomOf="@+id/imageview_folderadd_share_search"
-            app:layout_constraintStart_toEndOf="@+id/imageview_folderadd_share_search"
-            app:layout_constraintTop_toTopOf="@+id/imageview_folderadd_share_search" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_folder_add_share_search"
+            app:layout_constraintStart_toEndOf="@+id/imageview_folder_add_share_search"
+            app:layout_constraintTop_toTopOf="@+id/imageview_folder_add_share_search" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_folderadd_share_selected"
+        android:id="@+id/recyclerview_folder_add_share_selected"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -177,6 +177,6 @@
         android:layout_marginEnd="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_folderadd_share_search" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_folder_add_share_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

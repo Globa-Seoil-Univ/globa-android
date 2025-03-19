@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imagebutton_folder_permission_back"
+            android:id="@+id/image_button_folder_permission_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@null"

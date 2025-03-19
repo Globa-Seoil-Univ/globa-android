@@ -120,7 +120,7 @@ public class NotificationActivity extends AppCompatActivity {
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.framelayout_notification_content, fragment);
+        fragmentTransaction.replace(R.id.frame_layout_notification_content, fragment);
         fragmentTransaction.commit();
     }
 

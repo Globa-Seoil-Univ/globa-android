@@ -28,13 +28,13 @@ import okhttp3.RequestBody;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
-import team.y2k2.globa.databinding.ActivityMyinfoBinding;
+import team.y2k2.globa.databinding.ActivityMyInfoBinding;
 import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.main.profile.edit.NicknameEditActivity;
 import team.y2k2.globa.main.profile.withdraw.WithdrawActivity;
 
-public class MyinfoActivity extends AppCompatActivity {
-    private ActivityMyinfoBinding binding;
+public class MyInfoActivity extends AppCompatActivity {
+    private ActivityMyInfoBinding binding;
     private MyinfoAdapter myinfoAdapter;
     private MyinfoViewModel myInfoViewModel;
     private String profile, name, code, userId;
@@ -45,7 +45,7 @@ public class MyinfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMyinfoBinding.inflate(getLayoutInflater());
+        binding = ActivityMyInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         ApiClient apiClient = new ApiClient(this);
@@ -66,7 +66,7 @@ public class MyinfoActivity extends AppCompatActivity {
         });
 
         // 뷰 모델 갖고오기
-        myInfoViewModel = new ViewModelProvider(MyinfoActivity.this).get(MyinfoViewModel.class);
+        myInfoViewModel = new ViewModelProvider(MyInfoActivity.this).get(MyinfoViewModel.class);
 
         loadUserInfoList(myInfoViewModel);
 
@@ -119,7 +119,7 @@ public class MyinfoActivity extends AppCompatActivity {
     // 초기 화면 구성
     public void loadUserInfoList(MyinfoViewModel myInfoViewModel) {
         // 리사이클러뷰 레이아웃 매니저 설정
-        binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyinfoActivity.this));
+        binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyInfoActivity.this));
         // 리사이클러 뷰에 넣을 아이템 리스트
         List<MyInfoItem> itemList = new ArrayList<>();
 

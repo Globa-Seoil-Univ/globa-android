@@ -9,7 +9,7 @@
     tools:context=".main.folder.move.FolderMoveActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_foldermove_header"
+        android:id="@+id/layout_folder_move_header"
         android:layout_width="match_parent"
         android:layout_height="71dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/button_foldermove_back"
+            android:id="@+id/button_folder_move_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textview_foldermove_change"
+            android:id="@+id/textview_folder_move_change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add"
@@ -42,7 +42,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textview_foldermove_announce"
+        android:id="@+id/textview_folder_move_announce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/activity_folder_move_change_select"
@@ -50,17 +50,17 @@
         android:fontFamily="@font/notosans_bold"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_foldermove_header"
+        app:layout_constraintTop_toBottomOf="@+id/layout_folder_move_header"
         android:layout_marginStart="20dp" />
 
     <RadioGroup
-        android:id="@+id/group_foldermove_rediogroup"
+        android:id="@+id/group_folder_move_redio_group"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_foldermove_announce"
+        app:layout_constraintTop_toBottomOf="@+id/textview_folder_move_announce"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="16dp"/>

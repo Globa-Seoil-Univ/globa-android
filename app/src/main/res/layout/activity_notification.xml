@@ -15,13 +15,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imagebutton_notification_back"
+            android:id="@+id/image_button_notification_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
             android:layout_centerVertical="true"
             android:background="@null"
-            android:src="@drawable/header_back" />
+            android:importantForAccessibility="no" android:src="@drawable/header_back" />
 
         <TextView
             android:id="@+id/textview_notification_title"
@@ -356,7 +356,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:id="@+id/framelayout_notification_content"
+        android:id="@+id/frame_layout_notification_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"

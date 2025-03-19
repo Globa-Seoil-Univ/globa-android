@@ -26,11 +26,11 @@ import team.y2k2.globa.intro.IntroActivity;
 public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHolder> {
     private final List<MyInfoItem> itemList;
     private final ActivityResultLauncher<Intent> nicknameEditLauncher;
-    private final MyinfoActivity activity;
+    private final MyInfoActivity activity;
 
     private Context context;
 
-    public MyinfoAdapter(List<MyInfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher, MyinfoActivity activity) {
+    public MyinfoAdapter(List<MyInfoItem> itemList, ActivityResultLauncher<Intent> nicknameEditLauncher, MyInfoActivity activity) {
         this.itemList = itemList;
         this.nicknameEditLauncher = nicknameEditLauncher;
         this.activity = activity;
