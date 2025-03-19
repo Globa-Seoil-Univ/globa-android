@@ -53,6 +53,7 @@ public class FolderAddActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         folderShareActivityModel = new ViewModelProvider(this).get(FolderShareActivityModel.class);
+        folderShareActivityModel.setApiClient(this);
 
         apiClient = new ApiClient(this);
 

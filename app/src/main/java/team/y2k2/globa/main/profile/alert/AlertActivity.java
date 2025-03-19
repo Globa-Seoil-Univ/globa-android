@@ -43,6 +43,7 @@ public class AlertActivity extends AppCompatActivity {
         Log.d(getClass().getSimpleName(), "userId: " + userId);
 
         viewModel = new ViewModelProvider(this).get(AlertViewModel.class);
+        viewModel.setApiClient(this);
 
         viewModel.getMyAlertStatus(userId);
         viewModel.getAlertLiveData().observe(this, alertResponse -> {

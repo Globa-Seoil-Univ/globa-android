@@ -15,18 +15,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.model.request.NotificationTokenRequest;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
-
-import static team.y2k2.globa.api.ApiClient.apiService;
-import static team.y2k2.globa.api.ApiClient.authorization;
 
 public class MainModel {
     private final Activity activity;
+    private ApiClient apiClient;
 
     public MainModel(Activity activity) {
         this.activity = activity;
@@ -45,29 +40,20 @@ public class MainModel {
     }
 
     public String getUserInfo() {
-        ApiClient apiClient = new ApiClient(activity);
+        apiClient = new ApiClient(activity);
         UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
         return userInfoResponse.getUserId();
     }
 
     public void updateToken(String userId, String token, MainModelCallback callback) {
-        NotificationTokenRequest tokenRequest = new NotificationTokenRequest(token);
+        Response<Void> response = apiClient.updateToken(userId, token);
 
-        apiService.updateToken(userId, "application/json", authorization, tokenRequest).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    callback.onTokenUpdateSuccess();
-                } else {
-                    callback.onTokenUpdateFailure(response.code(), response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                callback.onTokenUpdateFailure(t);
-            }
-        });
+        if (response.isSuccessful()) {
+            callback.onTokenUpdateSuccess();
+        }
+        else {
+            callback.onTokenUpdateFailure(response.code(), response.message());
+        }
     }
 
     public String getUserAccessToken() {

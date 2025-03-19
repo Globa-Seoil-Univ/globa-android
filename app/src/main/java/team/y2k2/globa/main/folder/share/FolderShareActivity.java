@@ -65,6 +65,7 @@ public class FolderShareActivity extends AppCompatActivity {
 
         // 뷰모델 가져오기
         folderShareActivityModel = new ViewModelProvider(this).get(FolderShareActivityModel.class);
+        folderShareActivityModel.setApiClient(this);
 
         adapter = new FolderShareAdapter(itemList);
         binding.recyclerviewFolderShareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));

@@ -46,7 +46,8 @@ public class KeywordDetailActivity extends AppCompatActivity {
 
     public void loadAPIResponse() {
         KeywordDetailViewModel keywordDetailViewModel = new ViewModelProvider(this).get(KeywordDetailViewModel.class);
-        keywordDetailViewModel.searchKeyword(keyword);
+        keywordDetailViewModel.setApiClient(this);
+        keywordDetailViewModel.searchDictionary(keyword);
 
         keywordDetailViewModel.getKeywordDetailResponseLiveData().observe(KeywordDetailActivity.this, response -> {
             if (!response.getDictionary().isEmpty()) {
