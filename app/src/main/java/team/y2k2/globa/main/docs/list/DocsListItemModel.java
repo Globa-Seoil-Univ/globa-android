@@ -23,8 +23,8 @@ public class DocsListItemModel {
         items.add(item);
     }
 
-    public void addItems(List<Record> records){
-        for(Record record : records) {
+    public void addItems(List<Record> records) {
+        for (Record record : records) {
             String recordId = record.getRecordId();
             String folderId = record.getFolderId();
             String title = record.getTitle();

@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_main"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -19,8 +19,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="-20dp"
-                android:translationZ="5dp"
                 android:background="@drawable/main_bottom"
+                android:translationZ="5dp"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/relativelayout_keyword_detail_title">
@@ -29,13 +29,13 @@
                     android:id="@+id/recyclerview_keyword"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
                     android:clipToPadding="true"
                     android:scrollbarFadeDuration="0"
-                    android:scrollbars="vertical"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="20dp" />
+                    android:scrollbars="vertical" />
 
             </RelativeLayout>
 
@@ -52,8 +52,9 @@
                     android:id="@+id/imageview_keyword_detail_top"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="20dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/header_back_white" />
 
                 <TextView
@@ -97,31 +98,31 @@
                             android:id="@+id/textview_keyword_detail_word"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
                             android:layout_marginStart="20dp"
+                            android:layout_marginTop="30dp"
+                            android:text="@string/activity_keyword_detail_tools_title"
                             android:textColor="@color/white"
                             android:textSize="26dp"
-                            android:textStyle="bold"
-                            android:text="@string/activity_keyword_detail_tools_title"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/textview_keyword_detail_pronunciation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/lightGray"
-                            android:layout_marginStart="20dp"
                             android:layout_below="@+id/textview_keyword_detail_word"
-                            android:text="@string/activity_keyword_detail_tools_pronunciation"/>
+                            android:layout_marginStart="20dp"
+                            android:text="@string/activity_keyword_detail_tools_pronunciation"
+                            android:textColor="@color/lightGray" />
 
                         <TextView
                             android:id="@+id/textview_keyword_detail_source"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/lightGray"
-                            android:layout_marginEnd="20dp"
                             android:layout_alignTop="@id/textview_keyword_detail_pronunciation"
                             android:layout_alignParentEnd="true"
-                            android:text="@string/activity_keyword_detail_tools_source"/>
+                            android:layout_marginEnd="20dp"
+                            android:text="@string/activity_keyword_detail_tools_source"
+                            android:textColor="@color/lightGray" />
 
                     </RelativeLayout>
                 </RelativeLayout>

@@ -97,9 +97,7 @@ public class FolderInsideFragment extends Fragment {
     }
 
     private void navigateBack() {
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_view_main, FolderFragment.class, null)
-                .commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container_view_main, FolderFragment.class, null).commit();
         getParentFragmentManager().popBackStack();
     }
 
@@ -172,7 +170,7 @@ public class FolderInsideFragment extends Fragment {
     private void handleDeleteResponse(Integer responseCode) {
         if (responseCode != null && responseCode == 200) {
             navigateBack();
-        } else if (responseCode != null){
+        } else if (responseCode != null) {
             Toast.makeText(getContext(), "폴더 삭제 실패", Toast.LENGTH_SHORT).show();
             Log.d("폴더 삭제 실패", "폴더 삭제 실패 코드 : " + responseCode);
         }

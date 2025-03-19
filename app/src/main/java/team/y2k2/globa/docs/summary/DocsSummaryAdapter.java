@@ -20,6 +20,17 @@ public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.
         this.items = items;
     }
 
+    public static String formatDuration(int durationSecond) {
+        int hours = durationSecond / 3600;
+        durationSecond %= 3600;
+
+        int minutes = durationSecond / 60;
+        int seconds = durationSecond % 60;
+
+        if (hours > 0) return String.format("%2d:%02d:%02d", hours, minutes, seconds);
+        else return String.format("%02d:%02d", minutes, seconds);
+    }
+
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,6 +56,7 @@ public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.
     public int getItemCount() {
         return (null != items ? items.size() : 0);
     }
+
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView time;
@@ -57,18 +69,5 @@ public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.
             time = itemView.findViewById(R.id.textview_item_docs_summary_time);
             descriptions = itemView.findViewById(R.id.recyclerview_item_docs_summary_description);
         }
-    }
-
-    public static String formatDuration(int durationSecond) {
-        int hours = durationSecond / 3600;
-        durationSecond %= 3600;
-
-        int minutes = durationSecond / 60;
-        int seconds = durationSecond % 60;
-
-        if(hours > 0)
-            return String.format("%2d:%02d:%02d", hours, minutes, seconds);
-        else
-            return String.format("%02d:%02d", minutes, seconds);
     }
 }

@@ -42,19 +42,18 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        int adapterPosition = position;
 
-        String title = items.get(adapterPosition).getTitle();
-        String datetime = getDateFormat(items.get(adapterPosition).getDatetime());
+        String title = items.get(position).getTitle();
+        String datetime = getDateFormat(items.get(position).getDatetime());
 
         holder.title.setText(title);
         holder.datetime.setText(datetime);
 
         holder.layout.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("folderId", items.get(adapterPosition).getFolderId());
-            bundle.putString("folderTitle", items.get(adapterPosition).getTitle());
-            bundle.putString("folderDatetime", items.get(adapterPosition).getDatetime());
+            bundle.putInt("folderId", items.get(position).getFolderId());
+            bundle.putString("folderTitle", items.get(position).getTitle());
+            bundle.putString("folderDatetime", items.get(position).getDatetime());
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 
@@ -67,7 +66,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
             builder.setMessage("폴더를 삭제하시겠습니까?");
 
             builder.setPositiveButton("예", (dialog, which) -> {
-                deleteFolder(adapterPosition);
+                deleteFolder(position);
                 Toast.makeText(activity, "폴더를 삭제했습니다", Toast.LENGTH_LONG).show();
             });
             builder.setNegativeButton("아니오", null);

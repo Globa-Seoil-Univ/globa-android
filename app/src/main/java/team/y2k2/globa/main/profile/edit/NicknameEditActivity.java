@@ -18,8 +18,8 @@ import team.y2k2.globa.databinding.ActivityNicknameEditBinding;
 public class NicknameEditActivity extends AppCompatActivity {
 
     ActivityNicknameEditBinding binding;
-    private NicknameEditViewModel nicknameEditViewModel;
     boolean isChanged = false;
+    private NicknameEditViewModel nicknameEditViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,25 +35,25 @@ public class NicknameEditActivity extends AppCompatActivity {
     }
 
     private void initializeUI(String userId, String currentName) {
-        binding.buttonNicknameeditBack.setOnClickListener(v -> finish());
-        binding.edittextNicknameeditInputname.setText(currentName);
-        int currentNameCount = binding.edittextNicknameeditInputname.getText().length();
-        binding.textviewNicknameeditCount.setText(currentNameCount + "/32");
-        binding.edittextNicknameeditInputname.addTextChangedListener(new TextWatcher() {
+        binding.buttonNicknameEditBack.setOnClickListener(v -> finish());
+        binding.edittextNicknameEditInputName.setText(currentName);
+        int currentNameCount = binding.edittextNicknameEditInputName.getText().length();
+        binding.textviewNicknameEditCount.setText(currentNameCount + "/32");
+        binding.edittextNicknameEditInputName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // 텍스트 변경 전
-                binding.textviewNicknameeditChange.setTextColor(Color.GRAY);
+                binding.textviewNicknameEditChange.setTextColor(Color.GRAY);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // 텍스트 변경
                 int color = ContextCompat.getColor(NicknameEditActivity.this, R.color.primary);
-                binding.textviewNicknameeditChange.setTextColor(color);
-                binding.textviewNicknameeditCount.setText(s.length() + "/32");
+                binding.textviewNicknameEditChange.setTextColor(color);
+                binding.textviewNicknameEditCount.setText(s.length() + "/32");
                 isChanged = true;
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     binding.buttonNicknameEditCancel.setVisibility(View.GONE);
                 } else {
                     binding.buttonNicknameEditCancel.setVisibility(View.VISIBLE);
@@ -63,32 +63,32 @@ public class NicknameEditActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 // 텍스트 변경 후
-                if(s.length() > 32) {
-                    binding.edittextNicknameeditInputname.removeTextChangedListener(this);
+                if (s.length() > 32) {
+                    binding.edittextNicknameEditInputName.removeTextChangedListener(this);
                     String text = s.toString().substring(0, 32);
-                    binding.edittextNicknameeditInputname.setText(text);
-                    binding.edittextNicknameeditInputname.setSelection(text.length());
-                    binding.edittextNicknameeditInputname.addTextChangedListener(this);
+                    binding.edittextNicknameEditInputName.setText(text);
+                    binding.edittextNicknameEditInputName.setSelection(text.length());
+                    binding.edittextNicknameEditInputName.addTextChangedListener(this);
                 }
-                if(s.length() <= 32) {
-                    binding.textviewNicknameeditCount.setText(s.length() + "/32");
-                    binding.textviewNicknameeditChange.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                if (s.length() <= 32) {
+                    binding.textviewNicknameEditCount.setText(s.length() + "/32");
+                    binding.textviewNicknameEditChange.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 }
-                if(s.length() == 0) {
-                    binding.textviewNicknameeditChange.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                if (s.length() == 0) {
+                    binding.textviewNicknameEditChange.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
             }
         });
 
         // 변경 버튼
-        binding.textviewNicknameeditChange.setOnClickListener(v -> {
-            if(isChanged) {
-                if(binding.edittextNicknameeditInputname.getText().toString().isEmpty()) {
+        binding.textviewNicknameEditChange.setOnClickListener(v -> {
+            if (isChanged) {
+                if (binding.edittextNicknameEditInputName.getText().toString().isEmpty()) {
                     Toast.makeText(this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String newNickname = binding.edittextNicknameeditInputname.getText().toString();
-                nicknameEditViewModel.updateNickname(this,userId, newNickname);
+                String newNickname = binding.edittextNicknameEditInputName.getText().toString();
+                nicknameEditViewModel.updateNickname(this, userId, newNickname);
                 onNicknameChanged(newNickname);
             } else {
                 Toast.makeText(this, "이름이 변경되지 않았습니다", Toast.LENGTH_SHORT).show();
@@ -97,10 +97,10 @@ public class NicknameEditActivity extends AppCompatActivity {
 
         // 글자 모두 지우기 버튼
         binding.buttonNicknameEditCancel.setOnClickListener(v -> {
-            if(binding.edittextNicknameeditInputname.getText().toString().isEmpty()){
+            if (binding.edittextNicknameEditInputName.getText().toString().isEmpty()) {
                 binding.buttonNicknameEditCancel.setVisibility(View.GONE);
             } else {
-                binding.edittextNicknameeditInputname.setText("");
+                binding.edittextNicknameEditInputName.setText("");
             }
         });
     }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/constraintlayout_notification"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintlayout_notification"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/relativelayout_notification_title"
@@ -18,10 +18,11 @@
             android:id="@+id/image_button_notification_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="20dp"
             android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
             android:background="@null"
-            android:importantForAccessibility="no" android:src="@drawable/header_back" />
+            android:importantForAccessibility="no"
+            android:src="@drawable/header_back" />
 
         <TextView
             android:id="@+id/textview_notification_title"
@@ -42,48 +43,48 @@
         android:id="@+id/constraintlayout_notification_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativelayout_notification_title"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_notification_title">
 
         <TextView
             android:id="@+id/textview_notification_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/all_info"
+            android:layout_marginStart="5dp"
             android:fontFamily="@font/notosans_regular"
+            android:text="@string/all_info"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_light"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="5dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintlayout_notification_total_circle"
             android:layout_width="19dp"
             android:layout_height="19dp"
-            android:background="@drawable/circle_grey"
-            app:layout_constraintStart_toEndOf="@+id/textview_notification_total"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/circle_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textview_notification_total"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textview_notification_total_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0"
                 android:fontFamily="@font/notosans_regular"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                tools:text="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,13 +92,13 @@
             android:id="@+id/linearlayout_notification_total_underline"
             android:layout_width="0dp"
             android:layout_height="3dp"
+            android:layout_marginTop="3dp"
             android:background="@color/primary"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview_notification_total"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="3dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_notification_total" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -105,48 +106,48 @@
         android:id="@+id/constraintlayout_notification_notice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/constraintlayout_notification_total"
-        app:layout_constraintTop_toTopOf="@+id/constraintlayout_notification_total"
+        android:layout_marginStart="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/constraintlayout_notification_total"
-        android:layout_marginStart="12dp">
+        app:layout_constraintStart_toEndOf="@+id/constraintlayout_notification_total"
+        app:layout_constraintTop_toTopOf="@+id/constraintlayout_notification_total">
 
         <TextView
             android:id="@+id/textview_notification_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/notice"
+            android:layout_marginStart="5dp"
             android:fontFamily="@font/notosans_regular"
+            android:text="@string/notice"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_light"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="5dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintlayout_notification_notice_circle"
             android:layout_width="19dp"
             android:layout_height="19dp"
-            android:background="@drawable/circle_grey"
-            app:layout_constraintStart_toEndOf="@+id/textview_notification_notice"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/circle_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textview_notification_notice"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textview_notification_notice_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0"
                 android:fontFamily="@font/notosans_regular"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                tools:text="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -154,13 +155,13 @@
             android:id="@+id/linearlayout_notification_notice_underline"
             android:layout_width="0dp"
             android:layout_height="3dp"
+            android:layout_marginTop="3dp"
             android:background="@color/primary"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview_notification_notice"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="3dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_notification_notice" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -168,48 +169,48 @@
         android:id="@+id/constraintlayout_notification_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/constraintlayout_notification_notice"
-        app:layout_constraintTop_toTopOf="@+id/constraintlayout_notification_notice"
+        android:layout_marginStart="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/constraintlayout_notification_notice"
-        android:layout_marginStart="12dp">
+        app:layout_constraintStart_toEndOf="@+id/constraintlayout_notification_notice"
+        app:layout_constraintTop_toTopOf="@+id/constraintlayout_notification_notice">
 
         <TextView
             android:id="@+id/textview_notification_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/share"
+            android:layout_marginStart="5dp"
             android:fontFamily="@font/notosans_regular"
+            android:text="@string/share"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_light"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="5dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintlayout_notification_share_circle"
             android:layout_width="19dp"
             android:layout_height="19dp"
-            android:background="@drawable/circle_grey"
-            app:layout_constraintStart_toEndOf="@+id/textview_notification_share"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/circle_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textview_notification_share"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textview_notification_share_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0"
                 android:fontFamily="@font/notosans_regular"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                tools:text="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -217,13 +218,13 @@
             android:id="@+id/linearlayout_notification_share_underline"
             android:layout_width="0dp"
             android:layout_height="3dp"
+            android:layout_marginTop="3dp"
             android:background="@color/primary"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview_notification_share"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="3dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_notification_share" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -231,64 +232,63 @@
         android:id="@+id/constraintlayout_notification_docs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/constraintlayout_notification_share"
-        app:layout_constraintTop_toTopOf="@+id/constraintlayout_notification_share"
+        android:layout_marginStart="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/constraintlayout_notification_share"
-        android:layout_marginStart="12dp">
+        app:layout_constraintStart_toEndOf="@+id/constraintlayout_notification_share"
+        app:layout_constraintTop_toTopOf="@+id/constraintlayout_notification_share">
 
         <TextView
             android:id="@+id/textview_notification_docs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/docs"
+            android:layout_marginStart="5dp"
             android:fontFamily="@font/notosans_regular"
+            android:text="@string/docs"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_light"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="5dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintlayout_notification_docs_circle"
             android:layout_width="19dp"
             android:layout_height="19dp"
-            android:background="@drawable/circle_grey"
-            app:layout_constraintStart_toEndOf="@+id/textview_notification_docs"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/circle_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textview_notification_docs"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textview_notification_docs_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0"
                 android:fontFamily="@font/notosans_regular"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                tools:text="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         <LinearLayout
             android:id="@+id/linearlayout_notification_docs_underline"
             android:layout_width="0dp"
             android:layout_height="3dp"
+            android:layout_marginTop="3dp"
             android:background="@color/primary"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview_notification_docs"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="3dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_notification_docs" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -296,48 +296,48 @@
         android:id="@+id/constraintlayout_notification_inquiry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/constraintlayout_notification_docs"
-        app:layout_constraintTop_toTopOf="@+id/constraintlayout_notification_docs"
+        android:layout_marginStart="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/constraintlayout_notification_docs"
-        android:layout_marginStart="12dp">
+        app:layout_constraintStart_toEndOf="@+id/constraintlayout_notification_docs"
+        app:layout_constraintTop_toTopOf="@+id/constraintlayout_notification_docs">
 
         <TextView
             android:id="@+id/textview_notification_inquiry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/inquiry"
+            android:layout_marginStart="5dp"
             android:fontFamily="@font/notosans_regular"
+            android:text="@string/inquiry"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_light"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="5dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintlayout_notification_inquiry_circle"
             android:layout_width="19dp"
             android:layout_height="19dp"
-            android:background="@drawable/circle_grey"
-            app:layout_constraintStart_toEndOf="@+id/textview_notification_inquiry"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/circle_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textview_notification_inquiry"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textview_notification_inquiry_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0"
                 android:fontFamily="@font/notosans_regular"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                tools:text="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -345,13 +345,13 @@
             android:id="@+id/linearlayout_notification_inquiry_underline"
             android:layout_width="0dp"
             android:layout_height="3dp"
+            android:layout_marginTop="3dp"
             android:background="@color/primary"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview_notification_inquiry"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="3dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_notification_inquiry" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -359,9 +359,9 @@
         android:id="@+id/frame_layout_notification_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_notification_total"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_notification_total" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

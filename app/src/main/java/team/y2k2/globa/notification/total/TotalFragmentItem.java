@@ -29,30 +29,39 @@ public class TotalFragmentItem {
     public String getNotificationId() {
         return notificationId;
     }
+
     public String getProfile() {
         return profile;
     }
+
     public String getTitle() {
         return title;
     }
+
     public String getContent() {
         return content;
     }
+
     public String getCreatedTime() {
         return createdTime;
     }
+
     public String getFolderId() {
         return folderId;
     }
+
     public String getShareId() {
         return shareId;
     }
+
     public String getInquiryId() {
         return inquiryId;
     }
+
     public String getType() {
         return type;
     }
+
     public boolean isRead() {
         return isRead;
     }

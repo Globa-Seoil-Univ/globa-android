@@ -10,6 +10,7 @@ import team.y2k2.globa.main.profile.alert.AlertActivity;
 
 public class SystemDB extends SQLiteOpenHelper {
     private final SQLiteDatabase sqlDB;
+
     public SystemDB(Context context) {
         super(context, "system", null, 1);
         sqlDB = this.getWritableDatabase();
@@ -17,9 +18,7 @@ public class SystemDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE system("
-                +"systemName VARCHAR(30) PRIMARY KEY,"
-                +"systemClassName VARCHAR(50));";
+        String sql = "CREATE TABLE system(" + "systemName VARCHAR(30) PRIMARY KEY," + "systemClassName VARCHAR(50));";
 
         db.execSQL(sql);
     }
@@ -39,15 +38,12 @@ public class SystemDB extends SQLiteOpenHelper {
         }
     }
 
-    public void onDefault(){
-        String[] systemsSQL = {
-                "INSERT INTO system VALUES(" + R.string.profile_alert_setting + "," + AlertActivity.class.getName() + ");",
-                "INSERT INTO system VALUES("
-        };
+    public void onDefault() {
+        String[] systemsSQL = {"INSERT INTO system VALUES(" + R.string.profile_alert_setting + "," + AlertActivity.class.getName() + ");", "INSERT INTO system VALUES("};
     }
 
     private boolean isSystemExists(String systemName) {
-        Cursor cursor = sqlDB.rawQuery("SELECT * FROM system WHERE systemName LIKE '"+ systemName +"';", null);
+        Cursor cursor = sqlDB.rawQuery("SELECT * FROM system WHERE systemName LIKE '" + systemName + "';", null);
         cursor.close();
         return cursor.getCount() == 0;
     }

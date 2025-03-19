@@ -2,11 +2,11 @@ package team.y2k2.globa.docs.detail.comment.subcomment;
 
 public class DocsDetailSubCommentItem {
 
+    private final String commentId;
     private String profile;
     private String name;
     private String createdTime;
     private String content;
-    private final String commentId;
     private boolean deleted;
 
     public DocsDetailSubCommentItem(String profile, String name, String createdTime, String content, String commentId, boolean deleted) {
@@ -21,34 +21,41 @@ public class DocsDetailSubCommentItem {
     public String getProfile() {
         return profile;
     }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getCreatedTime() {
         return createdTime;
     }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
     public String getContent() {
         return content;
     }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public String getCommentId() {
         return commentId;
     }
 
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
-    }
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public void setDeleted(boolean deleted) {

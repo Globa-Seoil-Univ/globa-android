@@ -38,7 +38,7 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         FolderShareItem item = itemList.get(position);
-        if(!item.getImage().isEmpty()) {
+        if (!item.getImage().isEmpty()) {
             Glide.with(context).load(item.getImage()).error(R.drawable.profile_user).into(holder.image);
         } else {
             Glide.with(context).load(R.mipmap.ic_launcher).error(R.drawable.profile_user).into(holder.image);
@@ -58,7 +58,7 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
     }
 
     public void removeItem(int position) {
-        if(position >= 0 && position < itemList.size()) {
+        if (position >= 0 && position < itemList.size()) {
             itemList.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, itemList.size());
@@ -71,8 +71,8 @@ public class FolderShareAdapter extends RecyclerView.Adapter<FolderShareAdapter.
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.imageview_foldershare_profile_item);
-            layout = itemView.findViewById(R.id.constraintlayout_foldershare_item);
+            image = itemView.findViewById(R.id.imageview_folder_share_profile_item);
+            layout = itemView.findViewById(R.id.constraintlayout_folder_share_item);
         }
     }
 }

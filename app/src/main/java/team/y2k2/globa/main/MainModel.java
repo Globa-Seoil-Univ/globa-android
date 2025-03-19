@@ -124,9 +124,13 @@ public class MainModel {
 
     public interface MainModelCallback {
         void onTokenUpdateSuccess();
+
         void onTokenUpdateFailure(int code, String message);
+
         void onTokenUpdateFailure(Throwable t);
+
         void onTokenFailure(Exception e);
+
         void onRecordUploadReady(String audioPath, String audioName);
     }
 }

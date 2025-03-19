@@ -16,9 +16,8 @@ import java.util.ArrayList;
 import team.y2k2.globa.R;
 
 public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.AdapterViewHolder> {
-    private final ArrayList<AlertItem> items;
     final AlertActivity activity;
-
+    private final ArrayList<AlertItem> items;
     private boolean isUploadChecked, isShareChecked, isEventChecked;
 
     public AlertItemAdapter(ArrayList<AlertItem> items, AlertActivity activity) {
@@ -32,7 +31,7 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alert,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alert, parent, false);
         return new AdapterViewHolder(view);
     }
 
@@ -49,17 +48,17 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
             switch (position) {
                 case 0:
                     isUploadChecked = isChecked;
-                    if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("notification");
+                    if (isChecked) FirebaseMessaging.getInstance().subscribeToTopic("notification");
                     else FirebaseMessaging.getInstance().unsubscribeFromTopic("notification");
                     break;
                 case 1:
                     isShareChecked = isChecked;
-                    if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("notification");
+                    if (isChecked) FirebaseMessaging.getInstance().subscribeToTopic("notification");
                     else FirebaseMessaging.getInstance().unsubscribeFromTopic("notification");
                     break;
                 case 2:
                     isEventChecked = isChecked;
-                    if(isChecked) FirebaseMessaging.getInstance().subscribeToTopic("event");
+                    if (isChecked) FirebaseMessaging.getInstance().subscribeToTopic("event");
                     else FirebaseMessaging.getInstance().unsubscribeFromTopic("event");
                     break;
             }
@@ -70,6 +69,18 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
     @Override
     public int getItemCount() {
         return (null != items ? items.size() : 0);
+    }
+
+    public boolean isUploadChecked() {
+        return isUploadChecked;
+    }
+
+    public boolean isShareChecked() {
+        return isShareChecked;
+    }
+
+    public boolean isEventChecked() {
+        return isEventChecked;
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
@@ -85,15 +96,5 @@ public class AlertItemAdapter extends RecyclerView.Adapter<AlertItemAdapter.Adap
             toggle = itemView.findViewById(R.id.switch_alert);
 
         }
-    }
-
-    public boolean isUploadChecked() {
-        return isUploadChecked;
-    }
-    public boolean isShareChecked() {
-        return isShareChecked;
-    }
-    public boolean isEventChecked() {
-        return isEventChecked;
     }
 }

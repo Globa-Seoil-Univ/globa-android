@@ -10,13 +10,15 @@ public class FocusViewModel extends ViewModel {
     public MutableLiveData<Boolean> getCommentFocusLiveData() {
         return commentFocusLiveData;
     }
-    public MutableLiveData<Boolean> getSubCommentFocusLiveData() {
-        return subCommentFocusLiveData;
-    }
 
     public void setCommentFocusLiveData(boolean hasFocus) {
         commentFocusLiveData.setValue(hasFocus);
     }
+
+    public MutableLiveData<Boolean> getSubCommentFocusLiveData() {
+        return subCommentFocusLiveData;
+    }
+
     public void setSubCommentFocusLiveData(boolean hasFocus) {
         subCommentFocusLiveData.setValue(hasFocus);
     }

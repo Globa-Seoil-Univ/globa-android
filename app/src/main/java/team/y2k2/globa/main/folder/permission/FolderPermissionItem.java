@@ -3,9 +3,9 @@ package team.y2k2.globa.main.folder.permission;
 public class FolderPermissionItem {
     private final String name;
     private final String profileImageUrl;
-    private int selectedOption;
     private final int shareId;
     private final int userId;
+    private int selectedOption;
 
     public FolderPermissionItem(String name, String profileImageUrl, int selectedOption, int shareId, int userId) {
         this.name = name;

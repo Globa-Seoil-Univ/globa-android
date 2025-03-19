@@ -11,6 +11,7 @@ import java.util.List;
 
 import team.y2k2.globa.databinding.ItemDocsBinding;
 import team.y2k2.globa.docs.DocsActivity;
+
 import android.content.Intent;
 
 public class SearchDocsAdapter extends RecyclerView.Adapter<SearchDocsAdapter.ViewHolder> {

@@ -33,7 +33,7 @@ public class AlertViewModel extends ViewModel {
         apiService.getMyAlertStatus(userId, APPLICATION_JSON, authorization).enqueue(new Callback<AlertResponse>() {
             @Override
             public void onResponse(Call<AlertResponse> call, Response<AlertResponse> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     alertLiveData.setValue(response.body());
                     Log.d(getClass().getSimpleName(), "내 알림 정보 요청 결과: " + response.code());
                 } else {
@@ -53,7 +53,7 @@ public class AlertViewModel extends ViewModel {
         apiService.requestAlertStatus(userId, APPLICATION_JSON, authorization, alertRequest).enqueue(new Callback<AlertResponse>() {
             @Override
             public void onResponse(Call<AlertResponse> call, Response<AlertResponse> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Log.d(getClass().getSimpleName(), "알림 수정 요청 완료: " + response.code());
                 } else {
                     Log.d(getClass().getSimpleName(), "알림 수정 요청 실패: " + response.code());

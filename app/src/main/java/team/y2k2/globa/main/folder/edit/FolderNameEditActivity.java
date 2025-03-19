@@ -19,6 +19,7 @@ public class FolderNameEditActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         viewModel = new ViewModelProvider(this).get(FolderNameEditActivityModel.class);
+        viewModel.setApiClient(this);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 

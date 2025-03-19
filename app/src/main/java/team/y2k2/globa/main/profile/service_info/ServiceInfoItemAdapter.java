@@ -28,7 +28,7 @@ public class ServiceInfoItemAdapter extends RecyclerView.Adapter<ServiceInfoItem
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service_info,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service_info, parent, false);
         return new AdapterViewHolder(view);
     }
 
@@ -39,12 +39,11 @@ public class ServiceInfoItemAdapter extends RecyclerView.Adapter<ServiceInfoItem
 
         String url = items.get(position).getUrl();
 
-        if(url != null)
-            holder.layout.setOnClickListener(view -> {
-                Intent intent = new Intent(activity, WebViewActivity.class);
-                intent.putExtra("url", url);
-                activity.startActivity(intent);
-            });
+        if (url != null) holder.layout.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, WebViewActivity.class);
+            intent.putExtra("url", url);
+            activity.startActivity(intent);
+        });
 
     }
 

@@ -1,7 +1,6 @@
 package team.y2k2.globa.main.profile;
 
 
-
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,7 @@ public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_profile,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_profile, parent, false);
         return new AdapterViewHolder(view);
     }
 
@@ -41,7 +40,7 @@ public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.
         holder.icon.setImageResource(items.get(position).getIcon());
         holder.title.setText(items.get(position).getName());
 
-        if(items.get(position).getActivity() == null) {
+        if (items.get(position).getActivity() == null) {
             final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(holder.layout.getContext());
             bottomSheetDialog.setContentView(R.layout.dialog_setting_clean_data);
 

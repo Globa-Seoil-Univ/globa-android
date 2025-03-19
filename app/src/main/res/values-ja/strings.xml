@@ -170,12 +170,12 @@
     <string name="conditions_details_no4_3_a">필수 수집 정보 : 이름, 닉네임</string>
     <string name="conditions_details_no4_3_b">선택 수집 정보 : 프로필 사진</string>
 
-    <string name="folderadd_dialog_title">共有方法を選択してください。</string>
-    <string name="folderadd_dialog_detail">リンク共有はリンクを持つ誰でも見ることができ、\nメンバー共有は招待された人だけが見ることができ、権限の修正ができます。</string>
-    <string name="foldershare_dialog_title">権限を選択してください。</string>
+    <string name="folder_add_dialog_title">共有方法を選択してください。</string>
+    <string name="folder_add_dialog_detail">リンク共有はリンクを持つ誰でも見ることができ、\nメンバー共有は招待された人だけが見ることができ、権限の修正ができます。</string>
+    <string name="folder_share_dialog_title">権限を選択してください。</string>
 
-    <string name="foldershare_dialog_read">読み取り権限</string>
-    <string name="foldershare_dialog_write">書き込み権限</string>
+    <string name="folder_share_dialog_read">読み取り権限</string>
+    <string name="folder_share_dialog_write">書き込み権限</string>
 
     <string name="activity_folder_move_change_select">フォルダを選択してください。</string>
     <string name="long_title">タイトルをもっと短く書いてください。</string>

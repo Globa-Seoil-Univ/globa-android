@@ -57,36 +57,24 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
 
         TotalFragmentItem item = items.get(position);
 
-        if(item.getProfile() != null) {
+        if (item.getProfile() != null) {
             Log.d("이미지 경로", "이미지 경로: " + item.getProfile());
-            if(item.getProfile().startsWith("http")) {
-                Glide.with(holder.itemView.getContext())
-                        .load(item.getProfile())
-                        .error(R.drawable.profile_user)
-                        .into(holder.profileImage);
+            if (item.getProfile().startsWith("http")) {
+                Glide.with(holder.itemView.getContext()).load(item.getProfile()).error(R.drawable.profile_user).into(holder.profileImage);
             } else {
-                if(!item.getProfile().isEmpty()) {
+                if (!item.getProfile().isEmpty()) {
                     StorageReference imageRef = storage.getReference().child(item.getProfile());
-                    Glide.with(holder.itemView.getContext())
-                            .load(ProfileImage.convertGsToHttps(imageRef.toString()))
-                            .error(R.drawable.profile_user)
-                            .into(holder.profileImage);
+                    Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.drawable.profile_user).into(holder.profileImage);
                 } else {
-                    Glide.with(holder.itemView.getContext())
-                            .load(R.drawable.profile_user)
-                            .error(R.drawable.profile_user)
-                            .into(holder.profileImage);
+                    Glide.with(holder.itemView.getContext()).load(R.drawable.profile_user).error(R.drawable.profile_user).into(holder.profileImage);
                 }
             }
         } else {
             // 프로필이 없을 때
-            Glide.with(holder.itemView.getContext())
-                    .load(R.drawable.profile_user)
-                    .error(R.drawable.profile_user)
-                    .into(holder.profileImage);
+            Glide.with(holder.itemView.getContext()).load(R.drawable.profile_user).error(R.drawable.profile_user).into(holder.profileImage);
             Log.d("알림 프로필", "알림 프로필 없음, 아이템 위치: " + position);
         }
-        
+
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
@@ -94,13 +82,13 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
         holder.layout.setOnClickListener(v -> {
             Log.d("아이템 클릭", "아이템 클릭 타입: " + item.getType());
             // 알림 읽음 표시
-            if(!item.isRead()) {
+            if (!item.isRead()) {
                 Log.d("알림 읽음", "전체 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
                 notificationViewModel.readNotification(item.getNotificationId());
             }
 
-            if(item.getType().equals("8")) {
+            if (item.getType().equals("8")) {
                 Intent intent = new Intent(activity, InquiryDetailActivity.class);
                 Log.d(getClass().getSimpleName(), "문의 아이디: " + item.getInquiryId());
                 intent.putExtra("inquiryId", item.getInquiryId());
@@ -109,14 +97,14 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
 
         });
 
-        if(!item.isRead()) {
+        if (!item.isRead()) {
             holder.layout.setBackgroundColor(primaryColor);
         } else {
             holder.layout.setBackgroundColor(whiteColor);
         }
 
 
-        if(item.getType().equals("2")) {
+        if (item.getType().equals("2")) {
             // 공유 초대 알림
             holder.confirmBtn.setOnClickListener(v -> {
                 // 공유 수락 버튼 이벤트
@@ -142,7 +130,7 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
             holder.cancelBtn.setVisibility(View.GONE);
         }
 
-        if(item.getContent().isEmpty()) {
+        if (item.getContent().isEmpty()) {
             holder.content.setVisibility(View.GONE);
         } else {
             holder.content.setVisibility(View.VISIBLE);
@@ -172,7 +160,7 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
             profileImage = itemView.findViewById(R.id.imageview_item_notification_total);
             title = itemView.findViewById(R.id.textview_item_notification_total_title);
             content = itemView.findViewById(R.id.textview_item_notification_total_content);
-            createdTime = itemView.findViewById(R.id.textview_item_notification_total_createdtime);
+            createdTime = itemView.findViewById(R.id.textview_item_notification_total_created_time);
             confirmBtn = itemView.findViewById(R.id.button_item_notification_total_access);
             cancelBtn = itemView.findViewById(R.id.button_item_notification_total_denied);
         }

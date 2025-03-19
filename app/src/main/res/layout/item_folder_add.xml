@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/constraintlayout_folderadd_item"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintlayout_folder_add_item"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageview_folderadd_profile"
+        android:id="@+id/imageview_folder_add_profile"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@mipmap/ic_launcher_round"
@@ -15,33 +14,30 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_folderadd_minusbutton"
+        android:id="@+id/layout_folder_add_minus_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/imageview_folderadd_profile"
-        app:layout_constraintBottom_toBottomOf="@+id/imageview_folderadd_profile" >
+        app:layout_constraintBottom_toBottomOf="@+id/imageview_folder_add_profile"
+        app:layout_constraintEnd_toEndOf="@+id/imageview_folder_add_profile">
 
         <View
-            android:id="@+id/view_folderadd_redcircle"
+            android:id="@+id/view_folder_add_red_circle"
             android:layout_width="13dp"
             android:layout_height="13dp"
-            android:background="@drawable/redcircle_folderadd"
-            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/red_circle_folder_add"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/view_folderadd_minus"
+            android:id="@+id/view_folder_add_minus"
             android:layout_width="7dp"
             android:layout_height="3dp"
-            android:background="@drawable/minus_folderadd"
-            app:layout_constraintStart_toStartOf="@+id/view_folderadd_redcircle"
-            app:layout_constraintEnd_toEndOf="@+id/view_folderadd_redcircle"
-            app:layout_constraintTop_toTopOf="@+id/view_folderadd_redcircle"
-            app:layout_constraintBottom_toBottomOf="@+id/view_folderadd_redcircle" />
-
-
+            android:background="@drawable/minus_folder_add"
+            app:layout_constraintBottom_toBottomOf="@+id/view_folder_add_red_circle"
+            app:layout_constraintEnd_toEndOf="@+id/view_folder_add_red_circle"
+            app:layout_constraintStart_toStartOf="@+id/view_folder_add_red_circle"
+            app:layout_constraintTop_toTopOf="@+id/view_folder_add_red_circle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

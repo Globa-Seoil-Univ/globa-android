@@ -10,6 +10,7 @@ public class FolderItem {
         this.datetime = datetime;
         this.folderId = folderId;
     }
+
     public String getTitle() {
         return title;
     }

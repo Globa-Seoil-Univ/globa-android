@@ -21,6 +21,7 @@ public class DocsStatisticsActivityModel extends ViewModel {
     public LiveData<StatisticsResponse> getDocsStatisticsLiveData() {
         return docsStatisticsLiveData;
     }
+
     public LiveData<String> getErrorLiveData() {
         return errorLiveData;
     }

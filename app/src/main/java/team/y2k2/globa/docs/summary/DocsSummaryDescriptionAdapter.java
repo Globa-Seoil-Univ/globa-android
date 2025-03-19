@@ -35,6 +35,7 @@ public class DocsSummaryDescriptionAdapter extends RecyclerView.Adapter<DocsSumm
     public int getItemCount() {
         return (null != items ? items.size() : 0);
     }
+
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
 

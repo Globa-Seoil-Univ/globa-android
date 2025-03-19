@@ -46,6 +46,15 @@ public class LoginActivityModel extends ViewModel {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private LoginActivity activity;
+    private final Function2<OAuthToken, Throwable, Unit> signInKakaoCallback = (token, error) -> {
+        if (error != null) {
+            errorMessage.postValue("Kakao sign-in failed: " + error.getMessage());
+            loading.postValue(false);
+        } else if (token != null) {
+            handleKakaoSignInResult(token);
+        }
+        return null;
+    };
 
     public void setContext(LoginActivity activity) {
         this.activity = activity;
@@ -71,14 +80,9 @@ public class LoginActivityModel extends ViewModel {
     }
 
     private void initGoogleSignInClient() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(activity.getString(R.string.default_web_client_id))
-                .requestServerAuthCode(activity.getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(activity.getString(R.string.default_web_client_id)).requestServerAuthCode(activity.getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(activity, gso);
     }
-
 
     public String getAppKeyForKakao() {
         return APP_KEY_KAKAO;
@@ -133,54 +137,53 @@ public class LoginActivityModel extends ViewModel {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(accessToken, null);
 
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(activity, task -> {
-                    if (task.isSuccessful()) {
-                        // Firebase 로그인 성공
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            user.getIdToken(false).addOnCompleteListener(task2 -> {
-                                if (task2.isSuccessful()) {
-                                    String idToken = task2.getResult().getToken();
-                                    // 여기에서 새로운 ID 토큰을 처리합니다.
-                                    Log.d("ID_TOKEN", "ID Token: " + idToken);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(activity, task -> {
+            if (task.isSuccessful()) {
+                // Firebase 로그인 성공
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    user.getIdToken(false).addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+                            String idToken = task2.getResult().getToken();
+                            // 여기에서 새로운 ID 토큰을 처리합니다.
+                            Log.d("ID_TOKEN", "ID Token: " + idToken);
 
-                                    model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE, idToken);
-                                    LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), idToken);
+                            model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE, idToken);
+                            LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), idToken);
 
-                                    LoginResponse response = apiClient.requestSignIn(request);
+                            LoginResponse response = apiClient.requestSignIn(request);
 
-                                    if (response == null) {
-                                        errorMessage.postValue("로그인 실패 : 탈퇴한 사용자");
-                                        loading.postValue(false);
-                                    } else {
+                            if (response == null) {
+                                errorMessage.postValue("로그인 실패 : 탈퇴한 사용자");
+                                loading.postValue(false);
+                            } else {
 
-                                        userPreferences(request, response);
-                                        sendLogMessage(request, response);
+                                userPreferences(request, response);
+                                sendLogMessage(request, response);
 
-                                        ApiClient apiNewClient = new ApiClient(activity);
-                                        UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
-                                        userProfilePreferences(userInfoResponse);
-                                        showLogMessages(userInfoResponse);
+                                ApiClient apiNewClient = new ApiClient(activity);
+                                UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
+                                userProfilePreferences(userInfoResponse);
+                                showLogMessages(userInfoResponse);
 
-                                        loading.postValue(false);
-                                        loginSuccess.postValue(true);
-                                    }
+                                loading.postValue(false);
+                                loginSuccess.postValue(true);
+                            }
 
-                                } else {
-                                    errorMessage.postValue("Failed to retrieve Firebase ID token");
-                                    loading.postValue(false);
-                                }
-                            });
                         } else {
-                            errorMessage.postValue("Firebase user is null");
+                            errorMessage.postValue("Failed to retrieve Firebase ID token");
                             loading.postValue(false);
                         }
-                    } else {
-                        errorMessage.postValue("Firebase sign-in failed: " + task.getException().getMessage());
-                        loading.postValue(false);
-                    }
-                });
+                    });
+                } else {
+                    errorMessage.postValue("Firebase user is null");
+                    loading.postValue(false);
+                }
+            } else {
+                errorMessage.postValue("Firebase sign-in failed: " + task.getException().getMessage());
+                loading.postValue(false);
+            }
+        });
     }
 
     private void handleKakaoSignInResult(OAuthToken token) {
@@ -224,17 +227,6 @@ public class LoginActivityModel extends ViewModel {
             return null;
         });
     }
-
-    private final Function2<OAuthToken, Throwable, Unit> signInKakaoCallback = (token, error) -> {
-        if (error != null) {
-            errorMessage.postValue("Kakao sign-in failed: " + error.getMessage());
-            loading.postValue(false);
-        } else if (token != null) {
-            handleKakaoSignInResult(token);
-        }
-        return null;
-    };
-
 
     public void userProfilePreferences(UserInfoResponse response) {
         SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);

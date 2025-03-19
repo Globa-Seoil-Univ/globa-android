@@ -25,6 +25,11 @@ public class IntroModel {
         this.context = context;
     }
 
+    public static boolean isNofiGranted() {
+        Log.d("알림 수락 여부", "알림 수락 여부 getter 실행: " + isNofiGranted);
+        return isNofiGranted;
+    }
+
     public boolean checkAutoLogin() {
         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         String refreshToken = preferences.getString("refreshToken", "");
@@ -50,10 +55,5 @@ public class IntroModel {
                 Toast.makeText(context, "알림 수신이 거부되었습니다", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    public static boolean isNofiGranted() {
-        Log.d("알림 수락 여부", "알림 수락 여부 getter 실행: " + isNofiGranted);
-        return isNofiGranted;
     }
 }

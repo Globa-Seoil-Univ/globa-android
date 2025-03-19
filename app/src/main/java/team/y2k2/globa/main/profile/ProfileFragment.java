@@ -34,8 +34,8 @@ import team.y2k2.globa.main.profile.info.MyInfoActivity;
 
 public class ProfileFragment extends Fragment {
     private final ProfileModel model;
-    private FragmentProfileBinding binding;
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
+    private FragmentProfileBinding binding;
     private StorageReference profileImageRef;
 
     private String name, userId, profile;
@@ -51,14 +51,13 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(getLayoutInflater());
 
-        resultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if(result.getData() != null) {
-                        String newName = result.getData().getStringExtra("newName");
-                        String newProfile = result.getData().getStringExtra("newProfile");
-                        refreshData(newName, newProfile);
-                    }
-                });
+        resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getData() != null) {
+                String newName = result.getData().getStringExtra("newName");
+                String newProfile = result.getData().getStringExtra("newProfile");
+                refreshData(newName, newProfile);
+            }
+        });
 
         SettingItemAdapter adapter = new SettingItemAdapter(model.getItems(), this);
 
@@ -69,8 +68,7 @@ public class ProfileFragment extends Fragment {
 
         UserInfoResponse response = apiClient.requestUserInfo();
         // userInfo를 사용하여 필요한 작업 수행
-        //Log.d("IMAGETEST", response.getProfile());
-        Log.d("IMAGETEST", response.getName());
+        Log.d(getClass().getName(), response.getName());
 
         userId = response.getUserId();
         name = response.getName();
@@ -79,28 +77,19 @@ public class ProfileFragment extends Fragment {
         showLogMessages(response);
 
         binding.textviewProfileAccountUsername.setText(name);
-        binding.textviewProfileAccountUsercode.setText(response.getCode());
+        binding.textviewProfileAccountUserCode.setText(response.getCode());
 
         profile = response.getProfile();
 
-        if(profile != null) {
-            if(profile.startsWith("http")) {
-                Glide.with(inflater.getContext())
-                        .load(profile)
-                        .error(R.drawable.profile_user)
-                        .into(binding.imageviewProfileAccountImage);
+        if (profile != null) {
+            if (profile.startsWith("http")) {
+                Glide.with(inflater.getContext()).load(profile).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
             } else {
                 profileImageRef = storage.getReference().child(profile);
-                Glide.with(inflater.getContext())
-                        .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
-                        .error(R.drawable.profile_user)
-                        .into(binding.imageviewProfileAccountImage);
+                Glide.with(inflater.getContext()).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
             }
         } else {
-            Glide.with(inflater.getContext())
-                    .load(R.drawable.profile_user)
-                    .error(R.drawable.profile_user)
-                    .into(binding.imageviewProfileAccountImage);
+            Glide.with(inflater.getContext()).load(R.drawable.profile_user).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
         }
 
         binding.imageviewProfileAccountImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -110,7 +99,7 @@ public class ProfileFragment extends Fragment {
         binding.relativelayoutProfileAccountUser.setOnClickListener(v -> {
 
             Intent intent = new Intent(binding.getRoot().getContext(), MyInfoActivity.class);
-            if(resultLauncher != null) {
+            if (resultLauncher != null) {
                 resultLauncher.launch(intent);
             }
 
@@ -137,7 +126,7 @@ public class ProfileFragment extends Fragment {
         logs.add("publicFolderId:" + response.getPublicFolderId());
         logs.add("userCode      :" + response.getCode());
 
-        for(int i = 0; i < logs.toArray().length; i++) {
+        for (int i = 0; i < logs.toArray().length; i++) {
             Log.d(getClass().getName(), logs.get(i));
         }
 
@@ -148,65 +137,41 @@ public class ProfileFragment extends Fragment {
     }
 
     private void refreshData(String newName, String newProfile) {
-        if(newName != null && newProfile != null) {
+        if (newName != null && newProfile != null) {
             Log.d(getClass().getSimpleName(), "newName, newProfile 둘다 옴");
             binding.textviewProfileAccountUsername.setText(newName);
-            if(newProfile.startsWith("http")) {
-                Glide.with(getContext())
-                        .load(newProfile)
-                        .error(R.drawable.profile_user)
-                        .into(binding.imageviewProfileAccountImage);
+            if (newProfile.startsWith("http")) {
+                Glide.with(getContext()).load(newProfile).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
             } else {
                 profileImageRef = storage.getReference().child(newProfile);
-                Glide.with(getContext())
-                        .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
-                        .error(R.drawable.profile_user)
-                        .into(binding.imageviewProfileAccountImage);
+                Glide.with(getContext()).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
             }
-        } else if(newName != null){
+        } else if (newName != null) {
             Log.d(getClass().getSimpleName(), "newName만 옴");
             binding.textviewProfileAccountUsername.setText(newName);
-            if(profile != null) {
-                if(profile.startsWith("http")) {
-                    Glide.with(getContext())
-                            .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
-                            .error(R.drawable.profile_user)
-                            .into(binding.imageviewProfileAccountImage);
+            if (profile != null) {
+                if (profile.startsWith("http")) {
+                    Glide.with(getContext()).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
                 }
             } else {
-                Glide.with(getContext())
-                        .load(R.drawable.profile_user)
-                        .error(R.drawable.profile_user)
-                        .into(binding.imageviewProfileAccountImage);
+                Glide.with(getContext()).load(R.drawable.profile_user).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
             }
-        } else if(newProfile != null) {
+        } else if (newProfile != null) {
             Log.d(getClass().getSimpleName(), "newProfile만 옴: " + newProfile);
             binding.textviewProfileAccountUsername.setText(name);
-            Glide.with(getContext())
-                    .load(newProfile)
-                    .error(R.drawable.profile_user)
-                    .into(binding.imageviewProfileAccountImage);
+            Glide.with(getContext()).load(newProfile).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
         } else {
             Log.d(getClass().getSimpleName(), "둘다 안 옴");
             binding.textviewProfileAccountUsername.setText(name);
-            if(profile != null) {
-                if(profile.startsWith("http")) {
-                    Glide.with(getContext())
-                            .load(profile)
-                            .error(R.drawable.profile_user)
-                            .into(binding.imageviewProfileAccountImage);
+            if (profile != null) {
+                if (profile.startsWith("http")) {
+                    Glide.with(getContext()).load(profile).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
                 } else {
                     profileImageRef = storage.getReference().child(profile);
-                    Glide.with(getContext())
-                            .load(ProfileImage.convertGsToHttps(profileImageRef.toString()))
-                            .error(R.drawable.profile_user)
-                            .into(binding.imageviewProfileAccountImage);
+                    Glide.with(getContext()).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
                 }
             } else {
-                Glide.with(getContext())
-                        .load(R.drawable.profile_user)
-                        .error(R.drawable.profile_user)
-                        .into(binding.imageviewProfileAccountImage);
+                Glide.with(getContext()).load(R.drawable.profile_user).error(R.drawable.profile_user).into(binding.imageviewProfileAccountImage);
             }
         }
     }

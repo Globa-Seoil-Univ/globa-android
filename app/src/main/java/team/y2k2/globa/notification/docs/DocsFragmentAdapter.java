@@ -54,31 +54,25 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
 
         DocsFragmentItem item = items.get(position);
 
-        if(item.getProfile().startsWith("http")) {
-            Glide.with(holder.itemView.getContext())
-                    .load(item.getProfile())
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+        if (item.getProfile().startsWith("http")) {
+            Glide.with(holder.itemView.getContext()).load(item.getProfile()).error(R.mipmap.ic_launcher).into(holder.profileImage);
         } else {
             StorageReference imageRef = storage.getReference().child(item.getProfile());
-            Glide.with(holder.itemView.getContext())
-                    .load(ProfileImage.convertGsToHttps(imageRef.toString()))
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+            Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
         }
 
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
 
-        if(!item.isRead()) {
+        if (!item.isRead()) {
             holder.layout.setBackgroundColor(primaryColor);
         } else {
             holder.layout.setBackgroundColor(whiteColor);
         }
 
         holder.layout.setOnClickListener(v -> {
-            if(!item.isRead()) {
+            if (!item.isRead()) {
                 Log.d("알림 읽음", "문서 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
                 notificationViewModel.readNotification(item.getNotificationId());
@@ -107,7 +101,7 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
             profileImage = itemView.findViewById(R.id.imageview_item_notification_docs);
             title = itemView.findViewById(R.id.textview_item_notification_docs_title);
             content = itemView.findViewById(R.id.textview_item_notification_docs_content);
-            createdTime = itemView.findViewById(R.id.textview_item_notification_docs_createdtime);
+            createdTime = itemView.findViewById(R.id.textview_item_notification_docs_created_time);
 
         }
     }

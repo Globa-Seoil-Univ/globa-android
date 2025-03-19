@@ -1,30 +1,22 @@
 package team.y2k2.globa.main.folder.permission;
 
-import static team.y2k2.globa.api.ApiClient.authorization;
-
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
-import team.y2k2.globa.api.ApiService;
-import team.y2k2.globa.api.model.request.FolderPermissionChangeRequest;
 import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 
 public class FolderPermissionActivityModel extends ViewModel {
+    private final MutableLiveData<FolderPermissionResponse> usersLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private ApiClient apiClient;
 
-    private final ApiService apiService;
-    private final MutableLiveData<FolderPermissionResponse> usersLiveData;
-    private final MutableLiveData<String> errorLiveData;
-
-    public FolderPermissionActivityModel() {
-        apiService = ApiClient.getApiService();
-        usersLiveData = new MutableLiveData<>();
-        errorLiveData = new MutableLiveData<>();
+    public void setApiClient(Context context) {
+        this.apiClient = new ApiClient(context);
     }
 
     public MutableLiveData<FolderPermissionResponse> getUsersLiveData() {
@@ -36,62 +28,28 @@ public class FolderPermissionActivityModel extends ViewModel {
     }
 
     public void fetchSharedUsers(int folderId, int page, int count) {
-        apiService.requestFoloderShareUser(folderId, "application/json", authorization, page, count).enqueue(new Callback<FolderPermissionResponse>() {
-            @Override
-            public void onResponse(Call<FolderPermissionResponse> call, Response<FolderPermissionResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    usersLiveData.setValue(response.body());
-                    Log.d("API 수신 성공", "응답 코드 : " + response.code());
-                } else {
-                    Log.d("API 수신 오류", "오류 코드 : " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FolderPermissionResponse> call, Throwable t) {
-                errorLiveData.setValue(t.getMessage());
-                Log.d("API 송신 오류", "오류 메시지 : " + t.getMessage());
-            }
-        });
+        FolderPermissionResponse response = apiClient.requestFolderShareUser(folderId, page, count);
+        usersLiveData.setValue(response);
     }
 
     public void changeSharedUsers(int folderId, int userId, String userRole) {
-        FolderPermissionChangeRequest folderPermissionChangeRequest = new FolderPermissionChangeRequest(userRole);
-        apiService.requestUpdateSharePermission(folderId, userId, "application/json", authorization, folderPermissionChangeRequest).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Log.d("API 수신 완료", "응답 코드 : " + response.code());
-                } else {
-                    Log.d("API 수신 오류", "오류코드 : " + response.code() + ", 오류 메시지 : " + response.message());
-                }
-            }
+        Response<Void> response = apiClient.requestUpdateSharePermission(folderId, userId, userRole);
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                errorLiveData.setValue(t.getMessage());
-                Log.d("API 송신 오류 : ", "오류 메시지 : " + t.getMessage());
-            }
-        });
+        if (response.isSuccessful()) {
+            Log.d("API 수신 완료", "응답 코드 : " + response.code());
+        } else {
+            errorLiveData.setValue(response.message());
+            Log.d("API 수신 오류", "오류코드 : " + response.code() + ", 오류 메시지 : " + response.message());
+        }
     }
 
     public void deleteSharedUsers(int folderId, int userId) {
-        apiService.requestDeleteSharePermission(folderId, userId, "application/json", authorization).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Log.d(getClass().getName(), "공유 삭제 성공");
-                } else {
-                    Log.e(getClass().getName(), "공유 삭제 실패 : " + response.code());
-                }
-            }
+        Response<Void> response = apiClient.requestDeleteSharePermission(folderId, userId);
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(getClass().getName(), "서버 통신 실패: " + t.getMessage());
-            }
-        });
+        if (response.isSuccessful()) {
+            Log.d(getClass().getName(), "공유 삭제 성공");
+        } else {
+            errorLiveData.setValue(response.message());
+        }
     }
-
-
 }

@@ -56,7 +56,7 @@
 
     <string name="permission_management">권한 관리</string>
     <string name="docs_more_title">폴더 삭제 타이틀입니다. 이 값 쓰지 마세요</string>
-    <string name="docs_more_datetime">2001-04-24 오후 14:10</string>
+    <string name="docs_more_datetime">2001/04/24 오후 14:10</string>
     <string name="docs_more_move_docs">폴더 이동</string>
     <string name="docs_more_delete_docs">문서 삭제</string>
 
@@ -158,18 +158,18 @@
     <string name="conditions_details_no4_3_a">필수 수집 정보 : 이름, 닉네임</string>
     <string name="conditions_details_no4_3_b">선택 수집 정보 : 프로필 사진</string>
 
-    <string name="folderadd_dialog_title">공유 방법을 선택해주세요.</string>
-    <string name="folderadd_dialog_detail">링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 수정이 가능합니다.</string>
-    <string name="foldershare_dialog_title">권한을 선택해주세요.</string>
+    <string name="folder_add_dialog_title">공유 방법을 선택해주세요.</string>
+    <string name="folder_add_dialog_detail">링크 공유는 링크를 가진 누구나 볼 수 있고,\n멤버 공유는 초대 받은 사람만 볼 수 있으며 권한 수정이 가능합니다.</string>
+    <string name="folder_share_dialog_title">권한을 선택해주세요.</string>
 
-    <string name="foldershare_dialog_read">읽기 권한</string>
-    <string name="foldershare_dialog_write">쓰기 권한</string>
+    <string name="folder_share_dialog_read">읽기 권한</string>
+    <string name="folder_share_dialog_write">쓰기 권한</string>
 
     <string name="activity_folder_move_change_select">변경할 폴더를 선택해주세요.</string>
 
     <string name="long_title">이것은 아주 긴 제목입니다.</string>
-    <string name="activity_docs_move_title">2024-03-12 회의록</string>
-    <string name="activity_docs_move_datetime">2024-03-12 오후 11:07</string>
+    <string name="activity_docs_move_title">2024/03/12 회의록</string>
+    <string name="activity_docs_move_datetime">2024/03/12 오후 11:07</string>
 
     <string name="item_main_document_processing">요약중..</string>
 

@@ -17,6 +17,10 @@ public class IntroActivity extends AppCompatActivity {
     ActivityIntroBinding binding;
     IntroActivityModel viewModel;
 
+    public static boolean isNotificationGranted() {
+        return IntroActivityModel.isNofiGranted();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +50,5 @@ public class IntroActivity extends AppCompatActivity {
         SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewIntroLogo.getText());
         spanTitle.setSpan(new ForegroundColorSpan(getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spanTitle);
-    }
-
-    public static boolean isNotificationGranted() {
-        return IntroActivityModel.isNofiGranted();
     }
 }

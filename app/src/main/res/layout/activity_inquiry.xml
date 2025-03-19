@@ -20,6 +20,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="24dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/header_back" />
 
         <TextView

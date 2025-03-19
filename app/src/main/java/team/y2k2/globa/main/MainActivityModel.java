@@ -23,17 +23,22 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
 
     public static final String PRF_RECORD_NAME = "recordName";
     public static final String PRF_RECORD_PATH = "recordPath";
-
-    private Context context;
-    private MainModel model;
     private final MainFragment mainFragment;
     private final StatisticsFragment statisticsFragment;
     private final ProfileFragment profileFragment;
     private final FolderFragment folderFragment;
-
     private final MutableLiveData<Fragment> selectedFragment = new MutableLiveData<>();
     private final MutableLiveData<Boolean> showBottomSheetDialog = new MutableLiveData<>();
     private final MutableLiveData<Intent> uploadRecordIntent = new MutableLiveData<>();
+    private Context context;
+    private MainModel model;
+
+    public MainActivityModel() {
+        mainFragment = new MainFragment();
+        statisticsFragment = new StatisticsFragment();
+        profileFragment = new ProfileFragment();
+        folderFragment = new FolderFragment();
+    }
 
     public MutableLiveData<Fragment> getSelectedFragment() {
         return selectedFragment;
@@ -52,13 +57,6 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
         this.model = new MainModel(activity);
     }
 
-    public MainActivityModel() {
-        mainFragment = new MainFragment();
-        statisticsFragment = new StatisticsFragment();
-        profileFragment = new ProfileFragment();
-        folderFragment = new FolderFragment();
-    }
-
     public void refreshMainFragmentRecords() {
         if (mainFragment != null) {
             mainFragment.showRecords(0);
@@ -66,16 +64,11 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
     }
 
     public void viewFragment(int index) {
-        if (index == R.id.item_main_main)
-            selectedFragment.setValue(mainFragment);
-        else if (index == R.id.item_main_statistics)
-            selectedFragment.setValue(statisticsFragment);
-        else if (index == R.id.item_main_upload)
-            showBottomSheetDialog.setValue(true);
-        else if (index == R.id.item_main_profile)
-            selectedFragment.setValue(profileFragment);
-        else if (index == R.id.item_main_folder)
-            selectedFragment.setValue(folderFragment);
+        if (index == R.id.item_main_main) selectedFragment.setValue(mainFragment);
+        else if (index == R.id.item_main_statistics) selectedFragment.setValue(statisticsFragment);
+        else if (index == R.id.item_main_upload) showBottomSheetDialog.setValue(true);
+        else if (index == R.id.item_main_profile) selectedFragment.setValue(profileFragment);
+        else if (index == R.id.item_main_folder) selectedFragment.setValue(folderFragment);
     }
 
     public void handleUserFcmToken() {

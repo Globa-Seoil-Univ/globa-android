@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintlayout_my_info_item_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/textview_my_info_item_list_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/black"
+        android:textSize="@dimen/large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="이름" />
+
+    <ImageView
+        android:id="@+id/imageview_my_info_item_list_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/arrow_right"
+        app:layout_constraintBottom_toBottomOf="@+id/textview_my_info_item_list_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textview_my_info_item_list_title" />
+
+    <TextView
+        android:id="@+id/textview_my_info_item_list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/notosans_regular"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/large"
+        app:layout_constraintBottom_toBottomOf="@+id/textview_my_info_item_list_title"
+        app:layout_constraintEnd_toStartOf="@+id/imageview_my_info_item_list_next"
+        app:layout_constraintTop_toTopOf="@+id/textview_my_info_item_list_title"
+        tools:text="윤영진" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

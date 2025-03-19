@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -28,6 +30,9 @@ import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.FirstCommentRequest;
 import team.y2k2.globa.api.model.request.FolderAddRequest;
 import team.y2k2.globa.api.model.request.FolderDeleteRequest;
+import team.y2k2.globa.api.model.request.FolderNameEditRequest;
+import team.y2k2.globa.api.model.request.FolderPermissionChangeRequest;
+import team.y2k2.globa.api.model.request.InquiryRequest;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.StudyTimeRequest;
@@ -36,7 +41,9 @@ import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.response.CommentResponse;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
+import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 import team.y2k2.globa.api.model.response.FolderResponse;
+import team.y2k2.globa.api.model.response.InquiryDetailResponse;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;
 import team.y2k2.globa.api.model.response.NotificationResponse;
@@ -45,6 +52,7 @@ import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;
+import team.y2k2.globa.api.model.response.UnreadNotificationCheckResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.api.model.request.DocsNameEditRequest;
 import team.y2k2.globa.intro.IntroActivity;
@@ -69,10 +77,7 @@ public class ApiClient {
     }
 
     public static ApiService getApiService() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiService.API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(ApiService.API_BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         return retrofit.create(ApiService.class);
     }
@@ -208,7 +213,7 @@ public class ApiClient {
     // 클립보드 복사 메소드
     public void copyToClipboard(Context context, String text) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if(clipboard != null) {
+        if (clipboard != null) {
             ClipData clip = ClipData.newPlainText("code", text);
             clipboard.setPrimaryClip(clip);
         }
@@ -216,9 +221,7 @@ public class ApiClient {
 
     public LoginResponse requestSignIn(LoginRequest request) {
         try {
-
             AtomicBoolean isSuccess = new AtomicBoolean(true);
-
             LoginResponse parentResponse = CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<LoginResponse> call = apiService.requestSignIn(request);
@@ -237,8 +240,7 @@ public class ApiClient {
                 }
             }).get();
 
-            if (!isSuccess.get())
-                parentResponse = null;
+            if (!isSuccess.get()) parentResponse = null;
             return parentResponse;
         } catch (InterruptedException | ExecutionException e) {
             return null;
@@ -272,6 +274,29 @@ public class ApiClient {
         }
     }
 
+    // 폴더 이름 변경
+    public Response<Void> requestUpdateFolderName(int folderId,FolderNameEditRequest request) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<Void> call = apiService.requestUpdateFolderName(folderId, APPLICATION_JSON, authorization, request);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+                    handleErrorCode(response.code());
+                } catch (IOException e) {
+                    // IOException 발생 시 에러 처리
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
+                }
+                return response;
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
     // 문서 이름 업데이트
     public Response<Void> requestUpdateRecordName(String folderId, String recordId, String title) {
         DocsNameEditRequest request = new DocsNameEditRequest(title);
@@ -283,7 +308,7 @@ public class ApiClient {
                 Response<Void> response;
                 try {
                     response = call.execute();
-                    if(!handleErrorCode(response.code())) {
+                    if (!handleErrorCode(response.code())) {
                         return response;
                     }
                 } catch (IOException e) {
@@ -318,7 +343,7 @@ public class ApiClient {
                 return response;
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            return;
+            Toast.makeText(context, "통신 중 알 수 없는 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -416,7 +441,7 @@ public class ApiClient {
                 return response;
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            return;
+            Toast.makeText(context, "통신 중 알 수 없는 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -600,7 +625,7 @@ public class ApiClient {
                 try {
                     response = call.execute();
 
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         Log.d("대댓글 가져오기", "대댓글 가져오기 Code: " + response.code());
                         return response.body();
                     } else {
@@ -675,7 +700,7 @@ public class ApiClient {
                 try {
                     response = call.execute();
 
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         Log.d(getClass().getSimpleName(), "알림 가져오기 성공: " + response.code());
                         return response.body();
                     } else {
@@ -713,15 +738,15 @@ public class ApiClient {
                 }
                 return response;
             }).get();
-        }catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             return null;
         }
     }
 
+    // 문서 시각화
     public StatisticsResponse requestDocsStatistics(String folderId, String recordId) {
         try {
             return CompletableFuture.supplyAsync(() -> {
-                // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<StatisticsResponse> call = apiService.requestDocStatistics(folderId, recordId, APPLICATION_JSON, authorization);
                 Response<StatisticsResponse> response;
 
@@ -737,7 +762,32 @@ public class ApiClient {
                 } catch (IOException e) {
                     return null;
                 }
-            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    // 유저 전체 통계
+    public StatisticsResponse requestStatistics(String userId) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                Call<StatisticsResponse> call = apiService.requestStatistics(userId, APPLICATION_JSON, authorization);
+                Response<StatisticsResponse> response;
+
+                try {
+                    response = call.execute();
+
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        return null;
+                    }
+                } catch (IOException e) {
+                    return null;
+                }
+            }).get();
         } catch (InterruptedException | ExecutionException e) {
             return null;
         }
@@ -746,9 +796,98 @@ public class ApiClient {
     public SearchResponse searchForKeyword(String keyword) {
         try {
             return CompletableFuture.supplyAsync(() -> {
-                // 백그라운드 스레드에서 작업을 수행하는 코드
                 Call<SearchResponse> call = apiService.searchRecordForKeyword(APPLICATION_JSON, authorization, keyword, 1, 20);
                 Response<SearchResponse> response;
+
+                try {
+                    response = call.execute();
+
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        return null;
+                    }
+                } catch (IOException e) {
+                    return null;
+                }
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    // 댓글 삭제
+    public Response<Void> deleteRecord(String folderId, String recordId) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                Call<Void> call = apiService.requestDeleteRecord(folderId, recordId, APPLICATION_JSON, authorization);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+                    handleErrorCode(response.code());
+                } catch (IOException e) {
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
+                }
+                return response;
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    // 문의 추가
+    public Response<Void> requestInsertInquiry(String title, String content) {
+        InquiryRequest request = new InquiryRequest(title, content);
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                Call<Void> call = apiService.requestInsertInquiry(APPLICATION_JSON, authorization, request);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+                    handleErrorCode(response.code());
+                } catch (IOException e) {
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
+                }
+                return response;
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    // 프로필 사진 변경
+    public Response<Void> requestUpdateProfileImage(MultipartBody.Part multipartBody, String userId) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                Call<Void> call = apiService.requestUpdateProfileImage(userId, authorization, multipartBody);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+                    handleErrorCode(response.code());
+                } catch (IOException e) {
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
+                }
+                return response;
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    // 문의 상세
+    public InquiryDetailResponse requestGetInquiryDetail(String inquiryId) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                // 백그라운드 스레드에서 작업을 수행하는 코드
+                Call<InquiryDetailResponse> call = apiService.requestGetInquiryDetail(inquiryId, APPLICATION_JSON, authorization);
+                Response<InquiryDetailResponse> response;
 
                 try {
                     response = call.execute();
@@ -768,24 +907,96 @@ public class ApiClient {
         }
     }
 
-    // 댓글 삭제
-    public Response<Void> deleteRecord(String folderId, String recordId) {
+    // 유저 폴더 공유
+    public FolderPermissionResponse requestFolderShareUser(int folderId, int page, int count) {
         try {
             return CompletableFuture.supplyAsync(() -> {
                 // 백그라운드 스레드에서 작업을 수행하는 코드
-                Call<Void> call = apiService.requestDeleteRecord(folderId, recordId, APPLICATION_JSON, authorization);
+                Call<FolderPermissionResponse> call = apiService.requestFolderShareUser(folderId, APPLICATION_JSON, authorization, page, count);
+                Response<FolderPermissionResponse> response;
+
+                try {
+                    response = call.execute();
+
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        return null;
+                    }
+                } catch (IOException e) {
+                    return null;
+                }
+            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    // 유저 권한 변경
+    public Response<Void> requestUpdateSharePermission(int folderId, int userId, String userRole) {
+        FolderPermissionChangeRequest request = new FolderPermissionChangeRequest(userRole);
+
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                Call<Void> call = apiService.requestUpdateSharePermission(folderId, userId, APPLICATION_JSON, authorization, request);
 
                 Response<Void> response;
                 try {
                     response = call.execute();
                     handleErrorCode(response.code());
                 } catch (IOException e) {
-                    // IOException 발생 시 에러 처리
                     handleErrorCode(500);
                     response = Response.error(500, ResponseBody.create(null, ""));
                 }
                 return response;
-            }).get(); // CompletableFuture의 결과를 동기적으로 받아옴
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    // 유저 권한 삭제
+    public Response<Void> requestDeleteSharePermission(int folderId, int userId) {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                Call<Void> call = apiService.requestDeleteSharePermission(folderId, userId, APPLICATION_JSON, authorization);
+
+                Response<Void> response;
+                try {
+                    response = call.execute();
+                    handleErrorCode(response.code());
+                } catch (IOException e) {
+                    handleErrorCode(500);
+                    response = Response.error(500, ResponseBody.create(null, ""));
+                }
+                return response;
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    // 안읽은 알림 호출
+    public UnreadNotificationCheckResponse getUnreadNotificationCheck() {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                Call<UnreadNotificationCheckResponse> call = apiService.getUnreadNotificationCheck(APPLICATION_JSON, authorization);
+                Response<UnreadNotificationCheckResponse> response;
+
+                try {
+                    response = call.execute();
+
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else {
+                        handleErrorCode(response.code());
+                        return null;
+                    }
+                } catch (IOException e) {
+                    return null;
+                }
+            }).get();
         } catch (InterruptedException | ExecutionException e) {
             return null;
         }
@@ -1008,14 +1219,10 @@ public class ApiClient {
             return;
         }
 
-        if(! ((Activity) context).isFinishing()) {
+        if (!((Activity) context).isFinishing()) {
             ((Activity) context).runOnUiThread(() -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("에러 발생")
-                        .setMessage("에러 코드: " + errorCode + "\n" + errorMessage)
-                        .setPositiveButton("확인", (dialog, which) -> dialog.dismiss())
-                        .setCancelable(false)
-                        .show();
+                builder.setTitle("에러 발생").setMessage("에러 코드: " + errorCode + "\n" + errorMessage).setPositiveButton("확인", (dialog, which) -> dialog.dismiss()).setCancelable(false).show();
             });
         }
     }

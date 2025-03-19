@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/constraintlayout_document_item"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintlayout_document_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:background="@drawable/document_background"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@drawable/document_background">
 
     <LinearLayout
         android:id="@+id/linearlayout_search_document_icon_bg"
@@ -26,6 +25,7 @@
             android:id="@+id/imageview_search_document_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/document" />
     </LinearLayout>
 
@@ -33,30 +33,30 @@
         android:id="@+id/textview_search_document_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="2024-03-12 회의록"
         android:layout_marginStart="10dp"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/linearlayout_search_document_icon_bg"
-        app:layout_constraintTop_toTopOf="@+id/linearlayout_search_document_icon_bg" />
+        app:layout_constraintTop_toTopOf="@+id/linearlayout_search_document_icon_bg"
+        tools:text="2024-03-12 회의록" />
 
     <TextView
         android:id="@+id/textview_search_document_datetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="2024-03-12 오후 11:07"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/darkGray"
         app:layout_constraintStart_toStartOf="@+id/textview_search_document_title"
-        app:layout_constraintTop_toBottomOf="@+id/textview_search_document_title" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_search_document_title"
+        tools:text="2024-03-12 오후 11:07" />
 
     <LinearLayout
         android:id="@+id/linearlayout_search_document_profile"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/document_icon_background"
         android:gravity="center"
@@ -68,6 +68,7 @@
             android:id="@+id/imageview_search_document_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:importantForAccessibility="no"
             android:src="@drawable/profile_user" />
     </LinearLayout>
 

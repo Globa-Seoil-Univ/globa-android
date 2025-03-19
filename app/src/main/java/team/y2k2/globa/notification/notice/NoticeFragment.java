@@ -21,16 +21,15 @@ import team.y2k2.globa.notification.NotificationActivity;
 
 public class NoticeFragment extends Fragment {
 
-    FragmentNotificationNoticeBinding binding;
     private final List<NoticeFragmentItem> noticeFragmentItems = new ArrayList<>();
+    FragmentNotificationNoticeBinding binding;
     String notificationId, profile, title, content, createdTime;
     boolean isRead;
     NoticeFragmentAdapter adapter;
     ApiClient apiClient;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNotificationNoticeBinding.inflate(getLayoutInflater());
 
         initializeUI();
@@ -44,8 +43,8 @@ public class NoticeFragment extends Fragment {
         List<Notification> notificationList = apiClient.requestNotification("n").getNotifications();
         noticeFragmentItems.clear();
 
-        if(notificationList != null) {
-            for(Notification notification : notificationList) {
+        if (notificationList != null) {
+            for (Notification notification : notificationList) {
 
                 settingNotification(notification);
 
@@ -69,8 +68,7 @@ public class NoticeFragment extends Fragment {
         title = notification.getNotice().getTitle();
         content = notification.getNotice().getContent();
         isRead = notification.isRead();
-        Log.d("공지 사항 알림", "공지 사항 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                ", createdTime: " + createdTime + ", isRead: " + isRead);
+        Log.d("공지 사항 알림", "공지 사항 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
         noticeFragmentItems.add(new NoticeFragmentItem(notificationId, profile, title, content, createdTime, isRead));
     }
 }

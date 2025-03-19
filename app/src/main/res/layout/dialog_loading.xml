@@ -10,12 +10,12 @@
         android:id="@+id/animation_view"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        app:lottie_rawRes="@raw/loading"
         app:lottie_autoPlay="true"
-        app:lottie_loop="true" />
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class FolderInsideModel {
     private final ArrayList<FolderInsideDocsItem> items;
+
     public FolderInsideModel() {
         items = new ArrayList<>();
     }

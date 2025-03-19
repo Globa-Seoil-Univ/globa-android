@@ -168,12 +168,12 @@
     <string name="conditions_details_no4_3_a">Required Collection Information: Name, Nickname</string>
     <string name="conditions_details_no4_3_b">Optional Collection Information: Profile Picture</string>
 
-    <string name="folderadd_dialog_title">Please select a sharing method.</string>
-    <string name="folderadd_dialog_detail">Link sharing allows anyone with the link to view it,\nMember sharing allows only invited people to view it and change permissions.</string>
-    <string name="foldershare_dialog_title">Please select permissions.</string>
+    <string name="folder_add_dialog_title">Please select a sharing method.</string>
+    <string name="folder_add_dialog_detail">Link sharing allows anyone with the link to view it,\nMember sharing allows only invited people to view it and change permissions.</string>
+    <string name="folder_share_dialog_title">Please select permissions.</string>
 
-    <string name="foldershare_dialog_read">Read Permission</string>
-    <string name="foldershare_dialog_write">Write Permission</string>
+    <string name="folder_share_dialog_read">Read Permission</string>
+    <string name="folder_share_dialog_write">Write Permission</string>
 
     <string name="activity_folder_move_change_select">Please select the folder to change.</string>
     <string name="long_title">This is a very long title.</string>

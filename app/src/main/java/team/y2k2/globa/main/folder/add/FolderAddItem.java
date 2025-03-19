@@ -15,9 +15,11 @@ public class FolderAddItem {
     public String getProfile() {
         return profile;
     }
+
     public String getCode() {
         return code;
     }
+
     public String getRole() {
         return role;
     }

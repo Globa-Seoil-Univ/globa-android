@@ -10,7 +10,6 @@
     android:paddingEnd="20dp"
     android:paddingBottom="12dp">
 
-
     <LinearLayout
         android:id="@+id/linearlayout_profile_icon_bg"
         android:layout_width="40dp"
@@ -45,7 +44,7 @@
         android:id="@+id/linearlayout_comment_split"
         android:layout_width="6dp"
         android:layout_height="6dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/profile_icon_background"
         android:gravity="center"
         android:orientation="horizontal"

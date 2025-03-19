@@ -39,7 +39,7 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.item_myinfo, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_my_info, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -96,6 +96,15 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
         return itemList != null ? itemList.size() : 0;
     }
 
+    // 클립보드 복사 메소드
+    public void copyToClipboard(Context context, String text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard != null) {
+            ClipData clip = ClipData.newPlainText("code", text);
+            clipboard.setPrimaryClip(clip);
+        }
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView name;
@@ -105,21 +114,12 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.textview_myinfoItemlist_title);
-            name = itemView.findViewById(R.id.textview_myinfoItemlist_name);
-            image = itemView.findViewById(R.id.imageview_myinfoItemlist_next);
-            layout = itemView.findViewById(R.id.constraintlayout_myinfoItemList);
+            title = itemView.findViewById(R.id.textview_my_info_item_list_title);
+            name = itemView.findViewById(R.id.textview_my_info_item_list_name);
+            image = itemView.findViewById(R.id.imageview_my_info_item_list_next);
+            layout = itemView.findViewById(R.id.constraintlayout_my_info_item_list);
         }
 
-    }
-
-    // 클립보드 복사 메소드
-    public void copyToClipboard(Context context, String text) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (clipboard != null) {
-            ClipData clip = ClipData.newPlainText("code", text);
-            clipboard.setPrimaryClip(clip);
-        }
     }
 
 

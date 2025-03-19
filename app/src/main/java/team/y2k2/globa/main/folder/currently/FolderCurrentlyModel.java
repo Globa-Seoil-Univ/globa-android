@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class FolderCurrentlyModel {
 
     private final ArrayList<FolderCurrentlyItem> items;
+
     public FolderCurrentlyModel() {
         items = new ArrayList<>();
 

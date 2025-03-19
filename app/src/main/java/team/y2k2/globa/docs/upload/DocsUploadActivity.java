@@ -15,11 +15,10 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsUploadBinding;
 
 public class DocsUploadActivity extends AppCompatActivity {
+    public AlertDialog dialog;
     ActivityDocsUploadBinding binding;
     DocsUploadViewModel viewModel;
-
     AlertDialog.Builder builder;
-    public AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +64,7 @@ public class DocsUploadActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showLoadingDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_loading, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

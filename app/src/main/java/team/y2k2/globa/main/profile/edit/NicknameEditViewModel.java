@@ -42,7 +42,7 @@ public class NicknameEditViewModel extends ViewModel {
             apiService.requestUpdateProfileName(userId, "application/json", authorization, request).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         Log.d(getClass().getName(), "닉네임 업데이트 성공");
                         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
@@ -57,10 +57,10 @@ public class NicknameEditViewModel extends ViewModel {
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
                     errorLiveData.setValue("서버 오류 발생");
-                    Log.d(getClass().getName(), "닉네임 업데이트 실패"  + t.getMessage());
+                    Log.d(getClass().getName(), "닉네임 업데이트 실패" + t.getMessage());
                 }
             });
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.d(getClass().getName(), "Retrofit 오류 발생: " + e.getMessage());
         }
     }

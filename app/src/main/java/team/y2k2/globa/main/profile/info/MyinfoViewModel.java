@@ -1,7 +1,7 @@
 package team.y2k2.globa.main.profile.info;
 
-import static team.y2k2.globa.api.ApiClient.authorization;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -9,19 +9,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import okhttp3.MultipartBody;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import team.y2k2.globa.api.ApiService;
 import team.y2k2.globa.api.ApiClient;
 
 public class MyinfoViewModel extends ViewModel {
 
-    private final ApiService apiService; // Retrofit2
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private ApiClient apiClient; // Retrofit2
 
-    public MyinfoViewModel() {
-        apiService = ApiClient.getApiService();
+    public void setApiClient(Context context) {
+        this.apiClient = new ApiClient(context);
     }
 
     public LiveData<String> getErrorLiveData() {
@@ -29,21 +26,12 @@ public class MyinfoViewModel extends ViewModel {
     }
 
     public void uploadImage(MultipartBody.Part multipartBody, String userId) {
-        apiService.requestUpdateProfileImage(userId, authorization, multipartBody).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
-                    Log.d(getClass().getSimpleName(), "이미지 업로드 완료: " + response.code());
-                } else {
-                    Log.d(getClass().getSimpleName(), "이미지 업로드 실패: " + response.code() + ", " + response.message());
-                }
-            }
+        Response<Void> response = apiClient.requestUpdateProfileImage(multipartBody, userId);
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.d(getClass().getSimpleName(), "이미지 업로드 onFailure(): " + t.getMessage());
-            }
-        });
+        if (response.isSuccessful()) {
+            Log.d(getClass().getSimpleName(), "이미지 업로드 완료: " + response.code());
+        } else {
+            Log.d(getClass().getSimpleName(), "이미지 업로드 실패: " + response.code() + ", " + response.message());
+        }
     }
-
 }

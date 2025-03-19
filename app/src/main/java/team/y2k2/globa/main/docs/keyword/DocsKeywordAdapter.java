@@ -38,6 +38,7 @@ public class DocsKeywordAdapter extends RecyclerView.Adapter<DocsKeywordAdapter.
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         private final TextView keyword;
+
         public AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             keyword = itemView.findViewById(R.id.textview_keyword);

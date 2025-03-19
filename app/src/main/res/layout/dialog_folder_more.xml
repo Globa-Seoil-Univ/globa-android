@@ -71,6 +71,7 @@
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
+                android:importantForAccessibility="no"
                 android:src="@drawable/rename" />
 
             <TextView
@@ -98,7 +99,8 @@
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:src="@drawable/share_foldermore" />
+                android:importantForAccessibility="no"
+                android:src="@drawable/share_folder_more" />
 
             <TextView
                 android:id="@+id/textview_more_move"
@@ -119,19 +121,20 @@
             android:layout_marginRight="20dp">
 
             <ImageButton
-                android:id="@+id/imagebutton_more_authority"
+                android:id="@+id/image_button_more_authority"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:src="@drawable/authority_foldermore" />
+                android:importantForAccessibility="no"
+                android:src="@drawable/authority_folder_more" />
 
             <TextView
                 android:id="@+id/textview_more_authority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_toEndOf="@+id/imagebutton_more_authority"
+                android:layout_toEndOf="@+id/image_button_more_authority"
                 android:text="@string/permission_management"
                 android:textColor="@color/black" />
         </RelativeLayout>
@@ -151,7 +154,8 @@
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:src="@drawable/delete_foldermore" />
+                android:importantForAccessibility="no"
+                android:src="@drawable/delete_folder_more" />
 
             <TextView
                 android:id="@+id/textview_more_delete"

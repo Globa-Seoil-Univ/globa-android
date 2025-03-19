@@ -14,17 +14,14 @@ import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityQuizResultBinding;
 
 public class QuizResultActivity extends AppCompatActivity {
+    int color;
     private ActivityQuizResultBinding binding;
     private SharedPreferences quizResultPref;
     private SharedPreferences.Editor quizResultEditor;
-
     private int gradeInt;
-
     private String grade;
     private String corrected;
     private Map<String, ?> allEntries;
-
-    int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +36,7 @@ public class QuizResultActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        binding.buttonQuizresultBack.setOnClickListener(v -> finish());
+        binding.buttonQuizResultBack.setOnClickListener(v -> finish());
 
         // 데이터 수집
         loadData();
@@ -65,7 +62,7 @@ public class QuizResultActivity extends AppCompatActivity {
         int scoreStartIndex = 0;
         int scoreEndIndex = grade.length() - 1;
         scoreSpannable.setSpan(new ForegroundColorSpan(color), scoreStartIndex, scoreEndIndex, 0);
-        binding.textviewQuizresultScore.setText(scoreSpannable);
+        binding.textviewQuizResultScore.setText(scoreSpannable);
     }
 
     private void setCorrectedText() {
@@ -74,7 +71,7 @@ public class QuizResultActivity extends AppCompatActivity {
         int countStartIndex = 0;
         int countEndIndex = corrected.length() - 1;
         countSpannable.setSpan(new ForegroundColorSpan(color), countStartIndex, countEndIndex, 0);
-        binding.textviewQuizresultCorrect.setText(countSpannable);
+        binding.textviewQuizResultCorrect.setText(countSpannable);
     }
 
     private void setIncreasedText() {
@@ -87,7 +84,7 @@ public class QuizResultActivity extends AppCompatActivity {
             percentString = getString(R.string.activity_quiz_result_empty);
             SpannableStringBuilder percentSpannable = new SpannableStringBuilder(percentString);
             percentSpannable.setSpan(new ForegroundColorSpan(color), 9, 12, 0); // "상승률" 글자에만 색 입히기
-            binding.textviewQuizresultPercent.setText(percentSpannable);
+            binding.textviewQuizResultPercent.setText(percentSpannable);
         } else {
             // 문제 푼 이력이 있는 경우
             int lastCorrected = quizResultPref.getInt("lastGrade", 0);
@@ -101,7 +98,7 @@ public class QuizResultActivity extends AppCompatActivity {
                     int percentStartIndex = 9;
                     int percentEndIndex = percentString.length() - 1;
                     percentSpannable.setSpan(new ForegroundColorSpan(color), percentStartIndex, percentEndIndex - 8, 0);
-                    binding.textviewQuizresultPercent.setText(percentSpannable);
+                    binding.textviewQuizResultPercent.setText(percentSpannable);
                 } else if (gradeInt < lastCorrected) {
                     // 점수 하락 경우
                     different = lastCorrected - gradeInt;
@@ -110,16 +107,16 @@ public class QuizResultActivity extends AppCompatActivity {
                     int percentStartIndex = 9;
                     int percentEndIndex = percentString.length() - 1;
                     percentSpannable.setSpan(new ForegroundColorSpan(color), percentStartIndex, percentEndIndex - 8, 0);
-                    binding.textviewQuizresultPercent.setText(percentSpannable);
+                    binding.textviewQuizResultPercent.setText(percentSpannable);
                 } else {
                     // 점수 동일 경우
                     percentString = getString(R.string.activity_quiz_result_last_corrected_4);
-                    binding.textviewQuizresultPercent.setText(percentString);
+                    binding.textviewQuizResultPercent.setText(percentString);
                 }
             } else {
                 // 지난 성적이 0점인 경우
                 percentString = getString(R.string.activity_quiz_result_last_score_zero);
-                binding.textviewQuizresultPercent.setText(percentString);
+                binding.textviewQuizResultPercent.setText(percentString);
             }
         }
         quizResultEditor.putInt("lastGrade", gradeInt);

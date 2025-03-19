@@ -24,17 +24,16 @@ import team.y2k2.globa.notification.NotificationViewModel;
 
 public class TotalFragment extends Fragment {
 
-    FragmentNotificationTotalBinding binding;
-    private List<Notification> notificationList = new ArrayList<>();
     private final List<TotalFragmentItem> totalFragmentItems = new ArrayList<>();
+    FragmentNotificationTotalBinding binding;
     String notificationId, profile, title, content, createdTime, notificationType;
     boolean isRead;
     TotalFragmentAdapter adapter;
+    private List<Notification> notificationList = new ArrayList<>();
     private String myProfile;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNotificationTotalBinding.inflate(getLayoutInflater());
 
         ApiClient apiClient = new ApiClient(getContext());
@@ -53,10 +52,10 @@ public class TotalFragment extends Fragment {
         notificationViewModel.getNotification("a");
 
         notificationViewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
-            if(notificationResponse != null) {
+            if (notificationResponse != null) {
                 notificationList = notificationResponse.getNotifications();
                 totalFragmentItems.clear();
-                for(Notification notification : notificationList) {
+                for (Notification notification : notificationList) {
 
                     settingNotification(notification);
 
@@ -80,49 +79,44 @@ public class TotalFragment extends Fragment {
         createdTime = notification.getCreatedTime().substring(0, 10);
         isRead = notification.isRead();
         switch (notificationType) {
-            case "1" :
+            case "1":
                 profile = notification.getNotice().getThumbnail();
                 title = notification.getNotice().getTitle();
                 content = notification.getNotice().getContent();
-                Log.d("1번 알림", "공지 사항 알림(1번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                        ", createdTime: " + createdTime + ", isRead: " + isRead);
+                Log.d("1번 알림", "공지 사항 알림(1번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "1", isRead));
                 break;
-            case "2" :
+            case "2":
                 profile = notification.getUser().getProfile();
                 title = notification.getFolder().getTitle() + "폴더 공유 초대 알림";
                 content = notification.getUser().getName() + "님이 " + notification.getFolder().getTitle() + " 폴더 공유 초대를 보냈습니다.";
                 String folderId = notification.getFolder().getFolderId();
                 String shareId = notification.getShare().getShareId();
-                Log.d("2번 알림", "공유 초대 알림(2번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                        ", createdTime: " + createdTime + ", isRead: " + isRead);
+                Log.d("2번 알림", "공유 초대 알림(2번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, folderId, shareId, "", "2", isRead));
                 break;
-            case "3" :
+            case "3":
                 profile = notification.getUser().getProfile();
                 title = notification.getUser().getName() + getString(R.string.fragment_share_notification_3_1);
                 content = notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_3_2);
-                Log.d("3번 알림", "공유 폴더 파일 추가 알림(3번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                        ", createdTime: " + createdTime + ", isRead: " + isRead);
+                Log.d("3번 알림", "공유 폴더 파일 추가 알림(3번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "3", isRead));
                 break;
-            case "4" :
+            case "4":
                 profile = notification.getUser().getProfile();
                 title = notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_4_1) + notification.getUser().getName() + getString(R.string.fragment_share_notification_4_2);
                 content = "";
-                Log.d("4번 알림", "공유 폴더 사람 추가 알림(4번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                        ", createdTime: " + createdTime + ", isRead: " + isRead);
+                Log.d("4번 알림", "공유 폴더 사람 추가 알림(4번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "4", isRead));
                 break;
-            case "5" :
+            case "5":
                 profile = notification.getUser().getProfile();
                 title = notification.getUser().getName() + getString(R.string.fragment_share_notification_5_1) + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_5_2);
                 content = notification.getComment().getContent();
-                Log.d("5번 알림", "공유 폴더 댓글 추가 알림(5번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                        ", createdTime: " + createdTime + ", isRead: " + isRead);
+                Log.d("5번 알림", "공유 폴더 댓글 추가 알림(5번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "5", isRead));
                 break;
-            case "6" :
+            case "6":
                 profile = myProfile;
                 title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
                 content = "";
@@ -130,24 +124,22 @@ public class TotalFragment extends Fragment {
                 Log.d("6번 알림", "업로드 완료 알림(6번): (ID: " + notificationId + ", title: " + title + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "6", isRead));
                 break;
-            case "7" :
+            case "7":
                 profile = myProfile;
                 title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
                 content = "";
-                Log.d("7번 알림", "업로드 실패 알림(7번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                        ", createdTime: " + createdTime + ", isRead: " + isRead);
+                Log.d("7번 알림", "업로드 실패 알림(7번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "7", isRead));
                 break;
-            case "8" :
+            case "8":
                 profile = myProfile;
                 title = "문의 답변이 도착하였습니다.";
                 content = notification.getInquiry().getTitle();
                 String inquiryId = notification.getInquiry().getInquiryId();
-                Log.d("8번 알림", "문의 답변 알림(8번): (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                        ", createdTime: " + createdTime + ", isRead: " + isRead);
+                Log.d("8번 알림", "문의 답변 알림(8번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", inquiryId, "8", isRead));
                 break;
-            default :
+            default:
                 break;
         }
     }

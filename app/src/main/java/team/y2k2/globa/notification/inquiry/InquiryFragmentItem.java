@@ -23,21 +23,27 @@ public class InquiryFragmentItem {
     public String getNotificationId() {
         return notificationId;
     }
+
     public String getProfile() {
         return profile;
     }
+
     public String getInquiryId() {
         return inquiryId;
     }
+
     public String getTitle() {
         return title;
     }
+
     public String getContent() {
         return content;
     }
+
     public String getCreatedTime() {
         return createdTime;
     }
+
     public boolean isRead() {
         return isRead;
     }

@@ -71,8 +71,8 @@ public class FolderAddAdapter extends RecyclerView.Adapter<FolderAddAdapter.MyVi
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            profile = itemView.findViewById(R.id.imageview_foldershare_profile_item);
-            layout = itemView.findViewById(R.id.constraintlayout_foldershare_item);
+            profile = itemView.findViewById(R.id.imageview_folder_share_profile_item);
+            layout = itemView.findViewById(R.id.constraintlayout_folder_share_item);
         }
     }
 }

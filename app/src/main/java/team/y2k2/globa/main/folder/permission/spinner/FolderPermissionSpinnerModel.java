@@ -15,7 +15,7 @@ public class FolderPermissionSpinnerModel {
     public List<String> getOptions(Context context) {
         READ = context.getString(R.string.read);
         EDIT = context.getString(R.string.modify);
-        return Arrays.asList(READ,EDIT);
+        return Arrays.asList(READ, EDIT);
     }
 
 }

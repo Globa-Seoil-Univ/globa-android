@@ -18,8 +18,8 @@ import team.y2k2.globa.R;
 public class DocsUploadLanguageAdapter extends ArrayAdapter<String> implements SpinnerAdapter {
     private final ArrayList<String> items;
     private final LayoutInflater inflater;
-    private int dropResource;
     private final int topResources;
+    private int dropResource;
 
     public DocsUploadLanguageAdapter(@NonNull Context context, int resource) {
         super(context, resource);

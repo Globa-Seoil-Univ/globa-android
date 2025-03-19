@@ -30,10 +30,6 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
 
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    public interface onItemLongClickListener {
-        void onItemLongClick(int position);
-    }
-
     public FolderPermissionItemAdapter(ArrayList<FolderPermissionItem> items, onItemLongClickListener longClickListener) {
         this.items = items;
         this.longClickListener = longClickListener;
@@ -51,16 +47,10 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
         FolderPermissionItem item = items.get(position);
 
         if (item.getProfileImageUrl().startsWith("http")) {
-            Glide.with(holder.itemView.getContext())
-                    .load(item.getProfileImageUrl())
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+            Glide.with(holder.itemView.getContext()).load(item.getProfileImageUrl()).error(R.mipmap.ic_launcher).into(holder.profileImage);
         } else {
             StorageReference imageRef = storage.getReference().child(item.getProfileImageUrl());
-            Glide.with(holder.itemView.getContext())
-                    .load(ProfileImage.convertGsToHttps(imageRef.toString()))
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+            Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
         }
 
         holder.name.setText(item.getName());
@@ -93,6 +83,10 @@ public class FolderPermissionItemAdapter extends RecyclerView.Adapter<FolderPerm
 
     public FolderPermissionItem getItem(int position) {
         return items.get(position);
+    }
+
+    public interface onItemLongClickListener {
+        void onItemLongClick(int position);
     }
 
     public class AdapterViewHolder extends RecyclerView.ViewHolder {

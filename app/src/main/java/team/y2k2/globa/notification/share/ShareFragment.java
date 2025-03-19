@@ -21,16 +21,15 @@ import team.y2k2.globa.databinding.FragmentNotificationShareBinding;
 import team.y2k2.globa.notification.NotificationActivity;
 
 public class ShareFragment extends Fragment {
-    FragmentNotificationShareBinding binding;
     private final List<ShareFragmentItem> shareFragmentItems = new ArrayList<>();
+    FragmentNotificationShareBinding binding;
     String notificationId, profile, title, content, createdTime, notificationType;
     boolean isRead;
     ShareFragmentAdapter adapter;
     ApiClient apiClient;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNotificationShareBinding.inflate(getLayoutInflater());
 
         initializeUI();
@@ -44,8 +43,8 @@ public class ShareFragment extends Fragment {
         List<Notification> notificationList = apiClient.requestNotification("s").getNotifications();
         shareFragmentItems.clear();
 
-        if(notificationList != null) {
-            for(Notification notification : notificationList) {
+        if (notificationList != null) {
+            for (Notification notification : notificationList) {
 
                 settingNotification(notification);
 
@@ -68,7 +67,7 @@ public class ShareFragment extends Fragment {
         createdTime = notification.getCreatedTime().substring(0, 10);
         isRead = notification.isRead();
         switch (notificationType) {
-            case "2" :
+            case "2":
                 title = notification.getUser().getName() + getString(R.string.fragment_share_notification_2_1) + notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_2_2);
                 content = "";
                 String folderId = notification.getFolder().getFolderId();
@@ -76,24 +75,24 @@ public class ShareFragment extends Fragment {
                 Log.d("공유 알림", "공유 알림(2번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                 shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, folderId, shareId, "2", isRead));
                 break;
-            case "3" :
+            case "3":
                 title = notification.getUser().getName() + getString(R.string.fragment_share_notification_3_1);
                 content = notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_3_2);
                 Log.d("공유 알림", "공유 알림(3번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                 shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "3", isRead));
                 break;
-            case "4" :
+            case "4":
                 title = notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_4_1) + notification.getUser().getName() + getString(R.string.fragment_share_notification_4_2);
                 content = "";
                 Log.d("공유 알림", "공유 알림(4번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                 shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "4", isRead));
                 break;
-            case "5" :
+            case "5":
                 title = notification.getUser().getName() + getString(R.string.fragment_share_notification_5_1) + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_5_2);
                 content = notification.getComment().getContent();
                 Log.d("공유 알림", "공유 알림(5번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
                 shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "5", isRead));
-            default :
+            default:
                 break;
         }
     }

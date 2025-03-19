@@ -25,7 +25,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private static final String CHANNEL_ID = "firebase_channel";
     private static final int NOTIFICATION_ID = 1001;
 
-    public FirebaseMessagingService() { }
+    public FirebaseMessagingService() {
+    }
 
     @Override
     public void onNewToken(@NonNull String token) {
@@ -74,14 +75,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private void sendNotification(String title, String message) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
         }
 
         // 알림 채널 생성
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Firebase Notification", NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription("Default Discription");
+        channel.setDescription("Default Description");
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
 
@@ -91,13 +92,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         // 알림 빌더 설정
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID).setSmallIcon(R.mipmap.ic_launcher).setContentTitle(title).setContentText(message).setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(pendingIntent);
 
         // 알림을 시스템에 표시
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);

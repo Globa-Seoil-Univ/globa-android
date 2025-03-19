@@ -38,8 +38,7 @@ public class NoticeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notice, container, false);
         ImageView imageView = view.findViewById(R.id.imageview_notice_image);
 
@@ -51,35 +50,28 @@ public class NoticeFragment extends Fragment {
         storageRef = storage.getReference().child(imageURL);
 
         // 다운로드 URL 가져오기
-        storageRef.getDownloadUrl()
-                .addOnSuccessListener(uri -> {
-                    // 성공적으로 다운로드 URL을 가져왔을 때 처리
-                    String downloadedImageUrl = uri.toString();
-                    Glide.with(inflater.getContext())
-                            .load(downloadedImageUrl) // 임시로 로드
-                            .into(imageView);
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            // 성공적으로 다운로드 URL을 가져왔을 때 처리
+            String downloadedImageUrl = uri.toString();
+            Glide.with(inflater.getContext()).load(downloadedImageUrl) // 임시로 로드
+                    .into(imageView);
 
-                    Log.e("NOTICE_SUCCESS", imageURL + ":" + downloadedImageUrl);
+            Log.e("NOTICE_SUCCESS", imageURL + ":" + downloadedImageUrl);
 
-                })
-                .addOnFailureListener(exception -> {
-                    // 다운로드 URL을 가져오는 데 실패했을 때 처리
-                    Log.e("NOTICE_ERROR", "다운로드 URL 가져오기 실패", exception);
-                    if (!getActivity().isFinishing()) {
-                        (getActivity()).runOnUiThread(() -> {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setTitle("에러 발생")
-                                    .setMessage("Firebase RDB 에러 : " + exception.getMessage())
-                                    .setPositiveButton("확인", (dialog, which) -> dialog.dismiss())
-                                    .setCancelable(false)
-                                    .show();
-                        });
-
-                    }
-
-
-                    isDownloadFailed = true; // 실패 플래그 설정
+        }).addOnFailureListener(exception -> {
+            // 다운로드 URL을 가져오는 데 실패했을 때 처리
+            Log.e("NOTICE_ERROR", "다운로드 URL 가져오기 실패", exception);
+            if (!getActivity().isFinishing()) {
+                (getActivity()).runOnUiThread(() -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("에러 발생").setMessage("Firebase RDB 에러 : " + exception.getMessage()).setPositiveButton("확인", (dialog, which) -> dialog.dismiss()).setCancelable(false).show();
                 });
+
+            }
+
+
+            isDownloadFailed = true; // 실패 플래그 설정
+        });
         return view;
     }
 

@@ -23,21 +23,27 @@ public class DocsFragmentItem {
     public String getNotificationId() {
         return notificationId;
     }
+
     public String getProfile() {
         return profile;
     }
+
     public String getTitle() {
         return title;
     }
+
     public String getContent() {
         return content;
     }
+
     public String getCreatedTime() {
         return createdTime;
     }
+
     public String getType() {
         return type;
     }
+
     public boolean isRead() {
         return isRead;
     }

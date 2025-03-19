@@ -23,6 +23,7 @@ public class InquiryDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         viewModel = new ViewModelProvider(this).get(InquiryDetailViewModel.class);
+        viewModel.setApiClient(this);
 
         Intent intent = getIntent();
         inquiryId = intent.getStringExtra("inquiryId");
@@ -45,6 +46,6 @@ public class InquiryDetailActivity extends AppCompatActivity {
             }
         });
 
-        binding.imagebuttonInquiryDetailBack.setOnClickListener(v -> finish());
+        binding.imageButtonInquiryDetailBack.setOnClickListener(v -> finish());
     }
 }

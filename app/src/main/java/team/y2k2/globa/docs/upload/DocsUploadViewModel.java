@@ -31,6 +31,15 @@ public class DocsUploadViewModel extends ViewModel {
     private final MutableLiveData<String> title = new MutableLiveData<>();
     private final MutableLiveData<AudioPlayState> audioPlayState = new MutableLiveData<>();
     private final MutableLiveData<String> uploadStatus = new MutableLiveData<>();
+    FolderResponse response;
+    private DocsUploadModel model;
+    private DocsUploadActivity activity;
+    private StorageReference storageReference;
+    private String folderId;
+    private DocsUploadFolderAdapter adapter;
+    private MediaPlayer mediaPlayer;
+    private long unixTime;
+    private Handler handler;
 
     public LiveData<String> getDocsTitle() {
         return title;
@@ -43,18 +52,6 @@ public class DocsUploadViewModel extends ViewModel {
     public LiveData<String> getUploadStatus() {
         return uploadStatus;
     }
-
-    private DocsUploadModel model;
-    private DocsUploadActivity activity;
-    private StorageReference storageReference;
-    private String folderId;
-    private DocsUploadFolderAdapter adapter;
-    private MediaPlayer mediaPlayer;
-    private long unixTime;
-
-    FolderResponse response;
-    private Handler handler;
-
 
     public void setActivity(DocsUploadActivity activity) {
         this.activity = activity;
@@ -144,18 +141,15 @@ public class DocsUploadViewModel extends ViewModel {
 
         Uri uri = Uri.fromFile(new File(oggPath));
 
-        audioRef.putFile(uri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    // 업로드 성공 시
-                    Toast.makeText(activity, "파일 업로드 성공", Toast.LENGTH_SHORT).show();
-                    if(model.getRecordName().length() >= 20)
-                        requestCreateRecord(model.getRecordName().substring(0, 20));
-                    else
-                        requestCreateRecord(model.getRecordName());
+        audioRef.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+            // 업로드 성공 시
+            Toast.makeText(activity, "파일 업로드 성공", Toast.LENGTH_SHORT).show();
+            if (model.getRecordName().length() >= 20)
+                requestCreateRecord(model.getRecordName().substring(0, 20));
+            else requestCreateRecord(model.getRecordName());
 
 
-                })
-                .addOnFailureListener(e -> Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show());
+        }).addOnFailureListener(e -> Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show());
     }
 
     // MP3 to OGG 변환 함수 호출
@@ -195,14 +189,14 @@ public class DocsUploadViewModel extends ViewModel {
         // Handler 생성 및 연결
         handler = new Handler(handlerThread.getLooper());
 
-        if(activity.binding.edittextDocsUploadTitle.getText().length() != 0)
+        if (activity.binding.edittextDocsUploadTitle.getText().length() != 0)
             model.setRecordName(activity.binding.edittextDocsUploadTitle.getText().toString());
 
         SharedPreferences preferences = activity.getSharedPreferences("account", Activity.MODE_PRIVATE);
         // Firebase Storage 참조 가져오기
         storageReference = FirebaseStorage.getInstance().getReference("folders");
 
-        if(!preferences.getString("publicFolderId", "").isEmpty()) {
+        if (!preferences.getString("publicFolderId", "").isEmpty()) {
             Folder folder = adapter.getItems().get(activity.binding.spinnerDocsUpload.getSelectedItemPosition());
             folderId = String.valueOf(folder.getFolderId());
         }

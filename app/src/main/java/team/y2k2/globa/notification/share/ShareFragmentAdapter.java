@@ -136,7 +136,7 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
             profileImage = itemView.findViewById(R.id.imageview_item_notification_share);
             title = itemView.findViewById(R.id.textview_item_notification_share_title);
             content = itemView.findViewById(R.id.textview_item_notification_share_content);
-            createdTime = itemView.findViewById(R.id.textview_item_notification_share_createdtime);
+            createdTime = itemView.findViewById(R.id.textview_item_notification_share_created_time);
             confirmBtn = itemView.findViewById(R.id.button_item_notification_share_access);
             cancelBtn = itemView.findViewById(R.id.button_item_notification_share_denied);
 

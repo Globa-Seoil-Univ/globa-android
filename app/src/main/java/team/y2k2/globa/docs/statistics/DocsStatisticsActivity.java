@@ -37,10 +37,10 @@ public class DocsStatisticsActivity extends AppCompatActivity {
     int[] timeValues, gradeValues;
     double[] doubleWordValues, doubleGradeValues;
     ActivityDocsStatisticsBinding binding;
-    private HorizontalBarChart docsBarChart;
-    private LineChart docsTimeLineChart, docsGradeLineChart;
     DocsStatisticsActivityModel viewModel;
     String folderId, recordId;
+    private HorizontalBarChart docsBarChart;
+    private LineChart docsTimeLineChart, docsGradeLineChart;
     private List<Keyword> keywords;
     private List<StudyTime> studyTimes;
     private List<QuizGrade> quizGrades;
@@ -57,7 +57,6 @@ public class DocsStatisticsActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-
         // 뒤로가기 버튼
         binding.buttonDocsStatisticsBack.setOnClickListener(v -> finish());
 
@@ -66,7 +65,6 @@ public class DocsStatisticsActivity extends AppCompatActivity {
 
         // API Response 데이터를 LiveData로 받아 관찰 및 차트 그리기 실행
         receiveLiveData();
-
     }
 
     private void requestData() {
@@ -85,7 +83,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
     private void receiveLiveData() {
         // 단어, 퀴즈 점수는 데이터베이스에서 데이터를 받아와 차트 그림 (공부 시간은 일단 주석 처리)
         viewModel.getDocsStatisticsLiveData().observe(this, docsStatistics -> {
-            if(docsStatistics != null) {
+            if (docsStatistics != null) {
                 keywords = docsStatistics.getKeywords();
                 studyTimes = docsStatistics.getStudyTimes();
                 quizGrades = docsStatistics.getQuizGrades();
@@ -117,14 +115,14 @@ public class DocsStatisticsActivity extends AppCompatActivity {
             }
         }
 
-        for(int i = 0; i < doubleWordValues.length; i++) {
+        for (int i = 0; i < doubleWordValues.length; i++) {
             doubleWordValues[i] = doubleWordValues[i] * 100;
         }
 
-        if(wordX.length == 0) {
+        if (wordX.length == 0) {
             String[] newWordX = new String[10];
             double[] newWordValue = new double[10];
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 newWordX[i] = " ";
                 newWordValue[i] = 0;
             }
@@ -146,29 +144,29 @@ public class DocsStatisticsActivity extends AppCompatActivity {
             }
         }
 
-        for(int i = 0; i < timeX.length; i++) {
+        for (int i = 0; i < timeX.length; i++) {
             timeX[i] = timeX[i].substring(0, 10);
         }
 
-        if(timeX.length < 10 && timeX.length > 0) {
+        if (timeX.length < 10 && timeX.length > 0) {
             List<String> timeXList = new ArrayList<>();
             List<Integer> timeValuesList = new ArrayList<>();
-            for(int i = 0; i < timeX.length; i ++) {
+            for (int i = 0; i < timeX.length; i++) {
                 timeXList.add(timeX[i]);
                 timeValuesList.add(timeValues[i]);
             }
-            for(int i = 0; i < 10 - timeX.length; i++) {
+            for (int i = 0; i < 10 - timeX.length; i++) {
                 timeXList.add("0");
                 timeValuesList.add(0);
             }
             String[] newTimeX = new String[10];
             int[] newTimeValues = new int[10];
             int i = 0, j = 0;
-            for(String s : timeXList) {
+            for (String s : timeXList) {
                 newTimeX[i] = s;
                 i++;
             }
-            for(int n : timeValuesList) {
+            for (int n : timeValuesList) {
                 newTimeValues[j] = n;
                 j++;
             }
@@ -176,7 +174,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         } else if (timeX.length == 0) {
             String[] newTimeX = new String[10];
             int[] newTimeValues = new int[10];
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 newTimeX[i] = "0";
                 newTimeValues[i] = 0;
             }
@@ -190,28 +188,28 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         // 퀴즈 성적 차트
         gradeX = quizGrades.stream().map(QuizGrade::getCreatedTime).toArray(String[]::new);
         doubleGradeValues = quizGrades.stream().mapToDouble(QuizGrade::getScore).toArray();
-        gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
+        gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int) value).toArray();
 
-        if(gradeX.length < 10 && gradeX.length > 0) {
+        if (gradeX.length < 10 && gradeX.length > 0) {
             List<String> gradeXList = new ArrayList<>();
             List<Integer> gradeValuesList = new ArrayList<>();
-            for(int i = 0; i < gradeX.length; i ++) {
+            for (int i = 0; i < gradeX.length; i++) {
                 gradeXList.add(gradeX[i]);
                 Log.d("퀴즈 점수", "퀴즈 점수 들: " + gradeValues[i]);
                 gradeValuesList.add(gradeValues[i]);
             }
-            for(int i = 0; i < 10 - gradeX.length; i++) {
+            for (int i = 0; i < 10 - gradeX.length; i++) {
                 gradeXList.add("0");
                 gradeValuesList.add(0);
             }
             String[] newGradeX = new String[10];
             int[] newGradeValues = new int[10];
             int i = 0, j = 0;
-            for(String s : gradeXList) {
+            for (String s : gradeXList) {
                 newGradeX[i] = s;
                 i++;
             }
-            for(int n : gradeValuesList) {
+            for (int n : gradeValuesList) {
                 newGradeValues[j] = n;
                 j++;
             }
@@ -219,7 +217,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         } else if (gradeX.length == 0) {
             String[] newGradeX = new String[10];
             int[] newGradeValues = new int[10];
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 newGradeX[i] = "0";
                 newGradeValues[i] = 0;
             }
@@ -321,7 +319,7 @@ public class DocsStatisticsActivity extends AppCompatActivity {
 
     private void drawLineChart(LineChart lineChart, int maxY, String[] dayX, int[] values, String title) {
         List<Entry> entries = new ArrayList<>();
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             entries.add(new Entry(i, values[i]));
         }
 

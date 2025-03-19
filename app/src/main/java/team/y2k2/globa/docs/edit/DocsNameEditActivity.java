@@ -38,7 +38,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
 
         binding.textviewDocsNameChangeConfirm.setOnClickListener(v -> {
             String newName = binding.edittextDocsNameInputName.getText().toString();
-            if(binding.edittextDocsNameInputName.getText().toString().isEmpty()) {
+            if (binding.edittextDocsNameInputName.getText().toString().isEmpty()) {
                 Toast.makeText(this, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -60,7 +60,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 binding.textviewDocsNameCount.setText(s.length() + "/32");
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     binding.buttonDocsNameCancel.setVisibility(View.GONE);
                 } else {
                     binding.buttonDocsNameCancel.setVisibility(View.VISIBLE);
@@ -100,7 +100,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
         Response<Void> response = apiClient.requestUpdateRecordName(folderId, recordId, title);
 
         if (response != null && response.isSuccessful()) {
-            Log.d(getClass().getName(), "folderId = " + folderId +", recordId = " + recordId + ", title =" + title);
+            Log.d(getClass().getName(), "folderId = " + folderId + ", recordId = " + recordId + ", title =" + title);
             finish();
         }
     }

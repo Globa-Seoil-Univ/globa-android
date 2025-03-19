@@ -15,9 +15,7 @@ public class KeywordDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE keyword("
-                +"record_id INT PRIMARY KEY,"
-                +"keyword VARCHAR(30));";
+        String sql = "CREATE TABLE keyword(" + "record_id INT PRIMARY KEY," + "keyword VARCHAR(30));";
 
         db.execSQL(sql);
     }
@@ -38,7 +36,7 @@ public class KeywordDB extends SQLiteOpenHelper {
     }
 
     private boolean isKeywordExists(int recordId, String keyword) {
-        Cursor cursor = sqlDB.rawQuery("SELECT * FROM keyword WHERE record_id = " + recordId +" AND keyword LIKE '"+ keyword +"';", null);
+        Cursor cursor = sqlDB.rawQuery("SELECT * FROM keyword WHERE record_id = " + recordId + " AND keyword LIKE '" + keyword + "';", null);
         return cursor.getCount() == 0;
     }
 }

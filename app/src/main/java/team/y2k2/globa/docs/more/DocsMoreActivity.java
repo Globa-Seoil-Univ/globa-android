@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import team.y2k2.globa.R;
@@ -34,13 +33,12 @@ public class DocsMoreActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         docsMoreActivityModel = new ViewModelProvider(this).get(DocsMoreActivityModel.class);
+        docsMoreActivityModel.setApiClient(this);
 
         initializeUI();
-
     }
 
     private void initializeUI() {
-
         // 뒤로 가기 버튼
         binding.imageButtonDocsMoreBack.setOnClickListener(v -> finish());
 
@@ -106,8 +104,5 @@ public class DocsMoreActivity extends AppCompatActivity {
         });
 
         bottomSheetDialog.show();
-
     }
-
-
 }

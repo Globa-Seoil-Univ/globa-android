@@ -30,9 +30,11 @@ public class FolderShareActivityModel extends ViewModel {
     public LiveData<UserSearchResponse> getUserSearchLiveData() {
         return userSearchLiveData;
     }
+
     public MutableLiveData<String> getIsSucceedLiveData() {
         return isSucceedLiveData;
     }
+
     public LiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
@@ -41,7 +43,7 @@ public class FolderShareActivityModel extends ViewModel {
         apiService.requestSearchUserInfo("application/json", authorization, userCode).enqueue(new Callback<UserSearchResponse>() {
             @Override
             public void onResponse(Call<UserSearchResponse> call, Response<UserSearchResponse> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     userSearchLiveData.postValue(response.body());
                 } else {
                     errorLiveData.postValue("해당 코드의 사용자가 없습니다");
@@ -60,7 +62,7 @@ public class FolderShareActivityModel extends ViewModel {
         apiService.requestInsertFolderShareUser(folderId, userId, "application/json", authorization, folderShareAddRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Log.d(getClass().getName(), "공유 추가 성공");
                 } else {
                     Log.d(getClass().getName(), "공유 추가 실패 : " + response.code());

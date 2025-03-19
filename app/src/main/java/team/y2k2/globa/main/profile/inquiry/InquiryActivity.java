@@ -1,9 +1,5 @@
 package team.y2k2.globa.main.profile.inquiry;
 
-import static team.y2k2.globa.api.ApiService.API_BASE_URL;
-
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,14 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiService;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.databinding.ActivityInquiryBinding;
 
 public class InquiryActivity extends AppCompatActivity {
@@ -39,41 +30,18 @@ public class InquiryActivity extends AppCompatActivity {
             String title = binding.edittextInquiryTitle.getText().toString();
             String content = binding.edittextInquiryDescription.getText().toString();
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(API_BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            ApiClient apiClient = new ApiClient(this);
+            Response<Void> response = apiClient.requestInsertInquiry(title, content);
 
-            ApiService apiService = retrofit.create(ApiService.class);
+            if (response.isSuccessful()) {
+                Toast.makeText(binding.getRoot().getContext(), "문의를 보냈습니다.", Toast.LENGTH_LONG).show();
+                Log.d("INQUIRY_RESULT", "문의 추가 성공");
+                finish();
+            } else {
+                Toast.makeText(binding.getRoot().getContext(), response.code(), Toast.LENGTH_LONG).show();
+                Log.d("INQUIRY_RESULT", "문의 추가 실패" + response.code());
 
-            SharedPreferences preferences = binding.getRoot().getContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
-            String accessToken = "Bearer " + preferences.getString("accessToken", "");
-
-            InquiryRequest inquiryRequest = new InquiryRequest(title, content);
-
-            Call<Void> call = apiService.requestInsertInquiry("application/json",accessToken, inquiryRequest);
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(binding.getRoot().getContext(), "문의를 보냈습니다.", Toast.LENGTH_LONG).show();
-                        Log.d("INQUIRY_RESULT", "문의 추가 성공");
-                        finish();
-                    } else {
-                        Toast.makeText(binding.getRoot().getContext(), response.code(), Toast.LENGTH_LONG).show();
-                        Log.d("INQUIRY_RESULT", "문의 추가 실패" + response.code());
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    // 네트워크 요청 실패 시 처리
-                    Toast.makeText(binding.getRoot().getContext(), t.getMessage(), Toast.LENGTH_LONG);
-                    Log.d("INQUIRY_RESULT", "네트워크 에러" + t.getMessage());
-
-                }
-            });
+            }
         });
 
         binding.edittextInquiryTitle.addTextChangedListener(new TextWatcher() {

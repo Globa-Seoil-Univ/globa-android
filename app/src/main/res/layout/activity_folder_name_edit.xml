@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="team.y2k2.globa.main.folder.edit.FolderNameEditActivityModel" />
@@ -25,27 +26,27 @@
                 android:id="@+id/button_folder_name_back"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_marginStart="20dp"
                 android:background="@drawable/header_back"
                 android:onClick="@{() -> viewModel.onBackButtonClicked()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginStart="20dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textview_folder_name_change_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/change"
+                android:layout_marginEnd="20dp"
+                android:enabled="@{viewModel.isConfirmEnabled}"
                 android:fontFamily="@font/notosans_regular"
+                android:onClick="@{() -> viewModel.onConfirmButtonClicked()}"
+                android:text="@string/change"
                 android:textColor="@{viewModel.isConfirmEnabled ? @color/primary : @color/gray}"
                 android:textSize="@dimen/large"
-                android:enabled="@{viewModel.isConfirmEnabled}"
-                android:onClick="@{() -> viewModel.onConfirmButtonClicked()}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="20dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -53,52 +54,52 @@
             android:id="@+id/textview_folder_name_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activity_folder_name_edit_title"
-            android:textSize="@dimen/large"
+            android:layout_marginStart="20dp"
             android:fontFamily="@font/notosans_bold"
+            android:text="@string/activity_folder_name_edit_title"
             android:textColor="@color/black"
+            android:textSize="@dimen/large"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_folder_name_header"
-            android:layout_marginStart="20dp" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_folder_name_header" />
 
         <EditText
             android:id="@+id/edittext_folder_name_input_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={viewModel.folderName}"
-            android:textSize="@dimen/normal"
-            android:fontFamily="@font/notosans_regular"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textview_folder_name_title"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="16dp"/>
+            android:fontFamily="@font/notosans_regular"
+            android:text="@={viewModel.folderName}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview_folder_name_title" />
 
         <Button
             android:id="@+id/button_folder_name_cancel"
             android:layout_width="17dp"
             android:layout_height="17dp"
+            android:layout_marginEnd="15dp"
             android:background="@drawable/cancel"
             android:backgroundTint="@color/gray"
             android:onClick="@{() -> viewModel.onCancelButtonClicked()}"
-            app:layout_constraintEnd_toEndOf="@+id/edittext_folder_name_input_name"
-            app:layout_constraintTop_toTopOf="@+id/edittext_folder_name_input_name"
             app:layout_constraintBottom_toBottomOf="@+id/edittext_folder_name_input_name"
-            android:layout_marginEnd="15dp" />
+            app:layout_constraintEnd_toEndOf="@+id/edittext_folder_name_input_name"
+            app:layout_constraintTop_toTopOf="@+id/edittext_folder_name_input_name" />
 
         <TextView
             android:id="@+id/textview_folder_name_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.textCount + `/32`}"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/notosans_regular"
-            android:textSize="@dimen/normal_light"
+            android:text="@{viewModel.textCount + `/32`}"
             android:textColor="@color/gray"
+            android:textSize="@dimen/normal_light"
             app:layout_constraintEnd_toEndOf="@+id/edittext_folder_name_input_name"
-            app:layout_constraintTop_toBottomOf="@+id/edittext_folder_name_input_name"
-            android:layout_marginEnd="12dp" />
+            app:layout_constraintTop_toBottomOf="@+id/edittext_folder_name_input_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

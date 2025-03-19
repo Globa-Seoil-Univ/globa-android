@@ -17,20 +17,20 @@ public class DocsUploadModel {
         return recordName;
     }
 
-    public String getRecordExtension() {
-        return recordExtension;
-    }
-
-    public String getRecordPath() {
-        return recordPath;
-    }
-
     public void setRecordName(String recordName) {
         this.recordName = recordName;
     }
 
+    public String getRecordExtension() {
+        return recordExtension;
+    }
+
     public void setRecordExtension(String recordExtension) {
         this.recordExtension = recordExtension;
+    }
+
+    public String getRecordPath() {
+        return recordPath;
     }
 
     public void setRecordPath(String recordPath) {

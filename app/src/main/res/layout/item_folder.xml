@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/constraintlayout_folder_item"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintlayout_folder_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:background="@drawable/document_background"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@drawable/document_background">
 
     <LinearLayout
         android:id="@+id/linearlayout_docs_upload_folder_item_icon_bg"
@@ -34,22 +34,22 @@
         android:id="@+id/textview_folder_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="2024 회의록"
         android:layout_marginStart="10dp"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/linearlayout_docs_upload_folder_item_icon_bg"
-        app:layout_constraintTop_toTopOf="@+id/linearlayout_docs_upload_folder_item_icon_bg" />
+        app:layout_constraintTop_toTopOf="@+id/linearlayout_docs_upload_folder_item_icon_bg"
+        tools:text="2024 회의록" />
 
     <TextView
         android:id="@+id/textview_folder_item_datetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="2024-03-12 오후 11:07"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/darkGray"
         app:layout_constraintStart_toStartOf="@+id/textview_folder_item_title"
-        app:layout_constraintTop_toBottomOf="@+id/textview_folder_item_title" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_folder_item_title"
+        tools:text="2024-03-12 오후 11:07" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

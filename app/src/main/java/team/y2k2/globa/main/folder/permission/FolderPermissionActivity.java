@@ -23,15 +23,12 @@ import team.y2k2.globa.api.model.response.UserRole;
 import team.y2k2.globa.databinding.ActivityFolderPermissionBinding;
 
 public class FolderPermissionActivity extends AppCompatActivity {
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     ActivityFolderPermissionBinding binding;
     FolderPermissionActivityModel folderPermissionActivityModel;
-
     FolderPermissionItemAdapter adapter;
-
-    private final FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference storageRef;
-
     int folderId;
+    private StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +48,7 @@ public class FolderPermissionActivity extends AppCompatActivity {
         ArrayList<FolderPermissionItem> itemList = new ArrayList<>();
 
         folderPermissionActivityModel = new ViewModelProvider(this).get(FolderPermissionActivityModel.class);
+        folderPermissionActivityModel.setApiClient(this);
         folderPermissionActivityModel.fetchSharedUsers(folderId, 1, 10);
 
         folderPermissionActivityModel.getUsersLiveData().observe(FolderPermissionActivity.this, users -> {
@@ -96,7 +94,7 @@ public class FolderPermissionActivity extends AppCompatActivity {
         });
 
         // 뒤로가기 버튼
-        binding.imagebuttonFolderPermissionBack.setOnClickListener(v -> finish());
+        binding.imageButtonFolderPermissionBack.setOnClickListener(v -> finish());
     }
 
     private void onClickConfirmBtn() {

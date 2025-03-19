@@ -14,7 +14,7 @@ public class DocsModel {
         detailItems = new ArrayList<>();
         ArrayList<Highlight> highlightItems = new ArrayList<>();
 
-        for(int i = 0; i < sections.size(); i++) {
+        for (int i = 0; i < sections.size(); i++) {
             Section section = sections.get(i);
 
             String title = section.getTitle();
@@ -22,7 +22,7 @@ public class DocsModel {
             int time = section.getStartTime();
             String content = section.getAnalysis().getContent();
 
-            for(int j = 0; j < section.getAnalysis().getHighlights().size(); j++) {
+            for (int j = 0; j < section.getAnalysis().getHighlights().size(); j++) {
                 List<Highlight> highlights = section.getAnalysis().getHighlights();
 
                 int highlightId = highlights.get(j).getHighlightId();
@@ -32,7 +32,7 @@ public class DocsModel {
 
                 highlightItems.add(new Highlight(highlightId, type, startIdx, endIdx));
             }
-            detailItems.add(new DocsDetailItem(title, sectionId , String.valueOf(time), content, highlightItems));
+            detailItems.add(new DocsDetailItem(title, sectionId, String.valueOf(time), content, highlightItems));
             highlightItems.clear();
         }
     }

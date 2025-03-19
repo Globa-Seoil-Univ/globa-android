@@ -30,24 +30,18 @@ import team.y2k2.globa.main.ProfileImage;
 
 public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetailSubCommentAdapter.AdapterViewHolder> {
 
-    List<DocsDetailSubCommentItem> subCommentItems;
-
     private final DocsActivity activity;
     private final String folderId;
     private final String recordId;
     private final String sectionId;
     private final String highlightId;
-
     private final DocsDetailCommentAdapter commentAdapter;
-
     private final int BUTTON_COMMENT_SUB_CONFIRM = 2;
     private final int BUTTON_COMMENT_SUB_UPDATE = 3;
-
-    private ApiClient apiClient;
-
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
-
     private final FocusViewModel focusViewModel;
+    List<DocsDetailSubCommentItem> subCommentItems;
+    private ApiClient apiClient;
 
     public DocsDetailSubCommentAdapter(List<DocsDetailSubCommentItem> subCommentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailCommentAdapter commentAdapter) {
         this.subCommentItems = subCommentItems;
@@ -95,9 +89,9 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         String createdTime = subCommentItems.get(position).getCreatedTime();
         String content = subCommentItems.get(position).getContent();
 
-        if(profile != null) {
+        if (profile != null) {
             Log.d(getClass().getSimpleName(), "프로필 경로: " + profile);
-            if(profile.startsWith("http")) {
+            if (profile.startsWith("http")) {
                 Glide.with(activity).load(profile).error(R.mipmap.ic_launcher).into(holder.profileImage);
             } else {
                 StorageReference profileImageRef = storage.getReference().child(profile);
@@ -124,7 +118,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
                 commentAdapter.focusOnSubCommentEt();
 
                 focusViewModel.getSubCommentFocusLiveData().observe(activity, hasFocus -> {
-                    if(hasFocus) {
+                    if (hasFocus) {
                         // 대댓글 수정 동작 (버튼 상태 변경)
                         Log.d("대댓글 버튼 상태", "대댓글 버튼 상태 수정 상태로 번환 시작");
                         commentAdapter.setSubButtonStatus(BUTTON_COMMENT_SUB_UPDATE);
@@ -157,6 +151,26 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         return (subCommentItems != null ? subCommentItems.size() : 0);
     }
 
+    private void showBottomSheetDialog(String commentId, int position) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
+        View bottomSheetView = activity.getLayoutInflater().inflate(R.layout.dialog_delete_comment, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        TextView confirmBtn = bottomSheetView.findViewById(R.id.textview_delete_comment_confirm);
+        TextView cancelBtn = bottomSheetView.findViewById(R.id.textview_delete_comment_cancel);
+
+        confirmBtn.setOnClickListener(v -> {
+            updateItem("삭제된 댓글입니다", position);
+            if (apiClient == null) {
+                apiClient = new ApiClient(activity);
+            }
+            apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
+            bottomSheetDialog.dismiss();
+        });
+        cancelBtn.setOnClickListener(v -> bottomSheetDialog.dismiss());
+        bottomSheetDialog.show();
+    }
+
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView profileImage;
@@ -172,26 +186,6 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
             createdTime = itemView.findViewById(R.id.textview_item_comment_sub_datetime);
             content = itemView.findViewById(R.id.textview_item_comment_sub_content);
         }
-    }
-
-    private void showBottomSheetDialog(String commentId, int position) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
-        View bottomSheetView = activity.getLayoutInflater().inflate(R.layout.dialog_delete_comment, null);
-        bottomSheetDialog.setContentView(bottomSheetView);
-
-        TextView confirmBtn = bottomSheetView.findViewById(R.id.textview_delete_comment_confirm);
-        TextView cancelBtn = bottomSheetView.findViewById(R.id.textview_delete_comment_cancel);
-
-        confirmBtn.setOnClickListener(v -> {
-            updateItem("삭제된 댓글입니다", position);
-            if(apiClient == null) {
-                apiClient = new ApiClient(activity);
-            }
-            apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
-            bottomSheetDialog.dismiss();
-        });
-        cancelBtn.setOnClickListener(v -> bottomSheetDialog.dismiss());
-        bottomSheetDialog.show();
     }
 
 }

@@ -56,7 +56,7 @@ public class MyInfoActivity extends AppCompatActivity {
         code = userInfoResponse.getCode();
         userId = userInfoResponse.getUserId();
 
-        binding.buttonMyinfoBack.setOnClickListener(v -> {
+        binding.buttonMyInfoBack.setOnClickListener(v -> {
 
             Intent intent = new Intent();
             intent.putExtra("newName", newName);
@@ -83,7 +83,7 @@ public class MyInfoActivity extends AppCompatActivity {
                 Log.d("PhotoPicker", "Selected URI: " + uri);
                 Glide.with(this).load(uri)
                         .error(R.drawable.profile_user)
-                        .into(binding.imageviewMyinfoPhoto);
+                        .into(binding.imageviewMyInfoPhoto);
 
                 try{
                     InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -111,7 +111,7 @@ public class MyInfoActivity extends AppCompatActivity {
         });
 
         // 사진 변경 버튼 클릭 시 PhotoPicker 실행
-        binding.buttonMyinfoChangephoto.setOnClickListener(v -> pickMedia.launch(new PickVisualMediaRequest.Builder()
+        binding.buttonMyInfoChangePhoto.setOnClickListener(v -> pickMedia.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                 .build()));
     }
@@ -119,7 +119,7 @@ public class MyInfoActivity extends AppCompatActivity {
     // 초기 화면 구성
     public void loadUserInfoList(MyinfoViewModel myInfoViewModel) {
         // 리사이클러뷰 레이아웃 매니저 설정
-        binding.recyclerviewMyinfoItems.setLayoutManager(new LinearLayoutManager(MyInfoActivity.this));
+        binding.recyclerviewMyInfoItems.setLayoutManager(new LinearLayoutManager(MyInfoActivity.this));
         // 리사이클러 뷰에 넣을 아이템 리스트
         List<MyInfoItem> itemList = new ArrayList<>();
 
@@ -127,17 +127,17 @@ public class MyInfoActivity extends AppCompatActivity {
             if(profile.startsWith("http")) {
                 Glide.with(this).load(profile)
                         .error(R.drawable.profile_user)
-                        .into(binding.imageviewMyinfoPhoto);
+                        .into(binding.imageviewMyInfoPhoto);
             } else {
                 StorageReference imageRef = storage.getReference().child(profile);
                 Glide.with(this).load(ProfileImage.convertGsToHttps(imageRef.toString()))
                         .error(R.drawable.profile_user)
-                        .into(binding.imageviewMyinfoPhoto);
+                        .into(binding.imageviewMyInfoPhoto);
             }
         } else {
             Glide.with(this).load(R.drawable.profile_user)
                     .error(R.drawable.profile_user)
-                    .into(binding.imageviewMyinfoPhoto);
+                    .into(binding.imageviewMyInfoPhoto);
             Log.d("이미지 로드 오류", "profile 값이 null입니다");
         }
 
@@ -164,7 +164,7 @@ public class MyInfoActivity extends AppCompatActivity {
         // 어뎁터에 아이템 리스트 추가
         myinfoAdapter = new MyinfoAdapter(itemList, nicknameEditLauncher, this);
         // 라시아클러 뷰에 어뎁터 설정
-        binding.recyclerviewMyinfoItems.setAdapter(myinfoAdapter);
+        binding.recyclerviewMyInfoItems.setAdapter(myinfoAdapter);
 
     }
 

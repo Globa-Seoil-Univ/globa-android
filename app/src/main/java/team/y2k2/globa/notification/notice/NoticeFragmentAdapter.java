@@ -54,15 +54,12 @@ public class NoticeFragmentAdapter extends RecyclerView.Adapter<NoticeFragmentAd
 
         StorageReference imageRef = storage.getReference().child(item.getProfile());
 
-        Glide.with(holder.itemView.getContext())
-                .load(ProfileImage.convertGsToHttps(imageRef.toString()))
-                .error(R.mipmap.ic_launcher)
-                .into(holder.profileImage);
+        Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
 
-        if(!item.isRead()) {
+        if (!item.isRead()) {
             holder.layout.setBackgroundColor(primaryColor);
         } else {
             holder.layout.setBackgroundColor(whiteColor);
@@ -70,7 +67,7 @@ public class NoticeFragmentAdapter extends RecyclerView.Adapter<NoticeFragmentAd
 
         holder.layout.setOnClickListener(v -> {
             // 알림 읽음 표시
-            if(!item.isRead()){
+            if (!item.isRead()) {
                 Log.d("알림 읽음", "공지사항 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
                 notificationViewModel.readNotification(item.getNotificationId());
@@ -99,7 +96,7 @@ public class NoticeFragmentAdapter extends RecyclerView.Adapter<NoticeFragmentAd
             profileImage = itemView.findViewById(R.id.imageview_item_notification_notice);
             title = itemView.findViewById(R.id.textview_item_notification_notice_title);
             content = itemView.findViewById(R.id.textview_item_notification_notice_content);
-            createdTime = itemView.findViewById(R.id.textview_item_notification_notice_createdtime);
+            createdTime = itemView.findViewById(R.id.textview_item_notification_notice_created_time);
 
         }
     }

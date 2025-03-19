@@ -15,11 +15,7 @@ public class FolderDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE folder("
-                +"record_id INT PRIMARY KEY,"
-                +"user_id INT,"
-                +"title VARCHAR(32),"
-                +"datetime VARCHAR(300));";
+        String sql = "CREATE TABLE folder(" + "record_id INT PRIMARY KEY," + "user_id INT," + "title VARCHAR(32)," + "datetime VARCHAR(300));";
 
         db.execSQL(sql);
     }
@@ -40,7 +36,7 @@ public class FolderDB extends SQLiteOpenHelper {
     }
 
     private boolean isFolderIdExists(int folderId) {
-        Cursor cursor = sqlDB.rawQuery("SELECT * FROM folder WHERE folder_id = " + folderId +";", null);
+        Cursor cursor = sqlDB.rawQuery("SELECT * FROM folder WHERE folder_id = " + folderId + ";", null);
         cursor.close();
         return cursor.getCount() == 0;
     }

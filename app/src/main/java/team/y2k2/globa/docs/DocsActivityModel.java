@@ -29,7 +29,6 @@ import team.y2k2.globa.docs.summary.DocsSummaryModel;
 
 public class DocsActivityModel extends ViewModel {
 
-    private DocsActivity activity;
     String title;
     String folderId;
     String recordId;
@@ -41,16 +40,27 @@ public class DocsActivityModel extends ViewModel {
     Boolean isMusicStarted;
     ActivityDocsBinding binding;
     DocsSummaryAdapter summaryAdapter;
+    private DocsActivity activity;
     private SimpleExoPlayer player;
 
     private boolean isDownloadFailed = false;
 
+    public static String formatDuration(int durationMillis) {
+        int hours = (durationMillis / 1000) / 3600;
+        durationMillis %= 1000 * 3600;
+
+        int minutes = (durationMillis / 1000) / 60;
+        int seconds = (durationMillis / 1000) % 60;
+
+        if (hours > 0) return String.format("%2d:%02d:%02d", hours, minutes, seconds);
+        else return String.format("%02d:%02d", minutes, seconds);
+    }
 
     public void setActivity(DocsActivity activity) {
         this.activity = activity;
     }
 
-    public void setIntent(Intent intent){
+    public void setIntent(Intent intent) {
         title = intent.getStringExtra("title");
         folderId = intent.getStringExtra("folderId");
         recordId = intent.getStringExtra("recordId");
@@ -96,103 +106,100 @@ public class DocsActivityModel extends ViewModel {
         StorageReference storageRef = storage.getReference();
         StorageReference audioRef = storageRef.child(audioUrl);
 
-        audioRef.getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+        audioRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String audioUrl = uri.toString();
+
+                player.setMediaItem(MediaItem.fromUri(audioUrl));
+                player.prepare();
+
+                player.addListener(new Player.Listener() {
                     @Override
-                    public void onSuccess(Uri uri) {
-                        String audioUrl = uri.toString();
+                    public void onPlaybackStateChanged(int playbackState) {
+                        if (playbackState == Player.STATE_READY) {
+                            Log.d(getClass().getName(), player.getDuration() + " sec");
+                            binding.seekbarAudioProgress.setMax((int) player.getDuration());
+                            binding.textviewDocumentAudioEndTime.setText(formatDuration((int) player.getDuration()));
+                            binding.textviewDocumentAudioNowTime.setText(formatDuration(0));
 
-                        player.setMediaItem(MediaItem.fromUri(audioUrl));
-                        player.prepare();
+                            binding.lottieAudioDownload.setVisibility(View.INVISIBLE);
 
-                        player.addListener(new Player.Listener() {
-                            @Override
-                            public void onPlaybackStateChanged(int playbackState) {
-                                if (playbackState == Player.STATE_READY) {
-                                    Log.d(getClass().getName(), player.getDuration() + " sec");
-                                    binding.seekbarAudioProgress.setMax((int) player.getDuration());
-                                    binding.textviewDocumentAudioEndTime.setText(formatDuration((int) player.getDuration()));
-                                    binding.textviewDocumentAudioNowTime.setText(formatDuration(0));
-
-                                    binding.lottieAudioDownload.setVisibility(View.INVISIBLE);
-
-                                    binding.imageButtonDocumentAudioPlay.setVisibility(View.VISIBLE);
-                                    binding.imageviewDocumentReplay.setVisibility(View.VISIBLE);
-                                    binding.imageviewDocumentForward.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        });
-
-                        isMusicStarted = false;
-
-                        binding.imageButtonDocumentAudioPlay.setOnClickListener(v -> {
-                            if (!isMusicStarted) {
-                                isMusicStarted = true;
-                                binding.imageButtonDocumentAudioPlay.setImageResource(R.drawable.docs_pause);
-                                player.play();
-                                activity.startUpdatingSeekBar();
-
-                            } else {
-                                isMusicStarted = false;
-                                player.pause();
-                                binding.imageButtonDocumentAudioPlay.setImageResource(R.drawable.docs_play);
-                                activity.stopUpdatingSeekBar();
-                            }
-                        });
-
-                        binding.imageviewDocumentForward.setOnClickListener(v -> {
-                            int currentPosition = (int) player.getCurrentPosition();
-                            int forwardPosition = currentPosition + 5000;
-
-                            if (player.getDuration() <= forwardPosition) {
-                                forwardPosition = (int) player.getDuration();
-                            }
-
-                            binding.seekbarAudioProgress.setProgress(forwardPosition);
-                            binding.textviewDocumentAudioNowTime.setText(formatDuration(forwardPosition));
-                            player.seekTo(forwardPosition);
-                        });
-
-                        binding.imageviewDocumentReplay.setOnClickListener(v -> {
-                            int currentPosition = (int) player.getCurrentPosition();
-                            int replayPosition = currentPosition - 5000;
-
-                            if (replayPosition < 0) {
-                                replayPosition = 0;
-                            }
-
-                            binding.seekbarAudioProgress.setProgress(replayPosition);
-                            binding.textviewDocumentAudioNowTime.setText(formatDuration(replayPosition));
-                            player.seekTo(replayPosition);
-                        });
-
-                        binding.seekbarAudioProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                            @Override
-                            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                if (fromUser) {
-                                    binding.textviewDocumentAudioNowTime.setText(formatDuration(progress));
-                                    player.seekTo(progress);
-                                }
-                            }
-                            @Override
-                            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-                            @Override
-                            public void onStopTrackingTouch(SeekBar seekBar) {}
-                        });
+                            binding.imageButtonDocumentAudioPlay.setVisibility(View.VISIBLE);
+                            binding.imageviewDocumentReplay.setVisibility(View.VISIBLE);
+                            binding.imageviewDocumentForward.setVisibility(View.VISIBLE);
+                        }
                     }
-                })
-                .addOnFailureListener(e -> {
-                        (activity).runOnUiThread(() -> {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                            builder.setTitle("에러 발생")
-                                    .setMessage("Firebase RDB 에러 : " + e.getMessage())
-                                    .setPositiveButton("확인", (dialog, which) -> dialog.dismiss())
-                                    .setCancelable(false)
-                                    .show();
-                        });
-                    isDownloadFailed = true; // 실패 플래그 설정
                 });
+
+                isMusicStarted = false;
+
+                binding.imageButtonDocumentAudioPlay.setOnClickListener(v -> {
+                    if (!isMusicStarted) {
+                        isMusicStarted = true;
+                        binding.imageButtonDocumentAudioPlay.setImageResource(R.drawable.docs_pause);
+                        player.play();
+                        activity.startUpdatingSeekBar();
+
+                    } else {
+                        isMusicStarted = false;
+                        player.pause();
+                        binding.imageButtonDocumentAudioPlay.setImageResource(R.drawable.docs_play);
+                        activity.stopUpdatingSeekBar();
+                    }
+                });
+
+                binding.imageviewDocumentForward.setOnClickListener(v -> {
+                    int currentPosition = (int) player.getCurrentPosition();
+                    int forwardPosition = currentPosition + 5000;
+
+                    if (player.getDuration() <= forwardPosition) {
+                        forwardPosition = (int) player.getDuration();
+                    }
+
+                    binding.seekbarAudioProgress.setProgress(forwardPosition);
+                    binding.textviewDocumentAudioNowTime.setText(formatDuration(forwardPosition));
+                    player.seekTo(forwardPosition);
+                });
+
+                binding.imageviewDocumentReplay.setOnClickListener(v -> {
+                    int currentPosition = (int) player.getCurrentPosition();
+                    int replayPosition = currentPosition - 5000;
+
+                    if (replayPosition < 0) {
+                        replayPosition = 0;
+                    }
+
+                    binding.seekbarAudioProgress.setProgress(replayPosition);
+                    binding.textviewDocumentAudioNowTime.setText(formatDuration(replayPosition));
+                    player.seekTo(replayPosition);
+                });
+
+                binding.seekbarAudioProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if (fromUser) {
+                            binding.textviewDocumentAudioNowTime.setText(formatDuration(progress));
+                            player.seekTo(progress);
+                        }
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+                });
+            }
+        }).addOnFailureListener(e -> {
+            (activity).runOnUiThread(() -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle("에러 발생").setMessage("Firebase RDB 에러 : " + e.getMessage()).setPositiveButton("확인", (dialog, which) -> dialog.dismiss()).setCancelable(false).show();
+            });
+            isDownloadFailed = true; // 실패 플래그 설정
+        });
     }
 
     public String getTitle() {
@@ -207,7 +214,6 @@ public class DocsActivityModel extends ViewModel {
         return recordId;
     }
 
-
     public DocsDetailAdapter getDetailAdapter() {
         return detailAdapter;
     }
@@ -218,19 +224,6 @@ public class DocsActivityModel extends ViewModel {
 
     public void setBinding(ActivityDocsBinding binding) {
         this.binding = binding;
-    }
-
-    public static String formatDuration(int durationMillis) {
-        int hours = (durationMillis / 1000) / 3600;
-        durationMillis %= 1000 * 3600;
-
-        int minutes = (durationMillis / 1000) / 60;
-        int seconds = (durationMillis / 1000) % 60;
-
-        if (hours > 0)
-            return String.format("%2d:%02d:%02d", hours, minutes, seconds);
-        else
-            return String.format("%02d:%02d", minutes, seconds);
     }
 
     public void clearDisposable() {

@@ -18,8 +18,8 @@
             android:id="@+id/linearlayout_share_tab"
             android:layout_width="44dp"
             android:layout_height="8dp"
-            android:background="@drawable/alert_tab"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/alert_tab"
             android:orientation="horizontal" />
 
         <TextView
@@ -36,10 +36,10 @@
             android:id="@+id/textview_share_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/darkGray"
             android:layout_below="@+id/textview_share_title"
             android:layout_marginTop="5dp"
             android:text="@string/folder_share_type_description"
+            android:textColor="@color/darkGray"
             android:textSize="@dimen/small" />
 
 
@@ -47,10 +47,10 @@
             android:id="@+id/linearlayout_share_type_select_1"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:orientation="horizontal"
+            android:layout_below="@+id/textview_share_description"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/textview_share_description">
-            
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
@@ -61,19 +61,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/share_link"
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
-                android:textColor="@color/black"
-                />
+                android:text="@string/share_link"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearlayout_share_type_select_2"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:orientation="horizontal"
-            android:layout_below="@+id/linearlayout_share_type_select_1">
+            android:layout_below="@+id/linearlayout_share_type_select_1"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="18dp"
@@ -85,11 +84,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/share_member"
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
-                android:textColor="@color/black"
-                />
+                android:text="@string/share_member"
+                android:textColor="@color/black" />
         </LinearLayout>
     </RelativeLayout>
 

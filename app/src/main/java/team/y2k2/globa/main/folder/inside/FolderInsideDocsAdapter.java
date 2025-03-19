@@ -22,9 +22,9 @@ import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.docs.move.DocsMoveActivity;
 
 public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDocsAdapter.AdapterViewHolder> {
-    private List<FolderInsideRecord> items;
     private final FolderInsideFragment fragment;
     private final Context context;
+    private List<FolderInsideRecord> items;
 
     public FolderInsideDocsAdapter(List<FolderInsideRecord> items, FolderInsideFragment fragment) {
         this.items = items;
@@ -130,6 +130,10 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
         return items != null ? items.size() : 0;
     }
 
+    public void setItems(List<FolderInsideRecord> items) {
+        this.items = items;
+    }
+
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView datetime;
@@ -139,9 +143,5 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
             title = itemView.findViewById(R.id.textview_document_title);
             datetime = itemView.findViewById(R.id.textview_document_datetime);
         }
-    }
-
-    public void setItems(List<FolderInsideRecord> items) {
-        this.items = items;
     }
 }

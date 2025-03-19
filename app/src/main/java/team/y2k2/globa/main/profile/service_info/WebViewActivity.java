@@ -12,6 +12,7 @@ import team.y2k2.globa.R;
 
 public class WebViewActivity extends AppCompatActivity {
     WebView webView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

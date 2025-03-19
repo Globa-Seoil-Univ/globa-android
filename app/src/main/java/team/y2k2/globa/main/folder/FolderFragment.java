@@ -23,17 +23,19 @@ import team.y2k2.globa.main.folder.currently.FolderCurrentlyAdapter;
 import team.y2k2.globa.main.folder.currently.FolderCurrentlyModel;
 
 public class FolderFragment extends Fragment {
+    private final int FOLDER_ADD = 200;
     FragmentFolderBinding binding;
     FolderCurrentlyModel currentlyModel;
     FolderModel model;
-    private final int FOLDER_ADD = 200;
-    public FolderFragment() { }
+
+    public FolderFragment() {
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentFolderBinding.inflate(getLayoutInflater());
 
-        binding.imagebuttonFolderAdd.setOnClickListener(v -> {
+        binding.imageButtonFolderAdd.setOnClickListener(v -> {
             Intent intent = new Intent(binding.getRoot().getContext(), FolderAddActivity.class);
             startActivityForResult(intent, FOLDER_ADD);
         });
@@ -55,19 +57,19 @@ public class FolderFragment extends Fragment {
         model = new FolderModel();
         currentlyModel = new FolderCurrentlyModel();
 
-        if(response == null) {
+        if (response == null) {
             Log.d(getClass().getSimpleName(), "response = null");
         }
 
         if (response != null) {
-            for(int i = 0; i < response.getFolders().size(); i++) {
+            for (int i = 0; i < response.getFolders().size(); i++) {
                 Folder folder = response.getFolders().get(i);
 
                 model.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
                 currentlyModel.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
 
                 // 각 폴더에 대한 처리 작업 수행
-                Log.d("FOLDER_TEST", folder.getTitle()+" | " + folder.getCreatedTime() + " | " + folder.getFolderId());
+                Log.d("FOLDER_TEST", folder.getTitle() + " | " + folder.getCreatedTime() + " | " + folder.getFolderId());
             }
         }
 

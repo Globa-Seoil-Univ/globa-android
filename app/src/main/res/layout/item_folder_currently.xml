@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/constraintlayout_folder_item_currently"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintlayout_folder_item_currently"
     android:layout_width="105dp"
     android:layout_height="110dp"
-    android:padding="5dp"
     android:layout_marginEnd="5dp"
     android:background="@drawable/folder_currently_background"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:padding="5dp">
 
     <LinearLayout
         android:id="@+id/linearlayout_item_folder_currently_icon_bg"
@@ -16,14 +16,15 @@
         android:layout_margin="10dp"
         android:background="@drawable/document_icon_background"
         android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageview_item_folder_currently_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/folder" />
     </LinearLayout>
 
@@ -32,26 +33,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        tools:text="2024 회의록"
+        android:ellipsize="end"
         android:fontFamily="@font/notosans_regular"
+        android:maxLines="1"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:ellipsize="end"
-        android:maxLines="1"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearlayout_item_folder_currently_icon_bg" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout_item_folder_currently_icon_bg"
+        tools:text="2024 회의록" />
 
     <TextView
         android:id="@+id/textview_folder_item_currently_datetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="24-03-12 생성"
         android:fontFamily="@font/notosans_regular"
         android:textColor="@color/gray"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_folder_item_currently_title"
-        />
+        tools:text="24-03-12 생성" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -230,7 +230,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         subCommentTv = bottomSheetView.findViewById(R.id.textview_comment_sub_parent);
         subCommentRv = bottomSheetDialog.findViewById(R.id.recyclerview_comment_sub);
         subCommentEt = bottomSheetDialog.findViewById(R.id.edittext_comment_sub);
-        subCommentBtn = bottomSheetDialog.findViewById(R.id.imagebutton_comment_sub_confirm);
+        subCommentBtn = bottomSheetDialog.findViewById(R.id.image_button_comment_sub_confirm);
 
         Log.d("대댓글 창", "대댓글 창 열림 subButtonStatus: " + subButtonStatus);
 

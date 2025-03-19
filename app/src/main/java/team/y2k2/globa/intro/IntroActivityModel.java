@@ -22,6 +22,10 @@ public class IntroActivityModel extends ViewModel {
 
     private Context context;
 
+    public static boolean isNofiGranted() {
+        return IntroModel.isNofiGranted();
+    }
+
     public void setContext(Context context) {
         this.context = context;
         model = new IntroModel(context);
@@ -72,9 +76,5 @@ public class IntroActivityModel extends ViewModel {
 
     public void handlePermissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         model.handlePermissionResult(requestCode, permissions, grantResults);
-    }
-
-    public static boolean isNofiGranted() {
-        return IntroModel.isNofiGranted();
     }
 }

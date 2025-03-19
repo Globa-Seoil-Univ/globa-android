@@ -26,16 +26,16 @@ public class FolderMoveActivity extends AppCompatActivity {
         itemList.add("2024 회의록");
         itemList.add("2023 회의록");
 
-        binding.groupFoldermoveRediogroup.removeAllViews();
-        for(String item : itemList) {
+        binding.groupFolderMoveRadioGroup.removeAllViews();
+        for (String item : itemList) {
             RadioButton radioButton = new RadioButton(FolderMoveActivity.this);
             radioButton.setText(item);
             radioButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             radioButton.setBackgroundResource(R.drawable.folder_move_radio_button);
-            binding.groupFoldermoveRediogroup.addView(radioButton);
+            binding.groupFolderMoveRadioGroup.addView(radioButton);
         }
 
-        binding.groupFoldermoveRediogroup.setOnCheckedChangeListener((group, checkedId) -> {
+        binding.groupFolderMoveRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             // 라디오 버튼 클릭시 작동
         });
 

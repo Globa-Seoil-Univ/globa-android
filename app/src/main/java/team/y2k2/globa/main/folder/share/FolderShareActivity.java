@@ -29,18 +29,17 @@ import team.y2k2.globa.main.ProfileImage;
 
 public class FolderShareActivity extends AppCompatActivity {
 
-    ActivityFolderShareBinding binding;
-    private FolderShareActivityModel folderShareActivityModel;
-    boolean isSearched = false;
-    private FolderShareAdapter adapter;
     private final List<FolderShareItem> itemList = new ArrayList<>();
-    private String profile;
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
+    ActivityFolderShareBinding binding;
+    boolean isSearched = false;
+    int folderId;
+    private FolderShareActivityModel folderShareActivityModel;
+    private FolderShareAdapter adapter;
+    private String profile;
     private StorageReference profileImageRef;
     private String lastImageUrl;
     private int tempUserId;
-
-    int folderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,28 +55,28 @@ public class FolderShareActivity extends AppCompatActivity {
         folderId = getIntent().getIntExtra("folderId", 0);
 
         // 코드 입력하는 EditText가 비어있을 땐 X버튼 안보이게 하기
-        String input = binding.edittextFoldershareInputname.getText().toString();
-        if(input.isEmpty()) {
-            binding.buttonFoldershareCancel.setWidth(0);
+        String input = binding.edittextFolderShareInputName.getText().toString();
+        if (input.isEmpty()) {
+            binding.buttonFolderShareCancel.setWidth(0);
         }
 
         // 뒤로가기 버튼
-        binding.buttonFoldershareBack.setOnClickListener(v -> finish());
+        binding.buttonFolderShareBack.setOnClickListener(v -> finish());
 
         // 뷰모델 가져오기
         folderShareActivityModel = new ViewModelProvider(this).get(FolderShareActivityModel.class);
 
         adapter = new FolderShareAdapter(itemList);
-        binding.recyclerviewFoldershareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.recyclerviewFoldershareSelected.setAdapter(adapter);
+        binding.recyclerviewFolderShareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.recyclerviewFolderShareSelected.setAdapter(adapter);
 
         initializeEditText();
 
-        binding.constraintlayoutFoldershareSearch.setOnClickListener(v -> {
+        binding.constraintlayoutFolderShareSearch.setOnClickListener(v -> {
 
-            if(!binding.textviewFoldershareSearch.getText().toString().isEmpty()) {
+            if (!binding.textviewFolderShareSearch.getText().toString().isEmpty()) {
                 showBottomSheetDialog();
-                binding.textviewFoldershareConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                binding.textviewFolderShareConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
             } else {
                 Toast.makeText(FolderShareActivity.this, "사용자를 검색해주세요", Toast.LENGTH_SHORT).show();
             }
@@ -88,7 +87,7 @@ public class FolderShareActivity extends AppCompatActivity {
     }
 
     private void initializeEditText() {
-        binding.edittextFoldershareInputname.addTextChangedListener(new TextWatcher() {
+        binding.edittextFolderShareInputName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -96,31 +95,25 @@ public class FolderShareActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() == 6) {
+                if (s.length() == 6) {
                     folderShareActivityModel.searchUserInfo(s.toString());
 
                     folderShareActivityModel.getUserSearchLiveData().observe(FolderShareActivity.this, userInfoResponse -> {
-                        if(userInfoResponse != null) {
-                            binding.textviewFoldershareSearch.setText(userInfoResponse.getName());
+                        if (userInfoResponse != null) {
+                            binding.textviewFolderShareSearch.setText(userInfoResponse.getName());
                             profile = userInfoResponse.getProfile();
-                            if(profile != null) {
-                                if(profile.startsWith("http")) {
-                                    Glide.with(FolderShareActivity.this).load(profile)
-                                            .error(R.drawable.profile_user)
-                                            .into(binding.imageviewFoldershareSearch);
+                            if (profile != null) {
+                                if (profile.startsWith("http")) {
+                                    Glide.with(FolderShareActivity.this).load(profile).error(R.drawable.profile_user).into(binding.imageviewFolderShareSearch);
                                     lastImageUrl = profile;
                                 } else {
                                     profileImageRef = storage.getReference().child(profile);
                                     String firebaseImageUrl = profileImageRef.toString();
                                     lastImageUrl = ProfileImage.convertGsToHttps(firebaseImageUrl);
-                                    Glide.with(FolderShareActivity.this).load(lastImageUrl)
-                                            .error(R.mipmap.ic_launcher)
-                                            .into(binding.imageviewFoldershareSearch);
+                                    Glide.with(FolderShareActivity.this).load(lastImageUrl).error(R.mipmap.ic_launcher).into(binding.imageviewFolderShareSearch);
                                 }
                             } else {
-                                Glide.with(FolderShareActivity.this).load(R.drawable.profile_user)
-                                        .error(R.drawable.profile_user)
-                                        .into(binding.imageviewFoldershareSearch);
+                                Glide.with(FolderShareActivity.this).load(R.drawable.profile_user).error(R.drawable.profile_user).into(binding.imageviewFolderShareSearch);
                                 lastImageUrl = "";
                             }
 
@@ -140,22 +133,22 @@ public class FolderShareActivity extends AppCompatActivity {
     }
 
     private void initializeConfirmBtn() {
-        binding.textviewFoldershareConfirm.setOnClickListener(v -> {
+        binding.textviewFolderShareConfirm.setOnClickListener(v -> {
 
-            if(adapter.getItemCount() == 0) {
+            if (adapter.getItemCount() == 0) {
                 Toast.makeText(this, "사용자를 추가해주십시오", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // 리사이클러뷰를 순회하면서 하나씩 API Request
-            LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFoldershareSelected.getLayoutManager();
-            if(collectNewUserManager != null) {
+            LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFolderShareSelected.getLayoutManager();
+            if (collectNewUserManager != null) {
                 int firstPosition = collectNewUserManager.findFirstVisibleItemPosition();
                 int lastPosition = collectNewUserManager.findLastVisibleItemPosition();
 
-                for(int i = firstPosition; i <= lastPosition; i++) {
-                    RecyclerView.ViewHolder viewHolder = binding.recyclerviewFoldershareSelected.findViewHolderForAdapterPosition(i);
-                    if(viewHolder instanceof FolderShareAdapter.MyViewHolder) {
+                for (int i = firstPosition; i <= lastPosition; i++) {
+                    RecyclerView.ViewHolder viewHolder = binding.recyclerviewFolderShareSelected.findViewHolderForAdapterPosition(i);
+                    if (viewHolder instanceof FolderShareAdapter.MyViewHolder) {
                         FolderShareAdapter.MyViewHolder adapterViewHolder = (FolderShareAdapter.MyViewHolder) viewHolder;
                         FolderShareItem item = adapter.getItem(i);
 
@@ -168,14 +161,13 @@ public class FolderShareActivity extends AppCompatActivity {
                 }
             }
             folderShareActivityModel.getIsSucceedLiveData().observe(FolderShareActivity.this, responseCode -> {
-                if(responseCode.equals("201")) {
+                if (responseCode.equals("201")) {
                     Toast.makeText(this, "공유 추가 완료!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(this, "공유 추가 권한이 없습니다", Toast.LENGTH_SHORT).show();
                 }
             });
-            
         });
     }
 
@@ -189,20 +181,18 @@ public class FolderShareActivity extends AppCompatActivity {
         RelativeLayout writeButton = dialogView.findViewById(R.id.relative_layout_folder_share_write);
 
         readButton.setOnClickListener(v -> {
-            if(lastImageUrl != null) {
+            if (lastImageUrl != null) {
                 onClickDialogBtn("r");
             }
             bottomSheetDialog.dismiss();
         });
         writeButton.setOnClickListener(v -> {
-            if(lastImageUrl != null) {
+            if (lastImageUrl != null) {
                 onClickDialogBtn("w");
             }
             bottomSheetDialog.dismiss();
         });
-
         bottomSheetDialog.show();
-
     }
 
     private void onClickDialogBtn(String role) {
@@ -211,11 +201,9 @@ public class FolderShareActivity extends AppCompatActivity {
         newItem.setRole(role);
         itemList.add(newItem);
         adapter.notifyItemInserted(itemList.size() - 1);
-        binding.edittextFoldershareInputname.setText("");
-        Glide.with(this).load(R.mipmap.ic_launcher)
-                .into(binding.imageviewFoldershareSearch);
-        binding.textviewFoldershareSearch.setText("");
+        binding.edittextFolderShareInputName.setText("");
+        Glide.with(this).load(R.mipmap.ic_launcher).into(binding.imageviewFolderShareSearch);
+        binding.textviewFolderShareSearch.setText("");
         lastImageUrl = null;
     }
-
 }

@@ -1,4 +1,4 @@
-package team.y2k2.globa.main.profile.inquiry;
+package team.y2k2.globa.api.model.request;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,11 +9,10 @@ public class InquiryRequest {
     @SerializedName("content")
     private final String content;
 
-    public InquiryRequest(String title, String content){
+    public InquiryRequest(String title, String content) {
         this.title = title;
         this.content = content;
     }
-
 
     public String getTitle() {
         return title;

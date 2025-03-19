@@ -17,16 +17,12 @@ import team.y2k2.globa.databinding.ActivityAlertBinding;
 
 public class AlertActivity extends AppCompatActivity {
 
+    private final ArrayList<AlertItem> alertItems = new ArrayList<>();
     ActivityAlertBinding binding;
-
     AlertViewModel viewModel;
-
     private String userId;
     private boolean uploadNotification, shareNotification, eventNotification;
-    private boolean newUploadNofi, newShareNofi, newEventNofi;
-
-    private final ArrayList<AlertItem> alertItems = new ArrayList<>();
-
+    private boolean newUploadNotification, newShareNotification, newEventNotification;
     private AlertItemAdapter adapter;
 
     @Override
@@ -36,7 +32,7 @@ public class AlertActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
+            if (task.isSuccessful()) {
                 Log.d("FCM 토큰", "FCM 토큰 삭제 완료");
             } else {
                 Log.d("FCM 토큰", "FCM 토큰 삭제 실패");
@@ -50,7 +46,7 @@ public class AlertActivity extends AppCompatActivity {
 
         viewModel.getMyAlertStatus(userId);
         viewModel.getAlertLiveData().observe(this, alertResponse -> {
-            if(alertResponse != null) {
+            if (alertResponse != null) {
                 uploadNotification = alertResponse.isUploadNofi();
                 shareNotification = alertResponse.isShareNofi();
                 eventNotification = alertResponse.isEventNofi();
@@ -68,13 +64,13 @@ public class AlertActivity extends AppCompatActivity {
 
         binding.imageButtonAlertBack.setOnClickListener(v -> {
 
-            newUploadNofi = adapter.isUploadChecked();
-            newShareNofi = adapter.isShareChecked();
-            newEventNofi = adapter.isEventChecked();
+            newUploadNotification = adapter.isUploadChecked();
+            newShareNotification = adapter.isShareChecked();
+            newEventNotification = adapter.isEventChecked();
 
-            Log.d(getClass().getSimpleName(), "뒤로가기 버튼 클릭 newUploadNofi: " + newUploadNofi + ", newShareNofi: " + newShareNofi + ", newEventNofi: " + newEventNofi);
+            Log.d(getClass().getSimpleName(), "뒤로가기 버튼 클릭 newUploadNotification: " + newUploadNotification + ", newShareNotification: " + newShareNotification + ", newEventNotification: " + newEventNotification);
 
-            viewModel.requestAlertStatus(userId, newUploadNofi, newShareNofi, newEventNofi);
+            viewModel.requestAlertStatus(userId, newUploadNotification, newShareNotification, newEventNotification);
 
             finish();
         });
@@ -87,16 +83,18 @@ public class AlertActivity extends AppCompatActivity {
         alertItems.add(new AlertItem(R.string.profile_alert_3_title, R.string.profile_alert_3_description, eventNotification));
     }
 
-    public void setNewUploadNofi(boolean newUploadNofi) {
-        Log.d(getClass().getSimpleName(), "newUploadNofi setter 작동");
-        this.newUploadNofi = newUploadNofi;
+    public void setNewUploadNotification(boolean newUploadNotification) {
+        Log.d(getClass().getSimpleName(), "newUploadNotification setter 작동");
+        this.newUploadNotification = newUploadNotification;
     }
-    public void setNewShareNofi(boolean newShareNofi) {
-        Log.d(getClass().getSimpleName(), "newShareNofi setter 작동");
-        this.newShareNofi = newShareNofi;
+
+    public void setNewShareNotification(boolean newShareNotification) {
+        Log.d(getClass().getSimpleName(), "newShareNotification setter 작동");
+        this.newShareNotification = newShareNotification;
     }
-    public void setNewEventNofi(boolean newEventNofi) {
-        Log.d(getClass().getSimpleName(), "newEventNofi setter 작동");
-        this.newEventNofi = newEventNofi;
+
+    public void setNewEventNotification(boolean newEventNotification) {
+        Log.d(getClass().getSimpleName(), "newEventNotification setter 작동");
+        this.newEventNotification = newEventNotification;
     }
 }

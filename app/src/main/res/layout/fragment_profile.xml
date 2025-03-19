@@ -76,7 +76,8 @@
                         <ImageView
                             android:id="@+id/imageview_profile_account_image"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:importantForAccessibility="no" />
                     </LinearLayout>
 
                     <TextView
@@ -90,7 +91,7 @@
                         tools:text="윤성빈" />
 
                     <TextView
-                        android:id="@+id/textview_profile_account_usercode"
+                        android:id="@+id/textview_profile_account_user_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/textview_profile_account_username"
@@ -106,6 +107,7 @@
                         android:layout_height="18dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/arrow_right" />
 
                 </RelativeLayout>
@@ -117,7 +119,7 @@
                     android:layout_below="@+id/relativelayout_profile_account_user"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="25dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_marginBottom="25dp"
                     android:background="@color/lightGray"
                     android:orientation="horizontal" />

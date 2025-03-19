@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,8 +18,8 @@
             android:id="@+id/linearlayout_setting_clean_data_tab"
             android:layout_width="44dp"
             android:layout_height="8dp"
-            android:background="@drawable/alert_tab"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/alert_tab"
             android:orientation="horizontal" />
 
         <TextView
@@ -41,31 +40,31 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:columnCount="3"
-        android:rowCount="1"
         android:orientation="horizontal"
+        android:rowCount="1"
         app:layout_constraintTop_toBottomOf="@+id/relativelayout_setting_clean_data_1">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:layout_weight="9">
+            android:layout_weight="9"
+            android:gravity="center">
 
             <RelativeLayout
                 android:id="@+id/relativelayout_dialog_upload_cloud"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@drawable/document_icon_background"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/document_icon_background">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/upload_cloud"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/upload_cloud" />
 
             </RelativeLayout>
 
@@ -74,8 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relativelayout_dialog_upload_cloud"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/black"
-                android:text="@string/upload_cloud"/>
+                android:text="@string/upload_cloud"
+                android:textColor="@color/black" />
 
 
         </RelativeLayout>
@@ -85,23 +84,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:layout_weight="9">
+            android:layout_weight="9"
+            android:gravity="center">
 
             <RelativeLayout
                 android:id="@+id/relativelayout_dialog_upload_record"
-                android:background="@drawable/document_icon_background"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/document_icon_background">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/upload_record"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/upload_record" />
 
             </RelativeLayout>
 
@@ -110,8 +109,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relativelayout_dialog_upload_record"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/black"
-                android:text="@string/upload_record"/>
+                android:text="@string/upload_record"
+                android:textColor="@color/black" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

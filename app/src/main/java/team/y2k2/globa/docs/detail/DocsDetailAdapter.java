@@ -61,18 +61,16 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private final String recordId;
     private final String myProfile;
     private final String myName;
-
+    private final ArrayList<DocsDetailCommentItem> commentItems = new ArrayList<>();
+    private final FocusViewModel focusViewModel;
+    private final DocsDetailViewModel docsDetailViewModel;
     private int selectedPosition;
     private int buttonStatus = BUTTON_COMMENT_CONFIRM;
-
     private String selectedId;
     private EditText commentEt;
     private ImageButton commentBtn;
     private Disposable disposable;
     private DocsDetailCommentAdapter commentAdapter;
-    private final ArrayList<DocsDetailCommentItem> commentItems = new ArrayList<>();
-    private final FocusViewModel focusViewModel;
-    private final DocsDetailViewModel docsDetailViewModel;
     private String selectedText;
 
     public DocsDetailAdapter(ArrayList<DocsDetailItem> detailItems, DocsActivity activity) {
@@ -152,20 +150,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         return (null != detailItems ? detailItems.size() : 0);
     }
 
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        final TextView title;
-        final TextView time;
-        final TextView description;
-        long downTime;
-
-        public AdapterViewHolder(@NonNull View itemView) {
-            super(itemView);
-            title = itemView.findViewById(R.id.textview_item_docs_detail_title);
-            time = itemView.findViewById(R.id.textview_item_docs_detail_time);
-            description = itemView.findViewById(R.id.textview_item_docs_detail_description);
-        }
-    }
-
     private void showPopupMenu(View v, AdapterViewHolder holder, String folderId, String recordId, String sectionId) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.getMenuInflater().inflate(R.menu.highlight_menu, popupMenu.getMenu());
@@ -238,7 +222,8 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         durationSecond %= 3600;
         int minutes = durationSecond / 60;
         int seconds = durationSecond % 60;
-        if (hours > 0) return String.format(Locale.KOREA, "%02d:%02d:%02d", hours, minutes, seconds);
+        if (hours > 0)
+            return String.format(Locale.KOREA, "%02d:%02d:%02d", hours, minutes, seconds);
         else return String.format(Locale.KOREA, "%02d:%02d", minutes, seconds);
     }
 
@@ -250,7 +235,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         TextView commentTv = bottomSheetView.findViewById(R.id.textview_comment_name);
         RecyclerView commentRv = bottomSheetView.findViewById(R.id.recyclerview_comment);
         commentEt = bottomSheetView.findViewById(R.id.edittext_comment);
-        commentBtn = bottomSheetView.findViewById(R.id.imagebutton_comment_confirm);
+        commentBtn = bottomSheetView.findViewById(R.id.image_button_comment_confirm);
         commentTv.setText(name);
 
         commentAdapter = new DocsDetailCommentAdapter(commentItems, activity, sectionId, highlightId, this);
@@ -266,19 +251,17 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     private void setupCommentButton(BottomSheetDialog bottomSheetDialog, String sectionId, String highlightId, String startIdx, String endIdx) {
         Observable<Object> commentBtnClickStream = Observable.create(emitter -> commentBtn.setOnClickListener(v -> emitter.onNext(new Object())));
-        disposable = commentBtnClickStream.throttleFirst(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    String text = commentEt.getText().toString();
-                    if (!text.isEmpty()) {
-                        handleCommentAction(bottomSheetDialog, sectionId, highlightId, startIdx, endIdx, text);
-                    } else {
-                        Toast.makeText(activity, "댓글을 입력해주세요", Toast.LENGTH_SHORT).show();
-                    }
-                }, error -> {
-                    Log.e("RxJavaError", "RxJavaError 오류 내용: " + error);
-                    Toast.makeText(activity, "댓글 처리중 오류 발생", Toast.LENGTH_SHORT).show();
-                });
+        disposable = commentBtnClickStream.throttleFirst(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(event -> {
+            String text = commentEt.getText().toString();
+            if (!text.isEmpty()) {
+                handleCommentAction(bottomSheetDialog, sectionId, highlightId, startIdx, endIdx, text);
+            } else {
+                Toast.makeText(activity, "댓글을 입력해주세요", Toast.LENGTH_SHORT).show();
+            }
+        }, error -> {
+            Log.e("RxJavaError", "RxJavaError 오류 내용: " + error);
+            Toast.makeText(activity, "댓글 처리중 오류 발생", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void handleCommentAction(BottomSheetDialog bottomSheetDialog, String sectionId, String highlightId, String startIdx, String endIdx, String text) {
@@ -308,12 +291,12 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         commentEt.setText(selectedText);
     }
 
-    public void setButtonStatus(int status) {
-        this.buttonStatus = status;
-    }
-
     public int getButtonStatus() {
         return buttonStatus;
+    }
+
+    public void setButtonStatus(int status) {
+        this.buttonStatus = status;
     }
 
     public void setSelectedPosition(int position) {
@@ -326,5 +309,19 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
     public void setSelectedText(String selectedText) {
         this.selectedText = selectedText;
+    }
+
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+        final TextView title;
+        final TextView time;
+        final TextView description;
+        long downTime;
+
+        public AdapterViewHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.textview_item_docs_detail_title);
+            time = itemView.findViewById(R.id.textview_item_docs_detail_time);
+            description = itemView.findViewById(R.id.textview_item_docs_detail_description);
+        }
     }
 }

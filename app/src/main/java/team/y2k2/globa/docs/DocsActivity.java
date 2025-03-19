@@ -27,21 +27,29 @@ import team.y2k2.globa.docs.detail.DocsDetailViewModel;
 import team.y2k2.globa.docs.more.DocsMoreActivityModel;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
+    private final Handler handler = new Handler(Looper.getMainLooper());
     public ActivityDocsBinding binding;
     DocsActivityModel viewModel;
     DocsDetailViewModel docsDetailViewModel;
+    DocsMoreActivityModel docsMoreActivityModel;
+    ApiClient apiClient;
+    SimpleDateFormat dateFormat;
     private SimpleExoPlayer player;
-
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable updateSeekbarRunnable;
     private long startTime;
-
-    DocsMoreActivityModel docsMoreActivityModel;
     private String profile;
     private String name;
 
-    ApiClient apiClient;
-    SimpleDateFormat dateFormat;
+    public static String formatDuration(int durationMillis) {
+        int hours = (durationMillis / 1000) / 3600;
+        durationMillis %= 1000 * 3600;
+
+        int minutes = (durationMillis / 1000) / 60;
+        int seconds = (durationMillis / 1000) % 60;
+
+        if (hours > 0) return String.format("%2d:%02d:%02d", hours, minutes, seconds);
+        else return String.format("%02d:%02d", minutes, seconds);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +79,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         docsDetailViewModel.getIsFirstCommentLiveData().observe(DocsActivity.this, isFirst -> {
             Log.d(getClass().getSimpleName(), "DocsActivity에서 첫 댓글 옵저버 시작");
-            if(isFirst) {
+            if (isFirst) {
                 Log.d(getClass().getSimpleName(), "첫 댓글 감지 및 화면 다시 로드 시작");
                 viewModel.getResponse();
                 docsDetailViewModel.setIsFirstCommentLiveData(false);
@@ -80,7 +88,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         docsDetailViewModel.getIsAllDeletedLiveData().observe(DocsActivity.this, isAllDeleted -> {
             Log.d(getClass().getSimpleName(), "DocsActivity에서 모든 댓글 삭제 옵저버 시작");
-            if(isAllDeleted) {
+            if (isAllDeleted) {
                 Log.d(getClass().getSimpleName(), "모든 삭제 감지 및 화면 다시 로드 시작");
                 viewModel.getResponse();
                 docsDetailViewModel.setIsAllDeletedLiveData(false);
@@ -104,24 +112,13 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         // 문서 삭제 시
         docsMoreActivityModel = new ViewModelProvider(this).get(DocsMoreActivityModel.class);
+        docsMoreActivityModel.setApiClient(this);
         docsMoreActivityModel.getIsDeleted().observe(DocsActivity.this, isDeleted -> {
             // 문서 더보기의 삭제여부 변수(LiveData) 관찰
-            if(isDeleted) {
+            if (isDeleted) {
                 finish();
             }
         });
-    }
-
-    public void setDuration(int second) {
-        int position = second * 1000;
-
-        if (player.getDuration() <= position) {
-            position = (int) player.getDuration();
-        }
-
-        binding.seekbarAudioProgress.setProgress(position);
-        binding.textviewDocumentAudioNowTime.setText(formatDuration(position));
-        player.seekTo(position);
     }
 
     public void showSummary() {
@@ -144,19 +141,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
     }
 
-    public static String formatDuration(int durationMillis) {
-        int hours = (durationMillis / 1000) / 3600;
-        durationMillis %= 1000 * 3600;
-
-        int minutes = (durationMillis / 1000) / 60;
-        int seconds = (durationMillis / 1000) % 60;
-
-        if (hours > 0)
-            return String.format("%2d:%02d:%02d", hours, minutes, seconds);
-        else
-            return String.format("%02d:%02d", minutes, seconds);
-    }
-
     @Override
     public void start() {
         player.play();
@@ -170,6 +154,18 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     @Override
     public int getDuration() {
         return (int) player.getDuration();
+    }
+
+    public void setDuration(int second) {
+        int position = second * 1000;
+
+        if (player.getDuration() <= position) {
+            position = (int) player.getDuration();
+        }
+
+        binding.seekbarAudioProgress.setProgress(position);
+        binding.textviewDocumentAudioNowTime.setText(formatDuration(position));
+        player.seekTo(position);
     }
 
     @Override
@@ -259,12 +255,11 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         // 문서 상세 보기 종료 시
         long endTime = System.currentTimeMillis();
         long durationMilliSecond = endTime - startTime;
-        int durationMinute = (int)(durationMilliSecond / 60000);
+        int durationMinute = (int) (durationMilliSecond / 60000);
         Log.d("시간", "열려 있던 시간(분): " + durationMinute);
 
         // durationMinute, dateFormat으로 공부시간 API 수정 필요
-        Log.d(getClass().getSimpleName(), "공부 시간 수정 요청 (folderId: " + viewModel.getFolderId() + ", recordId: " + viewModel.getRecordId() +
-                ", 분: " + durationMinute + ", dateFormat: " + dateFormat.format(new Date()) + ")");
+        Log.d(getClass().getSimpleName(), "공부 시간 수정 요청 (folderId: " + viewModel.getFolderId() + ", recordId: " + viewModel.getRecordId() + ", 분: " + durationMinute + ", dateFormat: " + dateFormat.format(new Date()) + ")");
         apiClient.updateStudyTime(viewModel.getFolderId(), viewModel.getRecordId(), String.valueOf(durationMinute));
 
         // detailAdapter에 생성된 disposable 메모리 해제
@@ -274,6 +269,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     public String getFolderId() {
         return viewModel.getFolderId();
     }
+
     public String getRecordId() {
         return viewModel.getRecordId();
     }
@@ -281,6 +277,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     public String getProfile() {
         return profile;
     }
+
     public String getName() {
         return name;
     }

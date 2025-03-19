@@ -15,12 +15,15 @@ public class AlertItem {
     public int getDescription() {
         return description;
     }
+
     public int getTitle() {
         return title;
     }
+
     public boolean isChecked() {
         return isChecked;
     }
+
     public void setChecked(boolean isChecked) {
         this.isChecked = isChecked;
     }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/constraintlayout_item_notification_share"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintlayout_item_notification_share"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/document_background"
-    android:padding="20dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:padding="20dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageview_item_notification_share"
@@ -20,72 +20,72 @@
         android:id="@+id/textview_item_notification_share_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="전체 알림 제목입니다"
-        android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/normal_light"
-        android:textColor="@color/black"
-        android:maxLines="3"
-        android:ellipsize="end"
-        app:layout_constraintStart_toEndOf="@+id/imageview_item_notification_share"
-        app:layout_constraintEnd_toStartOf="@+id/textview_item_notification_share_createdtime"
-        app:layout_constraintTop_toTopOf="@+id/imageview_item_notification_share"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginTop="4dp"/>
+        android:ellipsize="end"
+        android:fontFamily="@font/notosans_regular"
+        android:maxLines="3"
+        android:textColor="@color/black"
+        android:textSize="@dimen/normal_light"
+        app:layout_constraintEnd_toStartOf="@+id/textview_item_notification_share_created_time"
+        app:layout_constraintStart_toEndOf="@+id/imageview_item_notification_share"
+        app:layout_constraintTop_toTopOf="@+id/imageview_item_notification_share"
+        tools:text="전체 알림 제목입니다" />
 
     <TextView
         android:id="@+id/textview_item_notification_share_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="전체 알림 내용입니다."
-        android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/small"
-        android:textColor="@color/gray"
-        android:maxLines="2"
-        android:ellipsize="end"
-        app:layout_constraintTop_toBottomOf="@id/textview_item_notification_share_title"
-        app:layout_constraintStart_toStartOf="@id/textview_item_notification_share_title"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="40dp"
-        android:layout_marginTop="8dp"/>
+        android:ellipsize="end"
+        android:fontFamily="@font/notosans_regular"
+        android:maxLines="2"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/textview_item_notification_share_title"
+        app:layout_constraintTop_toBottomOf="@id/textview_item_notification_share_title"
+        tools:text="전체 알림 내용입니다." />
 
     <TextView
-        android:id="@+id/textview_item_notification_share_createdtime"
+        android:id="@+id/textview_item_notification_share_created_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="20m"
         android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/small"
         android:textColor="@color/gray"
+        android:textSize="@dimen/small"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textview_item_notification_share_title" />
+        app:layout_constraintTop_toTopOf="@+id/textview_item_notification_share_title"
+        tools:text="20m" />
 
     <Button
         android:id="@+id/button_item_notification_share_access"
         android:layout_width="60dp"
         android:layout_height="35dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/main_button_selected"
-        android:text="@string/item_notification_share_confirm"
         android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/normal_light"
+        android:text="@string/item_notification_share_confirm"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@id/textview_item_notification_share_content"
+        android:textSize="@dimen/normal_light"
         app:layout_constraintEnd_toStartOf="@id/button_item_notification_share_denied"
-        app:layout_constraintTop_toBottomOf="@id/textview_item_notification_share_content"
-        android:layout_marginTop="10dp" />
+        app:layout_constraintStart_toStartOf="@id/textview_item_notification_share_content"
+        app:layout_constraintTop_toBottomOf="@id/textview_item_notification_share_content" />
 
     <Button
         android:id="@+id/button_item_notification_share_denied"
         android:layout_width="60dp"
         android:layout_height="35dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/main_button"
-        android:text="@string/item_notification_share_cancel"
         android:fontFamily="@font/notosans_regular"
-        android:textSize="@dimen/normal_light"
+        android:text="@string/item_notification_share_cancel"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@id/button_item_notification_share_access"
-        app:layout_constraintTop_toTopOf="@id/button_item_notification_share_access"
+        android:textSize="@dimen/normal_light"
         app:layout_constraintBottom_toBottomOf="@+id/button_item_notification_share_access"
-        android:layout_marginLeft="10dp" />
+        app:layout_constraintStart_toEndOf="@id/button_item_notification_share_access"
+        app:layout_constraintTop_toTopOf="@id/button_item_notification_share_access" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,13 +17,11 @@ import team.y2k2.globa.databinding.ActivityKeywordDetailBinding;
 
 public class KeywordDetailActivity extends AppCompatActivity {
 
+    private final ArrayList<KeywordDetailItem> itemList = new ArrayList<>();
     private ActivityKeywordDetailBinding binding;
     private KeywordDetailAdapter adapter;
-
     private String keyword;
     private String pronunciation;
-
-    private final ArrayList<KeywordDetailItem> itemList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,17 +49,16 @@ public class KeywordDetailActivity extends AppCompatActivity {
         keywordDetailViewModel.searchKeyword(keyword);
 
         keywordDetailViewModel.getKeywordDetailResponseLiveData().observe(KeywordDetailActivity.this, response -> {
-            if(!response.getDictionary().isEmpty()) {
+            if (!response.getDictionary().isEmpty()) {
                 List<KeywordDetail> keywordDetailList = response.getDictionary();
 
-                if(!keywordDetailList.isEmpty())
+                if (!keywordDetailList.isEmpty())
                     pronunciation = keywordDetailList.get(0).getPronunciation();
-                else
-                    pronunciation = "입력된 정보가 없습니다.";
+                else pronunciation = "입력된 정보가 없습니다.";
 
                 binding.textviewKeywordDetailPronunciation.setText(pronunciation);
 
-                for(KeywordDetail keywordDetail : keywordDetailList) {
+                for (KeywordDetail keywordDetail : keywordDetailList) {
                     addItem(keywordDetail);
                 }
 
@@ -69,7 +66,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
                 binding.recyclerviewKeyword.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
                 binding.recyclerviewKeyword.setAdapter(adapter);
 
-                if(itemList.isEmpty()) {
+                if (itemList.isEmpty()) {
                     Log.d("키워드", "키워드 정보가 없음");
                     Toast.makeText(this, "검색된 정보가 없습니다.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -89,8 +86,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
 
         binding.textviewKeywordDetailPronunciation.setText(pronunciation);
 
-        Log.d("키워드", "word: " + word + ", engWord: " + engWord + ", description: " + description + ", category: " + category +
-                ", pronunciation: " + pronunciation);
+        Log.d("키워드", "word: " + word + ", engWord: " + engWord + ", description: " + description + ", category: " + category + ", pronunciation: " + pronunciation);
 
         itemList.add(new KeywordDetailItem(word, description, category));
     }

@@ -37,7 +37,7 @@ public class DocsMoveModel extends ViewModel {
             Folder targetFolder = folderResponse.getFolders().get(selectedFolderPosition);
             String targetFolderId = String.valueOf(targetFolder.getFolderId());
 
-            if(apiClient.requestUpdateDocsMove(currentFolderId, recordId, targetFolderId).isSuccessful())
+            if (apiClient.requestUpdateDocsMove(currentFolderId, recordId, targetFolderId).isSuccessful())
                 moveSuccessLiveData.setValue(true);
         } else {
             moveSuccessLiveData.setValue(false);

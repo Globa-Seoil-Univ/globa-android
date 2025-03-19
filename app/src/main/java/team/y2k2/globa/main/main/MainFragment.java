@@ -107,12 +107,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             docsFilterButton.setOnClickListener(this);
         }
 
-        binding.imagebuttonMainNotification.setOnClickListener(v -> {
+        binding.imageButtonMainNotification.setOnClickListener(v -> {
             Intent intent = new Intent(this.getActivity(), NotificationActivity.class);
             startActivity(intent);
         });
 
-        binding.imagebuttonMainSearch.setOnClickListener(v -> {
+        binding.imageButtonMainSearch.setOnClickListener(v -> {
             Intent intent = new Intent(this.getActivity(), SearchActivity.class);
             startActivity(intent);
         });
@@ -138,7 +138,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords(), getActivity());
         }
 
-        if(adapter.getItemCount() == 0) {
+        if (adapter.getItemCount() == 0) {
             ArrayList<DocsListItem> items = new ArrayList<>();
             items.add(new DocsListItem());
             adapter = new DocsListItemAdapter(items, getActivity());
@@ -174,8 +174,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private void checkNotification() {
         viewModel.getUnreadNotificationCheck();
         viewModel.getNotificationCheckLiveData().observe(getViewLifecycleOwner(), checkResponse -> {
-            if(checkResponse != null) {
-                if(checkResponse.isHasUnRead()) {
+            if (checkResponse != null) {
+                if (checkResponse.isHasUnRead()) {
                     binding.linearlayoutMainNotificationCheck.setVisibility(View.VISIBLE);
                 } else {
                     binding.linearlayoutMainNotificationCheck.setVisibility(View.GONE);

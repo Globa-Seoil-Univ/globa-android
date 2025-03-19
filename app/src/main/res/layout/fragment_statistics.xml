@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/relativelayout_statistics_tab"
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textview_visualization"
@@ -32,10 +32,10 @@
         android:id="@+id/scrollview_statistics_scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativelayout_statistics_tab"
-        app:layout_constraintBottom_toBottomOf="parent" >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativelayout_statistics_tab">
 
         <LinearLayout
             android:id="@+id/linearlayout_statistics_content"
@@ -47,11 +47,11 @@
                 android:id="@+id/textview_statistics_title_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:text="@string/fragment_statistics_title_word"
-                android:textSize="@dimen/big"
                 android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_marginStart="16dp" />
+                android:textSize="@dimen/big"
+                android:textStyle="bold" />
 
             <com.github.mikephil.charting.charts.HorizontalBarChart
                 android:id="@+id/wordBarChart"
@@ -63,11 +63,11 @@
                 android:id="@+id/textview_statistics_title_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:text="@string/activity_docs_statistics_title_time"
-                android:textSize="@dimen/big"
                 android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_marginStart="16dp" />
+                android:textSize="@dimen/big"
+                android:textStyle="bold" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/timeLineChart"
@@ -81,11 +81,11 @@
                 android:id="@+id/textview_statistics_title_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:text="@string/activity_docs_statistics_title_score"
-                android:textSize="@dimen/big"
                 android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_marginStart="16dp" />
+                android:textSize="@dimen/big"
+                android:textStyle="bold" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/gradeLineChart"
@@ -98,7 +98,6 @@
         </LinearLayout>
 
     </ScrollView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

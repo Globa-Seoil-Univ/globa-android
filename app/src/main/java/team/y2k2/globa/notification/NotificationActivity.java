@@ -48,14 +48,13 @@ public class NotificationActivity extends AppCompatActivity {
         notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
         notificationViewModel.getUnreadNotificationCount();
         notificationViewModel.getUnreadCount().observe(this, unreadCount -> {
-            if(unreadCount != null) {
+            if (unreadCount != null) {
                 unreadAll = unreadCount.getAll();
                 unreadNotice = unreadCount.getNotice();
                 unreadShare = unreadCount.getShare();
                 unreadDocument = unreadCount.getDocument();
                 unreadInquiry = unreadCount.getInquiry();
-                Log.d("안 읽은 알림 개수", "total: " + unreadAll + ", notice: " + unreadNotice + ", share: " + unreadShare +
-                        ", docs: " + unreadDocument + ", inquiry: " + unreadInquiry);
+                Log.d("안 읽은 알림 개수", "total: " + unreadAll + ", notice: " + unreadNotice + ", share: " + unreadShare + ", docs: " + unreadDocument + ", inquiry: " + unreadInquiry);
                 binding.textviewNotificationTotalCount.setText(unreadAll);
                 binding.textviewNotificationNoticeCount.setText(unreadNotice);
                 binding.textviewNotificationShareCount.setText(unreadShare);
@@ -71,7 +70,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void buttonClickEvent() {
 
-        binding.imagebuttonNotificationBack.setOnClickListener(v -> finish());
+        binding.imageButtonNotificationBack.setOnClickListener(v -> finish());
 
         binding.constraintlayoutNotificationTotal.setOnClickListener(v -> {
             replaceFragment(new TotalFragment());

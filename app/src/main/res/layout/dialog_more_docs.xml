@@ -9,8 +9,8 @@
         android:id="@+id/relativelayout_more_docs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
         android:paddingLeft="20dp"
+        android:paddingTop="20dp"
         android:paddingRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,8 +20,8 @@
             android:id="@+id/linearlayout_more_docs_tab"
             android:layout_width="44dp"
             android:layout_height="8dp"
-            android:background="@drawable/alert_tab"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/alert_tab"
             android:orientation="horizontal" />
 
         <TextView
@@ -38,12 +38,11 @@
             android:id="@+id/textview_more_docs_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/darkGray"
             android:layout_below="@+id/textview_more_docs_title"
             android:layout_marginTop="5dp"
             android:text="@string/docs_more_datetime"
-            android:textSize="@dimen/small"
-            />
+            android:textColor="@color/darkGray"
+            android:textSize="@dimen/small" />
     </RelativeLayout>
 
     <LinearLayout
@@ -51,9 +50,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
-        android:rowCount="1"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
+        android:rowCount="1"
         app:layout_constraintTop_toBottomOf="@+id/relativelayout_more_docs">
 
 
@@ -61,27 +60,27 @@
             android:id="@+id/relativelayout_more_rename"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp">
-            
+
             <ImageButton
                 android:id="@+id/image_button_more_rename"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
                 android:importantForAccessibility="no"
-                android:src="@drawable/rename"/>
-            
+                android:src="@drawable/rename" />
+
             <TextView
                 android:id="@+id/textview_more_rename"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_more_rename"
                 android:text="@string/rename"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/image_button_more_rename"/>
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 
@@ -89,27 +88,27 @@
             android:id="@+id/relativelayout_more_move"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="20dp">
 
             <ImageButton
                 android:id="@+id/image_button_more_move"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
                 android:importantForAccessibility="no"
-                android:src="@drawable/move_docs"/>
+                android:src="@drawable/move_docs" />
 
             <TextView
                 android:id="@+id/textview_more_move"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_more_move"
                 android:text="@string/docs_more_move_docs"
-                android:textColor="@color/black"
-                android:layout_toEndOf="@+id/image_button_more_move"/>
+                android:textColor="@color/black" />
         </RelativeLayout>
 
 
@@ -117,8 +116,8 @@
             android:id="@+id/relativelayout_more_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="30dp">
 
@@ -126,19 +125,19 @@
                 android:id="@+id/image_button_more_delete"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
                 android:importantForAccessibility="no"
-                android:src="@drawable/delete_docs"/>
+                android:src="@drawable/delete_docs" />
 
             <TextView
                 android:id="@+id/textview_more_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/image_button_more_delete"
                 android:text="@string/docs_more_delete_docs"
-                android:textColor="@color/red"
-                android:layout_toEndOf="@+id/image_button_more_delete"/>
+                android:textColor="@color/red" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

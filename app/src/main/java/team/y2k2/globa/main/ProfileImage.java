@@ -28,8 +28,7 @@ public class ProfileImage {
         }
 
         // Construct the HTTPS URL
-        return "https://firebasestorage.googleapis.com/v0/b/" + bucketName +
-                "/o/" + encodedFilePath + "?alt=media";
+        return "https://firebasestorage.googleapis.com/v0/b/" + bucketName + "/o/" + encodedFilePath + "?alt=media";
     }
 
 }

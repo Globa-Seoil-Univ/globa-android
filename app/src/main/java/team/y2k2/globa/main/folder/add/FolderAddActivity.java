@@ -34,22 +34,17 @@ import team.y2k2.globa.main.folder.share.FolderShareActivityModel;
 
 public class FolderAddActivity extends AppCompatActivity {
 
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final List<FolderAddItem> itemList = new ArrayList<>();
+    private final List<ShareTarget> shareTargetList = new ArrayList<>();
     ActivityFolderAddBinding binding;
     ApiClient apiClient;
-
     FolderShareActivityModel folderShareActivityModel;
-
     String profile;
     String newProfile;
     String code;
-
     FolderAddAdapter adapter;
-
-    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference imageRef;
-
-    private final List<FolderAddItem> itemList = new ArrayList<>();
-    private final List<ShareTarget> shareTargetList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,27 +57,27 @@ public class FolderAddActivity extends AppCompatActivity {
         apiClient = new ApiClient(this);
 
         adapter = new FolderAddAdapter(itemList, this);
-        binding.recyclerviewFolderaddShareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.recyclerviewFolderaddShareSelected.setAdapter(adapter);
+        binding.recyclerviewFolderAddShareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.recyclerviewFolderAddShareSelected.setAdapter(adapter);
 
         binding.buttonFolderAddBack.setOnClickListener(v -> finish());
 
         binding.textviewFolderAddConfirm.setOnClickListener(v -> {
 
-            if(binding.edittextFolderaddInputname.getText().length() == 0) {
+            if (binding.edittextFolderAddInputName.getText().length() == 0) {
                 Toast.makeText(this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if(adapter.getItemCount() != 0) {
-                LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFolderaddShareSelected.getLayoutManager();
-                if(collectNewUserManager != null) {
+            if (adapter.getItemCount() != 0) {
+                LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFolderAddShareSelected.getLayoutManager();
+                if (collectNewUserManager != null) {
                     int firstPosition = collectNewUserManager.findFirstVisibleItemPosition();
                     int lastPosition = collectNewUserManager.findLastVisibleItemPosition();
 
-                    for(int i = firstPosition; i <= lastPosition; i++) {
-                        RecyclerView.ViewHolder viewHolder = binding.recyclerviewFolderaddShareSelected.findViewHolderForAdapterPosition(i);
-                        if(viewHolder instanceof FolderAddAdapter.MyViewHolder) {
+                    for (int i = firstPosition; i <= lastPosition; i++) {
+                        RecyclerView.ViewHolder viewHolder = binding.recyclerviewFolderAddShareSelected.findViewHolderForAdapterPosition(i);
+                        if (viewHolder instanceof FolderAddAdapter.MyViewHolder) {
                             FolderAddAdapter.MyViewHolder adapterViewHolder = (FolderAddAdapter.MyViewHolder) viewHolder;
                             FolderAddItem item = adapter.getItem(i);
 
@@ -96,7 +91,7 @@ public class FolderAddActivity extends AppCompatActivity {
                 }
             }
 
-            String title = binding.edittextFolderaddInputname.getText().toString();
+            String title = binding.edittextFolderAddInputName.getText().toString();
 
             if (!shareTargetList.isEmpty()) {
                 Log.d(getClass().getSimpleName(), "제목: " + title + ", 공유대상: " + shareTargetList.get(0).getCode() + ", " + shareTargetList.get(0).getRole());
@@ -108,45 +103,45 @@ public class FolderAddActivity extends AppCompatActivity {
 
         });
 
-        binding.edittextFolderaddInputname.addTextChangedListener(new TextWatcher() {
+        binding.edittextFolderAddInputName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                binding.textviewFolderaddCount.setText(s.length() + "/32");
+                binding.textviewFolderAddCount.setText(s.length() + "/32");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(count != 0) {
-                    binding.textviewFolderaddCount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
+                if (count != 0) {
+                    binding.textviewFolderAddCount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 } else {
-                    binding.textviewFolderaddCount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    binding.textviewFolderAddCount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length() > 32) {
-                    binding.edittextFolderaddInputname.removeTextChangedListener(this);
+                if (s.length() > 32) {
+                    binding.edittextFolderAddInputName.removeTextChangedListener(this);
                     String text = s.toString().substring(0, 32);
-                    binding.edittextFolderaddInputname.setText(text);
-                    binding.edittextFolderaddInputname.setSelection(text.length());
-                    binding.edittextFolderaddInputname.addTextChangedListener(this);
+                    binding.edittextFolderAddInputName.setText(text);
+                    binding.edittextFolderAddInputName.setSelection(text.length());
+                    binding.edittextFolderAddInputName.addTextChangedListener(this);
                 }
 
-                if(s.length() <= 32) {
-                    binding.textviewFolderaddCount.setText(s.length() + "/32");
+                if (s.length() <= 32) {
+                    binding.textviewFolderAddCount.setText(s.length() + "/32");
                     binding.textviewFolderAddConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
                 }
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     binding.textviewFolderAddConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-                    binding.buttonFolderaddCancel.setVisibility(View.GONE);
+                    binding.buttonFolderAddCancel.setVisibility(View.GONE);
                 } else {
-                    binding.buttonFolderaddCancel.setVisibility(View.VISIBLE);
+                    binding.buttonFolderAddCancel.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        binding.edittextFolderaddShareInputname.addTextChangedListener(new TextWatcher() {
+        binding.edittextFolderAddShareInputName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
 
@@ -154,40 +149,34 @@ public class FolderAddActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() == 6) {
+                if (s.length() == 6) {
                     folderShareActivityModel.searchUserInfo(s.toString());
 
                     folderShareActivityModel.getUserSearchLiveData().observe(FolderAddActivity.this, userResponse -> {
-                        if(userResponse != null) {
-                            binding.textviewFolderaddShareSearch.setText(userResponse.getName());
+                        if (userResponse != null) {
+                            binding.textviewFolderAddShareSearch.setText(userResponse.getName());
                             profile = userResponse.getProfile();
-                            if(profile != null) {
-                                if(profile.startsWith("http")) {
-                                    Glide.with(FolderAddActivity.this).load(profile)
-                                            .error(R.drawable.profile_user)
-                                            .into(binding.imageviewFolderaddShareSearch);
+                            if (profile != null) {
+                                if (profile.startsWith("http")) {
+                                    Glide.with(FolderAddActivity.this).load(profile).error(R.drawable.profile_user).into(binding.imageviewFolderAddShareSearch);
                                     newProfile = profile;
                                 } else {
                                     imageRef = storage.getReference().child(profile);
-                                    Glide.with(FolderAddActivity.this).load(ProfileImage.convertGsToHttps(profile))
-                                            .error(R.drawable.profile_user)
-                                            .into(binding.imageviewFolderaddShareSearch);
+                                    Glide.with(FolderAddActivity.this).load(ProfileImage.convertGsToHttps(profile)).error(R.drawable.profile_user).into(binding.imageviewFolderAddShareSearch);
                                     newProfile = ProfileImage.convertGsToHttps(profile);
                                 }
                             } else {
-                                Glide.with(FolderAddActivity.this).load(R.drawable.profile_user)
-                                        .error(R.drawable.profile_user)
-                                        .into(binding.imageviewFolderaddShareSearch);
+                                Glide.with(FolderAddActivity.this).load(R.drawable.profile_user).error(R.drawable.profile_user).into(binding.imageviewFolderAddShareSearch);
                                 newProfile = null;
                             }
                         }
                     });
                 }
 
-                if(s.length() == 0) {
-                    binding.buttonFoldershareShareCancel.setVisibility(View.GONE);
+                if (s.length() == 0) {
+                    binding.buttonFolderShareShareCancel.setVisibility(View.GONE);
                 } else {
-                    binding.buttonFoldershareShareCancel.setVisibility(View.VISIBLE);
+                    binding.buttonFolderShareShareCancel.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -197,18 +186,18 @@ public class FolderAddActivity extends AppCompatActivity {
             }
         });
 
-        binding.constraintlayoutFolderaddShareSearch.setOnClickListener(v -> {
-            if(!binding.textviewFolderaddShareSearch.getText().toString().isEmpty()) {
+        binding.constraintlayoutFolderAddShareSearch.setOnClickListener(v -> {
+            if (!binding.textviewFolderAddShareSearch.getText().toString().isEmpty()) {
                 showBottomSheetDialog();
-                code = binding.edittextFolderaddShareInputname.getText().toString();
+                code = binding.edittextFolderAddShareInputName.getText().toString();
             } else {
                 Toast.makeText(this, "사용자를 검색해주세요", Toast.LENGTH_SHORT).show();
             }
         });
 
-        binding.buttonFolderaddCancel.setOnClickListener(v -> binding.edittextFolderaddInputname.setText(""));
+        binding.buttonFolderAddCancel.setOnClickListener(v -> binding.edittextFolderAddInputName.setText(""));
 
-        binding.buttonFoldershareShareCancel.setOnClickListener(v -> binding.edittextFolderaddShareInputname.setText(""));
+        binding.buttonFolderShareShareCancel.setOnClickListener(v -> binding.edittextFolderAddShareInputName.setText(""));
 
     }
 
@@ -240,11 +229,9 @@ public class FolderAddActivity extends AppCompatActivity {
         FolderAddItem newItem = new FolderAddItem(newProfile, code, role);
         itemList.add(newItem);
         adapter.notifyItemInserted(itemList.size() - 1);
-        binding.edittextFolderaddShareInputname.setText("");
-        Glide.with(this).load(R.drawable.profile_user)
-                .error(R.drawable.profile_user)
-                .into(binding.imageviewFolderaddShareSearch);
-        binding.textviewFolderaddShareSearch.setText("");
+        binding.edittextFolderAddShareInputName.setText("");
+        Glide.with(this).load(R.drawable.profile_user).error(R.drawable.profile_user).into(binding.imageviewFolderAddShareSearch);
+        binding.textviewFolderAddShareSearch.setText("");
         newProfile = null;
 
     }

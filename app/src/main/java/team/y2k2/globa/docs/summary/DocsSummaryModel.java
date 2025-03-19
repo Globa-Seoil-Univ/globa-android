@@ -13,14 +13,14 @@ public class DocsSummaryModel {
     public DocsSummaryModel(List<Section> sections) {
         items = new ArrayList<>();
 
-        for(int i = 0; i < sections.size(); i++) {
+        for (int i = 0; i < sections.size(); i++) {
             ArrayList<String> contents = new ArrayList<>();
-            for(int j = 0; j < sections.get(i).getSummary().size(); j++) {
+            for (int j = 0; j < sections.get(i).getSummary().size(); j++) {
                 Summary summary = sections.get(i).getSummary().get(j);
 
                 contents.add(summary.getContent());
             }
-            items.add(new DocsSummaryItem(sections.get(i).getTitle(), String.valueOf(sections.get(i).getStartTime()),contents));
+            items.add(new DocsSummaryItem(sections.get(i).getTitle(), String.valueOf(sections.get(i).getStartTime()), contents));
         }
     }
 

@@ -56,24 +56,18 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
 
         InquiryFragmentItem item = items.get(position);
 
-        if(item.getProfile().startsWith("http")) {
-            Glide.with(holder.itemView.getContext())
-                    .load(item.getProfile())
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+        if (item.getProfile().startsWith("http")) {
+            Glide.with(holder.itemView.getContext()).load(item.getProfile()).error(R.mipmap.ic_launcher).into(holder.profileImage);
         } else {
             imageRef = storage.getReference().child(item.getProfile());
-            Glide.with(holder.itemView.getContext())
-                    .load(ProfileImage.convertGsToHttps(imageRef.toString()))
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.profileImage);
+            Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
         }
 
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
 
-        if(!item.isRead()) {
+        if (!item.isRead()) {
             holder.layout.setBackgroundColor(primaryColor);
         } else {
             holder.layout.setBackgroundColor(whiteColor);
@@ -81,7 +75,7 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
 
         holder.layout.setOnClickListener(v -> {
 
-            if(!item.isRead()) {
+            if (!item.isRead()) {
                 Log.d("알림 읽음", "문의 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
                 notificationViewModel.readNotification(item.getNotificationId());
@@ -99,7 +93,7 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
         return (items != null ? items.size() : 0);
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final ConstraintLayout layout;
         private final ImageView profileImage;
@@ -114,7 +108,7 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
             profileImage = itemView.findViewById(R.id.imageview_item_notification_inquiry);
             title = itemView.findViewById(R.id.textview_item_notification_inquiry_title);
             content = itemView.findViewById(R.id.textview_item_notification_inquiry_content);
-            createdTime = itemView.findViewById(R.id.textview_item_notification_inquiry_createdtime);
+            createdTime = itemView.findViewById(R.id.textview_item_notification_inquiry_created_time);
 
         }
     }

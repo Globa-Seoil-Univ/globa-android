@@ -44,10 +44,10 @@ public class StatisticsFragment extends Fragment {
     int[] timeValues, gradeValues;
     double[] doubleWordValues, doubleGradeValues;
     FragmentStatisticsBinding binding;
-    private HorizontalBarChart barChart;
-    private LineChart timeLineChart, gradeLineChart;
     StatisticsViewModel statisticsViewModel;
     String userId;
+    private HorizontalBarChart barChart;
+    private LineChart timeLineChart, gradeLineChart;
     private List<Keyword> keywords;
     private List<StudyTime> studyTimes;
     private List<QuizGrade> quizGrades;
@@ -75,6 +75,7 @@ public class StatisticsFragment extends Fragment {
 
     private void requestData() {
         statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
+        statisticsViewModel.setApiClient(getContext());
 
         ApiClient apiClient = new ApiClient(getContext());
         userId = apiClient.requestUserInfo().getUserId();
@@ -88,7 +89,7 @@ public class StatisticsFragment extends Fragment {
     private void receiveLiveData() {
         // 단어, 퀴즈 점수는 데이터베이스에서 데이터를 받아와 차트 그림 (공부 시간은 일단 주석 처리)
         statisticsViewModel.getStatisticsLiveData().observe(getViewLifecycleOwner(), statistics -> {
-            if(statistics != null) {
+            if (statistics != null) {
                 keywords = statistics.getKeywords();
                 studyTimes = statistics.getStudyTimes();
                 quizGrades = statistics.getQuizGrades();
@@ -119,14 +120,14 @@ public class StatisticsFragment extends Fragment {
             }
         }
 
-        for(int i = 0; i < doubleWordValues.length; i++) {
+        for (int i = 0; i < doubleWordValues.length; i++) {
             doubleWordValues[i] = doubleWordValues[i] * 100;
         }
 
-        if(wordX.length == 0) {
+        if (wordX.length == 0) {
             String[] newWordX = new String[10];
             double[] newWordValue = new double[10];
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 newWordX[i] = " ";
                 newWordValue[i] = 0;
             }
@@ -147,29 +148,29 @@ public class StatisticsFragment extends Fragment {
             }
         }
 
-        for(int i = 0; i < timeX.length; i++) {
+        for (int i = 0; i < timeX.length; i++) {
             timeX[i] = timeX[i].substring(0, 10);
         }
 
-        if(timeX.length < 10 && timeX.length > 0) {
+        if (timeX.length < 10 && timeX.length > 0) {
             List<String> timeXList = new ArrayList<>();
             List<Integer> timeValuesList = new ArrayList<>();
-            for(int i = 0; i < timeX.length; i ++) {
+            for (int i = 0; i < timeX.length; i++) {
                 timeXList.add(timeX[i]);
                 timeValuesList.add(timeValues[i]);
             }
-            for(int i = 0; i < 10 - timeX.length; i++) {
+            for (int i = 0; i < 10 - timeX.length; i++) {
                 timeXList.add("0");
                 timeValuesList.add(0);
             }
             String[] newTimeX = new String[10];
             int[] newTimeValues = new int[10];
             int i = 0, j = 0;
-            for(String s : timeXList) {
+            for (String s : timeXList) {
                 newTimeX[i] = s;
                 i++;
             }
-            for(int n : timeValuesList) {
+            for (int n : timeValuesList) {
                 newTimeValues[j] = n;
                 j++;
             }
@@ -177,7 +178,7 @@ public class StatisticsFragment extends Fragment {
         } else if (timeX.length == 0) {
             String[] newTimeX = new String[10];
             int[] newTimeValues = new int[10];
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 newTimeX[i] = "0";
                 newTimeValues[i] = 0;
             }
@@ -190,27 +191,27 @@ public class StatisticsFragment extends Fragment {
     private void drawQuizGradeChart() {
         gradeX = quizGrades.stream().map(QuizGrade::getCreatedTime).toArray(String[]::new);
         doubleGradeValues = quizGrades.stream().mapToDouble(QuizGrade::getScore).toArray();
-        gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int)value).toArray();
-        if(gradeX.length < 10 && gradeX.length > 0) {
+        gradeValues = DoubleStream.of(doubleGradeValues).mapToInt(value -> (int) value).toArray();
+        if (gradeX.length < 10 && gradeX.length > 0) {
             List<String> gradeXList = new ArrayList<>();
             List<Integer> gradeValuesList = new ArrayList<>();
-            for(int i = 0; i < gradeX.length; i ++) {
+            for (int i = 0; i < gradeX.length; i++) {
                 gradeXList.add(gradeX[i]);
                 gradeValuesList.add(gradeValues[i]);
                 Log.d("퀴즈 시각화", "날짜: " + gradeX[i] + ", 점수 : " + gradeValues[i]);
             }
-            for(int i = 0; i < 10 - gradeX.length; i++) {
+            for (int i = 0; i < 10 - gradeX.length; i++) {
                 gradeXList.add("0");
                 gradeValuesList.add(0);
             }
             String[] newGradeX = new String[10];
             int[] newGradeValues = new int[10];
             int i = 0, j = 0;
-            for(String s : gradeXList) {
+            for (String s : gradeXList) {
                 newGradeX[i] = s;
                 i++;
             }
-            for(int n : gradeValuesList) {
+            for (int n : gradeValuesList) {
                 newGradeValues[j] = n;
                 j++;
             }
@@ -218,7 +219,7 @@ public class StatisticsFragment extends Fragment {
         } else if (gradeX.length == 0) {
             String[] newGradeX = new String[10];
             int[] newGradeValues = new int[10];
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 newGradeX[i] = "0";
                 newGradeValues[i] = 0;
             }
@@ -324,7 +325,7 @@ public class StatisticsFragment extends Fragment {
 
     private void drawLineChart(LineChart lineChart, int maxY, String[] dayX, int[] values, String title) {
         List<Entry> entries = new ArrayList<>();
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             entries.add(new Entry(i, values[i]));
         }
 

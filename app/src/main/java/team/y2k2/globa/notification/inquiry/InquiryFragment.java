@@ -21,8 +21,8 @@ import team.y2k2.globa.notification.NotificationActivity;
 
 public class InquiryFragment extends Fragment {
 
-    FragmentNotificationInquiryBinding binding;
     private final List<InquiryFragmentItem> inquiryFragmentItems = new ArrayList<>();
+    FragmentNotificationInquiryBinding binding;
     String notificationId, profile, inquiryId, title, content, createdTime;
     boolean isRead;
     InquiryFragmentAdapter adapter;
@@ -46,8 +46,8 @@ public class InquiryFragment extends Fragment {
         List<Notification> notificationList = apiClient.requestNotification("i").getNotifications();
         inquiryFragmentItems.clear();
 
-        if(notificationList != null) {
-            for(Notification notification : notificationList) {
+        if (notificationList != null) {
+            for (Notification notification : notificationList) {
                 settingNotification(notification);
             }
 
@@ -68,8 +68,7 @@ public class InquiryFragment extends Fragment {
         content = notification.getInquiry().getTitle();
         createdTime = notification.getCreatedTime().substring(0, 10);
         isRead = notification.isRead();
-        Log.d("문의 알림", "문의 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content +
-                ", createdTime: " + createdTime + ", isRead: " + isRead);
+        Log.d("문의 알림", "문의 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
         inquiryFragmentItems.add(new InquiryFragmentItem(notificationId, profile, inquiryId, title, content, createdTime, isRead));
     }
 }

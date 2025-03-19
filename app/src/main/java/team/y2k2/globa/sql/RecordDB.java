@@ -24,11 +24,7 @@ public class RecordDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE record("
-                +"record_id INT PRIMARY KEY,"
-                +"folder_id INT,"
-                +"title VARCHAR(32),"
-                +"datetime VARCHAR(300));";
+        String sql = "CREATE TABLE record(" + "record_id INT PRIMARY KEY," + "folder_id INT," + "title VARCHAR(32)," + "datetime VARCHAR(300));";
 
         db.execSQL(sql);
     }
@@ -65,7 +61,7 @@ public class RecordDB extends SQLiteOpenHelper {
             String sql = "INSERT INTO Record VALUES(" + record_id + "," + folder_id + ",'" + title + "','" + datetime + "');";
             KeywordDB keywordDB = new KeywordDB(context);
 
-            for(int i = 0; i < keywords.size(); i++) {
+            for (int i = 0; i < keywords.size(); i++) {
                 Keyword keyword = keywords.get(i);
                 keywordDB.onInsert(record_id, keyword.getWord());
             }
@@ -84,7 +80,7 @@ public class RecordDB extends SQLiteOpenHelper {
     }
 
     private boolean isRecordIdExists(int recordId) {
-        Cursor cursor = sqlDB.rawQuery("SELECT * FROM Record WHERE record_id = " + recordId +";", null);
+        Cursor cursor = sqlDB.rawQuery("SELECT * FROM Record WHERE record_id = " + recordId + ";", null);
         return cursor.getCount() == 0;
     }
 }

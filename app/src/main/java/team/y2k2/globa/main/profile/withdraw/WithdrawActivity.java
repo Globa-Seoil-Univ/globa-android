@@ -17,8 +17,8 @@ import team.y2k2.globa.databinding.ActivityWithdrawBinding;
 public class WithdrawActivity extends AppCompatActivity {
 
     ActivityWithdrawBinding binding;
-    private WithdrawViewModel withdrawViewModel;
     String content = ""; // 회원 탈퇴 사유(editText)를 담을 변수
+    private WithdrawViewModel withdrawViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class WithdrawActivity extends AppCompatActivity {
         reasonList.add("기능이 부족해요");
         reasonList.add("다른 서비스가 더 좋아요");
 
-        for(String reason : reasonList) {
+        for (String reason : reasonList) {
             RadioButton radioButton = new RadioButton(WithdrawActivity.this);
             radioButton.setText(reason);
             radioButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
@@ -60,7 +60,7 @@ public class WithdrawActivity extends AppCompatActivity {
         });
 
         withdrawViewModel.getResponseLiveData().observe(this, response -> {
-            if(response == 200) {
+            if (response == 200) {
                 SharedPreferences preferences = getSharedPreferences("account", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();

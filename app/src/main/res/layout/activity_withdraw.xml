@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.profile.withdraw.WithdrawActivity">
@@ -72,8 +71,8 @@
     <!--        android:textSize="@dimen/normal_light"-->
     <!--        android:textColor="@color/black"-->
     <!--        android:buttonTint="@color/primary"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/textview_withdraw_subannounce"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_subannounce"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/textview_withdraw_sub_announce"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_sub_announce"-->
     <!--        android:layout_marginTop="16dp"-->
     <!--        android:checked="true" />-->
 

@@ -57,8 +57,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-        if(items.get(0).getRecordId().isEmpty())
-            return;
+        if (items.get(0).getRecordId().isEmpty()) return;
 
         String title = items.get(position).getTitle();
         String datetime = getDateFormat(items.get(position).getDatetime());
@@ -141,9 +140,9 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         DocsKeywordAdapter adapter = new DocsKeywordAdapter(keywordModel.getItems());
 
 
-        if(! items.get(position).getKeywords().isEmpty()) {
-            holder.processing.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            holder.lottieAnimationView.setLayoutParams(new LinearLayout.LayoutParams(0,0));
+        if (!items.get(position).getKeywords().isEmpty()) {
+            holder.processing.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+            holder.lottieAnimationView.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
         }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.itemView.getContext());
@@ -156,27 +155,6 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
     public int getItemCount() {
         return (null != items ? items.size() : 0);
     }
-
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        private final TextView title;
-        private final TextView datetime;
-        private final RecyclerView keywordRecyclerView;
-        private final ConstraintLayout layout;
-        private final TextView processing;
-        private final LottieAnimationView lottieAnimationView;
-
-        public AdapterViewHolder(@NonNull View itemView) {
-            super(itemView);
-            title = itemView.findViewById(R.id.textview_document_main_docs_name);
-            datetime = itemView.findViewById(R.id.textview_item_document_docs_time);
-            layout = itemView.findViewById(R.id.constraintlayout_item_main_document);
-
-            processing = itemView.findViewById(R.id.textview_main_document_processing);
-            keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
-            lottieAnimationView = itemView.findViewById(R.id.lottie_main_document_record);
-        }
-    }
-
 
     public String getDateFormat(String datetime) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
@@ -204,6 +182,26 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
             Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());
         } else {
             Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
+        }
+    }
+
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+        private final TextView title;
+        private final TextView datetime;
+        private final RecyclerView keywordRecyclerView;
+        private final ConstraintLayout layout;
+        private final TextView processing;
+        private final LottieAnimationView lottieAnimationView;
+
+        public AdapterViewHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.textview_document_main_docs_name);
+            datetime = itemView.findViewById(R.id.textview_item_document_docs_time);
+            layout = itemView.findViewById(R.id.constraintlayout_item_main_document);
+
+            processing = itemView.findViewById(R.id.textview_main_document_processing);
+            keywordRecyclerView = itemView.findViewById(R.id.recyclerview_document_keyword);
+            lottieAnimationView = itemView.findViewById(R.id.lottie_main_document_record);
         }
     }
 

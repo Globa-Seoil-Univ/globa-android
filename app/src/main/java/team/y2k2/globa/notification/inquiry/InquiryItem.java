@@ -19,7 +19,7 @@ public class InquiryItem {
     @SerializedName("createdTime")
     private final String createdTime;
 
-    public InquiryItem(String inquiryId, String title, String content, String createdTime,boolean solved) {
+    public InquiryItem(String inquiryId, String title, String content, String createdTime, boolean solved) {
         this.inquiryId = inquiryId;
         this.title = title;
         this.content = content;

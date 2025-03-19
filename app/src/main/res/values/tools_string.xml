@@ -1,0 +1,4 @@
+<resources>
+    <string name="activity_docs_tools_docs_title" translatable="false">지구온난화 시나리오 기반의 동아시아 기후변화 분석</string>
+    <string name="activity_docs_upload_tab" translatable="false">세부정보 추가</string>
+</resources>
