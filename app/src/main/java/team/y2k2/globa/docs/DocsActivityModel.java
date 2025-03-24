@@ -20,6 +20,7 @@ import com.google.firebase.storage.StorageReference;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
@@ -72,7 +73,7 @@ public class DocsActivityModel extends ViewModel {
 
     public void getResponse() {
         Log.d(getClass().getSimpleName(), "뷰모델 viewModel.getResponse() 시작");
-        ApiClient apiClient = new ApiClient(activity);
+        RecordApiClient apiClient = new RecordApiClient();
 
         DocsDetailResponse response = apiClient.requestGetDocumentDetail(folderId, recordId);
 

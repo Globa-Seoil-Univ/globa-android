@@ -16,6 +16,7 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.NotificationApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationShareBinding;
 import team.y2k2.globa.notification.NotificationActivity;
@@ -26,7 +27,7 @@ public class ShareFragment extends Fragment {
     String notificationId, profile, title, content, createdTime, notificationType;
     boolean isRead;
     ShareFragmentAdapter adapter;
-    ApiClient apiClient;
+    NotificationApiClient apiClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class ShareFragment extends Fragment {
     }
 
     private void initializeUI() {
-        apiClient = new ApiClient(this.getContext());
+        apiClient = new NotificationApiClient();
 
         List<Notification> notificationList = apiClient.requestNotification("s").getNotifications();
         shareFragmentItems.clear();

@@ -10,19 +10,22 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import retrofit2.Response;
-import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.entity.FolderInsideRecord;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
 
 public class FolderInsideFragmentModel extends ViewModel {
-    ApiClient apiClient;
+    RecordApiClient recordApiClient;
+    FolderApiClient folderApiClient;
     private final MutableLiveData<List<FolderInsideRecord>> folderInsideRecords = new MutableLiveData<>();
     private final MutableLiveData<Integer> deleteResponseCode = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<String> folderTitle = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        apiClient = new ApiClient(context);
+        recordApiClient = new RecordApiClient();
+        folderApiClient = new FolderApiClient();
     }
 
     public LiveData<String> getFolderTitle() {
@@ -46,16 +49,16 @@ public class FolderInsideFragmentModel extends ViewModel {
     }
 
     public void fetchFolderInsideRecords(int folderId) {
-        FolderInsideRecordResponse response = apiClient.requestGetFolderInside(folderId, 1, 100);
+        FolderInsideRecordResponse response = recordApiClient.requestGetFolderInside(folderId, 1, 100);
         folderInsideRecords.setValue(response.getRecords());
     }
 
     public void deleteFolder(int folderId) {
-        apiClient.requestDeleteFolder(folderId);
+        folderApiClient.requestDeleteFolder(folderId);
     }
 
     public void deleteDocs(String folderId, String recordId) {
-        Response<Void> response = apiClient.deleteRecord(folderId, recordId);
+        Response<Void> response = recordApiClient.deleteRecord(folderId, recordId);
 
         if (response.isSuccessful()) {
             Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());

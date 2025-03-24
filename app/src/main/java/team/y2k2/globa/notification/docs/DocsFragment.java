@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.NotificationApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationDocsBinding;
 import team.y2k2.globa.notification.NotificationActivity;
@@ -25,7 +27,8 @@ public class DocsFragment extends Fragment {
     String notificationId, profile, title, content, createdTime, notificationType;
     boolean isRead;
     DocsFragmentAdapter adapter;
-    ApiClient apiClient;
+    NotificationApiClient apiClient;
+    UserApiClient userApiClient;
     String myProfile;
 
     @Override
@@ -36,8 +39,9 @@ public class DocsFragment extends Fragment {
     }
 
     private void initializeUI() {
-        apiClient = new ApiClient(binding.getRoot().getContext());
-        myProfile = apiClient.requestUserInfo().getProfile();
+        apiClient = new NotificationApiClient();
+        userApiClient = new UserApiClient();
+        myProfile = userApiClient.requestUserInfo().getProfile();
 
         List<Notification> notificationList = apiClient.requestNotification("r").getNotifications();
         docsFragmentItems.clear();

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.sql.RecordDB;
@@ -20,7 +21,7 @@ public class SearchViewModel extends ViewModel {
 
     private final SearchDocsAdapter adapter;
     private RecordDB recordDB;
-    private ApiClient apiClient;
+    private RecordApiClient apiClient;
 
     public SearchViewModel() {
         adapter = new SearchDocsAdapter(new ArrayList<>());
@@ -28,7 +29,7 @@ public class SearchViewModel extends ViewModel {
 
     public void setContext(Context context) {
         recordDB = new RecordDB(context);
-        apiClient = new ApiClient(context);
+        apiClient = new RecordApiClient();
     }
 
     public SearchDocsAdapter getAdapter() {

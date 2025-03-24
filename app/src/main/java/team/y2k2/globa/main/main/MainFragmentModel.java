@@ -10,7 +10,10 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderApiClient;
+import team.y2k2.globa.api.clients.NoticeApiClient;
+import team.y2k2.globa.api.clients.NotificationApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.FolderResponse;
@@ -23,7 +26,10 @@ import team.y2k2.globa.sql.RecordDB;
 
 public class MainFragmentModel extends ViewModel {
     private final MutableLiveData<UnreadNotificationCheckResponse> notificationCheckLiveData = new MutableLiveData<>();
-    private ApiClient apiClient;
+    private FolderApiClient folderApiClient;
+    private RecordApiClient recordApiClient;
+    private NoticeApiClient noticeApiClient;
+    private NotificationApiClient notificationApiClient;
     private Context context;
     private MainModel model;
     private RecordResponse recordResponse;
@@ -31,7 +37,10 @@ public class MainFragmentModel extends ViewModel {
 
     public void setContext(Context context) {
         this.context = context;
-        apiClient = new ApiClient(context);
+        this.folderApiClient = new FolderApiClient();
+        this.recordApiClient = new RecordApiClient();
+        this.noticeApiClient = new NoticeApiClient();
+        this.notificationApiClient = new NotificationApiClient();
     }
 
     public MutableLiveData<UnreadNotificationCheckResponse> getNotificationCheckLiveData() {
@@ -39,7 +48,7 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public String[] getPromotionsImage() {
-        List<NoticeResponse> noticeResponse = apiClient.requestPromotion(3);
+        List<NoticeResponse> noticeResponse = noticeApiClient.requestPromotion(3);
         String[] images = new String[noticeResponse.size()];
 
         for (int i = 0; i < noticeResponse.size(); i++) {
@@ -51,8 +60,8 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public ArrayList<DocsListItem> getCurrentlyRecords() {
-        recordResponse = apiClient.requestGetRecords(100);
-        folderResponse = apiClient.requestGetFolders(1, 100);
+        recordResponse = recordApiClient.requestGetRecords(100);
+        folderResponse = folderApiClient.requestGetFolders(1, 100);
 
         DocsListItemModel listItems = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
@@ -77,8 +86,8 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public ArrayList<DocsListItem> getMostViewedRecords() {
-        recordResponse = apiClient.requestGetRecords(100);
-        folderResponse = apiClient.requestGetFolders(1, 100);
+        recordResponse = recordApiClient.requestGetRecords(100);
+        folderResponse = folderApiClient.requestGetFolders(1, 100);
 
         DocsListItemModel listItems = new DocsListItemModel();
 
@@ -100,7 +109,7 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public ArrayList<DocsListItem> getSharedRecords() {
-        recordResponse = apiClient.requestGetRecordsOfSharing(20);
+        recordResponse = recordApiClient.requestGetRecordsOfSharing(20);
 
         DocsListItemModel listItems = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
@@ -125,7 +134,7 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public ArrayList<DocsListItem> getReceivedRecords() {
-        recordResponse = apiClient.requestGetRecordsOfReceiving(20);
+        recordResponse = recordApiClient.requestGetRecordsOfReceiving(20);
 
         DocsListItemModel listItems = new DocsListItemModel();
         List<Record> records = recordResponse.getRecords();
@@ -149,7 +158,7 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public void getUnreadNotificationCheck() {
-        UnreadNotificationCheckResponse response = apiClient.getUnreadNotificationCheck();
+        UnreadNotificationCheckResponse response = notificationApiClient.getUnreadNotificationCheck();
         notificationCheckLiveData.postValue(response);
     }
 }

@@ -65,7 +65,7 @@ public class QuizActivity extends AppCompatActivity {
         recordId = Integer.parseInt(getIntent().getStringExtra("recordId"));
 
         quizActivityModel = new ViewModelProvider(this).get(QuizActivityModel.class);
-        quizActivityModel.gatherQuiz(folderId, recordId);
+//        quizActivityModel.gatherQuiz(folderId, recordId);
 
         quizActivityModel.getQuizLiveData().observe(this, quiz -> {
             if (quiz != null) {
@@ -103,7 +103,7 @@ public class QuizActivity extends AppCompatActivity {
             for (int i = 0; i < quizResultList.size(); i++) {
                 Log.d("퀴즈 결과", "퀴즈 결과: " + (quizResultList.get(i).getQuizId()) + ", " + (quizResultList.get(i).isCorrect()));
             }
-            quizActivityModel.submitQuizResult(folderId, recordId, quizResultList);
+//            quizActivityModel.submitQuizResult(folderId, recordId, quizResultList);
 
             // 결과화면으로 넘어가기전 결과 계산
             int totalQuestion = quizList.size(); // 총 문제 수

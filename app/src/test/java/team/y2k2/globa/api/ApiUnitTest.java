@@ -8,17 +8,18 @@ import org.junit.Test;
 
 import java.util.List;
 
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.*;
 
 public class ApiUnitTest {
-    private ApiClient apiClient;
+    private RecordApiClient apiClient;
 
     @Before
     public void setUp() {
         /* 앱 빌드 후 Access Token 발급받아 값 입력 후 테스트를 진행합니다. */
         String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5IiwiZXhwIjoxNzQxNDUwNjY5fQ.6KG6zSTsu04Yf4Vt3XvUjz1n_OsUTpBxZ5C_7JniOLM";
-        this.apiClient = new ApiClient(accessToken);
+        this.apiClient = new RecordApiClient();
     }
 
     @Test

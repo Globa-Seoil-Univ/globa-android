@@ -42,7 +42,7 @@ public class LoginActivityModel extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>(null);
 
     private LoginModel model;
-    private ApiClient apiClient;
+    public team.y2k2.globa.api.clients.UserApiClient userApiClient;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private LoginActivity activity;
@@ -58,7 +58,7 @@ public class LoginActivityModel extends ViewModel {
 
     public void setContext(LoginActivity activity) {
         this.activity = activity;
-        apiClient = new ApiClient(activity);
+        userApiClient = new team.y2k2.globa.api.clients.UserApiClient();
         mAuth = FirebaseAuth.getInstance();
         initGoogleSignInClient();
     }
@@ -151,7 +151,7 @@ public class LoginActivityModel extends ViewModel {
                             model = new LoginModel(mAuth.getCurrentUser(), RC_GOOGLE, idToken);
                             LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), idToken);
 
-                            LoginResponse response = apiClient.requestSignIn(request);
+                            LoginResponse response = userApiClient.requestSignIn(request);
 
                             if (response == null) {
                                 errorMessage.postValue("로그인 실패 : 탈퇴한 사용자");
@@ -161,8 +161,7 @@ public class LoginActivityModel extends ViewModel {
                                 userPreferences(request, response);
                                 sendLogMessage(request, response);
 
-                                ApiClient apiNewClient = new ApiClient(activity);
-                                UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
+                                UserInfoResponse userInfoResponse = userApiClient.requestUserInfo();
                                 userProfilePreferences(userInfoResponse);
                                 showLogMessages(userInfoResponse);
 
@@ -206,7 +205,7 @@ public class LoginActivityModel extends ViewModel {
             } else {
                 model = new LoginModel(user, RC_KAKAO);
                 LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), token);
-                LoginResponse response = apiClient.requestSignIn(request);
+                LoginResponse response = this.userApiClient.requestSignIn(request);
 
                 if (response == null) {
                     errorMessage.postValue("로그인 실패 : 탈퇴한 사용자");
@@ -215,8 +214,7 @@ public class LoginActivityModel extends ViewModel {
                     userPreferences(request, response);
                     sendLogMessage(request, response);
 
-                    ApiClient apiNewClient = new ApiClient(activity);
-                    UserInfoResponse userInfoResponse = apiNewClient.requestUserInfo();
+                    UserInfoResponse userInfoResponse = this.userApiClient.requestUserInfo();
                     userProfilePreferences(userInfoResponse);
                     showLogMessages(userInfoResponse);
 

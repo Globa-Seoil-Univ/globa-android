@@ -7,18 +7,19 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 
 public class StatisticsViewModel extends ViewModel {
 
-    private ApiClient apiClient;
+    private UserApiClient apiClient;
     private final MutableLiveData<StatisticsResponse> statisticsLiveData = new MutableLiveData<>();
     private final MutableLiveData<UserInfoResponse> userInfoLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new UserApiClient();
     }
 
     public LiveData<StatisticsResponse> getStatisticsLiveData() {

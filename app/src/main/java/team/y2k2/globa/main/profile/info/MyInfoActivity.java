@@ -27,6 +27,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.ActivityMyInfoBinding;
 import team.y2k2.globa.main.ProfileImage;
@@ -48,7 +49,7 @@ public class MyInfoActivity extends AppCompatActivity {
         binding = ActivityMyInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ApiClient apiClient = new ApiClient(this);
+        UserApiClient apiClient = new UserApiClient();
 
         UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
         profile = userInfoResponse.getProfile();

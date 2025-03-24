@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.databinding.FragmentProfileBinding;
 import team.y2k2.globa.main.ProfileImage;
@@ -64,7 +65,7 @@ public class ProfileFragment extends Fragment {
         binding.recyclerviewProfileSetting.setAdapter(adapter);
         binding.recyclerviewProfileSetting.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
 
-        ApiClient apiClient = new ApiClient(inflater.getContext());
+        UserApiClient apiClient = new UserApiClient();
 
         UserInfoResponse response = apiClient.requestUserInfo();
         // userInfo를 사용하여 필요한 작업 수행

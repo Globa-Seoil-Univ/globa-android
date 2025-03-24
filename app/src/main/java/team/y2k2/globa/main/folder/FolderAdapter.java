@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.main.folder.inside.FolderInsideFragment;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterViewHolder> {
@@ -81,7 +82,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
     }
 
     public void deleteFolder(int position) {
-        ApiClient client = new ApiClient(activity);
+        FolderApiClient client = new FolderApiClient();
         client.requestDeleteFolder(items.get(position).getFolderId());
     }
 

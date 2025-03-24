@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.NotificationApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationInquiryBinding;
 import team.y2k2.globa.notification.NotificationActivity;
@@ -26,7 +27,8 @@ public class InquiryFragment extends Fragment {
     String notificationId, profile, inquiryId, title, content, createdTime;
     boolean isRead;
     InquiryFragmentAdapter adapter;
-    ApiClient apiClient;
+    NotificationApiClient apiClient;
+    UserApiClient userApiClient;
 
     @Nullable
     @Override
@@ -40,8 +42,9 @@ public class InquiryFragment extends Fragment {
     }
 
     private void initializeUI() {
-        apiClient = new ApiClient(this.getContext());
-        profile = apiClient.requestUserInfo().getProfile();
+        apiClient = new NotificationApiClient();
+        userApiClient = new UserApiClient();
+        profile = userApiClient.requestUserInfo().getProfile();
 
         List<Notification> notificationList = apiClient.requestNotification("i").getNotifications();
         inquiryFragmentItems.clear();

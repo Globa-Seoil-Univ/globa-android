@@ -17,11 +17,12 @@ import java.nio.file.Files;
 
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 
 public class MainModel {
     private final Activity activity;
-    private ApiClient apiClient;
+    private UserApiClient apiClient;
 
     public MainModel(Activity activity) {
         this.activity = activity;
@@ -40,7 +41,7 @@ public class MainModel {
     }
 
     public String getUserInfo() {
-        apiClient = new ApiClient(activity);
+        apiClient = new UserApiClient();
         UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
         return userInfoResponse.getUserId();
     }

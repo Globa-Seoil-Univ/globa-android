@@ -10,16 +10,17 @@ import androidx.lifecycle.ViewModel;
 
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.request.NicknameEditRequest;
 
 public class NicknameEditViewModel extends ViewModel {
 
-    private ApiClient apiClient;
+    private UserApiClient apiClient;
     private final MutableLiveData<String> nameLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new UserApiClient();
     }
 
     public MutableLiveData<String> getNameLiveData() {

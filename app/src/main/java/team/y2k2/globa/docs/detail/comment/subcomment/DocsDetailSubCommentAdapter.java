@@ -23,6 +23,7 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.CommentApiClient;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;
 import team.y2k2.globa.docs.detail.comment.FocusViewModel;
@@ -41,7 +42,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private final FocusViewModel focusViewModel;
     List<DocsDetailSubCommentItem> subCommentItems;
-    private ApiClient apiClient;
+    private CommentApiClient apiClient;
 
     public DocsDetailSubCommentAdapter(List<DocsDetailSubCommentItem> subCommentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailCommentAdapter commentAdapter) {
         this.subCommentItems = subCommentItems;
@@ -51,7 +52,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         this.sectionId = sectionId;
         this.highlightId = highlightId;
         this.commentAdapter = commentAdapter;
-        this.apiClient = new ApiClient(activity);
+        this.apiClient = new CommentApiClient();
         focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);
     }
 
@@ -162,7 +163,7 @@ public class DocsDetailSubCommentAdapter extends RecyclerView.Adapter<DocsDetail
         confirmBtn.setOnClickListener(v -> {
             updateItem("삭제된 댓글입니다", position);
             if (apiClient == null) {
-                apiClient = new ApiClient(activity);
+                apiClient = new CommentApiClient();
             }
             apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
             bottomSheetDialog.dismiss();

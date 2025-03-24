@@ -8,15 +8,16 @@ import androidx.lifecycle.ViewModel;
 
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderShareApiClient;
 import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 
 public class FolderPermissionActivityModel extends ViewModel {
     private final MutableLiveData<FolderPermissionResponse> usersLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
-    private ApiClient apiClient;
+    private FolderShareApiClient apiClient;
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new FolderShareApiClient();
     }
 
     public MutableLiveData<FolderPermissionResponse> getUsersLiveData() {

@@ -27,6 +27,7 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.api.model.entity.ShareTarget;
 import team.y2k2.globa.databinding.ActivityFolderAddBinding;
 import team.y2k2.globa.main.ProfileImage;
@@ -38,7 +39,7 @@ public class FolderAddActivity extends AppCompatActivity {
     private final List<FolderAddItem> itemList = new ArrayList<>();
     private final List<ShareTarget> shareTargetList = new ArrayList<>();
     ActivityFolderAddBinding binding;
-    ApiClient apiClient;
+    FolderApiClient apiClient;
     FolderShareActivityModel folderShareActivityModel;
     String profile;
     String newProfile;
@@ -55,7 +56,7 @@ public class FolderAddActivity extends AppCompatActivity {
         folderShareActivityModel = new ViewModelProvider(this).get(FolderShareActivityModel.class);
         folderShareActivityModel.setApiClient(this);
 
-        apiClient = new ApiClient(this);
+        apiClient = new FolderApiClient();
 
         adapter = new FolderAddAdapter(itemList, this);
         binding.recyclerviewFolderAddShareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));

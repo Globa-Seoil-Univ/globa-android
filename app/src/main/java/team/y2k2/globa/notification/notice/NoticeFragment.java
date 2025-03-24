@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.NotificationApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationNoticeBinding;
 import team.y2k2.globa.notification.NotificationActivity;
@@ -26,7 +26,7 @@ public class NoticeFragment extends Fragment {
     String notificationId, profile, title, content, createdTime;
     boolean isRead;
     NoticeFragmentAdapter adapter;
-    ApiClient apiClient;
+    NotificationApiClient apiClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class NoticeFragment extends Fragment {
     }
 
     private void initializeUI() {
-        apiClient = new ApiClient(this.getContext());
+        apiClient = new NotificationApiClient();
 
         List<Notification> notificationList = apiClient.requestNotification("n").getNotifications();
         noticeFragmentItems.clear();

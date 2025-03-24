@@ -6,16 +6,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.request.AlertRequest;
 import team.y2k2.globa.api.model.response.AlertResponse;
 
 public class AlertViewModel extends ViewModel {
 
-    private ApiClient apiClient;
+    private UserApiClient apiClient;
     private final MutableLiveData<AlertResponse> alertLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        apiClient = new ApiClient(context);
+        apiClient = new UserApiClient();
     }
 
     public MutableLiveData<AlertResponse> getAlertLiveData() {

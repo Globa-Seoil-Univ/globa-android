@@ -11,14 +11,15 @@ import androidx.lifecycle.ViewModel;
 import okhttp3.MultipartBody;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 
 public class MyinfoViewModel extends ViewModel {
 
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
-    private ApiClient apiClient; // Retrofit2
+    private UserApiClient apiClient; // Retrofit2
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new UserApiClient();
     }
 
     public LiveData<String> getErrorLiveData() {

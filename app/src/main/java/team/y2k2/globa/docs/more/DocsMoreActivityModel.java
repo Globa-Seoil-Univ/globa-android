@@ -8,14 +8,15 @@ import androidx.lifecycle.ViewModel;
 
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
 
 public class DocsMoreActivityModel extends ViewModel {
-    private ApiClient apiClient;
+    private RecordApiClient apiClient;
     private final MutableLiveData<Boolean> isDeleted = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new RecordApiClient();
     }
 
     public MutableLiveData<Boolean> getIsDeleted() {

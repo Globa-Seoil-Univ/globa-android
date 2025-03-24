@@ -11,11 +11,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.databinding.ActivityIntroBinding;
 
 public class IntroActivity extends AppCompatActivity {
     ActivityIntroBinding binding;
     IntroActivityModel viewModel;
+    ApiClient apiClient;
 
     public static boolean isNotificationGranted() {
         return IntroActivityModel.isNofiGranted();
@@ -28,6 +30,8 @@ public class IntroActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(IntroActivityModel.class);
         viewModel.setContext(this);
+
+        apiClient = ApiClient.getInstance(this);
 
         binding.setViewModel(viewModel); // ViewModel 바인딩
         binding.setLifecycleOwner(this); // LiveData 관찰을 위해 LifecycleOwner 설정

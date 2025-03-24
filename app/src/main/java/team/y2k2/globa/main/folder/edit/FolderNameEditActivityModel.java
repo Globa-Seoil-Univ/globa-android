@@ -9,11 +9,12 @@ import androidx.lifecycle.ViewModel;
 
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 
 public class FolderNameEditActivityModel extends ViewModel {
 
-    private ApiClient apiClient;
+    private FolderApiClient apiClient;
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> finishActivity = new MutableLiveData<>(false);
     public MutableLiveData<String> folderName = new MutableLiveData<>("");
@@ -22,7 +23,7 @@ public class FolderNameEditActivityModel extends ViewModel {
     private int folderId;
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new FolderApiClient();
     }
 
     public void setFolderId(int folderId) {

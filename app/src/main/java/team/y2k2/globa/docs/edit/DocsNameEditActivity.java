@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.databinding.ActivityDocsNameEditBinding;
 
 public class DocsNameEditActivity extends AppCompatActivity {
@@ -95,7 +96,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
     }
 
     public void updateDocsName(String title) {
-        ApiClient apiClient = new ApiClient(this);
+        RecordApiClient apiClient = new RecordApiClient();
 
         Response<Void> response = apiClient.requestUpdateRecordName(folderId, recordId, title);
 

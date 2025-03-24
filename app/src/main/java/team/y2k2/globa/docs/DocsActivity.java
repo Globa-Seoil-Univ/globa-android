@@ -21,6 +21,8 @@ import java.util.Date;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.detail.DocsDetailViewModel;
@@ -32,7 +34,8 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     DocsActivityModel viewModel;
     DocsDetailViewModel docsDetailViewModel;
     DocsMoreActivityModel docsMoreActivityModel;
-    ApiClient apiClient;
+    RecordApiClient apiClient;
+    UserApiClient userApiClient;
     SimpleDateFormat dateFormat;
     private SimpleExoPlayer player;
     private Runnable updateSeekbarRunnable;
@@ -56,8 +59,9 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
 
-        apiClient = new ApiClient(this);
-        UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+        apiClient = new RecordApiClient();
+        userApiClient = new UserApiClient();
+        UserInfoResponse userInfoResponse = userApiClient.requestUserInfo();
 
         profile = userInfoResponse.getProfile();
         name = userInfoResponse.getName();

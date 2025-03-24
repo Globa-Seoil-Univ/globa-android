@@ -32,7 +32,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.CommentApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.entity.SubComment;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.DocsActivity;
@@ -68,7 +69,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     RecyclerView subCommentRv;
     EditText subCommentEt;
     ImageButton subCommentBtn;
-    ApiClient apiClient;
+    CommentApiClient apiClient;
+    UserApiClient userApiClient;
     private Disposable disposable;
     private DocsDetailSubCommentAdapter subAdapter;
     private int subButtonStatus = BUTTON_COMMENT_SUB_CONFIRM;
@@ -136,9 +138,10 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             Log.d("대댓글 보기", "대댓글 보기 클릭 이벤트 시작");
 
             // 대댓글 호출
-            apiClient = new ApiClient(activity);
-            myProfile = apiClient.requestUserInfo().getProfile();
-            myName = apiClient.requestUserInfo().getName();
+            apiClient = new CommentApiClient();
+            userApiClient = new UserApiClient();
+            myProfile = userApiClient.requestUserInfo().getProfile();
+            myName = userApiClient.requestUserInfo().getName();
 
             List<SubComment> subCommentList = apiClient.getSubComments(folderId, recordId, sectionId, highlightId, commentId, 1, 100).getSubComments();
 
@@ -167,8 +170,8 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         // 댓글 수정 또는 삭제
         holder.itemView.setOnLongClickListener(view -> {
-            apiClient = new ApiClient(activity);
-            UserInfoResponse response = apiClient.requestUserInfo();
+            apiClient = new CommentApiClient();
+            UserInfoResponse response = userApiClient.requestUserInfo();
 
             Log.d(getClass().getName(), commentItems.get(position).getProfile());
 
@@ -301,7 +304,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         confirmBtn.setOnClickListener(v -> {
             updateItem("삭제된 댓글입니다", position);
             if (apiClient == null) {
-                apiClient = new ApiClient(activity);
+                apiClient = new CommentApiClient();
             }
             apiClient.deleteComment(folderId, recordId, sectionId, highlightId, commentId);
             bottomSheetDialog.dismiss();

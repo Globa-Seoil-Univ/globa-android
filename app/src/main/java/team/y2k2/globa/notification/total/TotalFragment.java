@@ -17,6 +17,7 @@ import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationTotalBinding;
 import team.y2k2.globa.notification.NotificationActivity;
@@ -36,7 +37,7 @@ public class TotalFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNotificationTotalBinding.inflate(getLayoutInflater());
 
-        ApiClient apiClient = new ApiClient(getContext());
+        UserApiClient apiClient = new UserApiClient();
         myProfile = apiClient.requestUserInfo().getProfile();
 
         initializeUI();

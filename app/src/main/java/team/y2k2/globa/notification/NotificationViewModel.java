@@ -6,18 +6,22 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderShareApiClient;
+import team.y2k2.globa.api.clients.NotificationApiClient;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
 
 public class NotificationViewModel extends ViewModel {
 
-    private ApiClient apiClient;
+    private FolderShareApiClient apiClient;
+    private NotificationApiClient notificationApiClient;
     private final MutableLiveData<NotificationResponse> notificationLiveData = new MutableLiveData<>();
     private final MutableLiveData<UnreadNotificationCountResponse> unreadCount = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new FolderShareApiClient();
+        this.notificationApiClient = new NotificationApiClient();
     }
 
     public MutableLiveData<NotificationResponse> getNotificationLiveData() {
@@ -33,7 +37,7 @@ public class NotificationViewModel extends ViewModel {
     }
 
     public void getNotification(String type) {
-        NotificationResponse response = apiClient.requestGetNotification(type, 1, 100);
+        NotificationResponse response = notificationApiClient.requestGetNotification(type, 1, 100);
         notificationLiveData.postValue(response);
     }
 
@@ -46,11 +50,11 @@ public class NotificationViewModel extends ViewModel {
     }
 
     public void getUnreadNotificationCount() {
-        UnreadNotificationCountResponse response = apiClient.getUnreadNotificationCount();
+        UnreadNotificationCountResponse response = notificationApiClient.getUnreadNotificationCount();
         unreadCount.postValue(response);
     }
 
     public void readNotification(String notificationId) {
-        apiClient.updateReadNotification(notificationId);
+        notificationApiClient.updateReadNotification(notificationId);
     }
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.jetbrains.annotations.NotNull;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.databinding.FragmentFolderBinding;
@@ -51,8 +52,8 @@ public class FolderFragment extends Fragment {
     }
 
     public void loadFolder() {
-        ApiClient apiClient = new ApiClient(binding.getRoot().getContext());
-        FolderResponse response = apiClient.requestGetFolders(1, 100);
+        FolderApiClient folderApiClient = new FolderApiClient();
+        FolderResponse response = folderApiClient.requestGetFolders(1, 100);
 
         model = new FolderModel();
         currentlyModel = new FolderCurrentlyModel();

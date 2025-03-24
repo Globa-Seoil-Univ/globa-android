@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.InquiryApiClient;
 import team.y2k2.globa.databinding.ActivityInquiryBinding;
 
 public class InquiryActivity extends AppCompatActivity {
@@ -30,7 +31,7 @@ public class InquiryActivity extends AppCompatActivity {
             String title = binding.edittextInquiryTitle.getText().toString();
             String content = binding.edittextInquiryDescription.getText().toString();
 
-            ApiClient apiClient = new ApiClient(this);
+            InquiryApiClient apiClient = new InquiryApiClient();
             Response<Void> response = apiClient.requestInsertInquiry(title, content);
 
             if (response.isSuccessful()) {

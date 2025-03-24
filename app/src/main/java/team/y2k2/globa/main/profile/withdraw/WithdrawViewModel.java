@@ -12,16 +12,17 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.intro.IntroActivity;
 
 public class WithdrawViewModel extends ViewModel {
 
-    private ApiClient apiClient;
+    private UserApiClient apiClient;
     private final MutableLiveData<Integer> responseLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new UserApiClient();
     }
 
     public MutableLiveData<Integer> getResponseLiveData() {

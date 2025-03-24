@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.InquiryApiClient;
 import team.y2k2.globa.api.model.response.InquiryDetailResponse;
 
 public class InquiryDetailViewModel extends ViewModel {
@@ -14,10 +15,10 @@ public class InquiryDetailViewModel extends ViewModel {
     private final MutableLiveData<InquiryDetailResponse> inquiryDetail = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
-    private ApiClient apiClient;
+    private InquiryApiClient apiClient;
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new InquiryApiClient();
     }
 
     public LiveData<InquiryDetailResponse> getInquiryDetail() {

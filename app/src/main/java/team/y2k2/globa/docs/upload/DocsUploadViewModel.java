@@ -24,6 +24,8 @@ import java.time.Instant;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.FolderApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;
 
@@ -40,6 +42,8 @@ public class DocsUploadViewModel extends ViewModel {
     private MediaPlayer mediaPlayer;
     private long unixTime;
     private Handler handler;
+    private FolderApiClient folderApiClient;
+    private RecordApiClient recordApiClient;
 
     public LiveData<String> getDocsTitle() {
         return title;
@@ -56,6 +60,8 @@ public class DocsUploadViewModel extends ViewModel {
     public void setActivity(DocsUploadActivity activity) {
         this.activity = activity;
         this.model = new DocsUploadModel(activity.getIntent());
+        this.folderApiClient = new FolderApiClient();
+        this.recordApiClient = new RecordApiClient();
         setDocsTitle();
         audioPlayState.setValue(AudioPlayState.STOPPED);
     }
@@ -107,15 +113,13 @@ public class DocsUploadViewModel extends ViewModel {
         String path = "folders/" + folderId + "/" + unixTime + ".ogg";
         String folderId = Integer.toString(Integer.parseInt(response.getFolders().get(activity.binding.spinnerDocsUpload.getSelectedItemPosition()).getFolderId()));
 
-        ApiClient apiClient = new ApiClient(activity);
 
-        apiClient.requestCreateRecord(folderId, title, path, "0");
+        recordApiClient.requestCreateRecord(folderId, title, path, "0");
         activity.finish();
     }
 
     public void loadFolder() {
-        ApiClient apiClient = new ApiClient(activity);
-        response = apiClient.requestGetFolders(1, 100);
+        response = folderApiClient.requestGetFolders(1, 100);
 
         if (response != null) {
             adapter = new DocsUploadFolderAdapter(activity, R.layout.item_folder, response.getFolders());

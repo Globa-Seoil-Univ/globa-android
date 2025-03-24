@@ -28,6 +28,7 @@ import java.util.Locale;
 import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.main.docs.keyword.DocsKeywordAdapter;
@@ -175,7 +176,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
     }
 
     public void deleteDocs(String folderId, String recordId) {
-        ApiClient apiClient = new ApiClient(activity);
+        RecordApiClient apiClient = new RecordApiClient();
         Response<Void> response = apiClient.deleteRecord(folderId, recordId);
 
         if (response.isSuccessful()) {

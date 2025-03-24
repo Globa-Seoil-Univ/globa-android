@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.QuizGrade;
 import team.y2k2.globa.api.model.entity.StudyTime;
@@ -77,7 +78,7 @@ public class StatisticsFragment extends Fragment {
         statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
         statisticsViewModel.setApiClient(getContext());
 
-        ApiClient apiClient = new ApiClient(getContext());
+        UserApiClient apiClient = new UserApiClient();
         userId = apiClient.requestUserInfo().getUserId();
         statisticsViewModel.getStatistics(userId);
 

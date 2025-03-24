@@ -40,6 +40,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.core.Observable;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.CommentApiClient;
 import team.y2k2.globa.api.model.entity.Comment;
 import team.y2k2.globa.api.model.entity.Highlight;
 import team.y2k2.globa.api.model.response.CommentResponse;
@@ -54,7 +55,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private static final int BUTTON_COMMENT_CONFIRM = 0;
     private static final int BUTTON_COMMENT_UPDATE = 1;
 
-    private final ApiClient apiClient;
+    private final CommentApiClient apiClient;
     private final ArrayList<DocsDetailItem> detailItems;
     private final DocsActivity activity;
     private final String folderId;
@@ -78,7 +79,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         this.activity = activity;
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
-        this.apiClient = new ApiClient(activity);
+        this.apiClient = new CommentApiClient();
         this.myProfile = activity.getProfile().startsWith("http") ? activity.getProfile() : ProfileImage.convertGsToHttps(FirebaseStorage.getInstance().getReference().child(activity.getProfile()).toString());
         this.myName = activity.getName();
         this.focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);

@@ -7,16 +7,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.clients.DictionaryApiClient;
 import team.y2k2.globa.api.model.response.KeywordDetailResponse;
 
 public class KeywordDetailViewModel extends ViewModel {
 
-    private ApiClient apiClient;
+    private DictionaryApiClient apiClient;
     private final MutableLiveData<KeywordDetailResponse> keywordDetailResponseLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        this.apiClient = new ApiClient(context);
+        this.apiClient = new DictionaryApiClient();
     }
 
     public LiveData<KeywordDetailResponse> getKeywordDetailResponseLiveData() {
