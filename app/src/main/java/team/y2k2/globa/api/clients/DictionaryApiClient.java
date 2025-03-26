@@ -4,11 +4,10 @@ import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;
 
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.KeywordDetailResponse;
-import team.y2k2.globa.api.services.AnswerApiService;
 import team.y2k2.globa.api.services.DictionaryApiService;
 
 public class DictionaryApiClient extends ApiClient {
-    private DictionaryApiService apiService;
+    private final DictionaryApiService apiService;
 
     public DictionaryApiClient() {
         super(ApiClient.getInstance(null).getContext());

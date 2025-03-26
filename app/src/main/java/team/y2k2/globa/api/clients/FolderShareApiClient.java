@@ -10,7 +10,7 @@ import team.y2k2.globa.api.model.response.FolderPermissionResponse;
 import team.y2k2.globa.api.services.FolderShareApiService;
 
 public class FolderShareApiClient extends ApiClient {
-    private FolderShareApiService apiService;
+    private final FolderShareApiService apiService;
 
     public FolderShareApiClient() {
         super(ApiClient.getInstance(null).getContext());
@@ -21,8 +21,8 @@ public class FolderShareApiClient extends ApiClient {
     }
 
     // 초대 거절
-    public Response<Void> requestDeniedShareInvite(String folderId, String shareId, String notificationId) {
-        return executeVoidApiCall(apiService.requestDeniedShareInvite(folderId, shareId, APPLICATION_JSON, getAuthorization(), new NotificationRequest(notificationId)));
+    public void requestDeniedShareInvite(String folderId, String shareId, String notificationId) {
+        executeVoidApiCall(apiService.requestDeniedShareInvite(folderId, shareId, APPLICATION_JSON, getAuthorization(), new NotificationRequest(notificationId)));
     }
 
     // 유저 권한 삭제
@@ -41,7 +41,7 @@ public class FolderShareApiClient extends ApiClient {
     }
 
     // 공유 초대 수락
-    public Response<Void> requestAcceptShareInvite(String folderId, String shareId) {
-        return executeVoidApiCall(apiService.requestAcceptShareInvite(folderId, shareId, APPLICATION_JSON, getAuthorization()));
+    public void requestAcceptShareInvite(String folderId, String shareId) {
+        executeVoidApiCall(apiService.requestAcceptShareInvite(folderId, shareId, APPLICATION_JSON, getAuthorization()));
     }
 }

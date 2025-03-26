@@ -2,7 +2,6 @@ package team.y2k2.globa.api.clients;
 
 import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;
 
-import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.UnreadNotificationCheckResponse;
@@ -10,7 +9,7 @@ import team.y2k2.globa.api.model.response.UnreadNotificationCountResponse;
 import team.y2k2.globa.api.services.NotificationApiService;
 
 public class NotificationApiClient extends ApiClient {
-    private NotificationApiService apiService;
+    private final NotificationApiService apiService;
 
     public NotificationApiClient() {
         super(ApiClient.getInstance(null).getContext());
@@ -41,7 +40,7 @@ public class NotificationApiClient extends ApiClient {
     }
 
     // 알림 읽음 처리
-    public Response<Void> updateReadNotification(String notificationId) {
-        return executeVoidApiCall(apiService.readNotification(APPLICATION_JSON, getAuthorization(), notificationId));
+    public void updateReadNotification(String notificationId) {
+        executeVoidApiCall(apiService.readNotification(APPLICATION_JSON, getAuthorization(), notificationId));
     }
 }

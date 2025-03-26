@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.notice;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,15 +60,7 @@ public class NoticeFragment extends Fragment {
         }).addOnFailureListener(exception -> {
             // 다운로드 URL을 가져오는 데 실패했을 때 처리
             Log.e("NOTICE_ERROR", "다운로드 URL 가져오기 실패", exception);
-            if (!getActivity().isFinishing()) {
-                (getActivity()).runOnUiThread(() -> {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("에러 발생").setMessage("Firebase RDB 에러 : " + exception.getMessage()).setPositiveButton("확인", (dialog, which) -> dialog.dismiss()).setCancelable(false).show();
-                });
-
-            }
-
-
+            imageView.setImageResource(R.drawable.maintenance);
             isDownloadFailed = true; // 실패 플래그 설정
         });
         return view;

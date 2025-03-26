@@ -27,7 +27,6 @@ import java.util.Locale;
 
 import retrofit2.Response;
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;

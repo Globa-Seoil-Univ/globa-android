@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat;
 
 import retrofit2.Response;
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.databinding.ActivityDocsNameEditBinding;
 

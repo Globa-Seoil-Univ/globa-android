@@ -26,7 +26,6 @@ import com.kakao.sdk.user.UserApiClient;
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.request.LoginRequest;
 import team.y2k2.globa.api.model.response.LoginResponse;
 import team.y2k2.globa.api.model.response.TokenResponse;

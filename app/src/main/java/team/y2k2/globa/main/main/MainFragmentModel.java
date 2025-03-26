@@ -37,9 +37,19 @@ public class MainFragmentModel extends ViewModel {
 
     public void setContext(Context context) {
         this.context = context;
+        this.noticeApiClient = new NoticeApiClient() {
+            @Override
+            public void displayErrorDialog(int errorCode, String errorMessage) {
+                // 다이얼로그 표시할 이유 없이, 해당 NoticeFragment에서 직접 처리
+            }
+        };
         this.folderApiClient = new FolderApiClient();
-        this.recordApiClient = new RecordApiClient();
-        this.noticeApiClient = new NoticeApiClient();
+        this.recordApiClient = new RecordApiClient(){
+            @Override
+            public void displayErrorDialog(int errorCode, String errorMessage) {
+                // 다이얼로그 표시할 이유 없이, 해당 RecordAdapter에서 직접 처리
+            }
+        };
         this.notificationApiClient = new NotificationApiClient();
     }
 
@@ -48,6 +58,8 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public String[] getPromotionsImage() {
+
+
         List<NoticeResponse> noticeResponse = noticeApiClient.requestPromotion(3);
         String[] images = new String[noticeResponse.size()];
 

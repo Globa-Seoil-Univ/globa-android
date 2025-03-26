@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import retrofit2.Response;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.api.model.request.FolderNameEditRequest;
 

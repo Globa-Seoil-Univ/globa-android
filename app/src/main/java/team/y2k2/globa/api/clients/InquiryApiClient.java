@@ -9,7 +9,7 @@ import team.y2k2.globa.api.model.response.InquiryDetailResponse;
 import team.y2k2.globa.api.services.InquiryApiService;
 
 public class InquiryApiClient extends ApiClient {
-    private InquiryApiService apiService;
+    private final InquiryApiService apiService;
 
     public InquiryApiClient() {
         super(ApiClient.getInstance(null).getContext());

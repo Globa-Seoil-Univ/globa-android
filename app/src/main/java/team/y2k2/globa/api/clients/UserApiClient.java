@@ -20,7 +20,7 @@ import team.y2k2.globa.api.model.response.UserSearchResponse;
 import team.y2k2.globa.api.services.UserApiService;
 
 public class UserApiClient extends ApiClient {
-    private UserApiService apiService;
+    private final UserApiService apiService;
 
     public UserApiClient() {
         super(ApiClient.getInstance(null).getContext());

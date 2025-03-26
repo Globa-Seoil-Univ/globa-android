@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel;
 
 import okhttp3.MultipartBody;
 import retrofit2.Response;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.UserApiClient;
 
 public class MyinfoViewModel extends ViewModel {

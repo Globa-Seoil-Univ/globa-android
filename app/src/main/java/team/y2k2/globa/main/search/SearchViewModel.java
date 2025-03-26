@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.SearchResponse;

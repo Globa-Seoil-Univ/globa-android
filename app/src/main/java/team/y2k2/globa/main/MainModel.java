@@ -16,7 +16,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 
 import retrofit2.Response;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 

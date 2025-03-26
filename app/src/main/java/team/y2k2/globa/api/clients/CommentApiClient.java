@@ -12,7 +12,7 @@ import team.y2k2.globa.api.model.response.SubCommentResponse;
 import team.y2k2.globa.api.services.CommentApiService;
 
 public class CommentApiClient extends ApiClient {
-    private CommentApiService apiService;
+    private final CommentApiService apiService;
 
     public CommentApiClient() {
         super(ApiClient.getInstance(null).getContext());
@@ -23,8 +23,8 @@ public class CommentApiClient extends ApiClient {
     }
 
     // 댓글 삭제
-    public Response<Void> deleteComment(String folderId, String recordId, String sectionId, String highlightId, String commentId) {
-        return executeVoidApiCall(apiService.deleteComment(folderId, recordId, sectionId, highlightId, commentId, APPLICATION_JSON, getAuthorization()));
+    public void deleteComment(String folderId, String recordId, String sectionId, String highlightId, String commentId) {
+        executeVoidApiCall(apiService.deleteComment(folderId, recordId, sectionId, highlightId, commentId, APPLICATION_JSON, getAuthorization()));
     }
 
     // 댓글 가져오기
@@ -38,8 +38,8 @@ public class CommentApiClient extends ApiClient {
     }
 
     // 댓글 수정
-    public Response<Void> updateComment(String folderId, String recordId, String sectionId, String highlightId, String commentId, String text) {
-        return executeVoidApiCall(apiService.updateComment(folderId, recordId, sectionId, highlightId, commentId, APPLICATION_JSON, getAuthorization(), new CommentRequest(text)));
+    public void updateComment(String folderId, String recordId, String sectionId, String highlightId, String commentId, String text) {
+        executeVoidApiCall(apiService.updateComment(folderId, recordId, sectionId, highlightId, commentId, APPLICATION_JSON, getAuthorization(), new CommentRequest(text)));
     }
 
     // 댓글 최초 추가
@@ -48,12 +48,12 @@ public class CommentApiClient extends ApiClient {
     }
 
     // 댓글 추가 (최초X)
-    public Response<Void> requestInsertComment(String folderId, String recordId, String sectionId, String highlightId, String content) {
-        return executeVoidApiCall(apiService.requestInsertComment(folderId, recordId, sectionId, highlightId, APPLICATION_JSON, getAuthorization(), new CommentRequest(content)));
+    public void requestInsertComment(String folderId, String recordId, String sectionId, String highlightId, String content) {
+        executeVoidApiCall(apiService.requestInsertComment(folderId, recordId, sectionId, highlightId, APPLICATION_JSON, getAuthorization(), new CommentRequest(content)));
     }
 
     // 대댓글 추가
-    public Response<Void> requestInsertSubComment(String folderId, String recordId, String sectionId, String highlightId, String parentId, String content) {
-        return executeVoidApiCall(apiService.requestInsertSubComment(folderId, recordId, sectionId, highlightId, parentId, APPLICATION_JSON, getAuthorization(), new SubCommentRequest(content)));
+    public void requestInsertSubComment(String folderId, String recordId, String sectionId, String highlightId, String parentId, String content) {
+        executeVoidApiCall(apiService.requestInsertSubComment(folderId, recordId, sectionId, highlightId, parentId, APPLICATION_JSON, getAuthorization(), new SubCommentRequest(content)));
     }
 }

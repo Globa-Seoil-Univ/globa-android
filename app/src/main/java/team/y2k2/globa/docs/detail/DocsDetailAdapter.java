@@ -39,7 +39,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.core.Observable;
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.CommentApiClient;
 import team.y2k2.globa.api.model.entity.Comment;
 import team.y2k2.globa.api.model.entity.Highlight;

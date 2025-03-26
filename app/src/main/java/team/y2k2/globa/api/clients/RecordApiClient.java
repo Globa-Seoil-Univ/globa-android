@@ -2,10 +2,14 @@ package team.y2k2.globa.api.clients;
 
 import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;
 
+import java.util.List;
+
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
+import team.y2k2.globa.api.model.entity.Quiz;
 import team.y2k2.globa.api.model.request.DocsMoveRequest;
 import team.y2k2.globa.api.model.request.DocsNameEditRequest;
+import team.y2k2.globa.api.model.request.QuizResultRequest;
 import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.StudyTimeRequest;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
@@ -16,7 +20,7 @@ import team.y2k2.globa.api.model.response.StatisticsResponse;
 import team.y2k2.globa.api.services.RecordApiService;
 
 public class RecordApiClient extends ApiClient {
-    private RecordApiService apiService;
+    private final RecordApiService apiService;
 
     public RecordApiClient() {
         super(ApiClient.getInstance(null).getContext());
@@ -65,8 +69,8 @@ public class RecordApiClient extends ApiClient {
     }
 
     // 공부시간 수정
-    public Response<Void> updateStudyTime(String folderId, String recordId, String studyTime) {
-        return executeVoidApiCall(apiService.requestStudyTime(folderId, recordId, APPLICATION_JSON, getAuthorization(), new StudyTimeRequest(studyTime)));
+    public void updateStudyTime(String folderId, String recordId, String studyTime) {
+        executeVoidApiCall(apiService.requestStudyTime(folderId, recordId, APPLICATION_JSON, getAuthorization(), new StudyTimeRequest(studyTime)));
     }
 
     // 문서 이름 업데이트
@@ -76,5 +80,15 @@ public class RecordApiClient extends ApiClient {
 
     public Response<Void> requestUpdateDocsMove(String folderId, String recordId, String targetFolderId) {
         return executeVoidApiCall(apiService.requestUpdateDocsMove(folderId, recordId, APPLICATION_JSON, getAuthorization(), new DocsMoveRequest(String.valueOf(targetFolderId))));
+    }
+    
+    // 퀴즈 불러오기
+    public List<Quiz> requestGetQuiz(int folderId, int recordId) {
+        return executeApiCall(apiService.requestGetQuiz(folderId, recordId, APPLICATION_JSON, getAuthorization()));
+    }
+
+    // 퀴즈 결과 전송
+    public void requestInsertQuizResult(int folderId, int recordId, QuizResultRequest quizResults) {
+        executeVoidApiCall(apiService.requestInsertQuizResult(folderId, recordId, APPLICATION_JSON, getAuthorization(), quizResults));
     }
 }

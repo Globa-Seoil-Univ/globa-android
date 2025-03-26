@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosans_regular"
-            android:text="회원탈퇴"
+            android:text="@string/withdraw"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:fontFamily="@font/notosans_bold"
-        android:text="삭제하는 이유를 알려주세요."
+        android:text="@string/activity_withdraw_reason_1"
         android:textColor="@color/black"
         android:textSize="@dimen/large"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,66 +56,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/notosans_regular"
-        android:text="해당 피드백을 반영하여 \n더 나은 앱을 만들기 위해 사용됩니다."
+        android:text="@string/activity_withdraw_reason_2"
         android:textColor="@color/gray"
         android:textSize="@dimen/normal_light"
         app:layout_constraintStart_toStartOf="@+id/textview_withdraw_announce"
         app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_announce" />
-
-    <!--    <CheckBox-->
-    <!--        android:id="@+id/checkbox_withdraw_reason1"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="서비스 사용이 불편해요"-->
-    <!--        android:fontFamily="@font/notosans_regular"-->
-    <!--        android:textSize="@dimen/normal_light"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:buttonTint="@color/primary"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/textview_withdraw_sub_announce"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_sub_announce"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:checked="true" />-->
-
-    <!--    <CheckBox-->
-    <!--        android:id="@+id/checkbox_withdraw_reason2"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="정확성이 떨어져요"-->
-    <!--        android:fontFamily="@font/notosans_regular"-->
-    <!--        android:textSize="@dimen/normal_light"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:buttonTint="@color/primary"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason1"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason1"-->
-    <!--        android:layout_marginTop="12dp"-->
-    <!--        android:checked="true" />-->
-
-    <!--    <CheckBox-->
-    <!--        android:id="@+id/checkbox_withdraw_reason3"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="기능이 부족해요"-->
-    <!--        android:fontFamily="@font/notosans_regular"-->
-    <!--        android:textSize="@dimen/normal_light"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:buttonTint="@color/primary"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason2"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason2"-->
-    <!--        android:layout_marginTop="12dp"-->
-    <!--        android:checked="true" />-->
-
-    <!--    <CheckBox-->
-    <!--        android:id="@+id/checkbox_withdraw_reason4"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="다른 서비스가 더 좋아요"-->
-    <!--        android:fontFamily="@font/notosans_regular"-->
-    <!--        android:textSize="@dimen/normal_light"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:buttonTint="@color/primary"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/checkbox_withdraw_reason3"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/checkbox_withdraw_reason3"-->
-    <!--        android:layout_marginTop="12dp" />-->
 
     <RadioGroup
         android:id="@+id/group_withdraw_check"
@@ -139,6 +84,8 @@
         android:background="@drawable/withdraw_edittext_background"
         android:fontFamily="@font/notosans_regular"
         android:hint="@string/input_description"
+        android:importantForAutofill="no"
+        android:inputType="text"
         android:padding="15dp"
         android:textColorHint="@color/lightGray"
         android:textSize="@dimen/large"
@@ -155,7 +102,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/withdraw_button_background"
         android:fontFamily="@font/notosans_bold"
-        android:text="회원탈퇴"
+        android:text="@string/withdraw"
         android:textColor="@color/white"
         android:textSize="@dimen/big"
         app:layout_constraintBottom_toBottomOf="parent"

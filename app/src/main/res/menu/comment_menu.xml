@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/action_comment_update"
-        android:title="댓글 수정"
+        android:title="@string/edit_comment"
         android:icon="@android:drawable/ic_menu_more" />
 
     <item
         android:id="@+id/action_comment_delete"
-        android:title="댓글 삭제"
+        android:title="@string/delete_comment"
         android:icon="@android:drawable/ic_menu_more" />
 
 </menu>

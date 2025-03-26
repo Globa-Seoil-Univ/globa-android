@@ -1,7 +1,5 @@
 package team.y2k2.globa.docs;
 
-
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -19,7 +17,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.databinding.ActivityDocsBinding;
@@ -195,10 +192,6 @@ public class DocsActivityModel extends ViewModel {
                 });
             }
         }).addOnFailureListener(e -> {
-            (activity).runOnUiThread(() -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle("에러 발생").setMessage("Firebase RDB 에러 : " + e.getMessage()).setPositiveButton("확인", (dialog, which) -> dialog.dismiss()).setCancelable(false).show();
-            });
             isDownloadFailed = true; // 실패 플래그 설정
         });
     }

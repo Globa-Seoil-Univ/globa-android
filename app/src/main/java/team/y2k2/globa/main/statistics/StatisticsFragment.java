@@ -32,7 +32,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.QuizGrade;

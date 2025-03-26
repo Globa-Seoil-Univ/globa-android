@@ -71,7 +71,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textview_inquiry_title"
             android:layout_marginTop="10dp"
-            android:hint="@string/input_title" />
+            android:autofillHints="name"
+            android:hint="@string/input_title"
+            android:inputType="text" />
 
         <TextView
             android:id="@+id/textview_folder_name_count"
@@ -107,8 +109,10 @@
             android:layout_height="320dp"
             android:layout_below="@+id/textview_inquiry_description"
             android:layout_marginTop="10dp"
+            android:autofillHints="name"
             android:background="@null"
             android:gravity="top"
-            android:hint="@string/input_description" />
+            android:hint="@string/input_description"
+            android:inputType="text" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

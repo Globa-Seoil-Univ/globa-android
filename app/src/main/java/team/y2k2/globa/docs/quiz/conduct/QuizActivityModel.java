@@ -5,16 +5,20 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.entity.Quiz;
+import team.y2k2.globa.api.model.entity.QuizResult;
+import team.y2k2.globa.api.model.request.QuizResultRequest;
 
 public class QuizActivityModel extends ViewModel {
 
 //    private final ApiService apiService;
+    private RecordApiClient apiClient;
     private final MutableLiveData<List<Quiz>> quizLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public QuizActivityModel() {
-//        apiService = ApiClient.getApiService();
+        apiClient = new RecordApiClient();
     }
 
     public MutableLiveData<List<Quiz>> getQuizLiveData() {
@@ -25,44 +29,13 @@ public class QuizActivityModel extends ViewModel {
         return errorLiveData;
     }
 
-//    public void gatherQuiz(int folderId, int recordId) {
-//        apiService.requestGetQuiz(folderId, recordId, "application/json", authorization).enqueue(new Callback<List<Quiz>>() {
-//            @Override
-//            public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
-//                if (response.isSuccessful()) {
-//                    List<Quiz> quizzes = response.body();
-//
-//                    quizLiveData.setValue(quizzes);
-//                    Log.d("api 수신", "성공");
-//                } else {
-//                    Log.d("api 수신", "실패 : " + response.code());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Quiz>> call, Throwable t) {
-//                Log.d("api 송신", "실패 : " + t.getMessage());
-//                Log.d("폴더id, 문서id", (folderId) + ", " + (recordId));
-//            }
-//        });
-//    }
+    public void gatherQuiz(int folderId, int recordId) {
+        List<Quiz> quizzes = apiClient.requestGetQuiz(folderId,recordId);
+        quizLiveData.setValue(quizzes);
+    }
 
-//    public void submitQuizResult(int folderId, int recordId, List<QuizResult> quizResults) {
-//        QuizResultRequest quizRequestBody = new QuizResultRequest(quizResults);
-//        apiService.requestInsertQuizResult(folderId, recordId, "application/json", authorization, quizRequestBody).enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if (response.isSuccessful()) {
-//                    Log.d("API 응답 성공", "퀴즈 결과 전송 완료");
-//                } else {
-//                    Log.d("API 응답 오류", "퀴즈 결과 전송 실패: " + response.code());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                Log.e("API 전송 오류", t.getMessage());
-//            }
-//        });
-//    }
+    public void submitQuizResult(int folderId, int recordId, List<QuizResult> quizResults) {
+        QuizResultRequest quizRequestBody = new QuizResultRequest(quizResults);
+        apiClient.requestInsertQuizResult(folderId, recordId, quizRequestBody);
+    }
 }

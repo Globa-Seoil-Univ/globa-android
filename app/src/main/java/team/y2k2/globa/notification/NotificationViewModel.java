@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.FolderShareApiClient;
 import team.y2k2.globa.api.clients.NotificationApiClient;
 import team.y2k2.globa.api.model.response.NotificationResponse;

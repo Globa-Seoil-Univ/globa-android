@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.CommentApiClient;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;

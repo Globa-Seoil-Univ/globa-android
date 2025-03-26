@@ -79,6 +79,8 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/edit_rounded"
         android:hint="@string/dialog_comment_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
         android:paddingStart="16dp"
         android:paddingTop="10dp"
         android:paddingEnd="0dp"

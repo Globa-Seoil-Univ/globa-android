@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Globa</string>
-
     <string name="delete_confirmation_message">Are you sure you want to delete?</string>
 
     <string name="loading_title">Voice to Text by Globa</string>
@@ -147,9 +145,6 @@
     <string name="activity_docs_statistics_title_score">Learning Score</string>
     <string name="fragment_statistics_title_word">Keyword Importance</string>
 
-    <string name="twitter_consumer_key">289VE8u31zKqPX9tJGSTbR9ce</string>
-    <string name="twitter_consumer_secret">H2zuCbYUOkNDkxX0cCoP0bZ4NPFpVPp3i6Smgp78cp31VdDxeJ</string>
-
     <string name="conditions_title">Privacy Policy</string>
     <string name="conditions_title_no1">Article 1 (Purpose)</string>
     <string name="conditions_title_no2">Article 2 (Principles of Personal Information Processing)</string>
@@ -222,5 +217,10 @@
     <string name="activity_keyword_detail_tools_title">promotion</string>
     <string name="activity_keyword_detail_tools_pronunciation">[ promotion ]</string>
     <string name="activity_keyword_detail_tools_source">source :</string>
+    <string name="activity_withdraw_reason_1">"Please let me know why you are leaving. "</string>
+    <string name="activity_withdraw_reason_2">reflecting the corresponding feedback It is used to make better apps.</string>
+    <string name="edit_comment">edit comment</string>
+    <string name="delete_comment">delete comment</string>
+    <string name="delete_folder">delete folder</string>
 
 </resources>

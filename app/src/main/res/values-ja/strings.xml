@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Globa</string>
-
     <string name="delete_confirmation_message">本当に消しますか？</string>
 
     <string name="loading_title">音声変換は グローバ</string>
@@ -148,9 +146,6 @@
     <string name="activity_docs_statistics_title_score">学習成績</string>
     <string name="fragment_statistics_title_word">キーワード重要度</string>
 
-    <string name="twitter_consumer_key">289VE8u31zKqPX9tJGSTbR9ce</string>
-    <string name="twitter_consumer_secret">H2zuCbYUOkNDkxX0cCoP0bZ4NPFpVPp3i6Smgp78cp31VdDxeJ</string>
-
     <!-- 개인정보 처리 약관 -->
     <string name="conditions_title">개인정보처리방침</string>
     <string name="conditions_title_no1">제 1조 (목적)</string>
@@ -225,5 +220,10 @@
     <string name="activity_keyword_detail_tools_title">増進</string>
     <string name="activity_keyword_detail_tools_pronunciation">[ 増進 ]</string>
     <string name="activity_keyword_detail_tools_source">source :</string>
+    <string name="activity_withdraw_reason_1">"退会される理由を教えていただけますか。 "</string>
+    <string name="activity_withdraw_reason_2">当該フィードバックを反映して\\nより良いアプリを作るために使用されます。</string>
+    <string name="edit_comment">"コメント修正 "</string>
+    <string name="delete_comment">コメント削除</string>
+    <string name="delete_folder">"フォルダ削除 "</string>
 
 </resources>

@@ -15,8 +15,8 @@ import team.y2k2.globa.api.services.FolderApiService;
 import team.y2k2.globa.api.services.FolderShareApiService;
 
 public class FolderApiClient extends ApiClient {
-    private FolderApiService apiService;
-    private FolderShareApiService folderShareApiService;
+    private final FolderApiService apiService;
+    private final FolderShareApiService folderShareApiService;
 
     public FolderApiClient() {
         super(ApiClient.getInstance(null).getContext());

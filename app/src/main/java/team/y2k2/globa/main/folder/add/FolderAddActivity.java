@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.api.model.entity.ShareTarget;
 import team.y2k2.globa.databinding.ActivityFolderAddBinding;
