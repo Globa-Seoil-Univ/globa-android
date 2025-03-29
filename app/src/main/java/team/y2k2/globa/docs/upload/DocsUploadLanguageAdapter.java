@@ -1,6 +1,7 @@
 package team.y2k2.globa.docs.upload;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class DocsUploadLanguageAdapter extends ArrayAdapter<String> implements S
         this.items.add("日本語");
 
         this.inflater = LayoutInflater.from(context);
+        setDropDownViewResource(R.layout.item_language); // 드롭다운 리소스를 item_language로 설정
     }
 
     @Override
@@ -65,18 +67,29 @@ public class DocsUploadLanguageAdapter extends ArrayAdapter<String> implements S
     }
 
     private View createDropView(int position, View convertView, ViewGroup parents) {
-        final View view = inflater.inflate(dropResource, parents, false);
-        TextView title = view.findViewById(R.id.textview_language_item_title);
+        View view = convertView;
+        if (view == null) {
+            view = inflater.inflate(dropResource, parents, false);
+            if (view == null) {
+                return null;
+            }
+        }
+        TextView title = view.findViewById(R.id.textview_language_item_title); // item_language의 TextView 아이디 사용
+        if (title == null) {
+            return view;
+        }
+        Log.d(getClass().getName(), "아이템 개수 : " + items.size());
         title.setText(items.get(position));
-
         return view;
     }
 
-    private View createTopView(int position, View convertView, ViewGroup parents) {
-        final View view = inflater.inflate(topResources, parents, false);
+    private View createTopView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View view = convertView;
+        if (view == null) {
+            view = inflater.inflate(topResources, parent, false);
+        }
         TextView title = view.findViewById(R.id.textview_language_item_title);
         title.setText(items.get(position));
-
         return view;
     }
 }

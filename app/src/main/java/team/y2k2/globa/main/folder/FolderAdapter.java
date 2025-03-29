@@ -42,7 +42,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
-
         String title = items.get(position).getTitle();
         String datetime = getDateFormat(items.get(position).getDatetime());
 

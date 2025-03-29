@@ -58,9 +58,10 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public String[] getPromotionsImage() {
-
-
         List<NoticeResponse> noticeResponse = noticeApiClient.requestPromotion(3);
+        if (noticeResponse == null) {
+            return new String[0];
+        }
         String[] images = new String[noticeResponse.size()];
 
         for (int i = 0; i < noticeResponse.size(); i++) {

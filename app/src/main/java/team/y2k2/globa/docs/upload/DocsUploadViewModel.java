@@ -119,20 +119,17 @@ public class DocsUploadViewModel extends ViewModel {
 
     public void loadFolder() {
         response = folderApiClient.requestGetFolders(1, 100);
-
-        if (response != null) {
-            adapter = new DocsUploadFolderAdapter(activity, R.layout.item_folder, response.getFolders());
-            adapter.setDropDownViewResource(R.layout.item_folder);
-            activity.binding.spinnerDocsUpload.setAdapter(adapter);
-            activity.binding.spinnerDocsUpload.setSelection(0);
-        }
+        adapter = new DocsUploadFolderAdapter(activity, R.layout.item_folder, response.getFolders());
+        adapter.setDropDownViewResource(R.layout.item_folder);
+        activity.binding.spinnerDocsUpload.setAdapter(adapter);
+        activity.binding.spinnerDocsUpload.setSelection(0);
     }
 
     public void loadLanguage() {
         DocsUploadLanguageAdapter languageAdapter = new DocsUploadLanguageAdapter(activity, R.layout.item_language);
-        languageAdapter.setDropDownViewResource(R.layout.item_folder);
+        languageAdapter.setDropDownViewResource(R.layout.item_language);
         activity.binding.spinnerDocsUploadLanguage.setAdapter(languageAdapter);
-        activity.binding.spinnerDocsUpload.setSelection(0);
+        activity.binding.spinnerDocsUploadLanguage.setSelection(0);
     }
 
     public void uploadRecordFile(String oggPath, String folderId) {

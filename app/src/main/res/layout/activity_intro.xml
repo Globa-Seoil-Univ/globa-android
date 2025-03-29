@@ -93,6 +93,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/intro_button"
                 android:gravity="center"
+                android:visibility="invisible"
                 android:onClick="@{() -> viewModel.navigateToLogin()}"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -1,9 +1,13 @@
 package team.y2k2.globa.intro;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,21 +37,51 @@ public class IntroActivity extends AppCompatActivity {
 
         apiClient = ApiClient.getInstance(this);
 
-        binding.setViewModel(viewModel); // ViewModel 바인딩
-        binding.setLifecycleOwner(this); // LiveData 관찰을 위해 LifecycleOwner 설정
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
 
         setFirstCharColorPrimary(binding.textviewIntroLogo);
 
-        viewModel.autoLogin();
-        viewModel.getAutoLoginSuccess().observe(this, success -> {
-            if (success) {
-                viewModel.navigateToMain(this);
-            }
-        });
+        checkServerAndProceed();
+    }
 
-        viewModel.requestNotificationPermission(this);
-        viewModel.getNotificationPermissionGranted().observe(this, granted -> {
-        });
+    private void checkServerAndProceed() {
+        apiClient.isServerOpened()
+                .thenAccept(isOpened -> {
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (isOpened) {
+
+                            viewModel.autoLogin();
+                            viewModel.getAutoLoginSuccess().observe(this, success -> {
+                                if (success) {
+                                    viewModel.navigateToMain(this);
+                                } else {
+                                    binding.buttonIntroBottomStart.setVisibility(View.VISIBLE);
+                                }
+                            });
+                            viewModel.requestNotificationPermission(this);
+                            viewModel.getNotificationPermissionGranted().observe(this, granted -> {
+                            });
+                        } else {
+                            showServerUnreachableDialog();
+                        }
+                    });
+                })
+                .exceptionally(throwable -> {
+                    new Handler(Looper.getMainLooper()).post(this::showServerUnreachableDialog);
+                    return null;
+                });
+    }
+
+    private void showServerUnreachableDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("서버 연결 실패")
+                .setMessage("서버에 연결할 수 없습니다.")
+                .setPositiveButton("확인", (dialog, which) -> {
+                    finishAffinity();
+                })
+                .setCancelable(false)
+                .show();
     }
 
     public void setFirstCharColorPrimary(TextView textView) {

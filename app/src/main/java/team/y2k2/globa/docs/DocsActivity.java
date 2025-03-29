@@ -26,6 +26,8 @@ import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 import team.y2k2.globa.docs.detail.DocsDetailViewModel;
 import team.y2k2.globa.docs.more.DocsMoreActivityModel;
+import team.y2k2.globa.util.i18n.DateTimeFormatter;
+import team.y2k2.globa.util.i18n.LanguageUtils;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -67,8 +69,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         // 파일이 열리는 시간 측정
         startTime = System.currentTimeMillis();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // Log.d("시간, 날짜", "열린 시간: " + startTime + ", 날짜: " + startDate);
+        dateFormat = DateTimeFormatter.getDateFormat(LanguageUtils.getCurrentLocale(this));
 
         viewModel = new ViewModelProvider(this).get(DocsActivityModel.class);
         docsDetailViewModel = new ViewModelProvider(this).get(DocsDetailViewModel.class);

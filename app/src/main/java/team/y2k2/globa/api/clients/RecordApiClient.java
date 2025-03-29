@@ -24,7 +24,7 @@ public class RecordApiClient extends ApiClient {
 
     public RecordApiClient() {
         super(ApiClient.getInstance(null).getContext());
-        if(ApiClient.getInstance(null).getContext() == null) {
+        if (ApiClient.getInstance(null).getContext() == null) {
             throw new IllegalStateException("context 가 없음. Login 프로세스나 Logout 프로세스에서 다시 확인");
         }
         apiService = ApiClient.getRetrofit().create(RecordApiService.class);
@@ -81,7 +81,7 @@ public class RecordApiClient extends ApiClient {
     public Response<Void> requestUpdateDocsMove(String folderId, String recordId, String targetFolderId) {
         return executeVoidApiCall(apiService.requestUpdateDocsMove(folderId, recordId, APPLICATION_JSON, getAuthorization(), new DocsMoveRequest(String.valueOf(targetFolderId))));
     }
-    
+
     // 퀴즈 불러오기
     public List<Quiz> requestGetQuiz(int folderId, int recordId) {
         return executeApiCall(apiService.requestGetQuiz(folderId, recordId, APPLICATION_JSON, getAuthorization()));

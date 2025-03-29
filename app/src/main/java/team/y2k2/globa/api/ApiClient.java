@@ -1,5 +1,6 @@
 package team.y2k2.globa.api;
 
+import static android.content.ContentValues.TAG;
 import static team.y2k2.globa.api.ApiModel.*;
 
 import android.app.Activity;
@@ -7,8 +8,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -28,6 +32,7 @@ public class ApiClient {
     private static ApiClient apiClient;
 
     public static Retrofit retrofit; // Retrofit instance
+    public static String BASE_URL = "http://192.168.219.111";
 
     protected final Context context;
 
@@ -52,12 +57,31 @@ public class ApiClient {
     }
 
     private void initializeRetrofit() {
-        retrofit = new Retrofit.Builder().baseUrl("http://192.168.219.111").addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
     }
 
     public String getAuthorization() {
         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         return "Bearer " + preferences.getString("accessToken", "");
+    }
+
+    public CompletableFuture<Boolean> isServerOpened() {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                URL url = new URL(BASE_URL);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+                int responseCode = connection.getResponseCode();
+                Log.d(TAG, "서버 상태: " + responseCode);
+                connection.disconnect();
+                return (responseCode >= 200 && responseCode < 300);
+            } catch (IOException e) {
+                Log.e(TAG, "서버 상태 확인 실패 (IOException): " + e.getMessage());
+                return false;
+            }
+        });
     }
 
     // 공통 API 호출 처리 메서드
