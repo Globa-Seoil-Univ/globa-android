@@ -3,7 +3,6 @@ package team.y2k2.globa.api.model.response;
 import com.google.gson.annotations.SerializedName;
 
 public class AlertResponse {
-
     @SerializedName("uploadNofi")
     private boolean uploadNofi;
     @SerializedName("shareNofi")

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import retrofit2.Response;
 import team.y2k2.globa.R;
@@ -17,33 +18,41 @@ import team.y2k2.globa.databinding.ActivityInquiryBinding;
 
 public class InquiryActivity extends AppCompatActivity {
 
-    ActivityInquiryBinding binding;
+    private ActivityInquiryBinding binding;
+    private InquiryViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityInquiryBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        binding.imageviewInquiryTopBack.setOnClickListener(v -> finish());
+        viewModel = new ViewModelProvider(this).get(InquiryViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
 
-        binding.textviewInquiryTopConfirm.setOnClickListener(v -> {
-            String title = binding.edittextInquiryTitle.getText().toString();
-            String content = binding.edittextInquiryDescription.getText().toString();
+        viewModel.setInquiryApiClient(new InquiryApiClient()); // API 클라이언트 설정
 
-            InquiryApiClient apiClient = new InquiryApiClient();
-            Response<Void> response = apiClient.requestInsertInquiry(title, content);
+        observeViewModel();
+        initTextChangeListeners();
+    }
 
-            if (response.isSuccessful()) {
-                Toast.makeText(binding.getRoot().getContext(), "문의를 보냈습니다.", Toast.LENGTH_LONG).show();
-                Log.d("INQUIRY_RESULT", "문의 추가 성공");
+    private void observeViewModel() {
+        viewModel.getFinishActivity().observe(this, shouldFinish -> {
+            if (shouldFinish) {
                 finish();
-            } else {
-                Toast.makeText(binding.getRoot().getContext(), response.code(), Toast.LENGTH_LONG).show();
-                Log.d("INQUIRY_RESULT", "문의 추가 실패" + response.code());
-
             }
         });
 
+        viewModel.getShowToast().observe(this, message -> {
+            if (message != null) {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                viewModel.doneShowToast();
+            }
+        });
+    }
+
+    private void initTextChangeListeners() {
         binding.edittextInquiryTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -51,11 +60,13 @@ public class InquiryActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.onTitleTextChanged(s.toString()); // 뷰 모델에 알림
                 binding.textviewInquiryTopConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                viewModel.onTitleAfterTextChanged(s.toString()); // 뷰 모델에 알림
                 if (s.length() > 32) {
                     binding.edittextInquiryTitle.removeTextChangedListener(this);
                     String text = s.toString().substring(0, 32);
@@ -75,6 +86,19 @@ public class InquiryActivity extends AppCompatActivity {
             }
         });
 
-        setContentView(binding.getRoot());
+        binding.edittextInquiryDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.onDescriptionTextChanged(s.toString()); // 뷰 모델에 알림
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 }

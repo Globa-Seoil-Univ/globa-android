@@ -83,12 +83,8 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                     logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(logoutIntent);
                 }
-
             }
-
         });
-
-
     }
 
     @Override
@@ -96,7 +92,6 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
         return itemList != null ? itemList.size() : 0;
     }
 
-    // 클립보드 복사 메소드
     public void copyToClipboard(Context context, String text) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboard != null) {
@@ -119,8 +114,5 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
             image = itemView.findViewById(R.id.imageview_my_info_item_list_next);
             layout = itemView.findViewById(R.id.constraintlayout_my_info_item_list);
         }
-
     }
-
-
 }

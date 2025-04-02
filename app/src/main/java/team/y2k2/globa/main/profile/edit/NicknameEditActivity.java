@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +18,9 @@ import team.y2k2.globa.databinding.ActivityNicknameEditBinding;
 
 public class NicknameEditActivity extends AppCompatActivity {
 
-    ActivityNicknameEditBinding binding;
-    boolean isChanged = false;
-    private NicknameEditViewModel nicknameEditViewModel;
+    private ActivityNicknameEditBinding binding;
+    private NicknameEditViewModel viewModel;
+    private TextWatcher nicknameTextWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,19 +28,43 @@ public class NicknameEditActivity extends AppCompatActivity {
         binding = ActivityNicknameEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        nicknameEditViewModel = new ViewModelProvider(this).get(NicknameEditViewModel.class);
+        viewModel = new ViewModelProvider(this).get(NicknameEditViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+
         String userId = getIntent().getStringExtra("userId");
         String currentName = getIntent().getStringExtra("current_name");
+        viewModel.initialize(userId, currentName);
 
-        initializeUI(userId, currentName);
+        initViews(currentName);
+        observeViewModel();
     }
 
-    private void initializeUI(String userId, String currentName) {
-        binding.buttonNicknameEditBack.setOnClickListener(v -> finish());
-        binding.edittextNicknameEditInputName.setText(currentName);
-        int currentNameCount = binding.edittextNicknameEditInputName.getText().length();
-        binding.textviewNicknameEditCount.setText(currentNameCount + "/32");
-        binding.edittextNicknameEditInputName.addTextChangedListener(new TextWatcher() {
+    private void initViews(String currentName) {
+        binding.textviewNicknameEditAnnounce.setText(getString(R.string.activity_nickname_edit_title));
+        binding.textviewNicknameEditChange.setText(getString(R.string.change));
+        binding.buttonNicknameEditBack.setBackgroundResource(R.drawable.header_back);
+        binding.edittextNicknameEditInputName.setHint(currentName);
+    }
+
+    private void observeViewModel() {
+        viewModel.getFinishActivity().observe(this, shouldFinish -> {
+            if (shouldFinish) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("updated_name", viewModel.getNewNickname());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+
+        viewModel.getShowToast().observe(this, message -> {
+            if (message != null) {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                viewModel.doneShowToast();
+            }
+        });
+
+        nicknameTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // 텍스트 변경 전
@@ -48,68 +73,34 @@ public class NicknameEditActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // 텍스트 변경
-                int color = ContextCompat.getColor(NicknameEditActivity.this, R.color.primary);
-                binding.textviewNicknameEditChange.setTextColor(color);
+                // 텍스트 변경 중
+                viewModel.onNicknameChanged(s.toString());
                 binding.textviewNicknameEditCount.setText(s.length() + "/32");
-                isChanged = true;
-                if (s.length() == 0) {
-                    binding.buttonNicknameEditCancel.setVisibility(View.GONE);
-                } else {
-                    binding.buttonNicknameEditCancel.setVisibility(View.VISIBLE);
-                }
+                binding.buttonNicknameEditCancel.setVisibility(s.length() == 0 ? View.GONE : View.VISIBLE);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 // 텍스트 변경 후
+                viewModel.onNicknameAfterTextChanged(s.toString());
                 if (s.length() > 32) {
-                    binding.edittextNicknameEditInputName.removeTextChangedListener(this);
+                    binding.edittextNicknameEditInputName.removeTextChangedListener(nicknameTextWatcher);
                     String text = s.toString().substring(0, 32);
                     binding.edittextNicknameEditInputName.setText(text);
                     binding.edittextNicknameEditInputName.setSelection(text.length());
-                    binding.edittextNicknameEditInputName.addTextChangedListener(this);
-                }
-                if (s.length() <= 32) {
-                    binding.textviewNicknameEditCount.setText(s.length() + "/32");
-                    binding.textviewNicknameEditChange.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
-                }
-                if (s.length() == 0) {
-                    binding.textviewNicknameEditChange.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    binding.edittextNicknameEditInputName.addTextChangedListener(nicknameTextWatcher);
                 }
             }
-        });
+        };
 
-        // 변경 버튼
-        binding.textviewNicknameEditChange.setOnClickListener(v -> {
-            if (isChanged) {
-                if (binding.edittextNicknameEditInputName.getText().toString().isEmpty()) {
-                    Toast.makeText(this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String newNickname = binding.edittextNicknameEditInputName.getText().toString();
-                nicknameEditViewModel.updateNickname(this, userId, newNickname);
-                onNicknameChanged(newNickname);
-            } else {
-                Toast.makeText(this, "이름이 변경되지 않았습니다", Toast.LENGTH_SHORT).show();
-            }
-        });
+        binding.edittextNicknameEditInputName.addTextChangedListener(nicknameTextWatcher);
 
-        // 글자 모두 지우기 버튼
-        binding.buttonNicknameEditCancel.setOnClickListener(v -> {
-            if (binding.edittextNicknameEditInputName.getText().toString().isEmpty()) {
-                binding.buttonNicknameEditCancel.setVisibility(View.GONE);
+        viewModel.getIsChangeButtonEnabled().observe(this, isEnabled -> {
+            if (isEnabled) {
+                binding.textviewNicknameEditChange.setTextColor(ContextCompat.getColor(this, R.color.primary));
             } else {
-                binding.edittextNicknameEditInputName.setText("");
+                binding.textviewNicknameEditChange.setTextColor(ContextCompat.getColor(this, R.color.gray));
             }
         });
     }
-
-    private void onNicknameChanged(String newNickname) {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("updated_name", newNickname);
-        setResult(RESULT_OK, resultIntent);
-        finish();
-    }
-
 }

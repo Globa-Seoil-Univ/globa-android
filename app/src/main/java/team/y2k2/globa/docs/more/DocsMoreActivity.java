@@ -17,6 +17,7 @@ import team.y2k2.globa.databinding.ActivityDocsMoreBinding;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.docs.quiz.conduct.QuizActivity;
 import team.y2k2.globa.docs.statistics.DocsStatisticsActivity;
+import team.y2k2.globa.main.MainActivity;
 
 public class DocsMoreActivity extends AppCompatActivity {
     ActivityDocsMoreBinding binding;
@@ -98,9 +99,11 @@ public class DocsMoreActivity extends AppCompatActivity {
 
         confirmButton.setOnClickListener(v -> {
             bottomSheetDialog.dismiss();
-            // 삭제 처리
             docsMoreActivityModel.deleteDocs(folderId, recordId);
-            finish();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         });
 
         bottomSheetDialog.show();

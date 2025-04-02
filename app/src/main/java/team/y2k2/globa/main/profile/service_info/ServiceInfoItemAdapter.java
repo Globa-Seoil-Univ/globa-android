@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.profile.service_info;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -39,12 +38,12 @@ public class ServiceInfoItemAdapter extends RecyclerView.Adapter<ServiceInfoItem
 
         String url = items.get(position).getUrl();
 
-        if (url != null) holder.layout.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, WebViewActivity.class);
-            intent.putExtra("url", url);
-            activity.startActivity(intent);
-        });
-
+        if (url != null)
+            holder.layout.setOnClickListener(view -> {
+                Intent intent = new Intent(activity, WebViewActivity.class);
+                intent.putExtra("url", url);
+                activity.startActivity(intent);
+            });
     }
 
     @Override
@@ -55,7 +54,6 @@ public class ServiceInfoItemAdapter extends RecyclerView.Adapter<ServiceInfoItem
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView description;
-
         private final LinearLayout layout;
 
         public AdapterViewHolder(@NonNull View itemView) {

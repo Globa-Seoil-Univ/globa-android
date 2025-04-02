@@ -4,28 +4,39 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import team.y2k2.globa.databinding.ActivityServiceInfoBinding;
 
 public class ServiceInfoActivity extends AppCompatActivity {
-    ActivityServiceInfoBinding binding;
-    ServiceInfoModel model;
-
+    private ActivityServiceInfoBinding binding;
+    private ServiceInfoViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = new ServiceInfoModel();
         binding = ActivityServiceInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.imageviewServiceBack.setOnClickListener(v -> finish());
+        viewModel = new ViewModelProvider(this).get(ServiceInfoViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
 
-        ServiceInfoItemAdapter adapter = new ServiceInfoItemAdapter(this, model.getItems());
+        initAdapter();
+        observeViewModel();
+    }
 
+    private void initAdapter() {
+        ServiceInfoItemAdapter adapter = new ServiceInfoItemAdapter(this, viewModel.getServiceInfoItems());
         binding.recyclerviewItemService.setAdapter(adapter);
-        binding.recyclerviewItemService.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+    }
 
+    private void observeViewModel() {
+        viewModel.getFinishActivity().observe(this, shouldFinish -> {
+            if (shouldFinish) {
+                finish();
+            }
+        });
     }
 }

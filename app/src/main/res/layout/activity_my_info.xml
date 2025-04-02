@@ -1,72 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".main.profile.info.MyInfoActivity">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="team.y2k2.globa.main.profile.info.MyInfoViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_my_info_header"
         android:layout_width="match_parent"
-        android:layout_height="71dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        tools:context=".main.profile.info.MyInfoActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_my_info_header"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/button_my_info_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/header_back"
+                android:onClick="@{() -> viewModel.onBackButtonClick()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textview_my_info_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosans_regular"
+                android:text="@string/account"
+                android:textColor="@color/black"
+                android:textSize="@dimen/large"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageview_my_info_photo"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_my_info_header"
+            tools:src="@mipmap/ic_launcher_round" />
 
         <Button
-            android:id="@+id/button_my_info_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/header_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/button_my_info_change_photo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="70dp"
+            android:background="@drawable/my_info_change_photo"
+            android:onClick="@{() -> viewModel.onChangePhotoButtonClick()}"
+            app:layout_constraintBottom_toBottomOf="@id/imageview_my_info_photo"
+            app:layout_constraintEnd_toEndOf="@id/imageview_my_info_photo"
+            app:layout_constraintStart_toStartOf="@+id/imageview_my_info_photo" />
 
-        <TextView
-            android:id="@+id/textview_my_info_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/notosans_regular"
-            android:text="@string/account"
-            android:textColor="@color/black"
-            android:textSize="@dimen/large"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_my_info_items"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/imageview_my_info_photo"
+            tools:listitem="@layout/item_my_info" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageview_my_info_photo"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="16dp"
-        android:src="@mipmap/ic_launcher_round"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_my_info_header" />
-
-    <Button
-        android:id="@+id/button_my_info_change_photo"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="70dp"
-        android:background="@drawable/my_info_change_photo"
-        app:layout_constraintBottom_toBottomOf="@id/imageview_my_info_photo"
-        app:layout_constraintEnd_toEndOf="@id/imageview_my_info_photo"
-        app:layout_constraintStart_toStartOf="@+id/imageview_my_info_photo" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_my_info_items"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageview_my_info_photo" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

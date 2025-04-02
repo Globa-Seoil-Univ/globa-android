@@ -29,12 +29,10 @@ public class DocsMoreActivityModel extends ViewModel {
     public void deleteDocs(String folderId, String recordId) {
         Response<Void> response = apiClient.deleteRecord(folderId,recordId);
 
+        // API 오류 처리가 필요 없는 모달형 보고 구간
         if (response.isSuccessful()) {
             Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());
             isDeleted.setValue(true);
-        }
-        else {
-            Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
         }
     }
 }

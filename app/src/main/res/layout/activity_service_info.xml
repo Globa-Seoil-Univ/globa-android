@@ -1,51 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:id="@+id/relativelayout_item_service"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="team.y2k2.globa.main.profile.service_info.ServiceInfoViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageview_service_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/header_back" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/profile_service_info"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal"
-            android:textStyle="bold"
+        <RelativeLayout
+            android:id="@+id/relativelayout_item_service"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/imageview_service_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/header_back"
+                android:onClick="@{() -> viewModel.onBackClick()}"/>
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/textview_service_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/profile_service_info"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_item_service"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:scrollbarFadeDuration="0"
-        android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/relativelayout_item_service" />
+        </RelativeLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_item_service"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:scrollbarFadeDuration="0"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativelayout_item_service"
+            tools:listitem="@layout/item_service_info" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
