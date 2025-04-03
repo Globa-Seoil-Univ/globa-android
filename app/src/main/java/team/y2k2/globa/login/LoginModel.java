@@ -12,8 +12,6 @@ public class LoginModel {
     public static final int RC_TWITTER = 1003;
     public static final int RC_GOOGLE = 1004;
 
-    public static final String APP_KEY_KAKAO = "8a572ba277b6059bd51f23fe58474f13";
-
     /**
      * SNS 계정에 등록된 사용자 개인정보
      */

@@ -25,10 +25,10 @@ import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.main.folder.inside.FolderInsideFragment;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterViewHolder> {
-    private final ArrayList<FolderItem> items;
+    private final ArrayList<FolderModel.FolderItem> items;
     private final Activity activity;
 
-    public FolderAdapter(ArrayList<FolderItem> items, Activity activity) {
+    public FolderAdapter(ArrayList<FolderModel.FolderItem> items, Activity activity) {
         this.items = items;
         this.activity = activity;
     }
@@ -56,7 +56,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.AdapterVie
             FolderInsideFragment fragment = new FolderInsideFragment();
             fragment.setArguments(bundle);
 
-            ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.fragment_container_view_main, fragment, null).addToBackStack(null).commit();
+            ((FragmentActivity) holder.layout.getContext()).getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragment_container_view_main, fragment, null)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         holder.layout.setOnLongClickListener(v -> {

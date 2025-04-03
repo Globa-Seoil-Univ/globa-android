@@ -1,6 +1,5 @@
 package team.y2k2.globa.main.folder.add;
 
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +34,14 @@ public class FolderAddActivity extends AppCompatActivity {
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private final List<FolderAddItem> itemList = new ArrayList<>();
     private final List<ShareTarget> shareTargetList = new ArrayList<>();
-    ActivityFolderAddBinding binding;
-    FolderApiClient apiClient;
-    FolderShareActivityModel folderShareActivityModel;
-    String profile;
-    String newProfile;
-    String code;
-    FolderAddAdapter adapter;
-    StorageReference imageRef;
+    private ActivityFolderAddBinding binding;
+    private FolderApiClient apiClient;
+    private FolderShareActivityModel folderShareActivityModel;
+    private String profile;
+    private String newProfile;
+    private String code;
+    private FolderAddAdapter adapter;
+    private StorageReference imageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +49,7 @@ public class FolderAddActivity extends AppCompatActivity {
         binding = ActivityFolderAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        folderShareActivityModel = new ViewModelProvider(this).get(FolderShareActivityModel.class);
+        folderShareActivityModel = new FolderShareActivityModel();
         folderShareActivityModel.setApiClient(this);
 
         apiClient = new FolderApiClient();
@@ -61,49 +58,10 @@ public class FolderAddActivity extends AppCompatActivity {
         binding.recyclerviewFolderAddShareSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.recyclerviewFolderAddShareSelected.setAdapter(adapter);
 
-        binding.buttonFolderAddBack.setOnClickListener(v -> finish());
+        setupUI();
+    }
 
-        binding.textviewFolderAddConfirm.setOnClickListener(v -> {
-
-            if (binding.edittextFolderAddInputName.getText().length() == 0) {
-                Toast.makeText(this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (adapter.getItemCount() != 0) {
-                LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFolderAddShareSelected.getLayoutManager();
-                if (collectNewUserManager != null) {
-                    int firstPosition = collectNewUserManager.findFirstVisibleItemPosition();
-                    int lastPosition = collectNewUserManager.findLastVisibleItemPosition();
-
-                    for (int i = firstPosition; i <= lastPosition; i++) {
-                        RecyclerView.ViewHolder viewHolder = binding.recyclerviewFolderAddShareSelected.findViewHolderForAdapterPosition(i);
-                        if (viewHolder instanceof FolderAddAdapter.MyViewHolder) {
-                            FolderAddAdapter.MyViewHolder adapterViewHolder = (FolderAddAdapter.MyViewHolder) viewHolder;
-                            FolderAddItem item = adapter.getItem(i);
-
-                            String tempCode = item.getCode();
-                            String tempRole = item.getRole();
-
-                            shareTargetList.add(new ShareTarget(tempCode, tempRole));
-
-                        }
-                    }
-                }
-            }
-
-            String title = binding.edittextFolderAddInputName.getText().toString();
-
-            if (!shareTargetList.isEmpty()) {
-                Log.d(getClass().getSimpleName(), "제목: " + title + ", 공유대상: " + shareTargetList.get(0).getCode() + ", " + shareTargetList.get(0).getRole());
-            }
-
-            apiClient.requestInsertFolder(title, shareTargetList);
-
-            finish();
-
-        });
-
+    private void setupUI() {
         binding.edittextFolderAddInputName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -144,9 +102,7 @@ public class FolderAddActivity extends AppCompatActivity {
 
         binding.edittextFolderAddShareInputName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -182,10 +138,56 @@ public class FolderAddActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) {}
         });
+
+        binding.buttonFolderAddBack.setOnClickListener(v -> finish());
+
+        binding.textviewFolderAddConfirm.setOnClickListener(v -> {
+            if (binding.edittextFolderAddInputName.getText().toString().isEmpty()) {
+                binding.textviewFolderAddError.setText(getString(R.string.folder_add_empty_name));
+                binding.textviewFolderAddError.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            if (adapter.getItemCount() != 0) {
+                LinearLayoutManager collectNewUserManager = (LinearLayoutManager) binding.recyclerviewFolderAddShareSelected.getLayoutManager();
+                if (collectNewUserManager != null) {
+                    int firstPosition = collectNewUserManager.findFirstVisibleItemPosition();
+                    int lastPosition = collectNewUserManager.findLastVisibleItemPosition();
+
+                    for (int i = firstPosition; i <= lastPosition; i++) {
+                        RecyclerView.ViewHolder viewHolder = binding.recyclerviewFolderAddShareSelected.findViewHolderForAdapterPosition(i);
+                        if (viewHolder instanceof FolderAddAdapter.MyViewHolder) {
+                            FolderAddAdapter.MyViewHolder adapterViewHolder = (FolderAddAdapter.MyViewHolder) viewHolder;
+                            FolderAddItem item = adapter.getItem(i);
+
+                            String tempCode = item.getCode();
+                            String tempRole = item.getRole();
+
+                            shareTargetList.add(new ShareTarget(tempCode, tempRole));
+                        }
+                    }
+                }
+            }
+
+            String title = binding.edittextFolderAddInputName.getText().toString();
+
+            if (!shareTargetList.isEmpty()) {
+                Log.d(getClass().getSimpleName(), "제목: " + title + ", 공유대상: " + shareTargetList.get(0).getCode() + ", " + shareTargetList.get(0).getRole());
+            }
+
+            apiClient.requestInsertFolder(title, shareTargetList);
+
+            finish();
+        });
+
+        binding.buttonFolderAddCancel.setOnClickListener(v -> {
+            binding.edittextFolderAddInputName.setText("");
+            binding.textviewFolderAddError.setVisibility(View.GONE);
+        });
+
+        binding.buttonFolderShareShareCancel.setOnClickListener(v -> binding.edittextFolderAddShareInputName.setText(""));
 
         binding.constraintlayoutFolderAddShareSearch.setOnClickListener(v -> {
             if (!binding.textviewFolderAddShareSearch.getText().toString().isEmpty()) {
@@ -195,11 +197,6 @@ public class FolderAddActivity extends AppCompatActivity {
                 Toast.makeText(this, "사용자를 검색해주세요", Toast.LENGTH_SHORT).show();
             }
         });
-
-        binding.buttonFolderAddCancel.setOnClickListener(v -> binding.edittextFolderAddInputName.setText(""));
-
-        binding.buttonFolderShareShareCancel.setOnClickListener(v -> binding.edittextFolderAddShareInputName.setText(""));
-
     }
 
     private void showBottomSheetDialog() {
@@ -212,18 +209,15 @@ public class FolderAddActivity extends AppCompatActivity {
         RelativeLayout writeButton = dialogView.findViewById(R.id.relative_layout_folder_share_write);
 
         readButton.setOnClickListener(v -> {
-            // 읽기 권한
             onClickDialogBtn("r");
             bottomSheetDialog.dismiss();
         });
         writeButton.setOnClickListener(v -> {
-            // 쑈기 권한
             onClickDialogBtn("w");
             bottomSheetDialog.dismiss();
         });
 
         bottomSheetDialog.show();
-
     }
 
     private void onClickDialogBtn(String role) {
@@ -234,7 +228,5 @@ public class FolderAddActivity extends AppCompatActivity {
         Glide.with(this).load(R.drawable.profile_user).error(R.drawable.profile_user).into(binding.imageviewFolderAddShareSearch);
         binding.textviewFolderAddShareSearch.setText("");
         newProfile = null;
-
     }
-
 }

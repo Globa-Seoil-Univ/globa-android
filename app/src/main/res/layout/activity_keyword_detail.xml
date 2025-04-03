@@ -1,133 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragment_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.core.widget.NestedScrollView
+    <data>
+        <variable
+            name="viewModel"
+            type="team.y2k2.globa.keyword.detail.KeywordDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:id="@+id/linearlayout_keyword_detail_select_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="-20dp"
-                android:background="@drawable/main_bottom"
-                android:translationZ="5dp"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/relativelayout_keyword_detail_title">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_keyword"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:clipToPadding="true"
-                    android:scrollbarFadeDuration="0"
-                    android:scrollbars="vertical" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relativelayout_keyword_tap"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:background="@color/primary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/imageview_keyword_detail_top"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/header_back_white" />
-
-                <TextView
-                    android:id="@+id/textview_keyword_detail_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@string/keyword_title"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/normal"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relativelayout_keyword_detail_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/relativelayout_keyword_tap">
+                android:layout_height="match_parent">
 
                 <RelativeLayout
-                    android:id="@+id/relativelayout_main_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/linearlayout_keyword_detail_select_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-20dp"
+                    android:background="@drawable/main_bottom"
+                    android:translationZ="5dp"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/relativelayout_keyword_detail_title">
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview_keyword"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:clipToPadding="true"
+                        android:scrollbarFadeDuration="0"
+                        android:scrollbars="vertical" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativelayout_keyword_tap"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:background="@color/primary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imageview_keyword_detail_top"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/header_back_white" />
+
+                    <TextView
+                        android:id="@+id/textview_keyword_detail_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/keyword_title"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/normal"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativelayout_keyword_detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/relativelayout_keyword_tap">
 
                     <RelativeLayout
-                        android:id="@+id/viewpager_main_carousel"
+                        android:id="@+id/relativelayout_main_top"
                         android:layout_width="match_parent"
-                        android:layout_height="128dp"
-                        android:background="@color/primary">
+                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/textview_keyword_detail_word"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="30dp"
-                            android:text="@string/activity_keyword_detail_tools_title"
-                            android:textColor="@color/white"
-                            android:textSize="26dp"
-                            android:textStyle="bold" />
+                        <RelativeLayout
+                            android:id="@+id/viewpager_main_carousel"
+                            android:layout_width="match_parent"
+                            android:layout_height="128dp"
+                            android:background="@color/primary">
 
-                        <TextView
-                            android:id="@+id/textview_keyword_detail_pronunciation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/textview_keyword_detail_word"
-                            android:layout_marginStart="20dp"
-                            android:text="@string/activity_keyword_detail_tools_pronunciation"
-                            android:textColor="@color/lightGray" />
+                            <TextView
+                                android:id="@+id/textview_keyword_detail_word"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="30dp"
+                                android:text="@string/activity_keyword_detail_tools_title"
+                                android:textColor="@color/white"
+                                android:textSize="26dp"
+                                android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/textview_keyword_detail_source"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@id/textview_keyword_detail_pronunciation"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="20dp"
-                            android:text="@string/activity_keyword_detail_tools_source"
-                            android:textColor="@color/lightGray" />
+                            <TextView
+                                android:id="@+id/textview_keyword_detail_pronunciation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/textview_keyword_detail_word"
+                                android:layout_marginStart="20dp"
+                                android:text=""
+                                android:textColor="@color/lightGray" />
 
+                            <TextView
+                                android:id="@+id/textview_keyword_detail_source"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@id/textview_keyword_detail_pronunciation"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginEnd="20dp"
+                                android:text="@string/activity_keyword_detail_tools_source"
+                                android:textColor="@color/lightGray" />
+
+                        </RelativeLayout>
                     </RelativeLayout>
                 </RelativeLayout>
-            </RelativeLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

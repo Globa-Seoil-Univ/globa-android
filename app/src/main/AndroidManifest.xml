@@ -85,7 +85,7 @@
         <activity android:name=".main.profile.info.MyInfoActivity" />
         <activity android:name=".main.search.SearchActivity" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".login.LoginActivity$LoginActivity"
             android:exported="true"
             android:requestLegacyExternalStorage="true">
             <intent-filter>

@@ -49,7 +49,7 @@ public class FolderApiClient extends ApiClient {
     }
 
     // 폴더 추가
-    public void requestInsertFolder(String title, List<ShareTarget> shareTargets) {
-        executeVoidApiCall(apiService.requestInsertFolder(APPLICATION_JSON, getAuthorization(), new FolderAddRequest(title, shareTargets)));
+    public Response<Void> requestInsertFolder(String title, List<ShareTarget> shareTargets) {
+        return executeVoidApiCall(apiService.requestInsertFolder(APPLICATION_JSON, getAuthorization(), new FolderAddRequest(title, shareTargets)));
     }
 }

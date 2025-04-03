@@ -1,95 +1,79 @@
 package team.y2k2.globa.keyword.detail;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import team.y2k2.globa.api.model.entity.KeywordDetail;
-import team.y2k2.globa.databinding.ActivityKeywordDetailBinding;
+import team.y2k2.globa.R;
 
 public class KeywordDetailActivity extends AppCompatActivity {
-
-    private final ArrayList<KeywordDetailItem> itemList = new ArrayList<>();
-    private ActivityKeywordDetailBinding binding;
+    private KeywordDetailViewModel viewModel;
+    private TextView pronunciationTextView;
+    private RecyclerView recyclerView;
     private KeywordDetailAdapter adapter;
-    private String keyword;
-    private String pronunciation;
+    private ProgressBar progressBar;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_keyword_detail);
 
-        initializeUI();
-
-        setContentView(binding.getRoot());
+        setupViewModel();
+        setupUI();
+        observeViewModel();
     }
 
-    public void initializeUI() {
-        binding = ActivityKeywordDetailBinding.inflate(getLayoutInflater());
-
-        keyword = getIntent().getStringExtra("keyword");
-
-        binding.textviewKeywordDetailWord.setText(keyword);
-
-        loadAPIResponse();
-
-        binding.imageviewKeywordDetailTop.setOnClickListener(v -> finish());
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(KeywordDetailViewModel.class);
+        viewModel.setApiClient(this);
+        
+        String keyword = getIntent().getStringExtra("keyword");
+        if (keyword != null) {
+            viewModel.searchDictionary(keyword);
+        }
     }
 
-    public void loadAPIResponse() {
-        KeywordDetailViewModel keywordDetailViewModel = new ViewModelProvider(this).get(KeywordDetailViewModel.class);
-        keywordDetailViewModel.setApiClient(this);
-        keywordDetailViewModel.searchDictionary(keyword);
+    private void setupUI() {
+        pronunciationTextView = findViewById(R.id.textview_keyword_detail_pronunciation);
+        recyclerView = findViewById(R.id.recyclerview_keyword);
+        progressBar = findViewById(R.id.progress_bar);
+        
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new KeywordDetailAdapter(this);
+        recyclerView.setAdapter(adapter);
+    }
 
-        keywordDetailViewModel.getKeywordDetailResponseLiveData().observe(KeywordDetailActivity.this, response -> {
-            if (!response.getDictionary().isEmpty()) {
-                List<KeywordDetail> keywordDetailList = response.getDictionary();
+    private void observeViewModel() {
+        viewModel.getPronunciation().observe(this, pronunciation -> {
+            if (pronunciation != null) {
+                pronunciationTextView.setText(pronunciation);
+            }
+        });
 
-                if (!keywordDetailList.isEmpty())
-                    pronunciation = keywordDetailList.get(0).getPronunciation();
-                else pronunciation = "입력된 정보가 없습니다.";
-
-                binding.textviewKeywordDetailPronunciation.setText(pronunciation);
-
-                for (KeywordDetail keywordDetail : keywordDetailList) {
-                    addItem(keywordDetail);
-                }
-
-                adapter = new KeywordDetailAdapter(itemList, this);
-                binding.recyclerviewKeyword.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-                binding.recyclerviewKeyword.setAdapter(adapter);
-
-                if (itemList.isEmpty()) {
-                    Log.d("키워드", "키워드 정보가 없음");
+        viewModel.getKeywordItems().observe(this, items -> {
+            if (items != null) {
+                adapter.setItems(items);
+                if (items.isEmpty()) {
                     Toast.makeText(this, "검색된 정보가 없습니다.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.d("키워드", "키워드 정보가 있음 크기 : " + itemList.size());
                 }
+            }
+        });
 
+        viewModel.getIsLoading().observe(this, isLoading -> {
+            progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        });
+
+        viewModel.getErrorMessage().observe(this, error -> {
+            if (error != null) {
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-    public void addItem(KeywordDetail keywordDetail) {
-        String word = keywordDetail.getWord();
-        String engWord = keywordDetail.getEngword();
-        String description = keywordDetail.getDescription();
-        String category = keywordDetail.getCategory();
-        String pronunciation = keywordDetail.getPronunciation();
-
-        binding.textviewKeywordDetailPronunciation.setText(pronunciation);
-
-        Log.d("키워드", "word: " + word + ", engWord: " + engWord + ", description: " + description + ", category: " + category + ", pronunciation: " + pronunciation);
-
-        itemList.add(new KeywordDetailItem(word, description, category));
-    }
-
 }
