@@ -12,23 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.util.i18n.DateTimeFormatter;
 
 public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.AdapterViewHolder> {
     private final ArrayList<DocsSummaryItem> items;
 
     public DocsSummaryAdapter(ArrayList<DocsSummaryItem> items) {
         this.items = items;
-    }
-
-    public static String formatDuration(int durationSecond) {
-        int hours = durationSecond / 3600;
-        durationSecond %= 3600;
-
-        int minutes = durationSecond / 60;
-        int seconds = durationSecond % 60;
-
-        if (hours > 0) return String.format("%2d:%02d:%02d", hours, minutes, seconds);
-        else return String.format("%02d:%02d", minutes, seconds);
     }
 
     @NonNull
@@ -41,7 +31,7 @@ public class DocsSummaryAdapter extends RecyclerView.Adapter<DocsSummaryAdapter.
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         String title = items.get(position).getTitle();
-        String datetime = formatDuration(Integer.parseInt(items.get(position).getTime()));
+        String datetime = DateTimeFormatter.getTimeFormat(Integer.parseInt(items.get(position).getTime()));
 
         holder.title.setText(title);
         holder.time.setText(datetime);

@@ -44,17 +44,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private String profile;
     private String name;
 
-    public static String formatDuration(int durationMillis) {
-        int hours = (durationMillis / 1000) / 3600;
-        durationMillis %= 1000 * 3600;
-
-        int minutes = (durationMillis / 1000) / 60;
-        int seconds = (durationMillis / 1000) % 60;
-
-        if (hours > 0) return String.format("%2d:%02d:%02d", hours, minutes, seconds);
-        else return String.format("%02d:%02d", minutes, seconds);
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +157,8 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         }
 
         binding.seekbarAudioProgress.setProgress(position);
-        binding.textviewDocumentAudioNowTime.setText(formatDuration(position));
+        binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(position));
+
         player.seekTo(position);
     }
 
@@ -218,7 +208,8 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
             public void run() {
                 if (player != null && player.isPlaying()) {
                     int currentPosition = (int) player.getCurrentPosition();
-                    binding.textviewDocumentAudioNowTime.setText(formatDuration(currentPosition));
+                    binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(currentPosition));
+
                     binding.seekbarAudioProgress.setProgress(currentPosition);
                 }
                 handler.postDelayed(this, 1000); // 1초마다 업데이트

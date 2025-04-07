@@ -1,16 +1,13 @@
 package team.y2k2.globa.main.profile.edit;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import retrofit2.Response;
-import team.y2k2.globa.R;
 import team.y2k2.globa.api.clients.UserApiClient;
-import team.y2k2.globa.api.model.request.NicknameEditRequest;
 
 public class NicknameEditViewModel extends ViewModel {
     private final UserApiClient apiClient;

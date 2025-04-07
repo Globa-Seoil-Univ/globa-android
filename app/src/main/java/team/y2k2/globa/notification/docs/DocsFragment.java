@@ -21,8 +21,9 @@ import team.y2k2.globa.databinding.FragmentNotificationDocsBinding;
 import team.y2k2.globa.notification.NotificationActivity;
 
 public class DocsFragment extends Fragment {
-    private final List<DocsFragmentItem> docsFragmentItems = new ArrayList<>();
     FragmentNotificationDocsBinding binding;
+
+    private final List<DocsFragmentItem> docsFragmentItems = new ArrayList<>();
     String notificationId, profile, title, content, createdTime, notificationType;
     boolean isRead;
     DocsFragmentAdapter adapter;

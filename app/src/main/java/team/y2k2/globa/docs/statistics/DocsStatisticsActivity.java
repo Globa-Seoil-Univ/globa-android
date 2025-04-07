@@ -32,7 +32,6 @@ import team.y2k2.globa.api.model.entity.StudyTime;
 import team.y2k2.globa.databinding.ActivityDocsStatisticsBinding;
 
 public class DocsStatisticsActivity extends AppCompatActivity {
-
     String[] wordX, timeX, gradeX;
     int[] timeValues, gradeValues;
     double[] doubleWordValues, doubleGradeValues;

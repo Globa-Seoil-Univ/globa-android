@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +35,7 @@ import team.y2k2.globa.api.clients.CommentApiClient;
 import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.entity.SubComment;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
+import team.y2k2.globa.databinding.ItemCommentBinding;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.detail.DocsDetailViewModel;
@@ -44,6 +44,8 @@ import team.y2k2.globa.docs.detail.comment.subcomment.DocsDetailSubCommentItem;
 import team.y2k2.globa.main.ProfileImage;
 
 public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCommentAdapter.AdapterViewHolder> {
+    ItemCommentBinding binding;
+
     private final DocsActivity activity;
     private final String folderId;
     private final String recordId;
@@ -64,17 +66,13 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     String myName;
     int selectedPosition;
     String selectedId;
-    ImageView subCommentImg;
-    TextView subCommentTv;
-    RecyclerView subCommentRv;
-    EditText subCommentEt;
-    ImageButton subCommentBtn;
     CommentApiClient apiClient;
     UserApiClient userApiClient;
     private Disposable disposable;
     private DocsDetailSubCommentAdapter subAdapter;
     private int subButtonStatus = BUTTON_COMMENT_SUB_CONFIRM;
     private StorageReference profileImageRef;
+    private TextView subCommentEt;
 
     public DocsDetailCommentAdapter(ArrayList<DocsDetailCommentItem> commentItems, DocsActivity activity, String sectionId, String highlightId, DocsDetailAdapter mainAdapter) {
         this.commentItems = commentItems;
@@ -104,13 +102,12 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     @NonNull
     @Override
     public DocsDetailCommentAdapter.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
-        return new AdapterViewHolder(view);
+        binding = ItemCommentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new AdapterViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DocsDetailCommentAdapter.AdapterViewHolder holder, int position) {
-
         String profile = commentItems.get(position).getProfile();
         String name = commentItems.get(position).getName();
         String createdTime = commentItems.get(position).getCreatedTime();
@@ -119,21 +116,21 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
         if (profile != null) {
             if (profile.startsWith("http")) {
-                Glide.with(activity).load(profile).error(R.drawable.profile_user).into(holder.profileImage);
+                Glide.with(activity).load(profile).error(R.drawable.profile_user).into(holder.binding.imageviewItemCommentIcon);
             } else {
                 profileImageRef = storage.getReference().child(profile);
-                Glide.with(activity).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.drawable.profile_user).into(holder.profileImage);
+                Glide.with(activity).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.drawable.profile_user).into(holder.binding.imageviewItemCommentIcon);
             }
         } else {
-            Glide.with(activity).load(R.drawable.profile_user).error(R.drawable.profile_user).into(holder.profileImage);
+            Glide.with(activity).load(R.drawable.profile_user).error(R.drawable.profile_user).into(holder.binding.imageviewItemCommentIcon);
         }
 
-        holder.name.setText(name);
-        holder.createdTime.setText(createdTime);
-        holder.content.setText(content);
-        holder.showSubComments.setText("답글 보기");
+        holder.binding.textviewItemCommentUsername.setText(name);
+        holder.binding.textviewItemCommentDatetime.setText(createdTime);
+        holder.binding.textviewItemCommentContent.setText(content);
+        holder.binding.textviewItemCommentVisible.setText("답글 보기");
 
-        holder.showSubComments.setOnClickListener(v -> {
+        holder.binding.textviewItemCommentVisible.setOnClickListener(v -> {
             // 답글 보기 클릭 이벤트
             Log.d("대댓글 보기", "대댓글 보기 클릭 이벤트 시작");
 
@@ -165,7 +162,6 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
             Log.d(getClass().getSimpleName(), "선택 댓글 내용: " + parentContent);
 
             showSubCommentSheetDialog(subCommentItems, parentProfile, parentContent, sectionId, highlightId, parentId);
-
         });
 
         // 댓글 수정 또는 삭제
@@ -224,28 +220,27 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     }
 
     private void showSubCommentSheetDialog(ArrayList<DocsDetailSubCommentItem> subCommentItems, String profile, String content, String sectionId, String highlightId, String parentId) {
-
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
         View bottomSheetView = activity.getLayoutInflater().inflate(R.layout.dialog_comment_sub, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        subCommentImg = bottomSheetView.findViewById(R.id.imageview_comment_sub_parent);
-        subCommentTv = bottomSheetView.findViewById(R.id.textview_comment_sub_parent);
-        subCommentRv = bottomSheetDialog.findViewById(R.id.recyclerview_comment_sub);
+        ImageView subCommentImg = bottomSheetView.findViewById(R.id.imageview_comment_sub_parent);
+        TextView subCommentTv = bottomSheetView.findViewById(R.id.textview_comment_sub_parent);
+        RecyclerView subCommentRv = bottomSheetDialog.findViewById(R.id.recyclerview_comment_sub);
         subCommentEt = bottomSheetDialog.findViewById(R.id.edittext_comment_sub);
-        subCommentBtn = bottomSheetDialog.findViewById(R.id.image_button_comment_sub_confirm);
+        ImageButton subCommentBtn = bottomSheetDialog.findViewById(R.id.image_button_comment_sub_confirm);
 
         Log.d("대댓글 창", "대댓글 창 열림 subButtonStatus: " + subButtonStatus);
 
         if (profile != null) {
             if (profile.startsWith("http")) {
-                Glide.with(activity).load(profile).error(R.drawable.profile_user).into(subCommentImg);
+                Glide.with(activity).load(profile).error(R.drawable.profile_user).into(binding.imageviewItemCommentIcon);
             } else {
                 profileImageRef = storage.getReference().child(profile);
                 Glide.with(activity).load(ProfileImage.convertGsToHttps(profileImageRef.toString())).error(R.drawable.profile_user).into(subCommentImg);
             }
         } else {
-            Glide.with(activity).load(R.drawable.profile_user).error(R.drawable.profile_user).into(subCommentImg);
+            Glide.with(activity).load(R.drawable.profile_user).error(R.drawable.profile_user).into(binding.imageviewItemCommentIcon);
         }
 
         subCommentTv.setText(content);
@@ -290,7 +285,6 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
         });
 
         bottomSheetDialog.show();
-
     }
 
     private void showBottomSheetDialog(String commentId, int position) {
@@ -374,23 +368,11 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+        ItemCommentBinding binding;
 
-        private final ImageView profileImage;
-        private final TextView name;
-        private final TextView createdTime;
-        private final TextView content;
-        private final TextView showSubComments;
-
-        public AdapterViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            profileImage = itemView.findViewById(R.id.imageview_item_comment_icon);
-            name = itemView.findViewById(R.id.textview_item_comment_username);
-            createdTime = itemView.findViewById(R.id.textview_item_comment_datetime);
-            content = itemView.findViewById(R.id.textview_item_comment_content);
-            showSubComments = itemView.findViewById(R.id.textview_item_comment_visible);
-
+        public AdapterViewHolder(ItemCommentBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
-
 }

@@ -232,7 +232,7 @@
 
     <string name="kakao_app_key" translatable="false">8a572ba277b6059bd51f23fe58474f13</string>
 
-    <string name="folder_add_empty_name">폴더 이름을 입력해주세요</string>
-    <string name="folder_add_failed">폴더 추가에 실패했습니다</string>
-    <string name="folder_add_success">폴더가 추가되었습니다</string>
+    <string name="folder_add_empty_name">폴더 이름을 입력해주세요.</string>
+    <string name="folder_add_failed">폴더 추가에 실패했습니다.</string>
+    <string name="folder_add_success">폴더가 추가되었습니다.</string>
 </resources>

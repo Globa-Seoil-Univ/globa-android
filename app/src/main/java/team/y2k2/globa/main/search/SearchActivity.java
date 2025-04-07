@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import team.y2k2.globa.databinding.ActivitySearchBinding;
 
 public class SearchActivity extends AppCompatActivity {
-
     private ActivitySearchBinding binding;
     private SearchViewModel viewModel;
 

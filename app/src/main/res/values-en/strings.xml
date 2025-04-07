@@ -222,5 +222,8 @@
     <string name="edit_comment">edit comment</string>
     <string name="delete_comment">delete comment</string>
     <string name="delete_folder">delete folder</string>
+    <string name="folder_add_empty_name">"Please enter a folder name. "</string>
+    <string name="folder_add_failed">"Failed to add folder. "</string>
+    <string name="folder_add_success">"Folder added. "</string>
 
 </resources>

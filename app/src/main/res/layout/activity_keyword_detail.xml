@@ -106,7 +106,7 @@
                                 android:layout_marginTop="30dp"
                                 android:text="@string/activity_keyword_detail_tools_title"
                                 android:textColor="@color/white"
-                                android:textSize="26dp"
+                                android:textSize="26sp"
                                 android:textStyle="bold" />
 
                             <TextView

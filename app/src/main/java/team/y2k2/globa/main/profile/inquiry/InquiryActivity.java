@@ -3,7 +3,6 @@ package team.y2k2.globa.main.profile.inquiry;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -11,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.clients.InquiryApiClient;
 import team.y2k2.globa.databinding.ActivityInquiryBinding;

@@ -10,7 +10,6 @@ import team.y2k2.globa.api.model.entity.Folder;
 import team.y2k2.globa.api.model.response.FolderResponse;
 
 public class FolderFragmentModel extends ViewModel {
-
     private MutableLiveData<List<Folder>> folders = new MutableLiveData<>();
     public LiveData<List<Folder>> getFolders() {
         return folders;

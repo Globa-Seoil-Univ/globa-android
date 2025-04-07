@@ -9,7 +9,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,7 +31,6 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -43,16 +41,20 @@ import team.y2k2.globa.api.clients.CommentApiClient;
 import team.y2k2.globa.api.model.entity.Comment;
 import team.y2k2.globa.api.model.entity.Highlight;
 import team.y2k2.globa.api.model.response.CommentResponse;
+import team.y2k2.globa.databinding.ItemDocsDetailBinding;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentAdapter;
 import team.y2k2.globa.docs.detail.comment.DocsDetailCommentItem;
 import team.y2k2.globa.docs.detail.comment.FocusViewModel;
 import team.y2k2.globa.keyword.detail.KeywordDetailActivity;
 import team.y2k2.globa.main.ProfileImage;
+import team.y2k2.globa.util.i18n.DateTimeFormatter;
 
 public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.AdapterViewHolder> {
     private static final int BUTTON_COMMENT_CONFIRM = 0;
     private static final int BUTTON_COMMENT_UPDATE = 1;
+
+    ItemDocsDetailBinding binding;
 
     private final CommentApiClient apiClient;
     private final ArrayList<DocsDetailItem> detailItems;
@@ -85,26 +87,33 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         this.docsDetailViewModel = new ViewModelProvider(activity).get(DocsDetailViewModel.class);
     }
 
+    @Override
+    public int getItemCount() {
+        return (null != detailItems ? detailItems.size() : 0);
+    }
+
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_docs_detail, parent, false);
-        return new AdapterViewHolder(view);
+        binding = ItemDocsDetailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new AdapterViewHolder(binding.getRoot());
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         DocsDetailItem item = detailItems.get(position);
-        holder.title.setText(item.getTitle());
-        holder.time.setText(formatDuration(Integer.parseInt(item.getTime())));
-        holder.title.setOnClickListener(v -> activity.setDuration(Integer.parseInt(item.getTime())));
+
+        binding.textviewItemDocsDetailTitle.setText(item.getTitle());
+        binding.textviewItemDocsDetailTitle.setOnClickListener(v -> activity.setDuration(Integer.parseInt(item.getTime())));
+
+        String time = DateTimeFormatter.getTimeFormat(Integer.parseInt(item.getTime()));
+        binding.textviewItemDocsDetailTime.setText(time);
 
         SpannableString descriptionSpannable = setSpannableStringHighlight(new SpannableString(item.getDescription()), item.getHighlights(), holder, item.getSectionId());
-        holder.description.setText(descriptionSpannable);
-        holder.description.setMovementMethod(LinkMovementMethod.getInstance());
-
-        holder.description.setOnTouchListener(createTouchListener(holder, item.getHighlights(), position, item.getSectionId()));
+        binding.textviewItemDocsDetailDescription.setText(descriptionSpannable);
+        binding.textviewItemDocsDetailDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.textviewItemDocsDetailDescription.setOnTouchListener(createTouchListener(holder, item.getHighlights(), position, item.getSectionId()));
     }
 
     private View.OnTouchListener createTouchListener(AdapterViewHolder holder, List<Highlight> highlights, int position, String sectionId) {
@@ -145,10 +154,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         showPopupMenu(holder.description, holder, folderId, recordId, sectionId);
     }
 
-    @Override
-    public int getItemCount() {
-        return (null != detailItems ? detailItems.size() : 0);
-    }
 
     private void showPopupMenu(View v, AdapterViewHolder holder, String folderId, String recordId, String sectionId) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
@@ -217,16 +222,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         docsDetailViewModel.setCommentLiveData(true);
     }
 
-    private String formatDuration(int durationSecond) {
-        int hours = durationSecond / 3600;
-        durationSecond %= 3600;
-        int minutes = durationSecond / 60;
-        int seconds = durationSecond % 60;
-        if (hours > 0)
-            return String.format(Locale.KOREA, "%02d:%02d:%02d", hours, minutes, seconds);
-        else return String.format(Locale.KOREA, "%02d:%02d", minutes, seconds);
-    }
-
     private void showCommentSheetDialog(ArrayList<DocsDetailCommentItem> commentItems, String sectionId, String highlightId, String name, String startIdx, String endIdx) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
         View bottomSheetView = activity.getLayoutInflater().inflate(R.layout.dialog_comment, null);
@@ -258,10 +253,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
             } else {
                 Toast.makeText(activity, "댓글을 입력해주세요", Toast.LENGTH_SHORT).show();
             }
-        }, error -> {
-            Log.e("RxJavaError", "RxJavaError 오류 내용: " + error);
-            Toast.makeText(activity, "댓글 처리중 오류 발생", Toast.LENGTH_SHORT).show();
-        });
+        }, error -> Toast.makeText(activity, "댓글 처리중 오류 발생", Toast.LENGTH_SHORT).show());
     }
 
     private void handleCommentAction(BottomSheetDialog bottomSheetDialog, String sectionId, String highlightId, String startIdx, String endIdx, String text) {

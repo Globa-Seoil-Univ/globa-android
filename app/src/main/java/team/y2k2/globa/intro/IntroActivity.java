@@ -47,26 +47,24 @@ public class IntroActivity extends AppCompatActivity {
 
     private void checkServerAndProceed() {
         apiClient.isServerOpened()
-                .thenAccept(isOpened -> {
-                    new Handler(Looper.getMainLooper()).post(() -> {
-                        if (isOpened) {
+                .thenAccept(isOpened -> new Handler(Looper.getMainLooper()).post(() -> {
+                    if (isOpened) {
 
-                            viewModel.autoLogin();
-                            viewModel.getAutoLoginSuccess().observe(this, success -> {
-                                if (success) {
-                                    viewModel.navigateToMain(this);
-                                } else {
-                                    binding.buttonIntroBottomStart.setVisibility(View.VISIBLE);
-                                }
-                            });
-                            viewModel.requestNotificationPermission(this);
-                            viewModel.getNotificationPermissionGranted().observe(this, granted -> {
-                            });
-                        } else {
-                            showServerUnreachableDialog();
-                        }
-                    });
-                })
+                        viewModel.autoLogin();
+                        viewModel.getAutoLoginSuccess().observe(this, success -> {
+                            if (success) {
+                                viewModel.navigateToMain(this);
+                            } else {
+                                binding.buttonIntroBottomStart.setVisibility(View.VISIBLE);
+                            }
+                        });
+                        viewModel.requestNotificationPermission(this);
+                        viewModel.getNotificationPermissionGranted().observe(this, granted -> {
+                        });
+                    } else {
+                        showServerUnreachableDialog();
+                    }
+                }))
                 .exceptionally(throwable -> {
                     new Handler(Looper.getMainLooper()).post(this::showServerUnreachableDialog);
                     return null;
@@ -77,9 +75,7 @@ public class IntroActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("서버 연결 실패")
                 .setMessage("서버에 연결할 수 없습니다.")
-                .setPositiveButton("확인", (dialog, which) -> {
-                    finishAffinity();
-                })
+                .setPositiveButton("확인", (dialog, which) -> finishAffinity())
                 .setCancelable(false)
                 .show();
     }

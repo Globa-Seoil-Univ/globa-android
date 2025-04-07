@@ -66,9 +66,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getIsLoading().observe(this, isLoading -> {
-            progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        });
+        viewModel.getIsLoading().observe(this, isLoading -> progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE));
 
         viewModel.getErrorMessage().observe(this, error -> {
             if (error != null) {

@@ -6,13 +6,9 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.ArrayList;
-
-import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityAlertBinding;
 
 public class AlertActivity extends AppCompatActivity {

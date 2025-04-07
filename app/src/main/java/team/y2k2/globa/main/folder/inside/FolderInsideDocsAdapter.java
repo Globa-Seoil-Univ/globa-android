@@ -20,7 +20,6 @@ import team.y2k2.globa.api.model.entity.FolderInsideRecord;
 import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
 import team.y2k2.globa.docs.move.DocsMoveActivity;
-import team.y2k2.globa.main.MainActivity;
 
 public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDocsAdapter.AdapterViewHolder> {
     private final FolderInsideFragment fragment;

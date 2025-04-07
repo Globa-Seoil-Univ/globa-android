@@ -14,7 +14,6 @@ import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.sql.RecordDB;
 
 public class SearchViewModel extends ViewModel {
-
     final public MutableLiveData<String> searchText = new MutableLiveData<>("");
     final public MutableLiveData<Boolean> isCancelClick = new MutableLiveData<>();
 

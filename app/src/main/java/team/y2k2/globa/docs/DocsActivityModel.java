@@ -24,9 +24,9 @@ import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.more.DocsMoreActivity;
 import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.docs.summary.DocsSummaryModel;
+import team.y2k2.globa.util.i18n.DateTimeFormatter;
 
 public class DocsActivityModel extends ViewModel {
-
     String title;
     String folderId;
     String recordId;
@@ -118,8 +118,9 @@ public class DocsActivityModel extends ViewModel {
                         if (playbackState == Player.STATE_READY) {
                             Log.d(getClass().getName(), player.getDuration() + " sec");
                             binding.seekbarAudioProgress.setMax((int) player.getDuration());
-                            binding.textviewDocumentAudioEndTime.setText(formatDuration((int) player.getDuration()));
-                            binding.textviewDocumentAudioNowTime.setText(formatDuration(0));
+                            binding.textviewDocumentAudioEndTime.setText(DateTimeFormatter.getTimeFormat((int) player.getDuration()));
+
+                            binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(0));
 
                             binding.lottieAudioDownload.setVisibility(View.INVISIBLE);
 
@@ -156,7 +157,8 @@ public class DocsActivityModel extends ViewModel {
                     }
 
                     binding.seekbarAudioProgress.setProgress(forwardPosition);
-                    binding.textviewDocumentAudioNowTime.setText(formatDuration(forwardPosition));
+                    binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(forwardPosition));
+
                     player.seekTo(forwardPosition);
                 });
 
@@ -169,7 +171,8 @@ public class DocsActivityModel extends ViewModel {
                     }
 
                     binding.seekbarAudioProgress.setProgress(replayPosition);
-                    binding.textviewDocumentAudioNowTime.setText(formatDuration(replayPosition));
+                    binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(replayPosition));
+
                     player.seekTo(replayPosition);
                 });
 
@@ -177,7 +180,7 @@ public class DocsActivityModel extends ViewModel {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if (fromUser) {
-                            binding.textviewDocumentAudioNowTime.setText(formatDuration(progress));
+                            binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(progress));
                             player.seekTo(progress);
                         }
                     }
@@ -221,9 +224,7 @@ public class DocsActivityModel extends ViewModel {
     }
 
     public void clearDisposable() {
-
         detailAdapter.clearDisposable();
-
     }
 
 }
