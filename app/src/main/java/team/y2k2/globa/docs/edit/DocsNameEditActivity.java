@@ -1,107 +1,130 @@
 package team.y2k2.globa.docs.edit;
 
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
-import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.databinding.ActivityDocsNameEditBinding;
 
 public class DocsNameEditActivity extends AppCompatActivity {
-    ActivityDocsNameEditBinding binding;
-    String title;
-    String recordId;
-    String folderId;
+
+    private ActivityDocsNameEditBinding binding;
+    private DocsNameEditViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityDocsNameEditBinding.inflate(getLayoutInflater());
 
+        // 데이터 바인딩 설정
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_docs_name_edit);
+
+        // Intent에서 데이터 가져오기 및 유효성 검사
         Intent intent = getIntent();
-        recordId = intent.getStringExtra("recordId");
-        title = intent.getStringExtra("title");
-        folderId = intent.getStringExtra("folderId");
+        String recordId;
+        String folderId;
+        String initialTitle;
+        if (intent != null) {
+            recordId = intent.getStringExtra("recordId");
+            initialTitle = intent.getStringExtra("title");
+            folderId = intent.getStringExtra("folderId");
+        } else {
+            showErrorAndFinish("Intent is null.");
+            return;
+        }
 
-        binding.edittextDocsNameInputName.setText(title);
+        if (recordId == null || recordId.isEmpty() ||
+                folderId == null || folderId.isEmpty() ||
+                initialTitle == null) {
+            showErrorAndFinish("필수 데이터가 누락되었습니다."); // 문자열 리소스 사용 권장
+            return;
+        }
 
-        binding.textviewDocsNameChangeConfirm.setOnClickListener(v -> {
-            String newName = binding.edittextDocsNameInputName.getText().toString();
-            if (binding.edittextDocsNameInputName.getText().toString().isEmpty()) {
-                Toast.makeText(this, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        RecordApiClient apiClient = new RecordApiClient();
+        DocsNameEditViewModelFactory factory = new DocsNameEditViewModelFactory(
+                initialTitle, recordId, folderId, apiClient
+        );
+        viewModel = new ViewModelProvider(this, factory).get(DocsNameEditViewModel.class);
 
-            updateDocsName(newName);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+
+        binding.edittextDocsNameInputName.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(32) // MAX_TITLE_LENGTH
         });
 
-        binding.buttonDocsNameCancel.setOnClickListener(v -> binding.edittextDocsNameInputName.setText(""));
-
-        binding.textviewDocsNameCount.setText(title.length() + "/32");
-
-        binding.edittextDocsNameInputName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                binding.textviewDocsNameCount.setText(s.length() + "/32");
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
-                binding.textviewDocsNameCount.setText(s.length() + "/32");
-                if (s.length() == 0) {
-                    binding.buttonDocsNameCancel.setVisibility(View.GONE);
-                } else {
-                    binding.buttonDocsNameCancel.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (s.length() > 32) {
-                    binding.edittextDocsNameInputName.removeTextChangedListener(this);
-                    String text = s.toString().substring(0, 32);
-                    binding.edittextDocsNameInputName.setText(text);
-                    binding.edittextDocsNameInputName.setSelection(text.length());
-                    binding.edittextDocsNameInputName.addTextChangedListener(this);
-                }
-
-                if (s.length() <= 32) {
-                    binding.textviewDocsNameCount.setText(s.length() + "/32");
-                    binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
-                }
-
-                if (s.length() == 0) {
-                    binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-                }
-            }
-        });
-
-        binding.buttonDocsNameBack.setOnClickListener(v -> finish());
-
-        setContentView(binding.getRoot());
+        setupObservers();
     }
 
-    public void updateDocsName(String title) {
-        RecordApiClient apiClient = new RecordApiClient();
+    /** LiveData 관찰자 설정 */
+    private void setupObservers() {
+        // 변경 버튼 활성화 상태 관찰
+        viewModel.isConfirmEnabled.observe(this, isEnabled -> {
+            if (isEnabled != null) {
+                binding.textviewDocsNameChangeConfirm.setEnabled(isEnabled);
+                updateConfirmButtonAppearance();
+            }
+        });
 
-        Response<Void> response = apiClient.requestUpdateRecordName(folderId, recordId, title);
+        // 내용 변경 여부 관찰
+        viewModel.hasTextChanged.observe(this, hasChanged -> {
+            if (hasChanged != null) {
+                updateConfirmButtonAppearance();
+            }
+        });
 
-        if (response != null && response.isSuccessful()) {
-            Log.d(getClass().getName(), "folderId = " + folderId + ", recordId = " + recordId + ", title =" + title);
-            finish();
+        // 취소 버튼 표시 여부 관찰
+        viewModel.isCancelVisible.observe(this, isVisible -> {
+            if (isVisible != null) {
+                binding.buttonDocsNameCancel.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        // 뒤로가기 이벤트 관찰
+        viewModel.navigateBackEvent.observe(this, event -> {
+            if (event != null) {
+                finish();
+            }
+        });
+
+        // 토스트 메시지 이벤트 관찰
+        viewModel.showToastEvent.observe(this, event -> {
+            if (event != null) {
+                String message = event.getContentIfNotHandled();
+                if (message != null) {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /** 변경 버튼 (TextView)의 외형 (활성화 상태 및 글자 색상) 업데이트 */
+    private void updateConfirmButtonAppearance() {
+        boolean isEnabled = viewModel.isConfirmEnabled.getValue() != null && viewModel.isConfirmEnabled.getValue();
+        boolean hasChanged = viewModel.hasTextChanged.getValue() != null && viewModel.hasTextChanged.getValue();
+
+        int colorResId;
+        if (isEnabled && hasChanged) {
+            colorResId = R.color.primary;
+        } else {
+            colorResId = R.color.gray;
         }
+
+        binding.textviewDocsNameChangeConfirm.setTextColor(ContextCompat.getColor(this, colorResId));
+    }
+
+    /** 오류 메시지 표시 후 액티비티 종료 */
+    private void showErrorAndFinish(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        finish();
     }
 }

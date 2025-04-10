@@ -32,8 +32,7 @@ public class KeywordDetailActivity extends AppCompatActivity {
 
     private void setupViewModel() {
         viewModel = new ViewModelProvider(this).get(KeywordDetailViewModel.class);
-        viewModel.setApiClient(this);
-        
+
         String keyword = getIntent().getStringExtra("keyword");
         if (keyword != null) {
             viewModel.searchDictionary(keyword);

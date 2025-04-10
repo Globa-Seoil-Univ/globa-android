@@ -43,17 +43,6 @@ public class DocsActivityModel extends ViewModel {
 
     private boolean isDownloadFailed = false;
 
-    public static String formatDuration(int durationMillis) {
-        int hours = (durationMillis / 1000) / 3600;
-        durationMillis %= 1000 * 3600;
-
-        int minutes = (durationMillis / 1000) / 60;
-        int seconds = (durationMillis / 1000) % 60;
-
-        if (hours > 0) return String.format("%2d:%02d:%02d", hours, minutes, seconds);
-        else return String.format("%02d:%02d", minutes, seconds);
-    }
-
     public void setActivity(DocsActivity activity) {
         this.activity = activity;
     }

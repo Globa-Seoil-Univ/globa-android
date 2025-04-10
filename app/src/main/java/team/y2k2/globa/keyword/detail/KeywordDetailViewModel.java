@@ -1,7 +1,5 @@
 package team.y2k2.globa.keyword.detail;
 
-import android.app.Activity;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -19,9 +17,9 @@ public class KeywordDetailViewModel extends ViewModel {
     private final MutableLiveData<String> pronunciation = new MutableLiveData<>(null);
     private final MutableLiveData<List<KeywordDetailItem>> keywordItems = new MutableLiveData<>(new ArrayList<>());
 
-    private DictionaryApiClient apiClient;
+    private final DictionaryApiClient apiClient;
 
-    public void setApiClient(Activity activity) {
+    public KeywordDetailViewModel() {
         this.apiClient = new DictionaryApiClient();
     }
 
