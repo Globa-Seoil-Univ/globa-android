@@ -1,6 +1,7 @@
 package team.y2k2.globa.util.i18n;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,11 +27,12 @@ public class DateTimeFormatter {
         return outputDate;
     }
 
-    public static String getTimeFormat(int seconds) {
-        int hours = seconds / 3600;
-        seconds %= 3600;
-        int minutes = seconds / 60;
-        int second = seconds % 60;
+    public static String getTimeFormat(int milliseconds) {
+        milliseconds /= 1000;
+        int hours = milliseconds / 3600;
+        milliseconds %= 3600;
+        int minutes = milliseconds / 60;
+        int second = milliseconds % 60;
         if (hours > 0) return String.format(Locale.KOREA, "%02d:%02d:%02d", hours, minutes, second);
         else return String.format(Locale.KOREA, "%02d:%02d", minutes, second);
     }

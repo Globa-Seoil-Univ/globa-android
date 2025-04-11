@@ -17,7 +17,6 @@ import team.y2k2.globa.databinding.ActivityQuizBinding;
 import team.y2k2.globa.docs.quiz.result.QuizResultActivity;
 
 public class QuizActivity extends AppCompatActivity {
-
     private final List<Boolean> answerList = new ArrayList<>();
     private final List<QuizResult> quizResultList = new ArrayList<>();
     ActivityQuizBinding binding;
@@ -83,7 +82,6 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     protected void fetchQuiz(int answer) {
-
         if (quizList.get(currentIndex).getAnswer() == answer) {
             // 정답일 때
             answerList.add(true);
@@ -107,12 +105,8 @@ public class QuizActivity extends AppCompatActivity {
 
             // 결과화면으로 넘어가기전 결과 계산
             int totalQuestion = quizList.size(); // 총 문제 수
-            Log.d("총 문제 수", String.valueOf(totalQuestion));
             int correctAnswer = countTrue(answerList); // 총 정답 수
-            Log.d("총 정답 수", String.valueOf(correctAnswer));
             int grade = (int) (((double) correctAnswer / (double) totalQuestion) * 100); // 최종 점수
-            Log.d("최종 점수", String.valueOf(grade));
-            Log.d("퀴즈 정보", "문제 수 : " + totalQuestion + ", 정답 수 : " + correctAnswer + ", 점수 : " + grade);
 
             // 결과화면으로 이동
             Intent intent = new Intent(this, QuizResultActivity.class);
@@ -121,7 +115,5 @@ public class QuizActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-
     }
-
 }

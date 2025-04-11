@@ -150,7 +150,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     }
 
     public void setDuration(int second) {
-        int position = second * 1000;
+        int position = second;
 
         if (player.getDuration() <= position) {
             position = (int) player.getDuration();

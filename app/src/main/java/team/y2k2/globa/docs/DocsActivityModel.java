@@ -74,7 +74,6 @@ public class DocsActivityModel extends ViewModel {
         summaryAdapter = new DocsSummaryAdapter(docsSummaryModel.getItems());
 
         audioUrl = response.getPath();
-
         loadAudio();
     }
 

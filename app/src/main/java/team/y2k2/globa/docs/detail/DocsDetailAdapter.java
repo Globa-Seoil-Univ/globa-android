@@ -9,6 +9,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -99,14 +100,12 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         return new AdapterViewHolder(binding.getRoot());
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         DocsDetailItem item = detailItems.get(position);
 
         binding.textviewItemDocsDetailTitle.setText(item.getTitle());
         binding.textviewItemDocsDetailTitle.setOnClickListener(v -> activity.setDuration(Integer.parseInt(item.getTime())));
-
         String time = DateTimeFormatter.getTimeFormat(Integer.parseInt(item.getTime()));
         binding.textviewItemDocsDetailTime.setText(time);
 
