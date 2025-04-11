@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".main.profile.withdraw.WithdrawActivity">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="team.y2k2.globa.main.profile.withdraw.WithdrawViewModel" /> <import type="android.view.View"/>
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main.profile.withdraw.WithdrawActivity"> <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_withdraw_header"
         android:layout_width="match_parent"
         android:layout_height="72dp"
@@ -39,74 +45,123 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/textview_withdraw_announce"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:fontFamily="@font/notosans_bold"
-        android:text="@string/activity_withdraw_reason_1"
-        android:textColor="@color/black"
-        android:textSize="@dimen/large"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_withdraw_header" />
+        <TextView
+            android:id="@+id/textview_withdraw_announce"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/notosans_bold"
+            android:text="@string/activity_withdraw_reason_1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_withdraw_header" />
 
-    <TextView
-        android:id="@+id/textview_withdraw_sub_announce"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/notosans_regular"
-        android:text="@string/activity_withdraw_reason_2"
-        android:textColor="@color/gray"
-        android:textSize="@dimen/normal_light"
-        app:layout_constraintStart_toStartOf="@+id/textview_withdraw_announce"
-        app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_announce" />
+        <TextView
+            android:id="@+id/textview_withdraw_sub_announce"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/notosans_regular"
+            android:text="@string/activity_withdraw_reason_2"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/normal_light"
+            app:layout_constraintStart_toStartOf="@+id/textview_withdraw_announce"
+            app:layout_constraintEnd_toEndOf="@+id/textview_withdraw_announce"
+            app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_announce" />
 
-    <RadioGroup
-        android:id="@+id/group_withdraw_check"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_sub_announce" />
+        <RadioGroup
+            android:id="@+id/group_withdraw_check"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_withdraw_sub_announce">
 
-    <EditText
-        android:id="@+id/edittext_withdraw_detail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/withdraw_edittext_background"
-        android:fontFamily="@font/notosans_regular"
-        android:hint="@string/input_description"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:padding="15dp"
-        android:textColorHint="@color/lightGray"
-        android:textSize="@dimen/large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/group_withdraw_check" />
+            <RadioButton
+                android:id="@+id/radio_reason_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="서비스 사용이 불편해요"
+                android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/button_withdraw_withdraw"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/withdraw_button_background"
-        android:fontFamily="@font/notosans_bold"
-        android:text="@string/withdraw"
-        android:textColor="@color/white"
-        android:textSize="@dimen/big"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <RadioButton
+                android:id="@+id/radio_reason_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="정확성이 떨어져요"
+                android:textSize="18sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <RadioButton
+                android:id="@+id/radio_reason_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="기능이 부족해요"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/radio_reason_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="다른 서비스가 더 좋아요"
+                android:textSize="18sp" />
+
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/edittext_withdraw_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:minHeight="100dp"
+            android:gravity="top"
+            android:background="@drawable/withdraw_edittext_background"
+            android:fontFamily="@font/notosans_regular"
+            android:hint="@string/input_description"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:padding="15dp"
+            android:textColorHint="@color/lightGray"
+            android:textSize="@dimen/normal"
+            android:text="@={viewModel.detailReason}" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/group_withdraw_check" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:elevation="8dp"
+            tools:visibility="gone" />
+        <Button
+            android:id="@+id/button_withdraw_withdraw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/withdraw_button_background"
+            android:fontFamily="@font/notosans_bold"
+            android:text="@string/withdraw"
+            android:textColor="@color/white"
+            android:textSize="@dimen/big"
+            android:onClick="@{() -> viewModel.onWithdrawClicked()}" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
