@@ -78,7 +78,6 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
                 notificationViewModel.readNotification(item.getNotificationId());
             }
         });
-
     }
 
     @Override

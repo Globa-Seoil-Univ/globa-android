@@ -54,7 +54,6 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
 
     @Override
     public void onBindViewHolder(@NonNull TotalFragmentAdapter.MyViewHolder holder, int position) {
-
         TotalFragmentItem item = items.get(position);
 
         if (item.getProfile() != null) {

@@ -2,6 +2,8 @@ package team.y2k2.globa.api.clients;
 
 import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;
 
+import android.util.Log;
+
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.response.NotificationResponse;
 import team.y2k2.globa.api.model.response.UnreadNotificationCheckResponse;

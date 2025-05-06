@@ -46,6 +46,8 @@ public interface NotificationApiService {
      * 알림 읽음 처리
      */
     @POST(POST_NOTIFICATION)
-    Call<Void> readNotification(@Path("notification_id") String notificationId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
-
+    Call<Void> readNotification(
+            @Header("Content-Type") String contentType,
+            @Header("Authorization") String authorization,
+            @Path("notification_id") String notificationId);
 }

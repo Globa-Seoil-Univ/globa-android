@@ -56,9 +56,7 @@ public class TotalFragment extends Fragment {
                 notificationList = notificationResponse.getNotifications();
                 totalFragmentItems.clear();
                 for (Notification notification : notificationList) {
-
                     settingNotification(notification);
-
                 }
 
                 adapter = new TotalFragmentAdapter(totalFragmentItems, (NotificationActivity) requireActivity(), this);
@@ -103,8 +101,8 @@ public class TotalFragment extends Fragment {
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "3", isRead));
                 break;
             case "4":
-                profile = notification.getUser().getProfile();
-                title = notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_4_1) + notification.getUser().getName() + getString(R.string.fragment_share_notification_4_2);
+//                profile = notification.getUser().getProfile();
+//                title = notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_4_1) + notification.getUser().getName() + getString(R.string.fragment_share_notification_4_2);
                 content = "";
                 Log.d("4번 알림", "공유 폴더 사람 추가 알림(4번): (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
                 totalFragmentItems.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, "", "", "", "4", isRead));

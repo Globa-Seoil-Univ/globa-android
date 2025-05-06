@@ -21,12 +21,27 @@ public class User {
     @SerializedName("profile")
     private String profile;
 
-
     public String getProfile() {
         return profile;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getSnsId() {
+        return snsId;
+    }
+
+    public String getSnsKind() {
+        return snsKind;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 }

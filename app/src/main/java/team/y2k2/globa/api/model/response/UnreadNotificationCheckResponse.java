@@ -4,10 +4,38 @@ import com.google.gson.annotations.SerializedName;
 
 public class UnreadNotificationCheckResponse {
 
-    @SerializedName("hasUnRead")
-    private boolean hasUnRead;
+    @SerializedName("all")
+    private int all;
 
-    public boolean isHasUnRead() {
-        return hasUnRead;
+    @SerializedName("notice")
+    private int notice;
+
+    @SerializedName("share")
+    private int share;
+
+    @SerializedName("document")
+    private int document;
+
+    @SerializedName("inquiry")
+    private int inquiry;
+
+    public int getAll() {
+        return all;
+    }
+
+    public int getDocument() {
+        return document;
+    }
+
+    public int getInquiry() {
+        return inquiry;
+    }
+
+    public int getNotice() {
+        return notice;
+    }
+
+    public int getShare() {
+        return share;
     }
 }

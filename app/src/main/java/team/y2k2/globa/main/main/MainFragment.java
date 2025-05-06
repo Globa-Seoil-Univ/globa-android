@@ -173,14 +173,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private void checkNotification() {
         viewModel.getUnreadNotificationCheck();
-        viewModel.getNotificationCheckLiveData().observe(getViewLifecycleOwner(), checkResponse -> {
-            if (checkResponse != null) {
-                if (checkResponse.isHasUnRead()) {
-                    binding.linearlayoutMainNotificationCheck.setVisibility(View.VISIBLE);
-                } else {
-                    binding.linearlayoutMainNotificationCheck.setVisibility(View.GONE);
-                }
-            }
-        });
+        viewModel.getNotificationCheckLiveData().observe(getViewLifecycleOwner(), checkResponse -> {});
     }
 }

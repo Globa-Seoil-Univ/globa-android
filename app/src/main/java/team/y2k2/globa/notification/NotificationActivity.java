@@ -31,12 +31,12 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
+        notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
         initializeUI();
         setContentView(binding.getRoot());
     }
 
     private void initializeUI() {
-
         replaceFragment(new TotalFragment());
 
         binding.linearlayoutNotificationTotalUnderline.setVisibility(View.VISIBLE);
@@ -45,7 +45,6 @@ public class NotificationActivity extends AppCompatActivity {
         binding.linearlayoutNotificationDocsUnderline.setVisibility(View.INVISIBLE);
         binding.linearlayoutNotificationInquiryUnderline.setVisibility(View.INVISIBLE);
 
-        notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
         notificationViewModel.getUnreadNotificationCount();
         notificationViewModel.getUnreadCount().observe(this, unreadCount -> {
             if (unreadCount != null) {
@@ -105,7 +104,6 @@ public class NotificationActivity extends AppCompatActivity {
             binding.linearlayoutNotificationInquiryUnderline.setVisibility(View.INVISIBLE);
         });
         binding.constraintlayoutNotificationInquiry.setOnClickListener(v -> {
-
             replaceFragment(new InquiryFragment());
             binding.linearlayoutNotificationTotalUnderline.setVisibility(View.INVISIBLE);
             binding.linearlayoutNotificationNoticeUnderline.setVisibility(View.INVISIBLE);

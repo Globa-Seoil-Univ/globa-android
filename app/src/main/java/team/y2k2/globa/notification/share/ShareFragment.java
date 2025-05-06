@@ -31,9 +31,7 @@ public class ShareFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNotificationShareBinding.inflate(getLayoutInflater());
-
         initializeUI();
-
         return binding.getRoot();
     }
 
@@ -45,9 +43,7 @@ public class ShareFragment extends Fragment {
 
         if (notificationList != null) {
             for (Notification notification : notificationList) {
-
                 settingNotification(notification);
-
             }
 
             adapter = new ShareFragmentAdapter(shareFragmentItems, (NotificationActivity) requireActivity(), this);
@@ -57,7 +53,6 @@ public class ShareFragment extends Fragment {
         } else {
             Log.d(getClass().getSimpleName(), "공유 알림 오류 : notificationResponse = null");
         }
-
     }
 
     private void settingNotification(Notification notification) {

@@ -18,7 +18,7 @@ public class NotificationViewModel extends ViewModel {
     private final MutableLiveData<UnreadNotificationCountResponse> unreadCount = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
-    public void setApiClient(Context context) {
+    public NotificationViewModel() {
         this.apiClient = new FolderShareApiClient();
         this.notificationApiClient = new NotificationApiClient();
     }

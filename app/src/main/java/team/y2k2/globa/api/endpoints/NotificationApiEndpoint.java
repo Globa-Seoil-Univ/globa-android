@@ -6,7 +6,7 @@ public class NotificationApiEndpoint {
 //    알림 조회
     public static final String GET_NOTIFICATION = "/notification";
 //    안 읽은 알림 개수 조회
-    public static final String GET_NOTIFICATION_UNREAD_COUNT = "/notification/unread";
+    public static final String GET_NOTIFICATION_UNREAD_COUNT = "/notification/unread/count";
 //    안 읽은 알림 여부 조회
     public static final String GET_NOTIFICATION_UNREAD_CHECK = "/notification/unread/check";
 //    알림 읽음 처리
