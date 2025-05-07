@@ -9,6 +9,11 @@ public class LoginResponse {
     @SerializedName("refreshToken")
     private String refreshToken;
 
+    public LoginResponse(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
+
     public String getAccessToken() {
         return accessToken;
     }

@@ -73,9 +73,9 @@ public class IntroActivity extends AppCompatActivity {
 
     private void showServerUnreachableDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("서버 연결 실패")
+                .setTitle(R.string.dialog_server_unavailable_title)
                 .setMessage("서버에 연결할 수 없습니다.")
-                .setPositiveButton("확인", (dialog, which) -> finishAffinity())
+                .setPositiveButton(R.string.confirm, (dialog, which) -> finishAffinity())
                 .setCancelable(false)
                 .show();
     }
@@ -84,5 +84,9 @@ public class IntroActivity extends AppCompatActivity {
         SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewIntroLogo.getText());
         spanTitle.setSpan(new ForegroundColorSpan(getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spanTitle);
+    }
+
+    public IntroActivityModel getViewModel() {
+        return viewModel;
     }
 }

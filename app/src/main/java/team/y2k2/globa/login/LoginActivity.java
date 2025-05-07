@@ -110,4 +110,8 @@ public class LoginActivity extends AppCompatActivity {
     private void dismissLoadingDialog() {
         // 로딩 다이얼로그 숨김 로직
     }
+
+    public LoginActivityModel getViewModel() {
+        return viewModel;
+    }
 }

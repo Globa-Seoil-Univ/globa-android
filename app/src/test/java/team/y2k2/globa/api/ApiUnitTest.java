@@ -38,7 +38,7 @@ public class ApiUnitTest {
 
     @Test
     public void getUser() {
-        UserInfoResponse response = apiClient.requestUserInfo();
+        UserInfoResponse response = apiClient.userApiClient.requestUserInfo();
 
         assertNotNull(response.getUserId());
         assertNotNull(response.getName());

@@ -225,5 +225,7 @@
     <string name="folder_add_empty_name">"Please enter a folder name. "</string>
     <string name="folder_add_failed">"Failed to add folder. "</string>
     <string name="folder_add_success">"Folder added. "</string>
+    <string name="dialog_server_unavailable_title">Server unavailable</string>
+    <string name="confirm">confirm</string>
 
 </resources>
