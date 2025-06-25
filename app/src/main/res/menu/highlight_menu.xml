@@ -4,13 +4,13 @@
     <!-- 댓글 작성 -->
     <item
         android:id="@+id/action_comment"
-        android:title="댓글 작성"
+        android:title="@string/dialog_comment_hint"
         android:icon="@android:drawable/ic_menu_more" />
 
     <!-- 단어 검색 -->
     <item
         android:id="@+id/action_search"
-        android:title="단어 검색"
+        android:title="@string/keyword_title"
         android:icon="@android:drawable/ic_menu_more" />
 
     <!-- 다른 액션 아이템들 추가 가능 -->

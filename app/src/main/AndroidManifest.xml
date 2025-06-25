@@ -38,6 +38,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Globa"
         android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true"
         tools:targetApi="34">
         <profileable android:shell="true" />
 

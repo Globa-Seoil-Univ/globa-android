@@ -49,7 +49,6 @@ public class IntroActivity extends AppCompatActivity {
         apiClient.isServerOpened()
                 .thenAccept(isOpened -> new Handler(Looper.getMainLooper()).post(() -> {
                     if (isOpened) {
-
                         viewModel.autoLogin();
                         viewModel.getAutoLoginSuccess().observe(this, success -> {
                             if (success) {
@@ -61,6 +60,7 @@ public class IntroActivity extends AppCompatActivity {
                         viewModel.requestNotificationPermission(this);
                         viewModel.getNotificationPermissionGranted().observe(this, granted -> {
                         });
+
                     } else {
                         showServerUnreachableDialog();
                     }

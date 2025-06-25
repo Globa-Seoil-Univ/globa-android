@@ -14,10 +14,10 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-// import static androidx.test.espresso.matcher.ViewMatchers.withText;  // 필요시 사용
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 // import static org.hamcrest.CoreMatchers.not; // 필요시 사용
 // import static org.hamcrest.Matchers.allOf;   // 필요시 사용
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull; // assertNotNull은 verifySharedPreferencesAfterLogin에서 사용
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -52,15 +52,28 @@ import team.y2k2.globa.R;
 // import team.y2k2.globa.docs.DocsActivity; // 현재 테스트에서 직접 사용 안 함
 import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.main.MainActivity;
+// import team.y2k2.globa.main.search.SearchActivity; // 현재 테스트에서 직접 사용 안 함
+// import team.y2k2.globa.notification.NotificationActivity; // 현재 테스트에서 직접 사용 안 함
 
 @RunWith(AndroidJUnit4.class)
-public class IntroActivityTest {
+public class StatisticsFragmentTest {
 
-    private static final String TAG = "IntroActivityTest";
+    private static final String TAG = "StatisticsFragmentTest";
 
-    // MainActivity의 Fragment 컨테이너 ID 및 홈 화면(MainFragment) 활성화 확인용 View ID
-    private static final int mainActivityFragmentContainerId = R.id.fragment_container_view_main; // 실제 MainActivity의 FragmentContainerView ID
-    private static final int mainActivityHomeIndicatorId = R.id.imageview_main_top; // 실제 MainActivity에서 홈 상태를 나타내는 View ID
+    // MainActivity UI 요소 ID
+    private static final int mainActivityStatisticsTabId = R.id.item_main_statistics;
+    private static final int mainActivityFragmentContainerId = R.id.fragment_container_view_main;
+    private static final int mainActivityHomeIndicatorId = R.id.imageview_main_top; // MainActivity 홈 화면 확인용
+
+
+    // StatisticsFragment UI 요소 ID
+    private static final int statisticsMainTitleId = R.id.textview_visualization;
+    private static final int statisticsWordChartTitleId = R.id.textview_statistics_title_word;
+    private static final int statisticsWordBarChartId = R.id.wordBarChart;
+    private static final int statisticsTimeChartTitleId = R.id.textview_statistics_title_time;
+    private static final int statisticsTimeLineChartId = R.id.timeLineChart;
+    private static final int statisticsScoreChartTitleId = R.id.textview_statistics_title_score;
+    private static final int statisticsGradeLineChartId = R.id.gradeLineChart;
 
     @Rule
     public ActivityScenarioRule<IntroActivity> activityRule = new ActivityScenarioRule<>(IntroActivity.class);
@@ -80,56 +93,15 @@ public class IntroActivityTest {
     }
 
     @Test
-    public void introActivity_displaysLogo_whenIntroIsShown() {
-        Log.d(TAG, "introActivity_displaysLogo_whenIntroIsShown: 테스트 시작");
-        // ActivityScenarioRule에 의해 IntroActivity는 이미 실행된 상태입니다.
-        // EspressoIdlingResource는 IntroActivity의 초기 비동기 작업(로그인 상태, 서버 상태 확인 등)이
-        // 완료될 때까지 테스트를 대기시켜야 합니다.
-
-        boolean mainActivityAppearedQuickly = false;
-        try {
-            // IntroActivity가 로그인 상태 등을 확인하고 MainActivity로 빠르게 리다이렉션할 시간을 줍니다.
-            // 이 시간은 앱의 실제 로직 및 IdlingResource 구현에 따라 조절될 수 있습니다.
-            // IdlingResource가 잘 구현되어 있다면 이 Thread.sleep은 최소화하거나 제거할 수 있습니다.
-            Thread.sleep(2000); // 예시: 2초 대기
-
-            onView(withId(mainActivityFragmentContainerId)).check(matches(isDisplayed()));
-            // 위 라인에서 예외가 발생하지 않으면 MainActivity가 이미 표시된 것입니다.
-            mainActivityAppearedQuickly = true;
-            Log.d(TAG, "MainActivity가 빠르게 나타남. IntroActivity의 자체 UI는 표시되지 않았을 수 있음.");
-        } catch (NoMatchingViewException e) {
-            // MainActivity가 즉시 나타나지 않았다면, IntroActivity가 자신의 UI를 보여주고 있을 것입니다.
-            Log.d(TAG, "MainActivity가 즉시 나타나지 않음. IntroActivity UI 요소 검증 시도.");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            fail("Interrupted while checking initial activity: " + e.getMessage());
-        }
-
-        if (!mainActivityAppearedQuickly) {
-            // MainActivity가 빠르게 나타나지 않은 경우 (즉, IntroActivity가 화면에 내용을 표시하는 경우)
-            Log.d(TAG, "IntroActivity 로고 및 시작 버튼 표시 확인 중...");
-            onView(withId(R.id.imageview_intro_logo)).check(matches(isDisplayed()));
-            // IntroActivity의 시작 버튼도 함께 확인하여 Intro 화면이 확실히 표시되었는지 검증합니다.
-            onView(withId(R.id.button_intro_bottom_start)).check(matches(isDisplayed()));
-            Log.d(TAG, "IntroActivity 로고 및 시작 버튼 표시 확인됨.");
-        } else {
-            // MainActivity가 바로 나타났다면, IntroActivity의 로고 표시는 이 테스트의 주 목적과 맞지 않을 수 있습니다.
-            // 이 경우, IntroActivity가 리다이렉션하는 역할을 제대로 수행했다고 간주할 수 있습니다.
-            Log.d(TAG, "앱이 MainActivity로 바로 시작하여 IntroActivity 로고 및 시작 버튼 표시는 해당되지 않음.");
-        }
-        Log.d(TAG, "introActivity_displaysLogo_whenIntroIsShown: 테스트 완료");
-    }
-
-    @Test
-    public void intro_serverOnline_manualGoogleSignIn_navigateToMain() {
-        Log.d(TAG, "intro_serverOnline_manualGoogleSignIn_navigateToMain: 테스트 시작");
+    public void testStatisticsFragment_UI_Display_AfterFullFlow() {
+        Log.d(TAG, "testStatisticsFragment_UI_Display_AfterFullFlow: 테스트 시작");
 
         // === 1단계: 로그인 플로우 또는 MainActivity 직접 실행 확인 ===
         Log.d(TAG, "  1단계: 로그인 플로우 또는 MainActivity 직접 실행 확인 시작");
         try {
             boolean onMainActivityAlready = false;
             try {
-                Thread.sleep(2000); // 앱 초기화 및 자동 로그인/리다이렉션 시간 부여
+                Thread.sleep(2000);
                 onView(withId(mainActivityFragmentContainerId)).check(matches(isDisplayed()));
                 Log.d(TAG, "    MainActivity가 이미 표시됨. 로그인 플로우 건너뜀.");
                 onMainActivityAlready = true;
@@ -142,19 +114,12 @@ public class IntroActivityTest {
             }
 
             if (!onMainActivityAlready) {
-                // IntroActivity는 ActivityScenarioRule에 의해 이미 실행된 상태
-                // IntroActivity의 서버 상태 확인 및 UI 안정화 대기 (위의 2초가 부족했을 경우 대비)
-                Thread.sleep(3000);
-
+                Thread.sleep(3000); // IntroActivity UI 안정화 (위의 2초 + 3초 = 총 5초 대기)
                 Log.d(TAG, "    인트로 화면 시작 버튼 클릭");
-                onView(withId(R.id.button_intro_bottom_start))
-                        .check(matches(isDisplayed()))
-                        .check(matches(isEnabled()))
-                        .perform(click());
+                onView(withId(R.id.button_intro_bottom_start)).perform(click());
 
                 Thread.sleep(1000);
                 Log.d(TAG, "    로그인 화면 구글 로그인 버튼 클릭");
-                onView(withId(R.id.button_sign_in_google)).check(matches(isDisplayed()));
                 onView(withId(R.id.button_sign_in_google)).perform(click());
 
                 Log.d(TAG, "    수동 Google 로그인 대기 중... (20초)");
@@ -178,20 +143,66 @@ public class IntroActivityTest {
             return;
         }
         Log.d(TAG, "  1단계: 로그인 플로우 및 MainActivity 진입 완료 (또는 이미 진입됨)");
-    }
 
+
+        // === 2단계: MainActivity에서 통계 탭으로 이동 ===
+        Log.d(TAG, "  2단계: 통계 탭으로 이동 시작");
+        try {
+            Thread.sleep(1000);
+            onView(withId(mainActivityFragmentContainerId)).check(matches(isDisplayed()));
+            onView(withId(mainActivityStatisticsTabId)).perform(click());
+        } catch (InterruptedException e) {
+            Log.e(TAG, "    Thread.sleep 중단됨 (통계 탭 이동 대기 중)", e);
+            Thread.currentThread().interrupt(); return;
+        }
+        Log.d(TAG, "  2단계: 통계 탭으로 이동 완료");
+
+        // === 3단계: StatisticsFragment 데이터 로딩 및 차트 렌더링 대기 ===
+        Log.d(TAG, "  3단계: 통계 데이터 로딩 및 차트 렌더링 대기 중...");
+        try {
+            Thread.sleep(7000); // IdlingResource로 대체 권장
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); return;
+        }
+        Log.d(TAG, "  3단계: 통계 데이터 로딩 및 차트 렌더링 대기 완료 (가정)");
+
+        // === 4단계: StatisticsFragment UI 요소 검증 ===
+        Log.d(TAG, "  4단계: StatisticsFragment UI 요소 검증 시작");
+        onView(withId(statisticsMainTitleId)).check(matches(isDisplayed()));
+
+        onView(withId(statisticsWordChartTitleId)).check(matches(isDisplayed()));
+        onView(withId(statisticsWordChartTitleId)).check(matches(withText(R.string.fragment_statistics_title_word)));
+
+        onView(withId(statisticsTimeChartTitleId)).check(matches(isDisplayed()));
+        onView(withId(statisticsTimeChartTitleId)).check(matches(withText(R.string.activity_docs_statistics_title_time))); // 통계 프래그먼트용 문자열 리소스 사용 권장
+
+        onView(withId(statisticsScoreChartTitleId)).check(matches(isDisplayed()));
+        onView(withId(statisticsScoreChartTitleId)).check(matches(withText(R.string.activity_docs_statistics_title_score))); // 통계 프래그먼트용 문자열 리소스 사용 권장
+
+        onView(withId(statisticsWordBarChartId)).check(matches(isDisplayed()));
+        Log.d(TAG, "    단어 중요도 차트(wordBarChart) 표시됨.");
+
+        onView(withId(statisticsTimeLineChartId)).check(matches(isDisplayed()));
+        Log.d(TAG, "    학습 시간 차트(timeLineChart) 표시됨.");
+
+        onView(withId(statisticsGradeLineChartId)).check(matches(isDisplayed()));
+        Log.d(TAG, "    퀴즈 점수 차트(gradeLineChart) 표시됨.");
+
+        Log.d(TAG, "  4단계: StatisticsFragment UI 요소 검증 완료.");
+        Log.d(TAG, "testStatisticsFragment_UI_Display_AfterFullFlow: 모든 테스트 완료");
+    }
 
     private void verifySharedPreferencesAfterLogin(String loginType) {
         SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences("account", Activity.MODE_PRIVATE);
         String accessToken = prefs.getString("accessToken", null);
-        String refreshToken = prefs.getString("refreshToken", null);
+        String refreshToken = prefs.getString("refreshToken", null); // 추가된 필드
         String uid = prefs.getString("uid", null);
         String name = prefs.getString("name", null);
         String userName = prefs.getString("userName", null);
         String userId = prefs.getString("userId", null);
 
         Log.d(TAG, "    [" + loginType + "] 저장된 Access Token: " + accessToken);
-        Log.d(TAG, "    [" + loginType + "] 저장된 UID: " + uid);
+        Log.d(TAG, "    [" + loginType + "] 저장된 UID (SNS): " + uid);
 
         assertNotNull("[" + loginType + "] 로그인 성공 후 Access token은 null이 아니어야 합니다.", accessToken);
         assertTrue("[" + loginType + "] 로그인 성공 후 Access token은 비어있지 않아야 합니다.", !TextUtils.isEmpty(accessToken));

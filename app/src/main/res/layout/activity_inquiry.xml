@@ -93,9 +93,9 @@
                 android:layout_below="@id/edittext_inquiry_title"
                 android:layout_alignParentEnd="true"
                 android:fontFamily="@font/notosans_regular"
-                android:textColor="@color/gray"
+                android:text="@{viewModel.titleCount}" android:textColor="@color/gray"
                 android:textSize="13sp"
-                tools:text="3/32" />
+                tools:text="0/32" />
         </RelativeLayout>
 
         <RelativeLayout

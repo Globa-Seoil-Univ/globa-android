@@ -68,7 +68,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         viewModel.setIntent(getIntent());
         viewModel.setPlayer(player);
         viewModel.setBinding(binding);
-        viewModel.getResponse();
+//        viewModel.getResponse();
 
         docsDetailViewModel.getIsFirstCommentLiveData().observe(DocsActivity.this, isFirst -> {
             Log.d(getClass().getSimpleName(), "DocsActivity에서 첫 댓글 옵저버 시작");

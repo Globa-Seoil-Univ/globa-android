@@ -6,7 +6,7 @@ import team.y2k2.globa.login.LoginModel;
 
 public class LoginRequest {
     @SerializedName("snsKind")
-    private final int snsKind;
+    private final String snsKind;
 
     @SerializedName("snsId")
     private final String snsId;
@@ -14,14 +14,17 @@ public class LoginRequest {
     @SerializedName("name")
     private final String name;
 
+    @SerializedName("token")
+    private final String token;
+
     @SerializedName("profile")
     private final String profile;
 
     @SerializedName("notification")
     private final boolean notification;
 
-    @SerializedName("token")
-    private final String token;
+    @SerializedName("eventNotification")
+    private final boolean eventNotification;
 
     public LoginRequest(LoginModel model, boolean notification, String token) {
         this.snsKind = model.getSnsKind();
@@ -30,6 +33,7 @@ public class LoginRequest {
         this.profile = model.getProfileImageUrl();
         this.notification = notification;
         this.token = token;
+        this.eventNotification = true;
     }
 
     public String getToken() {
@@ -39,8 +43,7 @@ public class LoginRequest {
     public String getProfile() {
         return profile;
     }
-
-    public int getSnsKind() {
+    public String getSnsKind() {
         return snsKind;
     }
 
@@ -54,5 +57,9 @@ public class LoginRequest {
 
     public boolean isNotification() {
         return notification;
+    }
+
+    public boolean isEventNotification() {
+        return eventNotification;
     }
 }

@@ -49,25 +49,25 @@ public interface RecordApiService {
      * 문서 삭제
      */
     @DELETE(DELETE_RECORD)
-    Call<Void> requestDeleteRecord(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<Void> requestDeleteRecord(@Path("folderId") String folderId, @Path("recordId") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
 
     /**
      * 문서 추가
      */
     @POST(POST_RECORD)
-    Call<Void> requestCreateRecord(@Path("folder_id") String folderId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body RecordCreateRequest insertDocumentRequest);
+    Call<Void> requestCreateRecord(@Path("folderId") String folderId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body RecordCreateRequest insertDocumentRequest);
 
     /**
      * 폴더 내 녹음 파일 조회
      */
     @GET(GET_RECORD_IN_FOLDER)
-    Call<FolderInsideRecordResponse> requestGetFolderInside(@Path("folder_id") int folderId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Query("page") int page, @Query("count") int count);
+    Call<FolderInsideRecordResponse> requestGetFolderInside(@Path("folderId") int folderId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Query("page") int page, @Query("count") int count);
 
     /**
      * 퀴즈 조회
      */
     @GET(GET_RECORD_QUIZ)
-    Call<List<Quiz>> requestGetQuiz(@Path("folder_id") int folderId, @Path("record_id") int recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<List<Quiz>> requestGetQuiz(@Path("folderId") int folderId, @Path("recordId") int recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
 
     /**
      * 모든 녹음 파일 조회
@@ -97,36 +97,36 @@ public interface RecordApiService {
      * 녹음 파일 상세 조회
      */
     @GET(GET_RECORD_DETAIL_IN_FOLDER)
-    Call<DocsDetailResponse> requestGetDocumentDetail(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<DocsDetailResponse> requestGetDocumentDetail(@Path("folderId") String folderId, @Path("recordId") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
 
     /**
      * 문서 내 시각화 자료 조회
      */
     @GET(GET_RECORD_ANALYSIS_IN_FOLDER)
-    Call<StatisticsResponse> requestDocStatistics(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<StatisticsResponse> requestDocStatistics(@Path("folderId") String folderId, @Path("recordId") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
 
     /**
      * 공부시간 수정
      */
     @PATCH(PATCH_RECORD_STUDY)
-    Call<Void> requestStudyTime(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body StudyTimeRequest studyTimeRequest);
+    Call<Void> requestStudyTime(@Path("folderId") String folderId, @Path("recordId") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body StudyTimeRequest studyTimeRequest);
 
     /**
      * 문서 이름 수정
      */
     @PATCH(PATCH_RECORD_NAME)
-    Call<Void> requestUpdateRecordName(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body DocsNameEditRequest docsNameEditRequest);
+    Call<Void> requestUpdateRecordName(@Path("folderId") String folderId, @Path("recordId") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body DocsNameEditRequest docsNameEditRequest);
 
     /**
      * 문서 폴더 이동
      */
     @PATCH(PATCH_RECORD_MOVE_FOLDER)
-    Call<Void> requestUpdateDocsMove(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body DocsMoveRequest docsMoveRequest);
+    Call<Void> requestUpdateDocsMove(@Path("folderId") String folderId, @Path("recordId") String recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body DocsMoveRequest docsMoveRequest);
 
     /**
      * 퀴즈 결과 추가
      */
     @POST(POST_RECORD_QUIZ)
-    Call<Void> requestInsertQuizResult(@Path("folder_id") int folderId, @Path("record_id") int recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body QuizResultRequest result);
+    Call<Void> requestInsertQuizResult(@Path("folderId") int folderId, @Path("recordId") int recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body QuizResultRequest result);
 
 }

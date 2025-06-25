@@ -40,6 +40,13 @@ public class SearchDocsAdapter extends RecyclerView.Adapter<SearchDocsAdapter.Vi
         return items != null ? items.size() : 0;
     }
 
+    public SearchDocsItem getItem(int position) {
+        if (items != null && position >= 0 && position < items.size()) {
+            return items.get(position);
+        }
+        return null;
+    }
+
     public void setItems(List<SearchDocsItem> newItems) {
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(new SearchDiffCallback(items, newItems));
         items = newItems;

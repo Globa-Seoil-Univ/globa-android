@@ -2,6 +2,7 @@ package team.y2k2.globa.main.profile;
 
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,7 @@ public class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.
         }
 
         holder.layout.setOnClickListener(view -> {
+            Log.d("SettingItemAdapter_Click", "Item title: " + holder.title.getText().toString() + " | Activity to launch: " + items.get(position).getActivity().getClass().getSimpleName() + " | Time: " + System.currentTimeMillis());
             Intent intent = new Intent(fragment.getContext(), items.get(position).getActivity().getClass());
             intent.putExtra("userId", fragment.getUserId());
             fragment.startActivity(intent);

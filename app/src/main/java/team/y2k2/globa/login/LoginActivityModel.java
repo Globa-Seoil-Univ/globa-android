@@ -2,6 +2,7 @@ package team.y2k2.globa.login;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -62,6 +63,8 @@ public class LoginActivityModel extends ViewModel implements SnsLoginManager.Sns
         LoginRequest request = new LoginRequest(model, IntroActivity.isNotificationGranted(), token);
         LoginResponse response = userApiClient.requestSignIn(request);
 
+        sendLogMessage(request, response);
+
         if (response == null) {
             errorMessage.postValue("로그인 실패 : 탈퇴한 사용자");
             loading.postValue(false);
@@ -86,6 +89,12 @@ public class LoginActivityModel extends ViewModel implements SnsLoginManager.Sns
 
     private void sendLogMessage(LoginRequest request, LoginResponse response) {
         // 로그 메시지 전송 로직
+        Log.d("LoginModel", "snsKind:" + request.getSnsKind());
+        Log.d("LoginModel", "snsId: " + request.getSnsId());
+        Log.d("LoginModel", "name: " + request.getName());
+        Log.d("LoginModel", "token: " + request.getToken());
+        Log.d("LoginModel", "notification: " + request.isNotification());
+        Log.d("LoginModel", "eventNotification: " + request.isEventNotification());
     }
 
     private void showLogMessages(UserInfoResponse response) {

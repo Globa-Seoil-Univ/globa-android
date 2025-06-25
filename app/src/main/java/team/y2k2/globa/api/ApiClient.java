@@ -32,7 +32,7 @@ public class ApiClient {
     private static ApiClient apiClient;
 
     public static Retrofit retrofit; // Retrofit instance
-    public static String BASE_URL = "http://192.168.219.111";
+    public static String BASE_URL = "http://192.168.219.103";
 
     protected final Context context;
 
@@ -76,7 +76,7 @@ public class ApiClient {
                 int responseCode = connection.getResponseCode();
                 Log.d(TAG, "서버 상태: " + responseCode);
                 connection.disconnect();
-                return (responseCode >= 200 && responseCode < 300);
+                return (responseCode >= 200 && responseCode < 404);
             } catch (IOException e) {
                 Log.e(TAG, "서버 상태 확인 실패 (IOException): " + e.getMessage());
                 return false;

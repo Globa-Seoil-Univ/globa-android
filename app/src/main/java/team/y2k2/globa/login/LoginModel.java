@@ -18,14 +18,17 @@ public class LoginModel {
     private final String uid;
     private final String name;
     private final String profileImageUrl;
-    private final int snsKind;
+    private final String snsKind;
     String token;
 
     public LoginModel(FirebaseUser user, int snsKind, String token) {
         uid = user.getUid();
         name = user.getDisplayName();
         profileImageUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "";
-        this.snsKind = snsKind;
+        if(snsKind == 1004)
+            this.snsKind = "GOOGLE";
+        else
+            this.snsKind = "KAKAO";
         this.token = token;
     }
 
@@ -33,10 +36,13 @@ public class LoginModel {
         uid = user.getId().toString();
         name = user.getKakaoAccount().getProfile().getNickname();
         profileImageUrl = user.getKakaoAccount().getProfile().getProfileImageUrl();
-        this.snsKind = snsKind;
+        if(snsKind == 1004)
+            this.snsKind = "GOOGLE";
+        else
+            this.snsKind = "KAKAO";
     }
 
-    public int getSnsKind() {
+    public String getSnsKind() {
         return snsKind;
     }
 
