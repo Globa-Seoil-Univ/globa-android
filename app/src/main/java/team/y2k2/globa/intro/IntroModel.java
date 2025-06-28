@@ -35,6 +35,7 @@ public class IntroModel {
         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         String refreshToken = preferences.getString("refreshToken", "");
         String accessToken = preferences.getString("accessToken", "");
+        Log.d(getClass().getName(), "AT : " + accessToken);
         return !refreshToken.equalsIgnoreCase("") && !accessToken.equalsIgnoreCase("");
     }
 

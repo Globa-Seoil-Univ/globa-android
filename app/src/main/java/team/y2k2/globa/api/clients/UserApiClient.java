@@ -36,8 +36,8 @@ public class UserApiClient extends ApiClient {
     }
 
     // 알림 상태 조회
-    public AlertResponse getMyAlertStatus(String userId) {
-        return executeApiCall(apiService.getMyAlertStatus(userId, APPLICATION_JSON, getAuthorization()));
+    public AlertResponse getMyAlertStatus() {
+        return executeApiCall(apiService.getMyAlertStatus(APPLICATION_JSON, getAuthorization()));
     }
 
     public UserInfoResponse requestUserInfo() {
@@ -55,8 +55,8 @@ public class UserApiClient extends ApiClient {
     }
 
     // 사용자 이름 변경
-    public Response<Void> requestUpdateProfileName(String userId, String newNickname) {
-        return executeVoidApiCall(apiService.requestUpdateProfileName(userId, APPLICATION_JSON, getAuthorization(), new NicknameEditRequest(newNickname)));
+    public Response<Void> requestUpdateProfileName(String newNickname) {
+        return executeVoidApiCall(apiService.requestUpdateProfileName(APPLICATION_JSON, getAuthorization(), new NicknameEditRequest(newNickname)));
     }
 
     // 프로필 사진 변경
@@ -74,8 +74,8 @@ public class UserApiClient extends ApiClient {
     }
 
     // 알림 상태 수정
-    public AlertResponse requestAlertStatus(String userId, AlertRequest alertRequest) {
-        return executeApiCall(apiService.requestAlertStatus(userId, APPLICATION_JSON, getAuthorization(), alertRequest));
+    public AlertResponse requestAlertStatus(AlertRequest alertRequest) {
+        return executeApiCall(apiService.requestAlertStatus(APPLICATION_JSON, getAuthorization(), alertRequest));
     }
 
     // FCM 토큰 업데이트

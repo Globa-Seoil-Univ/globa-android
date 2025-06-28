@@ -14,11 +14,11 @@ public class Section {
     @SerializedName("startTime")
     private int startTime;
 
-    @SerializedName("analysis")
-    private Analysis analysis;
+    @SerializedName("analyses")
+    private Analysis analyses;
 
-    @SerializedName("summary")
-    private List<Summary> summary;
+    @SerializedName("summaries")
+    private List<Summary> summaries;
 
     public int getSectionId() {
         return sectionId;
@@ -32,11 +32,11 @@ public class Section {
         return startTime;
     }
 
-    public Analysis getAnalysis() {
-        return analysis;
+    public Analysis getAnalyses() {
+        return analyses;
     }
 
-    public List<Summary> getSummary() {
-        return summary;
+    public List<Summary> getSummaries() {
+        return summaries;
     }
 }

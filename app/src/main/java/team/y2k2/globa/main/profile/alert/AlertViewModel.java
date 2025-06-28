@@ -37,7 +37,7 @@ public class AlertViewModel extends ViewModel {
 
     public void setUserId(String userId) {
         this.userId = userId;
-        getMyAlertStatus(userId);
+        getMyAlertStatus();
     }
 
     public void setAlertStatus(AlertResponse alertResponse) {
@@ -47,14 +47,14 @@ public class AlertViewModel extends ViewModel {
         loadToggleList();
     }
 
-    public void getMyAlertStatus(String userId) {
-        AlertResponse response = apiClient.getMyAlertStatus(userId);
+    public void getMyAlertStatus() {
+        AlertResponse response = apiClient.getMyAlertStatus();
         alertLiveData.setValue(response);
     }
 
     public void requestAlertStatus(boolean uploadNofi, boolean shareNofi, boolean eventNofi) {
         AlertRequest alertRequest = new AlertRequest(uploadNofi, shareNofi, eventNofi);
-        apiClient.requestAlertStatus(userId, alertRequest);
+        apiClient.requestAlertStatus(alertRequest);
         finishActivity.setValue(true);
     }
 

@@ -51,7 +51,7 @@ public interface UserApiService {
      * 내 알림 정보 가져오기
      */
     @GET(GET_USER_NOTIFICATION)
-    Call<AlertResponse> getMyAlertStatus(@Path("user_id") String userId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<AlertResponse> getMyAlertStatus(@Header("Content-Type") String contentType, @Header("Authorization") String authorization);
 
     /**
      * 내 정보 가져오기
@@ -75,7 +75,7 @@ public interface UserApiService {
      * 이름 수정
      */
     @PATCH(PATCH_USER_NAME)
-    Call<Void> requestUpdateProfileName(@Path("user_id") String userId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body NicknameEditRequest request);
+    Call<Void> requestUpdateProfileName(@Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body NicknameEditRequest request);
 
     /**
      * 프로필 사진 수정
@@ -106,7 +106,7 @@ public interface UserApiService {
      * 알림 정보 수정
      */
     @PUT(PUT_USER_NOTIFICATION)
-    Call<AlertResponse> requestAlertStatus(@Path("user_id") String userId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body AlertRequest alertRequest);
+    Call<AlertResponse> requestAlertStatus(@Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body AlertRequest alertRequest);
 
     /**
      * FCM 알림 토큰 수정

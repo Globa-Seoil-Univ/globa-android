@@ -28,7 +28,6 @@ public class AlertActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
 
         viewModel.setUserId(getIntent().getStringExtra("userId"));
-
         initAdapter();
         observeViewModel();
 

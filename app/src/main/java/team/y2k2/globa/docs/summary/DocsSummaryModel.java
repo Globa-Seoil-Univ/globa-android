@@ -15,8 +15,8 @@ public class DocsSummaryModel {
 
         for (int i = 0; i < sections.size(); i++) {
             ArrayList<String> contents = new ArrayList<>();
-            for (int j = 0; j < sections.get(i).getSummary().size(); j++) {
-                Summary summary = sections.get(i).getSummary().get(j);
+            for (int j = 0; j < sections.get(i).getSummaries().size(); j++) {
+                Summary summary = sections.get(i).getSummaries().get(j);
 
                 contents.add(summary.getContent());
             }

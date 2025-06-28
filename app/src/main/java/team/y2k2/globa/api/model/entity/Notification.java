@@ -7,10 +7,11 @@ public class Notification {
     private String notificationId;
     @SerializedName("type")
     private String type;
-    @SerializedName("createdTime")
-    private String createdTime;
+
     @SerializedName("isRead")
     private boolean isRead;
+    @SerializedName("createdTime")
+    private String createdTime;
     @SerializedName("notice")
     private Notice notice;
     @SerializedName("user")

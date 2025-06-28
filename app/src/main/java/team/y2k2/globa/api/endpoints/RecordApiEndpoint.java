@@ -10,7 +10,7 @@ public class RecordApiEndpoint {
 //    퀴즈 조회
     public static final String GET_RECORD_QUIZ = "/folder/{folderId}/record/{recordId}/quiz";
 //    모든 녹음 파일 조회
-    public static final String GET_RECORD_ALL = "/record/sharing";
+    public static final String GET_RECORD_ALL = "/record/recent";
 //    공유 하는 문서 조회
     public static final String GET_RECORD_SHARING = "/record/sharing";
 //    문서 검색

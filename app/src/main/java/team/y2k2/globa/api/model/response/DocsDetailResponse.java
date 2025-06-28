@@ -1,5 +1,7 @@
 package team.y2k2.globa.api.model.response;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class DocsDetailResponse {
     @SerializedName("folder")
     private Folder folder;
 
-    @SerializedName("section")
+    @SerializedName("sections")
     private List<Section> sections;
 
     public int getRecordId() {

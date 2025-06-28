@@ -20,10 +20,10 @@ public class DocsModel {
             String title = section.getTitle();
             String sectionId = String.valueOf(section.getSectionId());
             int time = section.getStartTime();
-            String content = section.getAnalysis().getContent();
+            String content = section.getAnalyses().getContent();
 
-            for (int j = 0; j < section.getAnalysis().getHighlights().size(); j++) {
-                List<Highlight> highlights = section.getAnalysis().getHighlights();
+            for (int j = 0; j < section.getAnalyses().getHighlights().size(); j++) {
+                List<Highlight> highlights = section.getAnalyses().getHighlights();
 
                 int highlightId = highlights.get(j).getHighlightId();
                 String type = highlights.get(j).getType();
