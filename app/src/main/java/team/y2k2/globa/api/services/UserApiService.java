@@ -112,6 +112,6 @@ public interface UserApiService {
      * FCM 알림 토큰 수정
      */
     @PUT(PUT_USER_NOTIFICATION_TOKEN)
-    Call<Void> updateToken(@Path("user_id") String userId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body NotificationTokenRequest tokenRequest);
+    Call<Void> updateToken(@Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body NotificationTokenRequest tokenRequest);
 
 }

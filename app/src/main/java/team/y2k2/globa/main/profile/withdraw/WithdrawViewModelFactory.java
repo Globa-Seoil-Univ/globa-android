@@ -14,8 +14,8 @@ public class WithdrawViewModelFactory implements ViewModelProvider.Factory {
     private final FirebaseMessaging firebaseMessaging;
 
     public WithdrawViewModelFactory() {
-        this.userApiClient = new UserApiClient(); // 예시: 직접 생성
-        this.firebaseMessaging = FirebaseMessaging.getInstance(); // 예시: 싱글톤 인스턴스 가져오기
+        this.userApiClient = new UserApiClient();
+        this.firebaseMessaging = FirebaseMessaging.getInstance();
     }
 
     public WithdrawViewModelFactory(UserApiClient userApiClient, FirebaseMessaging firebaseMessaging) {

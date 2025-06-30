@@ -32,7 +32,7 @@ public class ApiClient {
     private static ApiClient apiClient;
 
     public static Retrofit retrofit; // Retrofit instance
-    public static String BASE_URL = "http://192.168.219.103";
+    public static String BASE_URL = "http://1.209.165.82:8080";
 
     protected final Context context;
 

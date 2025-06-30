@@ -50,6 +50,10 @@ public class FolderInsideFragmentModel extends ViewModel {
 
     public void fetchFolderInsideRecords(int folderId) {
         FolderInsideRecordResponse response = recordApiClient.requestGetFolderInside(folderId, 1, 100);
+        if (response == null) {
+            errorMessage.setValue("문서가 없습니다.");
+            return;
+        }
         folderInsideRecords.setValue(response.getRecords());
     }
 

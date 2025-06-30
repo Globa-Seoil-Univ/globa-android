@@ -35,7 +35,7 @@ public class MainModel {
             }
             String fcmToken = task.getResult();
             String userId = getUserInfo();
-            updateToken(userId, fcmToken, callback);
+            updateToken(fcmToken, callback);
         });
     }
 
@@ -45,8 +45,8 @@ public class MainModel {
         return userInfoResponse.getUserId();
     }
 
-    public void updateToken(String userId, String token, MainModelCallback callback) {
-        Response<Void> response = apiClient.updateToken(userId, token);
+    public void updateToken(String token, MainModelCallback callback) {
+        Response<Void> response = apiClient.updateToken(token);
 
         if (response.isSuccessful()) {
             callback.onTokenUpdateSuccess();

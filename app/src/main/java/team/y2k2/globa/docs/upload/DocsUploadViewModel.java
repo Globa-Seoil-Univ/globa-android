@@ -43,6 +43,7 @@ public class DocsUploadViewModel extends ViewModel {
     private Handler handler;
     private FolderApiClient folderApiClient;
     private RecordApiClient recordApiClient;
+    private DocsUploadLanguageAdapter languageAdapter;
 
     public LiveData<String> getDocsTitle() {
         return title;
@@ -107,13 +108,12 @@ public class DocsUploadViewModel extends ViewModel {
     }
 
 
-    private void requestCreateRecord(String title) {
+    private void requestCreateRecord(String title, String lang) {
         // 네트워크 요청 보내기
         String path = "folders/" + folderId + "/" + unixTime + ".ogg";
         String folderId = Integer.toString(Integer.parseInt(response.getFolders().get(activity.binding.spinnerDocsUpload.getSelectedItemPosition()).getFolderId()));
 
-
-        recordApiClient.requestCreateRecord(folderId, title, path, "0");
+        recordApiClient.requestCreateRecord(folderId, title, path, lang);
         activity.finish();
     }
 
@@ -126,7 +126,7 @@ public class DocsUploadViewModel extends ViewModel {
     }
 
     public void loadLanguage() {
-        DocsUploadLanguageAdapter languageAdapter = new DocsUploadLanguageAdapter(activity, R.layout.item_language);
+        languageAdapter = new DocsUploadLanguageAdapter(activity, R.layout.item_language);
         languageAdapter.setDropDownViewResource(R.layout.item_language);
         activity.binding.spinnerDocsUploadLanguage.setAdapter(languageAdapter);
         activity.binding.spinnerDocsUploadLanguage.setSelection(0);
@@ -142,11 +142,21 @@ public class DocsUploadViewModel extends ViewModel {
         Uri uri = Uri.fromFile(new File(oggPath));
 
         audioRef.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+            String lang;
+            switch (activity.binding.spinnerDocsUploadLanguage.getSelectedItemPosition()) {
+                case 0 : lang = "ko"; break;
+                case 1 : lang = "en"; break;
+                case 2 : lang = "ja"; break;
+                default: lang = "ko"; break;
+            }
+
             // 업로드 성공 시
             Toast.makeText(activity, "파일 업로드 성공", Toast.LENGTH_SHORT).show();
-            if (model.getRecordName().length() >= 20)
-                requestCreateRecord(model.getRecordName().substring(0, 20));
-            else requestCreateRecord(model.getRecordName());
+            if (model.getRecordName().length() >= 20) {
+
+                requestCreateRecord(model.getRecordName().substring(0, 20), lang);
+            }
+            else requestCreateRecord(model.getRecordName(), lang);
 
 
         }).addOnFailureListener(e -> Toast.makeText(activity, "파일 업로드 실패", Toast.LENGTH_SHORT).show());

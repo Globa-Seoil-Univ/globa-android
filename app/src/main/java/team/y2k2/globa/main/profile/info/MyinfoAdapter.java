@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.List;
 
 import team.y2k2.globa.R;
@@ -83,11 +85,16 @@ public class MyinfoAdapter extends RecyclerView.Adapter<MyinfoAdapter.MyViewHold
                     Log.d(getClass().getSimpleName(), "클립보드 복사 완료: " + item.getName());
                 } else if (item.getTitle().equals(titleSignOutFromResource)) {
                     Log.d(getClass().getSimpleName(), "프리퍼런스 리셋 시작 (로그아웃)");
+
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     SharedPreferences preferences = context.getSharedPreferences("account", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
                     Log.d(getClass().getSimpleName(), "프리퍼런스 리셋 완료");
+
+                    mAuth.signOut();
+                    Log.d(getClass().getSimpleName(), "파이어베이스 로그아웃 완료");
 
                     Intent logoutIntent = new Intent(context, IntroActivity.class);
                     logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

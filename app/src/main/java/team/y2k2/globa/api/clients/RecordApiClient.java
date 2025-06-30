@@ -35,8 +35,8 @@ public class RecordApiClient extends ApiClient {
         return executeVoidApiCall(apiService.requestDeleteRecord(folderId, recordId, APPLICATION_JSON, getAuthorization()));
     }
 
-    public void requestCreateRecord(String folderId, String title, String path, String size) {
-        executeVoidApiCall(apiService.requestCreateRecord(folderId, APPLICATION_JSON, getAuthorization(), new RecordCreateRequest(title, path, size)));
+    public void requestCreateRecord(String folderId, String title, String path, String lang) {
+        executeVoidApiCall(apiService.requestCreateRecord(folderId, APPLICATION_JSON, getAuthorization(), new RecordCreateRequest(title, path, lang)));
     }
 
     public FolderInsideRecordResponse requestGetFolderInside(int folderId, int page, int count) {

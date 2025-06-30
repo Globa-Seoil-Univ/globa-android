@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.kakao.sdk.common.KakaoSdk;
 
 import team.y2k2.globa.R;
@@ -64,6 +65,10 @@ public class LoginActivity extends AppCompatActivity {
         viewModel.getLoginSuccess().observe(this, isSuccess -> {
             if (isSuccess) {
                 Toast.makeText(this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+
+                FirebaseMessaging.getInstance().subscribeToTopic("NOTICE");
+                FirebaseMessaging.getInstance().subscribeToTopic("EVENT");
+
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
             }

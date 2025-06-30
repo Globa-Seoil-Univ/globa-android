@@ -9,13 +9,13 @@ public class RecordCreateRequest {
     @SerializedName("path")
     private final String path;
 
-    @SerializedName("size")
-    private final String size;
+    @SerializedName("lang")
+    private final String lang;
 
-    public RecordCreateRequest(String title, String path, String size) {
+    public RecordCreateRequest(String title, String path, String lang) {
         this.title = title;
         this.path = path;
-        this.size = size;
+        this.lang = lang;
     }
 
     public String getTitle() {
@@ -26,7 +26,7 @@ public class RecordCreateRequest {
         return path;
     }
 
-    public String getSize() {
-        return size;
+    public String getLang() {
+        return lang;
     }
 }

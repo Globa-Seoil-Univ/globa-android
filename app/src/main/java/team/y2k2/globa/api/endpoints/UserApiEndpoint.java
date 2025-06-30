@@ -23,6 +23,6 @@ public class UserApiEndpoint {
     public static final String POST_USER_AUTH = "/user/auth";
 //    알림 정보 수정
     public static final String PUT_USER_NOTIFICATION = "/user/notification";
-//    FCM 알림 토큰 수정
-    public static final String PUT_USER_NOTIFICATION_TOKEN = "/user/{user_id}/notification/token";
+//    FCM 알림 토큰
+    public static final String PUT_USER_NOTIFICATION_TOKEN = "/user/notification/token";
 }

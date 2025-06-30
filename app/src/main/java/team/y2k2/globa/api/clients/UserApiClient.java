@@ -79,7 +79,7 @@ public class UserApiClient extends ApiClient {
     }
 
     // FCM 토큰 업데이트
-    public Response<Void> updateToken(String userId, String token) {
-        return executeVoidApiCall(apiService.updateToken(userId, APPLICATION_JSON, getAuthorization(), new NotificationTokenRequest(token)));
+    public Response<Void> updateToken(String token) {
+        return executeVoidApiCall(apiService.updateToken(APPLICATION_JSON, getAuthorization(), new NotificationTokenRequest(token)));
     }
 }

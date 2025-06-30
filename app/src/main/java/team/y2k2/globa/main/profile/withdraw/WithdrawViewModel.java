@@ -116,10 +116,14 @@ public class WithdrawViewModel extends ViewModel {
     // Firebase 토픽 구독 해지
     private void unsubscribeFirebaseTopics() {
         try {
+            // 어디서 쓰는 지 모름
             firebaseMessaging.unsubscribeFromTopic("notification");
+
+            // 기본 제공 서비스
             firebaseMessaging.unsubscribeFromTopic("notice");
             firebaseMessaging.unsubscribeFromTopic("event");
-            Log.d(getClass().getSimpleName(), "Unsubscribed from Firebase topics.");
+
+            Log.d(getClass().getSimpleName(), "FCM 토픽 구독 해제");
         } catch (Exception e) {
             Log.e(getClass().getSimpleName(), "Error unsubscribing from Firebase topics", e);
             // 구독 해지 실패는 치명적이지 않으므로, 로그만 남기고 계속 진행
