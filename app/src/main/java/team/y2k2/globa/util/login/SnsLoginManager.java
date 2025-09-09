@@ -14,19 +14,16 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
 import team.y2k2.globa.R;
 import team.y2k2.globa.login.LoginModel;
 
 public class SnsLoginManager {
+    private static final String TAG = "SnsLoginManager";
     private final Activity activity;
     private final FirebaseAuth mAuth;
     private final GoogleSignInClient mGoogleSignInClient;
-    private final Function2<OAuthToken, Throwable, Unit> signInKakaoCallback;
     private SnsLoginCallback callback;
 
     public interface SnsLoginCallback {
@@ -39,7 +36,7 @@ public class SnsLoginManager {
         this.callback = callback;
         this.mAuth = FirebaseAuth.getInstance();
         this.mGoogleSignInClient = initGoogleSignInClient();
-        this.signInKakaoCallback = createKakaoCallback();
+        Log.d(TAG, "SnsLoginManager가 초기화되었습니다.");
     }
 
     private GoogleSignInClient initGoogleSignInClient() {
@@ -51,18 +48,8 @@ public class SnsLoginManager {
         return GoogleSignIn.getClient(activity, gso);
     }
 
-    private Function2<OAuthToken, Throwable, Unit> createKakaoCallback() {
-        return (token, error) -> {
-            if (error != null) {
-                callback.onError("Kakao sign-in failed: " + error.getMessage());
-            } else if (token != null) {
-                handleKakaoSignInResult(token);
-            }
-            return null;
-        };
-    }
-
     public void startSignIn(int signInType) {
+        Log.d(TAG, "startSignIn 호출됨. Type: " + signInType);
         if (signInType == LoginModel.RC_GOOGLE) {
             signInGoogle();
         } else if (signInType == LoginModel.RC_KAKAO) {
@@ -71,16 +58,33 @@ public class SnsLoginManager {
     }
 
     private void signInGoogle() {
+        Log.d(TAG, "구글 로그인을 시작합니다.");
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         activity.startActivityForResult(signInIntent, LoginModel.RC_GOOGLE);
     }
 
     private void signInKakao() {
+        Log.d(TAG, "카카오 로그인을 시작합니다.");
+
+        KakaoAuthManager.setCallback(new SnsLoginCallback() {
+            @Override
+            public void onSuccess(LoginModel loginModel, String token) {
+                signInKakaoWithToken(token);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onError(errorMessage);
+            }
+        });
+
         UserApiClient userApiClient = UserApiClient.getInstance();
         if (userApiClient.isKakaoTalkLoginAvailable(activity)) {
-            userApiClient.loginWithKakaoTalk(activity, signInKakaoCallback);
+            Log.d(TAG, "카카오톡으로 로그인을 시도합니다.");
+            userApiClient.loginWithKakaoTalk(activity, KakaoAuthManager.kakaoLoginCallback);
         } else {
-            userApiClient.loginWithKakaoAccount(activity, signInKakaoCallback);
+            Log.d(TAG, "카카오계정으로 로그인을 시도합니다.");
+            userApiClient.loginWithKakaoAccount(activity, KakaoAuthManager.kakaoLoginCallback);
         }
     }
 
@@ -88,34 +92,33 @@ public class SnsLoginManager {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
+            Log.i(TAG, "구글 로그인 성공. Firebase로 인증을 시도합니다. User: " + account.getEmail());
             signInGoogleWithFirebase(account);
         } catch (ApiException e) {
+            Log.e(TAG, "구글 로그인 실패: " + e.getMessage(), e);
             callback.onError("Google sign-in failed: " + e.getMessage());
         }
     }
 
     private void signInGoogleWithFirebase(GoogleSignInAccount acct) {
         String accessToken = acct.getIdToken();
-        String authCode = acct.getServerAuthCode();
-
         if (accessToken == null) {
+            Log.e(TAG, "Google Access Token is null");
             callback.onError("Google Access Token is null");
             return;
         }
-
-        Log.d(getClass().getSimpleName(), "구글 AT: " + accessToken);
-        Log.d(getClass().getSimpleName(), "구글 Code: " + authCode);
-
         AuthCredential credential = GoogleAuthProvider.getCredential(accessToken, null);
 
         mAuth.signInWithCredential(credential).addOnCompleteListener(activity, task -> {
             if (task.isSuccessful()) {
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
+                    Log.i(TAG, "Firebase 인증 성공. User: " + user.getUid());
                     user.getIdToken(false).addOnCompleteListener(task2 -> {
                         if (task2.isSuccessful()) {
                             String idToken = task2.getResult().getToken();
                             LoginModel model = new LoginModel(user, LoginModel.RC_GOOGLE, idToken);
+                            Log.d(TAG, "ViewModel으로 onSuccess 콜백을 전달합니다.");
                             callback.onSuccess(model, idToken);
                         } else {
                             callback.onError("Failed to retrieve Firebase ID token");
@@ -125,31 +128,27 @@ public class SnsLoginManager {
                     callback.onError("Firebase user is null");
                 }
             } else {
+                Log.e(TAG, "Firebase 인증 실패: " + task.getException().getMessage(), task.getException());
                 callback.onError("Firebase sign-in failed: " + task.getException().getMessage());
             }
         });
     }
 
-    private void handleKakaoSignInResult(OAuthToken token) {
-        if (token != null) {
-            Log.d(getClass().getName(), token.getIdToken());
-            Log.d(getClass().getName(), token.getAccessToken());
-            signInKakaoWithToken(token.getAccessToken());
-        } else {
-            callback.onError("Kakao sign-in failed: Token is null");
-        }
-    }
-
     private void signInKakaoWithToken(String token) {
+        Log.d(TAG, "signInKakaoWithToken: AccessToken=" + token);
         UserApiClient userApiClient = UserApiClient.getInstance();
+        Log.d(TAG, "카카오 사용자 정보(me API)를 요청합니다.");
         userApiClient.me((user, meError) -> {
             if (meError != null) {
+                Log.e(TAG, "카카오 me() API 호출 실패: " + meError.getMessage(), meError);
                 callback.onError("Kakao me() failed: " + meError.getMessage());
             } else {
+                Log.i(TAG, "카카오 me() API 호출 성공. User ID: " + user.getId());
                 LoginModel model = new LoginModel(user, LoginModel.RC_KAKAO);
+                Log.d(TAG, "ViewModel으로 onSuccess 콜백을 전달합니다.");
                 callback.onSuccess(model, token);
             }
             return null;
         });
     }
-} 
+}

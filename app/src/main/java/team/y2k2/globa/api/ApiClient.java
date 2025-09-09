@@ -32,7 +32,7 @@ public class ApiClient {
     private static ApiClient apiClient;
 
     public static Retrofit retrofit; // Retrofit instance
-    public static String BASE_URL = "http://1.209.165.82:8080";
+    public static String BASE_URL = "https://globa.duckdns.org";
 
     protected final Context context;
 
@@ -62,7 +62,7 @@ public class ApiClient {
 
     public String getAuthorization() {
         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
-        return "Bearer " + preferences.getString("accessToken", "");
+        return preferences.getString("accessToken", "");
     }
 
     public CompletableFuture<Boolean> isServerOpened() {
@@ -76,7 +76,7 @@ public class ApiClient {
                 int responseCode = connection.getResponseCode();
                 Log.d(TAG, "서버 상태: " + responseCode);
                 connection.disconnect();
-                return (responseCode >= 200 && responseCode < 404);
+                return (responseCode >= 200 && responseCode < 503);
             } catch (IOException e) {
                 Log.e(TAG, "서버 상태 확인 실패 (IOException): " + e.getMessage());
                 return false;

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.12.0"
 assertjCore = "3.24.2"
 circleimageview = "3.1.0"
 converterGson = "2.9.0"
@@ -32,14 +32,13 @@ retrofit = "2.9.0"
 rxandroid = "3.0.2"
 rxjava = "3.1.5"
 swiperefreshlayout = "1.1.0"
-v2UserRx = "2.20.1"
+kakaoSdk = "2.21.6"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertjCore" }
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoplayer" }
-ffmpeg-kit-full = { module = "com.arthenica:ffmpeg-kit-full", version.ref = "ffmpegKitFull" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -71,7 +70,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
-v2-user-rx = { module = "com.kakao.sdk:v2-user-rx", version.ref = "v2UserRx" }
+kakao-v2-user-rx = { module = "com.kakao.sdk:v2-user-rx", version.ref = "kakaoSdk" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

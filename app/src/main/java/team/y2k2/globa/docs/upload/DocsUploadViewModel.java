@@ -13,9 +13,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.arthenica.ffmpegkit.FFmpegKit;
-import com.arthenica.ffmpegkit.FFmpegSession;
-import com.arthenica.ffmpegkit.ReturnCode;
+import com.antonkarpenko.ffmpegkit.FFmpegKit;
+import com.antonkarpenko.ffmpegkit.FFmpegSession;
+import com.antonkarpenko.ffmpegkit.ReturnCode;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 

@@ -15,12 +15,28 @@ android {
         enable = true
     }
 
+    signingConfigs {
+        release {
+            // 이전에 키 생성 시 지정했던 .jks 파일 경로
+            storeFile file('/Users/haebun/globa.jks')
+            // 키 저장소(store) 비밀번호
+            storePassword 'globa1126!'
+            // 키 별명(alias)
+            keyAlias 'key0'
+            // 키 별명(alias)의 비밀번호
+            keyPassword 'globa1126!'
+        }
+    }
+
     defaultConfig {
         applicationId "team.y2k2.globa"
         minSdk 30
-        targetSdk 34
-        versionCode 1
+        targetSdk 35
+        versionCode 9
         versionName "1.0"
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -28,6 +44,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
         }
     }
     compileOptions {
@@ -38,7 +56,7 @@ android {
 
 dependencies {
     implementation libs.lottie
-    implementation libs.ffmpeg.kit.full
+    implementation 'com.antonkarpenko:ffmpeg-kit-full:1.2.0'
 
     implementation platform(libs.firebase.bom)
     implementation libs.firebase.auth
@@ -48,7 +66,7 @@ dependencies {
     implementation libs.firebase.messaging
     implementation libs.play.services.auth
 
-    implementation libs.v2.user.rx
+    implementation libs.kakao.v2.user.rx
     implementation libs.oauth
 
     implementation libs.retrofit

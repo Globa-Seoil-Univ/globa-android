@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(MainActivityModel.class);
         viewModel.setContext(this);
@@ -29,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setNavigationView(binding.bottomNavigationMainBottom);
         observeLiveData();
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
     }
 
     private void setNavigationView(BottomNavigationView view) {

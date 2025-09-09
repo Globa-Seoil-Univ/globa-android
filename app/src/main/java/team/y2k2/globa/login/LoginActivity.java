@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import team.y2k2.globa.databinding.ActivityLoginBinding;
 import team.y2k2.globa.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
     private static final String LOGIN_ERR_MSG = "로그인 오류가 발생했습니다.";
     private ActivityLoginBinding binding;
     private LoginActivityModel viewModel;
@@ -89,7 +91,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initKakaoSdk() {
-        KakaoSdk.init(this, getString(R.string.kakao_app_key));
+        String kakaoAppKey = getString(R.string.kakao_app_key);
+        Log.d(TAG, "Kakao SDK 초기화를 시도합니다. App Key: " + kakaoAppKey);
+        KakaoSdk.init(this, kakaoAppKey);
     }
 
     private void initGoogleSdk() {
@@ -105,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(getClass().getName(), "onActivityResult -> requestCode: " + requestCode + ", resultCode: " + resultCode + ", data: " + data);
         viewModel.handleActivityResult(requestCode, resultCode, data);
     }
 
