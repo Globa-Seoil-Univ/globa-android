@@ -140,7 +140,7 @@
     <string name="item_notification_share_cancel">Reject</string>
     <string name="item_notification_share_confirm">Accept</string>
 
-    <string name="activity_docs_statistics_title_word">Visualization Data</string>
+    <string name="activity_docs_statistics_title_word">Keyword Importance</string>
     <string name="activity_docs_statistics_title_time">Learning Time</string>
     <string name="activity_docs_statistics_title_score">Learning Score</string>
     <string name="fragment_statistics_title_word">Keyword Importance</string>

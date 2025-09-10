@@ -129,7 +129,7 @@
     <string name="item_notification_share_cancel">거절</string>
     <string name="item_notification_share_confirm">수락</string>
 
-    <string name="activity_docs_statistics_title_word">시각화 자료</string>
+    <string name="activity_docs_statistics_title_word">단어 중요도</string>
     <string name="activity_docs_statistics_title_time">학습 시간</string>
     <string name="activity_docs_statistics_title_score">학습 성적</string>
 
