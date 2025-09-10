@@ -31,15 +31,20 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
     private final NotificationViewModel notificationViewModel;
     private final int whiteColor;
     private final int primaryColor;
-
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public DocsFragmentAdapter(List<DocsFragmentItem> items, NotificationActivity activity, DocsFragment fragment) {
         this.items = items;
         this.activity = activity;
-        this.notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
+        this.notificationViewModel = new ViewModelProvider(fragment.requireActivity()).get(NotificationViewModel.class);
         this.whiteColor = ContextCompat.getColor(activity, R.color.white);
         this.primaryColor = ContextCompat.getColor(activity, R.color.primary_1);
+    }
+
+    public void setItems(List<DocsFragmentItem> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -51,25 +56,17 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
 
     @Override
     public void onBindViewHolder(@NonNull DocsFragmentAdapter.MyViewHolder holder, int position) {
-
         DocsFragmentItem item = items.get(position);
 
-        if (item.getProfile().startsWith("http")) {
-            Glide.with(holder.itemView.getContext()).load(item.getProfile()).error(R.mipmap.ic_launcher).into(holder.profileImage);
-        } else {
-            StorageReference imageRef = storage.getReference().child(item.getProfile());
-            Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
-        }
+        Glide.with(holder.itemView.getContext())
+                .load(R.mipmap.ic_launcher)
+                .into(holder.profileImage);
 
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
 
-        if (!item.isRead()) {
-            holder.layout.setBackgroundColor(primaryColor);
-        } else {
-            holder.layout.setBackgroundColor(whiteColor);
-        }
+        holder.layout.setBackgroundColor(item.isRead() ? whiteColor : primaryColor);
 
         holder.layout.setOnClickListener(v -> {
             if (!item.isRead()) {
@@ -78,15 +75,17 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
                 notificationViewModel.readNotification(item.getNotificationId());
             }
         });
+
+        // 내용이 없으면 숨김 처리
+        holder.content.setVisibility(item.getContent().isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public int getItemCount() {
-        return (items != null ? items.size() : 0);
+        return items.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-
         private final ConstraintLayout layout;
         private final ImageView profileImage;
         private final TextView title;
@@ -95,13 +94,11 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
             layout = itemView.findViewById(R.id.constraintlayout_item_notification_docs);
             profileImage = itemView.findViewById(R.id.imageview_item_notification_docs);
             title = itemView.findViewById(R.id.textview_item_notification_docs_title);
             content = itemView.findViewById(R.id.textview_item_notification_docs_content);
             createdTime = itemView.findViewById(R.id.textview_item_notification_docs_created_time);
-
         }
     }
 }

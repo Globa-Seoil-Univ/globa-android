@@ -1,74 +1,89 @@
 package team.y2k2.globa.notification.notice;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import team.y2k2.globa.api.clients.NotificationApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationNoticeBinding;
 import team.y2k2.globa.notification.NotificationActivity;
+import team.y2k2.globa.notification.NotificationViewModel;
 
 public class NoticeFragment extends Fragment {
 
-    private final List<NoticeFragmentItem> noticeFragmentItems = new ArrayList<>();
-    FragmentNotificationNoticeBinding binding;
-    String notificationId, profile, title, content, createdTime;
-    boolean isRead;
-    NoticeFragmentAdapter adapter;
-    NotificationApiClient apiClient;
+    private FragmentNotificationNoticeBinding binding;
+    private NotificationViewModel viewModel;
+    private NoticeFragmentAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentNotificationNoticeBinding.inflate(getLayoutInflater());
-
-        initializeUI();
-
+        binding = FragmentNotificationNoticeBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
-    private void initializeUI() {
-        apiClient = new NotificationApiClient();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        List<Notification> notificationList = apiClient.requestNotification("n").getNotifications();
-        noticeFragmentItems.clear();
+        viewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
-        if (notificationList != null) {
-            for (Notification notification : notificationList) {
+        setupRecyclerView();
+        observeViewModel();
 
-                settingNotification(notification);
-
-            }
-
-            adapter = new NoticeFragmentAdapter(noticeFragmentItems, (NotificationActivity) requireActivity(), this);
-
-            binding.recyclerviewNotificationNoticeContent.setAdapter(adapter);
-            binding.recyclerviewNotificationNoticeContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-        } else {
-            Log.d(getClass().getSimpleName(), "공지사항 알림 오류 : notificationResponse = null");
-        }
-
-
+        viewModel.getNotification("n");
     }
 
-    private void settingNotification(Notification notification) {
-        notificationId = notification.getNotificationId();
-        profile = notification.getNotice().getThumbnail();
-        createdTime = notification.getCreatedTime().substring(0, 10);
-        title = notification.getNotice().getTitle();
-        content = notification.getNotice().getContent();
-        isRead = notification.isRead();
-        Log.d("공지 사항 알림", "공지 사항 알림: (ID: " + notificationId + ", title: " + title + ", content: " + content + ", createdTime: " + createdTime + ", isRead: " + isRead);
-        noticeFragmentItems.add(new NoticeFragmentItem(notificationId, profile, title, content, createdTime, isRead));
+    private void setupRecyclerView() {
+        adapter = new NoticeFragmentAdapter(new ArrayList<>(), (NotificationActivity) requireActivity(), this);
+        binding.recyclerviewNotificationNoticeContent.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerviewNotificationNoticeContent.setAdapter(adapter);
+    }
+
+    private void observeViewModel() {
+        viewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
+            if (notificationResponse != null && notificationResponse.getNotifications() != null) {
+                List<NoticeFragmentItem> items = processNotifications(notificationResponse.getNotifications());
+                adapter.setItems(items);
+            } else {
+                adapter.setItems(new ArrayList<>());
+                Log.d("Error", "NoticeFragment: notificationResponse is null");
+            }
+        });
+    }
+
+    private List<NoticeFragmentItem> processNotifications(List<Notification> notifications) {
+        List<NoticeFragmentItem> items = new ArrayList<>();
+        for (Notification notification : notifications) {
+            // NoticeFragment는 타입 "1"만 처리
+            if ("1".equals(notification.getType())) {
+                String notificationId = notification.getNotificationId();
+                String profile = notification.getNotice().getThumbnail();
+                String createdTime = notification.getCreatedTime().substring(0, 10);
+                String title = notification.getNotice().getTitle();
+                String content = notification.getNotice().getContent();
+                boolean isRead = notification.isRead();
+                items.add(new NoticeFragmentItem(notificationId, profile, title, content, createdTime, isRead));
+            }
+        }
+        return items;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

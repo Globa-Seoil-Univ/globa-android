@@ -22,6 +22,7 @@ public class FolderInsideFragmentModel extends ViewModel {
     private final MutableLiveData<Integer> deleteResponseCode = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<String> folderTitle = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isListEmpty = new MutableLiveData<>(false);
 
     public void setApiClient(Context context) {
         recordApiClient = new RecordApiClient();
@@ -47,14 +48,20 @@ public class FolderInsideFragmentModel extends ViewModel {
     public LiveData<String> getErrorMessage() {
         return errorMessage;
     }
+    public LiveData<Boolean> getIsListEmpty() {
+        return isListEmpty;
+    }
 
     public void fetchFolderInsideRecords(int folderId) {
         FolderInsideRecordResponse response = recordApiClient.requestGetFolderInside(folderId, 1, 100);
-        if (response == null) {
-            errorMessage.setValue("문서가 없습니다.");
-            return;
+
+        if (response == null || response.getRecords() == null || response.getRecords().isEmpty()) {
+            isListEmpty.setValue(true);
+            folderInsideRecords.setValue(new java.util.ArrayList<>()); // 비어있는 리스트 전달
+        } else {
+            isListEmpty.setValue(false);
+            folderInsideRecords.setValue(response.getRecords());
         }
-        folderInsideRecords.setValue(response.getRecords());
     }
 
     public void deleteFolder(int folderId) {
@@ -66,6 +73,7 @@ public class FolderInsideFragmentModel extends ViewModel {
 
         if (response.isSuccessful()) {
             Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());
+            fetchFolderInsideRecords(Integer.parseInt(folderId));
         } else {
             Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
         }

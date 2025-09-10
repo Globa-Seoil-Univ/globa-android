@@ -1,94 +1,114 @@
 package team.y2k2.globa.notification.share;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.clients.NotificationApiClient;
 import team.y2k2.globa.api.model.entity.Notification;
 import team.y2k2.globa.databinding.FragmentNotificationShareBinding;
 import team.y2k2.globa.notification.NotificationActivity;
+import team.y2k2.globa.notification.NotificationViewModel;
 
 public class ShareFragment extends Fragment {
-    private final List<ShareFragmentItem> shareFragmentItems = new ArrayList<>();
-    FragmentNotificationShareBinding binding;
-    String notificationId, profile, title, content, createdTime, notificationType;
-    boolean isRead;
-    ShareFragmentAdapter adapter;
-    NotificationApiClient apiClient;
+
+    private FragmentNotificationShareBinding binding;
+    private NotificationViewModel viewModel;
+    private ShareFragmentAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentNotificationShareBinding.inflate(getLayoutInflater());
-        initializeUI();
+        binding = FragmentNotificationShareBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
-    private void initializeUI() {
-        apiClient = new NotificationApiClient();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        List<Notification> notificationList = apiClient.requestNotification("s").getNotifications();
-        shareFragmentItems.clear();
+        viewModel = new ViewModelProvider(requireActivity()).get(NotificationViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
-        if (notificationList != null) {
-            for (Notification notification : notificationList) {
-                settingNotification(notification);
-            }
+        setupRecyclerView();
+        observeViewModel();
 
-            adapter = new ShareFragmentAdapter(shareFragmentItems, (NotificationActivity) requireActivity(), this);
-
-            binding.recyclerviewNotificationShareContent.setAdapter(adapter);
-            binding.recyclerviewNotificationShareContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-        } else {
-            Log.d(getClass().getSimpleName(), "공유 알림 오류 : notificationResponse = null");
-        }
+        viewModel.getNotification("s");
     }
 
-    private void settingNotification(Notification notification) {
-        profile = notification.getUser().getProfile();
-        notificationId = notification.getNotificationId();
-        notificationType = notification.getType();
-        createdTime = notification.getCreatedTime().substring(0, 10);
-        isRead = notification.isRead();
-        switch (notificationType) {
-            case "2":
-                title = notification.getUser().getName() + getString(R.string.fragment_share_notification_2_1) + notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_2_2);
-                content = "";
-                String folderId = notification.getFolder().getFolderId();
-                String shareId = notification.getShare().getShareId();
-                Log.d("공유 알림", "공유 알림(2번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
-                shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, folderId, shareId, "2", isRead));
-                break;
-            case "3":
-                title = notification.getUser().getName() + getString(R.string.fragment_share_notification_3_1);
-                content = notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_3_2);
-                Log.d("공유 알림", "공유 알림(3번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
-                shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "3", isRead));
-                break;
-            case "4":
-                title = notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_4_1) + notification.getUser().getName() + getString(R.string.fragment_share_notification_4_2);
-                content = "";
-                Log.d("공유 알림", "공유 알림(4번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
-                shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "4", isRead));
-                break;
-            case "5":
-                title = notification.getUser().getName() + getString(R.string.fragment_share_notification_5_1) + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_5_2);
-                content = notification.getComment().getContent();
-                Log.d("공유 알림", "공유 알림(5번) : (ID: " + notificationId + ", title: " + title + ", content: " + content);
-                shareFragmentItems.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, "", "", "5", isRead));
-            default:
-                break;
+    private void setupRecyclerView() {
+        adapter = new ShareFragmentAdapter(new ArrayList<>(), (NotificationActivity) requireActivity(), this);
+        binding.recyclerviewNotificationShareContent.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerviewNotificationShareContent.setAdapter(adapter);
+    }
+
+    private void observeViewModel() {
+        viewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
+            if (notificationResponse != null && notificationResponse.getNotifications() != null) {
+                List<ShareFragmentItem> items = processNotifications(notificationResponse.getNotifications());
+                adapter.setItems(items);
+            } else {
+                adapter.setItems(new ArrayList<>());
+                Log.d("Error", "ShareFragment: notificationResponse is null");
+            }
+        });
+    }
+
+    private List<ShareFragmentItem> processNotifications(List<Notification> notifications) {
+        List<ShareFragmentItem> items = new ArrayList<>();
+        for (Notification notification : notifications) {
+            String notificationType = notification.getType();
+            // ShareFragment는 타입 2, 3, 4, 5 처리
+            if ("2".equals(notificationType) || "3".equals(notificationType) || "4".equals(notificationType) || "5".equals(notificationType)) {
+                String notificationId = notification.getNotificationId();
+                String profile = notification.getUser().getProfile();
+                String createdTime = notification.getCreatedTime().substring(0, 10);
+                boolean isRead = notification.isRead();
+                String title = "";
+                String content = "";
+                String folderId = "";
+                String shareId = "";
+
+                switch (notificationType) {
+                    case "2":
+                        title = notification.getUser().getName() + getString(R.string.fragment_share_notification_2_1) + notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_2_2);
+                        content = "";
+                        folderId = notification.getFolder().getFolderId();
+                        shareId = notification.getShare().getShareId();
+                        break;
+                    case "3":
+                        title = notification.getUser().getName() + getString(R.string.fragment_share_notification_3_1);
+                        content = notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_3_2);
+                        break;
+                    case "4":
+                        title = notification.getFolder().getTitle() + getString(R.string.fragment_share_notification_4_1) + notification.getUser().getName() + getString(R.string.fragment_share_notification_4_2);
+                        content = "";
+                        break;
+                    case "5":
+                        title = notification.getUser().getName() + getString(R.string.fragment_share_notification_5_1) + notification.getFolder().getTitle() + " - " + notification.getRecord().getTitle() + getString(R.string.fragment_share_notification_5_2);
+                        content = notification.getComment().getContent();
+                        break;
+                }
+                items.add(new ShareFragmentItem(notificationId, profile, title, content, createdTime, folderId, shareId, notificationType, isRead));
+            }
         }
+        return items;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

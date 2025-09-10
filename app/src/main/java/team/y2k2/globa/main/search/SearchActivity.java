@@ -2,11 +2,13 @@ package team.y2k2.globa.main.search;
 
 import android.os.Bundle;
 import android.view.inputmethod.EditorInfo;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import team.y2k2.globa.databinding.ActivitySearchBinding;
 
 public class SearchActivity extends AppCompatActivity {
@@ -16,6 +18,8 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         binding = ActivitySearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -23,6 +27,12 @@ public class SearchActivity extends AppCompatActivity {
         viewModel.setContext(this);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         setupRecyclerView();
         setupListeners();

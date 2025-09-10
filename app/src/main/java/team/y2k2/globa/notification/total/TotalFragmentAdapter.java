@@ -40,9 +40,14 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
     public TotalFragmentAdapter(List<TotalFragmentItem> items, NotificationActivity activity, TotalFragment fragment) {
         this.items = items;
         this.activity = activity;
-        notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
+        notificationViewModel = new ViewModelProvider(fragment.requireActivity()).get(NotificationViewModel.class);
         this.whiteColor = ContextCompat.getColor(activity, R.color.white);
         this.primaryColor = ContextCompat.getColor(activity, R.color.primary_1);
+    }
+    public void setItems(List<TotalFragmentItem> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -56,22 +61,15 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
     public void onBindViewHolder(@NonNull TotalFragmentAdapter.MyViewHolder holder, int position) {
         TotalFragmentItem item = items.get(position);
 
-        if (item.getProfile() != null) {
-            Log.d("이미지 경로", "이미지 경로: " + item.getProfile());
+        if (item.getProfile() != null && !item.getProfile().isEmpty()) {
             if (item.getProfile().startsWith("http")) {
                 Glide.with(holder.itemView.getContext()).load(item.getProfile()).error(R.drawable.profile_user).into(holder.profileImage);
             } else {
-                if (!item.getProfile().isEmpty()) {
-                    StorageReference imageRef = storage.getReference().child(item.getProfile());
-                    Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.drawable.profile_user).into(holder.profileImage);
-                } else {
-                    Glide.with(holder.itemView.getContext()).load(R.drawable.profile_user).error(R.drawable.profile_user).into(holder.profileImage);
-                }
+                StorageReference imageRef = storage.getReference().child(item.getProfile());
+                Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.drawable.profile_user).into(holder.profileImage);
             }
         } else {
-            // 프로필이 없을 때
-            Glide.with(holder.itemView.getContext()).load(R.drawable.profile_user).error(R.drawable.profile_user).into(holder.profileImage);
-            Log.d("알림 프로필", "알림 프로필 없음, 아이템 위치: " + position);
+            Glide.with(holder.itemView.getContext()).load(R.drawable.profile_user).into(holder.profileImage);
         }
 
         holder.title.setText(item.getTitle());
@@ -79,71 +77,49 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
         holder.createdTime.setText(item.getCreatedTime());
 
         holder.layout.setOnClickListener(v -> {
-            Log.d("아이템 클릭", "아이템 클릭 타입: " + item.getType());
-            // 알림 읽음 표시
             if (!item.isRead()) {
-                Log.d("알림 읽음", "전체 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
                 notificationViewModel.readNotification(item.getNotificationId());
             }
 
-            if (item.getType().equals("8")) {
+            if ("8".equals(item.getType())) {
                 Intent intent = new Intent(activity, InquiryDetailActivity.class);
-                Log.d(getClass().getSimpleName(), "문의 아이디: " + item.getInquiryId());
                 intent.putExtra("inquiryId", item.getInquiryId());
                 activity.startActivity(intent);
             }
-
         });
 
-        if (!item.isRead()) {
-            holder.layout.setBackgroundColor(primaryColor);
-        } else {
-            holder.layout.setBackgroundColor(whiteColor);
-        }
+        holder.layout.setBackgroundColor(item.isRead() ? whiteColor : primaryColor);
 
-
-        if (item.getType().equals("2")) {
-            // 공유 초대 알림
+        if ("2".equals(item.getType())) {
+            holder.confirmBtn.setVisibility(View.VISIBLE);
+            holder.cancelBtn.setVisibility(View.VISIBLE);
             holder.confirmBtn.setOnClickListener(v -> {
-                // 공유 수락 버튼 이벤트
-                Log.d("수락 버튼", "공유 초대 수락 버튼 클릭");
-                Log.d("수락 버튼", "folder_id : " + item.getFolderId() + " share_id : " + item.getShareId());
                 notificationViewModel.acceptInvite(item.getFolderId(), item.getShareId());
                 holder.confirmBtn.setVisibility(View.GONE);
                 holder.cancelBtn.setVisibility(View.GONE);
                 holder.layout.setBackgroundColor(whiteColor);
             });
             holder.cancelBtn.setOnClickListener(v -> {
-                // 공유 거절 버튼 이벤트
-                Log.d("거절 버튼", "공유 초대 거절 버튼 클릭");
-                Log.d("거절 버튼", "folder_id : " + item.getFolderId() + " share_id : " + item.getShareId() + " notification_id : " + item.getNotificationId());
                 notificationViewModel.denyInvite(item.getFolderId(), item.getShareId(), item.getNotificationId());
                 holder.confirmBtn.setVisibility(View.GONE);
                 holder.cancelBtn.setVisibility(View.GONE);
                 holder.layout.setBackgroundColor(whiteColor);
             });
         } else {
-            // 공유 초대 알림이 아닌 경우 버튼 숨기기
             holder.confirmBtn.setVisibility(View.GONE);
             holder.cancelBtn.setVisibility(View.GONE);
         }
 
-        if (item.getContent().isEmpty()) {
-            holder.content.setVisibility(View.GONE);
-        } else {
-            holder.content.setVisibility(View.VISIBLE);
-        }
-
+        holder.content.setVisibility(item.getContent().isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public int getItemCount() {
-        return (items != null ? items.size() : 0);
+        return items.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-
         private final ConstraintLayout layout;
         private final ImageView profileImage;
         private final TextView title;
@@ -154,7 +130,6 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
             layout = itemView.findViewById(R.id.constraintlayout_item_notification_total);
             profileImage = itemView.findViewById(R.id.imageview_item_notification_total);
             title = itemView.findViewById(R.id.textview_item_notification_total_title);
@@ -164,5 +139,4 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
             cancelBtn = itemView.findViewById(R.id.button_item_notification_total_denied);
         }
     }
-
 }

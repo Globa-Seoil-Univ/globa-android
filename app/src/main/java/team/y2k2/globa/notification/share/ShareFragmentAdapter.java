@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-
 import java.util.List;
 
 import team.y2k2.globa.R;
@@ -30,15 +29,23 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
 
     private final List<ShareFragmentItem> items;
     private final NotificationViewModel notificationViewModel;
+    private final NotificationActivity activity;
     private final int whiteColor, primaryColor;
 
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public ShareFragmentAdapter(List<ShareFragmentItem> items, NotificationActivity activity, ShareFragment fragment) {
         this.items = items;
-        notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
+        this.activity = activity;
+        this.notificationViewModel = new ViewModelProvider(fragment.requireActivity()).get(NotificationViewModel.class);
         this.whiteColor = ContextCompat.getColor(activity, R.color.white);
         this.primaryColor = ContextCompat.getColor(activity, R.color.primary_1);
+    }
+
+    public void setItems(List<ShareFragmentItem> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -50,11 +57,9 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
 
     @Override
     public void onBindViewHolder(@NonNull ShareFragmentAdapter.MyViewHolder holder, int position) {
-
         ShareFragmentItem item = items.get(position);
 
-        if (item.getProfile() != null) {
-            // 프로필이 있을 때
+        if (item.getProfile() != null && !item.getProfile().isEmpty()) {
             if (item.getProfile().startsWith("http")) {
                 Glide.with(holder.itemView.getContext()).load(item.getProfile()).error(R.mipmap.ic_launcher).into(holder.profileImage);
             } else {
@@ -62,23 +67,16 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
                 Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
             }
         } else {
-            // 프로필이 없을 때
-            Glide.with(holder.itemView.getContext()).load(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.profileImage);
-            Log.d("알림 프로필", "알림 프로필 없음, 아이템 위치: " + position);
+            Glide.with(holder.itemView.getContext()).load(R.mipmap.ic_launcher).into(holder.profileImage);
         }
 
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
 
-        if (!item.isRead()) {
-            holder.layout.setBackgroundColor(primaryColor);
-        } else {
-            holder.layout.setBackgroundColor(whiteColor);
-        }
+        holder.layout.setBackgroundColor(item.isRead() ? whiteColor : primaryColor);
 
         holder.layout.setOnClickListener(v -> {
-            // 알림 읽음 표시
             if (!item.isRead()) {
                 Log.d("알림 읽음", "공유 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
@@ -86,41 +84,33 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
             }
         });
 
-        if (item.getType().equals("2")) {
-            // 공유 초대 알림
+        if ("2".equals(item.getType())) {
+            holder.confirmBtn.setVisibility(View.VISIBLE);
+            holder.cancelBtn.setVisibility(View.VISIBLE);
             holder.confirmBtn.setOnClickListener(v -> {
-                // 공유 수락 버튼 이벤트
-                Log.d("수락 버튼", "공유 초대 수락 버튼 클릭");
-                Log.d("수락 버튼", "folder_id : " + item.getFolderId() + " share_id : " + item.getShareId());
                 notificationViewModel.acceptInvite(item.getFolderId(), item.getShareId());
                 holder.confirmBtn.setVisibility(View.GONE);
                 holder.cancelBtn.setVisibility(View.GONE);
                 holder.layout.setBackgroundColor(whiteColor);
             });
             holder.cancelBtn.setOnClickListener(v -> {
-                // 공유 거절 버튼 이벤트
-                Log.d("거절 버튼", "공유 초대 거절 버튼 클릭");
-                Log.d("거절 버튼", "folder_id : " + item.getFolderId() + " share_id : " + item.getShareId() + " notification_id : " + item.getNotificationId());
                 notificationViewModel.denyInvite(item.getFolderId(), item.getShareId(), item.getNotificationId());
                 holder.confirmBtn.setVisibility(View.GONE);
                 holder.cancelBtn.setVisibility(View.GONE);
                 holder.layout.setBackgroundColor(whiteColor);
             });
         } else {
-            // 공유 초대 알림이 아닌 경우 버튼 숨기기
             holder.confirmBtn.setVisibility(View.GONE);
             holder.cancelBtn.setVisibility(View.GONE);
         }
-
     }
 
     @Override
     public int getItemCount() {
-        return (items != null ? items.size() : 0);
+        return items.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-
         private final ConstraintLayout layout;
         private final ImageView profileImage;
         private final TextView title;
@@ -131,7 +121,6 @@ public class ShareFragmentAdapter extends RecyclerView.Adapter<ShareFragmentAdap
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
             layout = itemView.findViewById(R.id.constraintlayout_item_notification_share);
             profileImage = itemView.findViewById(R.id.imageview_item_notification_share);
             title = itemView.findViewById(R.id.textview_item_notification_share_title);

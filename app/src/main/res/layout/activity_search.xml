@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -86,11 +88,25 @@
             android:layout_height="0dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp"
+            android:visibility="@{viewModel.isSearchResultEmpty ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/textview_search_history_title"
-            app:layout_constraintTop_toBottomOf="@id/textview_search_history_title" />
+            app:layout_constraintTop_toBottomOf="@id/textview_search_history_title"
+            tools:listitem="@layout/item_search_docs" />
+
+        <TextView
+            android:id="@+id/textview_no_results"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검색 결과가 없습니다."
+            android:textColor="@color/darkGray"
+            android:textSize="16sp"
+            android:visibility="@{viewModel.isSearchResultEmpty ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearlayout_search_frame" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

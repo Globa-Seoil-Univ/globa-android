@@ -15,13 +15,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
 
@@ -33,15 +30,18 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
     private final int whiteColor;
     private final int primaryColor;
 
-    private final FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference imageRef;
-
     public InquiryFragmentAdapter(List<InquiryFragmentItem> items, NotificationActivity activity, InquiryFragment fragment) {
         this.items = items;
         this.activity = activity;
-        this.notificationViewModel = new ViewModelProvider(fragment).get(NotificationViewModel.class);
+        this.notificationViewModel = new ViewModelProvider(fragment.requireActivity()).get(NotificationViewModel.class);
         this.whiteColor = ContextCompat.getColor(activity, R.color.white);
         this.primaryColor = ContextCompat.getColor(activity, R.color.primary_1);
+    }
+
+    public void setItems(List<InquiryFragmentItem> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -53,28 +53,19 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
 
     @Override
     public void onBindViewHolder(@NonNull InquiryFragmentAdapter.MyViewHolder holder, int position) {
-
         InquiryFragmentItem item = items.get(position);
 
-        if (item.getProfile().startsWith("http")) {
-            Glide.with(holder.itemView.getContext()).load(item.getProfile()).error(R.mipmap.ic_launcher).into(holder.profileImage);
-        } else {
-            imageRef = storage.getReference().child(item.getProfile());
-            Glide.with(holder.itemView.getContext()).load(ProfileImage.convertGsToHttps(imageRef.toString())).error(R.mipmap.ic_launcher).into(holder.profileImage);
-        }
+        Glide.with(holder.itemView.getContext())
+                .load(R.mipmap.ic_launcher)
+                .into(holder.profileImage);
 
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.createdTime.setText(item.getCreatedTime());
 
-        if (!item.isRead()) {
-            holder.layout.setBackgroundColor(primaryColor);
-        } else {
-            holder.layout.setBackgroundColor(whiteColor);
-        }
+        holder.layout.setBackgroundColor(item.isRead() ? whiteColor : primaryColor);
 
         holder.layout.setOnClickListener(v -> {
-
             if (!item.isRead()) {
                 Log.d("알림 읽음", "문의 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
@@ -85,16 +76,14 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
             intent.putExtra("inquiryId", item.getInquiryId());
             activity.startActivity(intent);
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return (items != null ? items.size() : 0);
+        return items.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-
         private final ConstraintLayout layout;
         private final ImageView profileImage;
         private final TextView title;
@@ -103,14 +92,11 @@ public class InquiryFragmentAdapter extends RecyclerView.Adapter<InquiryFragment
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
             layout = itemView.findViewById(R.id.constraintlayout_item_notification_inquiry);
             profileImage = itemView.findViewById(R.id.imageview_item_notification_inquiry);
             title = itemView.findViewById(R.id.textview_item_notification_inquiry_title);
             content = itemView.findViewById(R.id.textview_item_notification_inquiry_content);
             createdTime = itemView.findViewById(R.id.textview_item_notification_inquiry_created_time);
-
         }
     }
-
 }
