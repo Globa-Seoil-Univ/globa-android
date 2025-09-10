@@ -16,6 +16,7 @@ public class KeywordDetailViewModel extends ViewModel {
     private final MutableLiveData<KeywordDetailResponse> keywordDetailResponse = new MutableLiveData<>(null);
     private final MutableLiveData<String> pronunciation = new MutableLiveData<>(null);
     private final MutableLiveData<List<KeywordDetailItem>> keywordItems = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Boolean> isListEmpty = new MutableLiveData<>(false);
 
     private final DictionaryApiClient apiClient;
 
@@ -32,24 +33,24 @@ public class KeywordDetailViewModel extends ViewModel {
     }
 
     private void processKeywordResponse(KeywordDetailResponse response) {
-        if (response != null && !response.getDictionary().isEmpty()) {
+        if (response != null && response.getDictionary() != null && !response.getDictionary().isEmpty()) {
             List<KeywordDetail> keywordDetailList = response.getDictionary();
-            
-            if (!keywordDetailList.isEmpty()) {
-                pronunciation.setValue(keywordDetailList.get(0).getPronunciation());
-            } else {
-                pronunciation.setValue("입력된 정보가 없습니다.");
-            }
+            pronunciation.setValue(keywordDetailList.get(0).getPronunciation());
 
             List<KeywordDetailItem> items = new ArrayList<>();
             for (KeywordDetail keywordDetail : keywordDetailList) {
                 items.add(new KeywordDetailItem(
-                    keywordDetail.getWord(),
-                    keywordDetail.getDescription(),
-                    keywordDetail.getCategory()
+                        keywordDetail.getWord(),
+                        keywordDetail.getDescription(),
+                        keywordDetail.getCategory()
                 ));
             }
             keywordItems.setValue(items);
+            isListEmpty.setValue(items.isEmpty());
+        } else {
+            keywordItems.setValue(new ArrayList<>());
+            isListEmpty.setValue(true);
+            pronunciation.setValue("");
         }
     }
 
@@ -71,5 +72,9 @@ public class KeywordDetailViewModel extends ViewModel {
 
     public MutableLiveData<List<KeywordDetailItem>> getKeywordItems() {
         return keywordItems;
+    }
+
+    public MutableLiveData<Boolean> getIsListEmpty() {
+        return isListEmpty;
     }
 }

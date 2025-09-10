@@ -1,10 +1,13 @@
 <resources>
     <style name="Base.Theme.Globa" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
 
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
+
+
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -12,7 +15,9 @@
 
 
     <style name="FolderPermissionSpinnerStyle" parent="Widget.AppCompat.Spinner">
-        <item name="android:dropDownVerticalOffset">5dp</item> <item name="android:popupBackground">@android:color/white</item> </style>
+        <item name="android:dropDownVerticalOffset">5dp</item>
+        <item name="android:popupBackground">@android:color/white</item>
+    </style>
 
     <style name="Theme.Globa" parent="Base.Theme.Globa" />
 

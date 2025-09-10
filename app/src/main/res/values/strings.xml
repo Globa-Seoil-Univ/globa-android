@@ -221,8 +221,8 @@
     <string name="fragment_share_notification_5_2">에 댓글을 추가하였습니다.</string>
 
     <string name="activity_inquiry_detail_title">문의 상세</string>
-    <string name="activity_keyword_detail_tools_title">증진</string>
-    <string name="activity_keyword_detail_tools_pronunciation">[ 증진 ]</string>
+    <string name="activity_keyword_detail_tools_title">단어</string>
+    <string name="activity_keyword_detail_tools_pronunciation"></string>
     <string name="activity_keyword_detail_tools_source">출처 : 우리말샘</string>
     <string name="activity_withdraw_reason_1">탈퇴하시는 이유를 알려주세요.</string>
     <string name="activity_withdraw_reason_2">해당 피드백을 반영하여 \\n더 나은 앱을 만들기 위해 사용됩니다.</string>

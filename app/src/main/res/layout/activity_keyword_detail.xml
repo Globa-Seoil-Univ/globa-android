@@ -20,32 +20,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RelativeLayout
-                    android:id="@+id/linearlayout_keyword_detail_select_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="-20dp"
-                    android:background="@drawable/main_bottom"
-                    android:translationZ="5dp"
-                    app:layout_constraintStart_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/relativelayout_keyword_detail_title">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerview_keyword"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:clipToPadding="true"
-                        android:scrollbarFadeDuration="0"
-                        android:scrollbars="vertical" />
-
-                </RelativeLayout>
+                android:layout_height="wrap_content">
 
                 <RelativeLayout
                     android:id="@+id/relativelayout_keyword_tap"
@@ -104,7 +79,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="30dp"
-                                android:text="@string/activity_keyword_detail_tools_title"
+                                tools:text="단어"
                                 android:textColor="@color/white"
                                 android:textSize="26sp"
                                 android:textStyle="bold" />
@@ -115,8 +90,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/textview_keyword_detail_word"
                                 android:layout_marginStart="20dp"
-                                android:text=""
-                                android:textColor="@color/lightGray" />
+                                android:textColor="@color/lightGray"
+                                tools:text="[발음]" />
 
                             <TextView
                                 android:id="@+id/textview_keyword_detail_source"
@@ -130,6 +105,43 @@
 
                         </RelativeLayout>
                     </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/linearlayout_keyword_detail_select_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="300dp"
+                    android:layout_marginTop="-20dp"
+                    android:background="@drawable/main_bottom"
+                    android:translationZ="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/relativelayout_keyword_detail_title">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview_keyword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:clipToPadding="false"
+                        android:paddingBottom="20dp"
+                        android:nestedScrollingEnabled="false"/>
+
+                    <TextView
+                        android:id="@+id/textview_no_keywords"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="검색된 단어가 없습니다."
+                        android:textColor="@color/darkGray"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+
                 </RelativeLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

@@ -2,6 +2,7 @@ package team.y2k2.globa.keyword.detail;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,14 +20,19 @@ public class KeywordDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private KeywordDetailAdapter adapter;
     private ProgressBar progressBar;
+    private TextView noKeywordsTextView;
+    private TextView wordTextView;
+    private ImageView backButton;
+
+    private TextView sourceTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_keyword_detail);
 
-        setupViewModel();
         setupUI();
+        setupViewModel();
         observeViewModel();
     }
 
@@ -35,18 +41,26 @@ public class KeywordDetailActivity extends AppCompatActivity {
 
         String keyword = getIntent().getStringExtra("keyword");
         if (keyword != null) {
+            wordTextView.setText(keyword);
             viewModel.searchDictionary(keyword);
         }
     }
 
     private void setupUI() {
+        wordTextView = findViewById(R.id.textview_keyword_detail_word);
         pronunciationTextView = findViewById(R.id.textview_keyword_detail_pronunciation);
         recyclerView = findViewById(R.id.recyclerview_keyword);
         progressBar = findViewById(R.id.progress_bar);
-        
+        noKeywordsTextView = findViewById(R.id.textview_no_keywords);
+        backButton = findViewById(R.id.imageview_keyword_detail_top);
+        sourceTextView = findViewById(R.id.textview_keyword_detail_source);
+
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new KeywordDetailAdapter(this);
         recyclerView.setAdapter(adapter);
+
+        backButton.setOnClickListener(v -> finish());
     }
 
     private void observeViewModel() {
@@ -59,11 +73,22 @@ public class KeywordDetailActivity extends AppCompatActivity {
         viewModel.getKeywordItems().observe(this, items -> {
             if (items != null) {
                 adapter.setItems(items);
-                if (items.isEmpty()) {
-                    Toast.makeText(this, "검색된 정보가 없습니다.", Toast.LENGTH_SHORT).show();
-                }
             }
         });
+
+        viewModel.getIsListEmpty().observe(this, isEmpty -> {
+            if (isEmpty) {
+                recyclerView.setVisibility(View.GONE);
+                noKeywordsTextView.setVisibility(View.VISIBLE);
+                sourceTextView.setVisibility(View.GONE);
+            } else {
+                recyclerView.setVisibility(View.VISIBLE);
+                noKeywordsTextView.setVisibility(View.GONE);
+                sourceTextView.setVisibility(View.VISIBLE);
+            }
+        });
+
+
 
         viewModel.getIsLoading().observe(this, isLoading -> progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE));
 

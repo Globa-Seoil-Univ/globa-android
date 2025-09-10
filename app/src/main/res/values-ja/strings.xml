@@ -217,9 +217,9 @@
     <string name="fragment_share_notification_5_2">にコメントを追加しました。</string>
 
     <string name="activity_inquiry_detail_title">ヘルプセンターディテール</string>
-    <string name="activity_keyword_detail_tools_title">増進</string>
-    <string name="activity_keyword_detail_tools_pronunciation">[ 増進 ]</string>
-    <string name="activity_keyword_detail_tools_source">source :</string>
+    <string name="activity_keyword_detail_tools_title"></string>
+    <string name="activity_keyword_detail_tools_pronunciation"></string>
+    <string name="activity_keyword_detail_tools_source">source : opendict.korean.go.kr</string>
     <string name="activity_withdraw_reason_1">"退会される理由を教えていただけますか。 "</string>
     <string name="activity_withdraw_reason_2">当該フィードバックを反映して\\nより良いアプリを作るために使用されます。</string>
     <string name="edit_comment">"コメント修正 "</string>
