@@ -1,38 +1,44 @@
 package team.y2k2.globa.main.search;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.function.Consumer;
 
-import team.y2k2.globa.databinding.ItemDocsBinding;
+import team.y2k2.globa.R;
 import team.y2k2.globa.docs.DocsActivity;
-
-import android.content.Intent;
 
 public class SearchDocsAdapter extends RecyclerView.Adapter<SearchDocsAdapter.ViewHolder> {
 
     private List<SearchDocsItem> items;
+    private final Consumer<SearchDocsItem> onDeleteClickListener;
 
-    public SearchDocsAdapter(List<SearchDocsItem> items) {
+    public SearchDocsAdapter(List<SearchDocsItem> items, Consumer<SearchDocsItem> onDeleteClickListener) {
         this.items = items;
+        this.onDeleteClickListener = onDeleteClickListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemDocsBinding binding = ItemDocsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolder(binding);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_history, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SearchDocsItem currentItem = items.get(position);
-        holder.bind(currentItem);
+        holder.bind(currentItem, onDeleteClickListener);
     }
 
     @Override
@@ -40,43 +46,47 @@ public class SearchDocsAdapter extends RecyclerView.Adapter<SearchDocsAdapter.Vi
         return items != null ? items.size() : 0;
     }
 
-    public SearchDocsItem getItem(int position) {
-        if (items != null && position >= 0 && position < items.size()) {
-            return items.get(position);
-        }
-        return null;
-    }
-
     public void setItems(List<SearchDocsItem> newItems) {
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new SearchDiffCallback(items, newItems));
-        items = newItems;
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new SearchDiffCallback(this.items, newItems));
+        this.items = newItems;
         result.dispatchUpdatesTo(this);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemDocsBinding binding;
+        private final ConstraintLayout layout;
+        private final TextView title;
+        private final TextView datetime;
+        private final ImageButton deleteButton;
 
-        public ViewHolder(ItemDocsBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            layout = itemView.findViewById(R.id.constraintlayout_document_item);
+            title = itemView.findViewById(R.id.textview_document_title);
+            datetime = itemView.findViewById(R.id.textview_document_datetime);
+            deleteButton = itemView.findViewById(R.id.imagebutton_delete_history);
         }
 
-        public void bind(SearchDocsItem item) {
-            binding.textviewDocumentTitle.setText(item.getTitle());
-            binding.textviewDocumentDatetime.setText(item.getDatetime());
+        public void bind(SearchDocsItem item, Consumer<SearchDocsItem> onDeleteClickListener) {
+            title.setText(item.getTitle());
+            datetime.setText(item.getDatetime());
 
-            binding.constraintlayoutDocumentItem.setOnClickListener(v -> {
-                Intent intent = new Intent(binding.getRoot().getContext(), DocsActivity.class);
+            layout.setOnClickListener(v -> {
+                Intent intent = new Intent(v.getContext(), DocsActivity.class);
                 intent.putExtra("title", item.getTitle());
                 intent.putExtra("folderId", item.getFolderId());
                 intent.putExtra("recordId", item.getRecordId());
-                binding.getRoot().getContext().startActivity(intent);
+                v.getContext().startActivity(intent);
+            });
+
+            deleteButton.setOnClickListener(v -> {
+                if(onDeleteClickListener != null) {
+                    onDeleteClickListener.accept(item);
+                }
             });
         }
     }
 
     private static class SearchDiffCallback extends DiffUtil.Callback {
-
         private final List<SearchDocsItem> oldList;
         private final List<SearchDocsItem> newList;
 
@@ -97,16 +107,12 @@ public class SearchDocsAdapter extends RecyclerView.Adapter<SearchDocsAdapter.Vi
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            SearchDocsItem oldItem = oldList.get(oldItemPosition);
-            SearchDocsItem newItem = newList.get(newItemPosition);
-            return oldItem.getRecordId().equals(newItem.getRecordId());
+            return oldList.get(oldItemPosition).getRecordId().equals(newList.get(newItemPosition).getRecordId());
         }
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            SearchDocsItem oldItem = oldList.get(oldItemPosition);
-            SearchDocsItem newItem = newList.get(newItemPosition);
-            return oldItem.equals(newItem);
+            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
         }
     }
 }

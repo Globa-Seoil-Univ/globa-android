@@ -7,7 +7,9 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-
+    <style name="Theme.Globa.KeywordDetail" parent="Theme.Globa">
+        <item name="android:statusBarColor">@color/primary</item>
+    </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
         <item name="android:windowBackground">@android:color/transparent</item>

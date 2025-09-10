@@ -20,7 +20,7 @@ public class SearchViewModel extends ViewModel {
     private RecordApiClient apiClient;
 
     public SearchViewModel() {
-        adapter = new SearchDocsAdapter(new ArrayList<>());
+        adapter = new SearchDocsAdapter(new ArrayList<>(), this::deleteHistoryItem);
     }
 
     public void setContext(Context context) {
@@ -29,8 +29,15 @@ public class SearchViewModel extends ViewModel {
     }
 
     public SearchDocsAdapter getAdapter() {
-        performSearch();
+        updateLocalSearchResults();
         return adapter;
+    }
+
+    private void deleteHistoryItem(SearchDocsItem item) {
+        if (recordDB != null) {
+            recordDB.deleteRecordById(item.getRecordId());
+            updateLocalSearchResults();
+        }
     }
 
     public void performSearch() {
@@ -57,7 +64,8 @@ public class SearchViewModel extends ViewModel {
         return docsItems;
     }
 
-    private void updateLocalSearchResults() {
+    public void updateLocalSearchResults() {
+        if (recordDB == null) return;
         List<Record> records = recordDB.onSearch(searchText.getValue());
         ArrayList<SearchDocsItem> docsItems = new ArrayList<>();
         if (records != null) {

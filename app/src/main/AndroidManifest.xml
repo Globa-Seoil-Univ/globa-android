@@ -125,7 +125,9 @@
         <activity android:name=".main.profile.inquiry.InquiryActivity" />
         <activity android:name=".main.profile.alert.AlertActivity" />
         <activity android:name=".main.profile.theme.ThemeActivity" />
-        <activity android:name=".keyword.detail.KeywordDetailActivity" />
+        <activity
+            android:name=".keyword.detail.KeywordDetailActivity"
+            android:theme="@style/Theme.Globa.KeywordDetail" />
         <activity android:name=".main.folder.permission.FolderPermissionActivity" />
         <activity
             android:name=".docs.DocsActivity"
