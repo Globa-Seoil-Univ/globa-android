@@ -14,10 +14,13 @@ import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.model.entity.FolderInsideRecord;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
+import team.y2k2.globa.sql.RecordDB;
 
 public class FolderInsideFragmentModel extends ViewModel {
-    RecordApiClient recordApiClient;
-    FolderApiClient folderApiClient;
+    private RecordApiClient recordApiClient;
+    private FolderApiClient folderApiClient;
+    private RecordDB recordDB;
+
     private final MutableLiveData<List<FolderInsideRecord>> folderInsideRecords = new MutableLiveData<>();
     private final MutableLiveData<Integer> deleteResponseCode = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
@@ -27,6 +30,7 @@ public class FolderInsideFragmentModel extends ViewModel {
     public void setApiClient(Context context) {
         recordApiClient = new RecordApiClient();
         folderApiClient = new FolderApiClient();
+        recordDB = new RecordDB(context);
     }
 
     public LiveData<String> getFolderTitle() {
@@ -57,7 +61,7 @@ public class FolderInsideFragmentModel extends ViewModel {
 
         if (response == null || response.getRecords() == null || response.getRecords().isEmpty()) {
             isListEmpty.setValue(true);
-            folderInsideRecords.setValue(new java.util.ArrayList<>()); // 비어있는 리스트 전달
+            folderInsideRecords.setValue(new java.util.ArrayList<>());
         } else {
             isListEmpty.setValue(false);
             folderInsideRecords.setValue(response.getRecords());
@@ -72,7 +76,13 @@ public class FolderInsideFragmentModel extends ViewModel {
         Response<Void> response = recordApiClient.deleteRecord(folderId, recordId);
 
         if (response.isSuccessful()) {
-            Log.d(getClass().getName(), "문서 삭제 성공 : " + response.code());
+            Log.d(getClass().getName(), "문서 삭제 성공 (API) : " + response.code());
+
+            if (recordDB != null) {
+                recordDB.deleteRecordById(recordId);
+                Log.d(getClass().getName(), "문서 삭제 성공 (Local DB)");
+            }
+
             fetchFolderInsideRecords(Integer.parseInt(folderId));
         } else {
             Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
