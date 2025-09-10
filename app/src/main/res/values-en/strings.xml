@@ -107,6 +107,7 @@
     <string name="profile_alert_3_title">Event Alert</string>
     <string name="profile_alert_3_description">Notifications will be sent for various events, benefits, and marketing related information.</string>
 
+    <string name="profile_alert_4_description">서비스의 중요 업데이트나 공지를 받습니다.</string>
     <string name="folder_current">Recently Used Folders</string>
     <string name="folder_permission_title">Change Permissions</string>
 
@@ -227,5 +228,6 @@
     <string name="folder_add_success">"Folder added. "</string>
     <string name="dialog_server_unavailable_title">Server unavailable</string>
     <string name="confirm">confirm</string>
+    <string name="profile_alert_4_title">기본 알림</string>
 
 </resources>

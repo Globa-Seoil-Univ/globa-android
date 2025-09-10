@@ -10,11 +10,14 @@ public class AlertRequest {
     private final boolean shareNotification;
     @SerializedName("eventNofi")
     private final boolean eventNotification;
+    @SerializedName("primaryNofi")
+    private final boolean primaryNotification;
 
-    public AlertRequest(boolean uploadNotification, boolean shareNotification, boolean eventNofi) {
+    public AlertRequest(boolean uploadNotification, boolean shareNotification, boolean eventNotification, boolean primaryNotification) {
         this.uploadNotification = uploadNotification;
         this.shareNotification = shareNotification;
-        this.eventNotification = eventNofi;
+        this.eventNotification = eventNotification;
+        this.primaryNotification = primaryNotification;
     }
 
     public boolean isUploadNotification() {
@@ -26,4 +29,5 @@ public class AlertRequest {
     public boolean isEventNofi() {
         return eventNotification;
     }
+    public boolean isPrimaryNotification() { return primaryNotification; }
 }

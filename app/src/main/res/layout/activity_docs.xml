@@ -20,7 +20,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:background="@null"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:importantForAccessibility="no"
             android:src="@drawable/header_back" />
 
@@ -29,8 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_toStartOf="@+id/imageview_docs_more"
             android:layout_toEndOf="@id/image_button_docs_back"
             android:ellipsize="end"
@@ -39,7 +39,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             android:textStyle="bold"
-            tools:text="@string/activity_docs_tools_docs_title" />
+            tools:text="문서 제목" />
 
         <ImageView
             android:id="@+id/imageview_docs_more"
@@ -48,6 +48,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:importantForAccessibility="no"
             android:src="@drawable/more" />
     </RelativeLayout>
@@ -66,37 +67,40 @@
 
         <Button
             android:id="@+id/button_docs_description"
-            style="@style/GlobaSelectedButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:background="@drawable/main_button_selected"
             android:text="@string/description"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:id="@+id/button_docs_summary"
-            style="@style/GlobaButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:background="@drawable/main_button"
             android:text="@string/activity_docs_summary_title"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            style="?android:attr/borderlessButtonStyle"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_docs_detail"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:scrollbarFadeDuration="0"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@id/seekbar_audio_progress"
-        app:layout_constraintTop_toBottomOf="@+id/linearlayout_docs_fragment_switch" />
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout_docs_fragment_switch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearlayout_document_audio"
@@ -104,27 +108,33 @@
         android:layout_height="60dp"
         android:background="#222222"
         android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/textview_document_audio_now_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@id/linearlayout_document_audio"
-        app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
-        tools:text="" />
+        <TextView
+            android:id="@+id/textview_document_audio_now_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            tools:text="00:00" />
 
-    <TextView
-        android:id="@+id/textview_document_audio_end_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/activity_docs_time_end"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@id/linearlayout_document_audio"
-        app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textview_document_audio_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            tools:text="00:00" />
+    </LinearLayout>
+
 
     <ImageButton
         android:id="@+id/imageview_document_replay"
@@ -134,7 +144,6 @@
         android:background="@null"
         android:importantForAccessibility="no"
         android:src="@drawable/docs_replay_5"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
         app:layout_constraintEnd_toStartOf="@id/image_button_document_audio_play"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio" />
@@ -146,7 +155,6 @@
         android:background="@null"
         android:importantForAccessibility="no"
         android:src="@drawable/docs_play"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -163,7 +171,6 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/loading"
-        app:lottie_repeatCount="100"
         app:lottie_speed="1" />
 
     <ImageButton
@@ -174,26 +181,28 @@
         android:background="@null"
         android:importantForAccessibility="no"
         android:src="@drawable/docs_forward_5"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
         app:layout_constraintStart_toEndOf="@id/image_button_document_audio_play"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio" />
 
     <SeekBar
         android:id="@+id/seekbar_audio_progress"
+        style="@style/Widget.AppCompat.SeekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="-16dp"
-        android:layout_marginRight="-16dp"
         android:layout_marginBottom="-4dp"
-        android:max="100"
-        android:progress="0"
         android:progressDrawable="@drawable/audio_seekbar"
-        android:progressTint="@color/primary"
         android:thumb="@drawable/audio_thumb"
-        android:thumbTint="@color/primaryDark"
         app:layout_constraintBottom_toTopOf="@id/linearlayout_document_audio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_audio_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="imageview_document_replay,image_button_document_audio_play,imageview_document_forward"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
