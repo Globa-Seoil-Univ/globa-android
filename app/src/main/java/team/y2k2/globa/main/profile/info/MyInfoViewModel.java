@@ -77,16 +77,31 @@ public class MyInfoViewModel extends ViewModel {
             this.currentName = userInfoResponse.getName();
             this.currentUserCode = userInfoResponse.getCode();
             this.currentUserId = userInfoResponse.getUserId();
-            this.currentProfileImageUrl = userInfoResponse.getProfile(); // 멤버 변수 업데이트
-            this.profileImageLiveData.setValue(this.currentProfileImageUrl); // LiveData도 업데이트
+
+            String newProfileUrlFromServer = userInfoResponse.getProfile();
+            if (newProfileUrlFromServer != null && !newProfileUrlFromServer.isEmpty()) {
+                this.currentProfileImageUrl = newProfileUrlFromServer;
+                this.profileImageLiveData.setValue(this.currentProfileImageUrl);
+            }
 
             updateUserPreferences(userInfoResponse);
             generateAndPublishItemList();
             Log.d(TAG, "fetchAndSetUserInfo: 사용자 정보 로드 및 설정 완료. 이름: " + this.currentName);
         } else {
             Log.e(TAG, "fetchAndSetUserInfo: UserInfoResponse is null");
-            // SharedPreferences에서 로드 시도 또는 에러 처리
         }
+    }
+
+    public void setInitialData(String name, String profileUrl, String userCode, String userId) {
+        this.currentName = name;
+        this.currentProfileImageUrl = profileUrl;
+        this.currentUserCode = userCode;
+        this.currentUserId = userId;
+
+        this.profileImageLiveData.setValue(profileUrl);
+
+        generateAndPublishItemList();
+        Log.d(TAG, "setInitialData: 초기 데이터로 UI 즉시 업데이트 완료. 이름: " + name);
     }
 
     private void updateUserPreferences(UserInfoResponse response) {
@@ -126,13 +141,13 @@ public class MyInfoViewModel extends ViewModel {
         return currentUserId;
     }
 
-    public void uploadImage(MultipartBody.Part multipartBody, String userIdForUpload) {
+    public void uploadImage(MultipartBody.Part multipartBody) {
         if (apiClient == null) {
             Log.e(TAG, "apiClient is null in uploadImage.");
             errorLiveData.setValue("이미지 업로드 준비 중 오류가 발생했습니다.");
             return;
         }
-        Response<Void> response = apiClient.requestUpdateProfileImage(multipartBody, userIdForUpload);
+        Response<Void> response = apiClient.requestUpdateProfileImage(multipartBody);
 
         if (response.isSuccessful()) {
             Log.d(TAG, "이미지 업로드 API 성공: " + response.code());

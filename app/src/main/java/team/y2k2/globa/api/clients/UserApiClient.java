@@ -60,8 +60,8 @@ public class UserApiClient extends ApiClient {
     }
 
     // 프로필 사진 변경
-    public Response<Void> requestUpdateProfileImage(MultipartBody.Part multipartBody, String userId) {
-        return executeVoidApiCall(apiService.requestUpdateProfileImage(userId, getAuthorization(), multipartBody));
+    public Response<Void> requestUpdateProfileImage(MultipartBody.Part multipartBody) {
+        return executeVoidApiCall(apiService.requestUpdateProfileImage(getAuthorization(), multipartBody));
     }
 
 

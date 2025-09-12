@@ -107,6 +107,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
     androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
     debugImplementation "androidx.fragment:fragment-testing:1.8.0"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.5.1" // 사용 중인 espresso-core 버전과 맞추는 것이 좋습니다.
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.5.1"
     androidTestImplementation 'org.hamcrest:hamcrest-library:2.2'
+    implementation 'com.firebaseui:firebase-ui-storage:8.0.2'
+
 }

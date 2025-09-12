@@ -82,7 +82,7 @@ public interface UserApiService {
      */
     @Multipart
     @PATCH(PATCH_USER_PROFILE)
-    Call<Void> requestUpdateProfileImage(@Path("user_id") String userId, @Header("Authorization") String authorization, @Part MultipartBody.Part profile);
+    Call<Void> requestUpdateProfileImage(@Header("Authorization") String authorization, @Part MultipartBody.Part profile);
 
     /**
      * FCM 알림 토큰 등록 (Todo - 작업 필요)
