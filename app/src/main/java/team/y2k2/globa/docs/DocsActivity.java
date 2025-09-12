@@ -149,17 +149,17 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         return (int) player.getDuration();
     }
 
-    public void setDuration(int second) {
-        int position = second;
+    public void setDuration(int seconds) {
+        int positionInMillis = seconds * 1000;
 
-        if (player.getDuration() <= position) {
-            position = (int) player.getDuration();
+        if (player.getDuration() <= positionInMillis) {
+            positionInMillis = (int) player.getDuration();
         }
 
-        binding.seekbarAudioProgress.setProgress(position);
-        binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(position));
+        binding.seekbarAudioProgress.setProgress(positionInMillis);
+        binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(positionInMillis));
 
-        player.seekTo(position);
+        player.seekTo(positionInMillis);
     }
 
     @Override

@@ -125,12 +125,12 @@ public class DocsUploadViewModel extends ViewModel {
             isUploading.postValue(false);
             uploadStatus.postValue("파일 업로드 성공");
 
-            String lang;
-            switch (activity.binding.spinnerDocsUploadLanguage.getSelectedItemPosition()) {
-                case 1: lang = "en"; break;
-                case 2: lang = "ja"; break;
-                default: lang = "ko"; break;
-            }
+            String lang = "ko";
+//            switch (activity.binding.spinnerDocsUploadLanguage.getSelectedItemPosition()) {
+//                case 1: lang = "en"; break;
+//                case 2: lang = "ja"; break;
+//                default: lang = "ko"; break;
+//            }
             requestCreateRecord(model.getRecordName(), lang);
         }).addOnFailureListener(e -> {
             isUploading.postValue(false);
@@ -197,7 +197,7 @@ public class DocsUploadViewModel extends ViewModel {
     public void loadLanguage() {
         languageAdapter = new DocsUploadLanguageAdapter(activity, R.layout.item_language);
         languageAdapter.setDropDownViewResource(R.layout.item_language);
-        activity.binding.spinnerDocsUploadLanguage.setAdapter(languageAdapter);
-        activity.binding.spinnerDocsUploadLanguage.setSelection(0);
+//        activity.binding.spinnerDocsUploadLanguage.setAdapter(languageAdapter);
+//        activity.binding.spinnerDocsUploadLanguage.setSelection(0);
     }
 }

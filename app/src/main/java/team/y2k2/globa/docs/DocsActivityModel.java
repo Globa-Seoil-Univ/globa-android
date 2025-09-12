@@ -64,6 +64,7 @@ public class DocsActivityModel extends ViewModel {
         DocsDetailResponse response = apiClient.requestGetDocumentDetail(folderId, recordId);
 
         docsModel = new DocsModel(response.getSections());
+
         detailAdapter = new DocsDetailAdapter(docsModel.getDetailItems(), activity);
         folderTitle = response.getFolder().getTitle();
 
