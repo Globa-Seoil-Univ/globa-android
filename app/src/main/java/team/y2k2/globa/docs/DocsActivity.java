@@ -75,8 +75,15 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         userApiClient = new UserApiClient();
         UserInfoResponse userInfoResponse = userApiClient.requestUserInfo();
 
-        profile = userInfoResponse.getProfile();
-        name = userInfoResponse.getName();
+        if (userInfoResponse != null) {
+            profile = userInfoResponse.getProfile();
+            name = userInfoResponse.getName();
+        } else {
+            Log.e(getClass().getSimpleName(), "사용자 정보 조회에 실패했습니다.");
+            profile = "";
+            name = "Unknown";
+        }
+
 
         // 파일이 열리는 시간 측정
         startTime = System.currentTimeMillis();
@@ -86,6 +93,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         docsDetailViewModel = new ViewModelProvider(this).get(DocsDetailViewModel.class);
         player = new SimpleExoPlayer.Builder(this).build();
 
+        viewModel.setContext(this);
         viewModel.setActivity(this);
         viewModel.setIntent(getIntent());
         viewModel.setPlayer(player);

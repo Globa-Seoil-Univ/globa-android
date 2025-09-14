@@ -76,14 +76,7 @@ public class MyInfoActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> nicknameEditLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK) {
-                    Intent data = result.getData();
-                    if (data != null && data.hasExtra("updated_name")) {
-                        String updatedName = data.getStringExtra("updated_name");
-                        Log.d(TAG, "NicknameEditActivity 결과 수신: " + updatedName);
-
-                        resultingNewName = updatedName;
-                        myInfoViewModel.updateNameFromEdit(updatedName);
-                    }
+                    Log.d(TAG, "NicknameEditActivity로부터 성공 결과를 받았습니다. 화면은 onResume에서 갱신됩니다.");
                 } else {
                     Log.d(TAG, "NicknameEditActivity 결과가 OK가 아님 또는 데이터 없음.");
                 }
@@ -112,6 +105,12 @@ public class MyInfoActivity extends AppCompatActivity {
         initRecyclerView();
         observeViewModel();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: 화면이 다시 활성화되어 사용자 정보를 새로고침합니다.");
         myInfoViewModel.fetchAndSetUserInfo();
     }
 
@@ -124,15 +123,9 @@ public class MyInfoActivity extends AppCompatActivity {
     private void observeViewModel() {
         myInfoViewModel.getFinishActivity().observe(this, shouldFinish -> {
             if (shouldFinish != null && shouldFinish) {
-                Intent resultIntent = new Intent();
-                if (resultingNewName != null) {
-                    resultIntent.putExtra("newName", resultingNewName);
-                }
-                String finalProfileUrl = myInfoViewModel.getProfileImageLiveData().getValue();
-                if (finalProfileUrl != null) {
-                    resultIntent.putExtra("newProfile", finalProfileUrl);
-                }
-                setResult(Activity.RESULT_OK, resultIntent);
+                // ProfileFragment로 결과를 전달하기 위한 로직 (필요시 활성화)
+                // Intent resultIntent = new Intent();
+                // setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });
@@ -188,8 +181,6 @@ public class MyInfoActivity extends AppCompatActivity {
                         .into(binding.imageviewMyInfoPhoto);
             }
             else {
-                // ▼▼▼▼▼ 수정된 부분 ▼▼▼▼▼
-                // StorageReference에서 다운로드 URL을 직접 받아와서 String으로 Glide에 전달
                 StorageReference imageRef = storage.getReference().child(imageUrl);
                 imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     Glide.with(this)
@@ -203,7 +194,6 @@ public class MyInfoActivity extends AppCompatActivity {
                             .load(R.drawable.profile_user)
                             .into(binding.imageviewMyInfoPhoto);
                 });
-                // ▲▲▲▲▲ 수정된 부분 ▲▲▲▲▲
             }
         } else {
             Log.d(TAG, "loadProfileImageUI: imageUrl이 null이거나 비어있어 기본 이미지 로드.");

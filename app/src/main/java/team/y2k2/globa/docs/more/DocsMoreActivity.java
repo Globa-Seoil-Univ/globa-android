@@ -81,10 +81,24 @@ public class DocsMoreActivity extends AppCompatActivity {
             startActivity(toQuizIntent);
         });
 
-        // 링크 공유 버튼
-        binding.relativelayoutDocsMoreShare.setOnClickListener(v -> Toast.makeText(this, "미구현", Toast.LENGTH_SHORT).show());
-
+        binding.relativelayoutDocsMoreShare.setOnClickListener(v -> shareLink());
     }
+
+    private void shareLink() {
+        if (recordId == null || recordId.isEmpty()) {
+            Toast.makeText(this, "공유할 수 없는 문서입니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String deepLink = "globa://docs/" + recordId;
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, deepLink);
+
+        startActivity(Intent.createChooser(shareIntent, "링크 공유"));
+    }
+
 
     protected void showBottomSheetDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);

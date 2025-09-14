@@ -1,5 +1,6 @@
 package team.y2k2.globa.docs;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -40,8 +41,13 @@ public class DocsActivityModel extends ViewModel {
     DocsSummaryAdapter summaryAdapter;
     private DocsActivity activity;
     private SimpleExoPlayer player;
+    private Context context;
 
     private boolean isDownloadFailed = false;
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     public void setActivity(DocsActivity activity) {
         this.activity = activity;
@@ -62,6 +68,11 @@ public class DocsActivityModel extends ViewModel {
         RecordApiClient apiClient = new RecordApiClient();
 
         DocsDetailResponse response = apiClient.requestGetDocumentDetail(folderId, recordId);
+
+        if (response == null) {
+            Log.e(getClass().getSimpleName(), "문서 상세 정보 조회에 실패했습니다.");
+            return;
+        }
 
         docsModel = new DocsModel(response.getSections());
 
@@ -89,6 +100,12 @@ public class DocsActivityModel extends ViewModel {
     }
 
     public void loadAudio() {
+        if (audioUrl == null || audioUrl.isEmpty()) {
+            Log.e(getClass().getName(), "오디오 URL이 비어있습니다.");
+            binding.lottieAudioDownload.setVisibility(View.INVISIBLE);
+            return;
+        }
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference audioRef = storageRef.child(audioUrl);
@@ -213,7 +230,9 @@ public class DocsActivityModel extends ViewModel {
     }
 
     public void clearDisposable() {
-        detailAdapter.clearDisposable();
+        if(detailAdapter != null) {
+            detailAdapter.clearDisposable();
+        }
     }
 
 }
