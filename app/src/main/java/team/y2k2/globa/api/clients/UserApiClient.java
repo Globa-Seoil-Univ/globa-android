@@ -64,13 +64,12 @@ public class UserApiClient extends ApiClient {
         return executeVoidApiCall(apiService.requestUpdateProfileImage(getAuthorization(), multipartBody));
     }
 
-
     public LoginResponse requestSignIn(LoginRequest request) {
         return executeApiCall(apiService.requestSignIn(request));
     }
 
     public TokenResponse requestToken(TokenRequest request) {
-        return executeApiCall(apiService.getRequestToken(APPLICATION_JSON, getAuthorization(), request));
+        return executeApiCall(apiService.getRequestToken(APPLICATION_JSON, request));
     }
 
     // 알림 상태 수정

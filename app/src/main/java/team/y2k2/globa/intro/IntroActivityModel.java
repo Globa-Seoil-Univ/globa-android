@@ -3,6 +3,7 @@ package team.y2k2.globa.intro;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -50,9 +51,12 @@ public class IntroActivityModel extends ViewModel {
     }
 
     public void autoLogin() {
+        Log.d(getClass().getName(), "자동 로그인을 시도합니다...");
         if (model.checkAutoLogin()) {
+            Log.d(getClass().getName(), "자동 로그인 조건 충족 (Refresh Token 존재).");
             autoLoginSuccess.setValue(true);
         } else {
+            Log.d(getClass().getName(), "자동 로그인 조건 불충족. 로그인 화면으로 진행합니다.");
             autoLoginSuccess.setValue(false);
             isLoading.setValue(false);
             startButtonEnabled.setValue(true);

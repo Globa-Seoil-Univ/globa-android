@@ -53,6 +53,7 @@ public class IntroActivity extends AppCompatActivity {
                         viewModel.autoLogin();
                         viewModel.getAutoLoginSuccess().observe(this, success -> {
                             if (success) {
+                                Log.d(getClass().getName(), "로그인 성공");
                                 viewModel.navigateToMain(this);
                             } else {
                                 binding.buttonIntroBottomStart.setVisibility(View.VISIBLE);

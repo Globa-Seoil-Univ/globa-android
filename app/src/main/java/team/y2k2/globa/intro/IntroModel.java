@@ -34,9 +34,8 @@ public class IntroModel {
     public boolean checkAutoLogin() {
         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         String refreshToken = preferences.getString("refreshToken", "");
-        String accessToken = preferences.getString("accessToken", "");
-        Log.d(getClass().getName(), "AT : " + accessToken);
-        return !refreshToken.equalsIgnoreCase("") && !accessToken.equalsIgnoreCase("");
+        Log.d(getClass().getName(), "자동 로그인 확인 중... Refresh Token 존재 여부: " + !refreshToken.isEmpty());
+        return !refreshToken.isEmpty();
     }
 
     public void requestNotificationPermission(Activity activity) {

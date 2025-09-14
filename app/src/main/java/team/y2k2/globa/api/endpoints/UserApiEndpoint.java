@@ -20,7 +20,8 @@ public class UserApiEndpoint {
 //    회원 가입과 로그인
     public static final String POST_USER = "/user";
 //    Access Token 갱신
-    public static final String POST_USER_AUTH = "/user/auth";
+    public static final String POST_USER_AUTH = "/user/refresh";
+
 //    알림 정보 수정
     public static final String PUT_USER_NOTIFICATION = "/user/notification";
 //    FCM 알림 토큰

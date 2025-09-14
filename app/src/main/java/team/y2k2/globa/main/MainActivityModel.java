@@ -59,7 +59,7 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
 
     public void refreshMainFragmentRecords() {
         if (mainFragment != null) {
-            mainFragment.showRecords(0);
+            mainFragment.refreshData();
         }
     }
 

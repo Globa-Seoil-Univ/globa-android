@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -42,6 +43,12 @@ public class MainModel {
     public String getUserInfo() {
         apiClient = new UserApiClient();
         UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+
+        if (userInfoResponse == null) {
+            Log.e("MainModel", "사용자 정보 조회 API가 null을 반환했습니다.");
+            return null;
+        }
+
         return userInfoResponse.getUserId();
     }
 

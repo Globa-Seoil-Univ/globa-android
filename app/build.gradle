@@ -110,5 +110,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:3.5.1"
     androidTestImplementation 'org.hamcrest:hamcrest-library:2.2'
     implementation 'com.firebaseui:firebase-ui-storage:8.0.2'
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
 
 }

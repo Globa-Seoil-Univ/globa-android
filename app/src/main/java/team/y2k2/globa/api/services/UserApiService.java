@@ -100,7 +100,7 @@ public interface UserApiService {
      * Access Token 갱신
      */
     @POST(POST_USER_AUTH)
-    Call<TokenResponse> getRequestToken(@Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body TokenRequest refreshToken);
+    Call<TokenResponse> getRequestToken(@Header("Content-Type") String contentType, @Body TokenRequest refreshToken);
 
     /**
      * 알림 정보 수정

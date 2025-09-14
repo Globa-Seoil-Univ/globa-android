@@ -52,8 +52,6 @@ import team.y2k2.globa.R;
 // import team.y2k2.globa.docs.DocsActivity; // 현재 테스트에서 직접 사용 안 함
 import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.main.MainActivity;
-// import team.y2k2.globa.main.search.SearchActivity; // 현재 테스트에서 직접 사용 안 함
-// import team.y2k2.globa.notification.NotificationActivity; // 현재 테스트에서 직접 사용 안 함
 
 @RunWith(AndroidJUnit4.class)
 public class StatisticsFragmentTest {
@@ -171,7 +169,7 @@ public class StatisticsFragmentTest {
         onView(withId(statisticsMainTitleId)).check(matches(isDisplayed()));
 
         onView(withId(statisticsWordChartTitleId)).check(matches(isDisplayed()));
-        onView(withId(statisticsWordChartTitleId)).check(matches(withText(R.string.fragment_statistics_title_word)));
+        onView(withId(statisticsWordChartTitleId)).check(matches(withText(R.string.activity_docs_statistics_title_word)));
 
         onView(withId(statisticsTimeChartTitleId)).check(matches(isDisplayed()));
         onView(withId(statisticsTimeChartTitleId)).check(matches(withText(R.string.activity_docs_statistics_title_time))); // 통계 프래그먼트용 문자열 리소스 사용 권장

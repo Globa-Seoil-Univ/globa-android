@@ -1,44 +1,30 @@
 package team.y2k2.globa;
 
 import static androidx.test.espresso.Espresso.onView;
-// import static androidx.test.espresso.Espresso.pressBack; // 필요시 사용
 import static androidx.test.espresso.action.ViewActions.click;
-// import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-// import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
-// import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
-// import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.junit.Assert.assertEquals;
-// import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail; // fail 추가
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
@@ -57,17 +43,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-// import java.util.concurrent.atomic.AtomicReference; // AtomicReference는 현재 사용 안 함
 
 import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.main.MainActivity;
-import team.y2k2.globa.main.profile.ProfileFragment;
-import team.y2k2.globa.main.profile.SettingItem;
 import team.y2k2.globa.main.profile.SettingItemAdapter;
 import team.y2k2.globa.main.profile.alert.AlertActivity;
-import team.y2k2.globa.main.profile.alert.AlertItem;
-import team.y2k2.globa.main.profile.alert.AlertViewModel;
 
 
 @RunWith(AndroidJUnit4.class)

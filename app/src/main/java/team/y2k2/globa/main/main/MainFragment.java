@@ -15,13 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -33,34 +32,78 @@ import team.y2k2.globa.main.search.*;
 import team.y2k2.globa.notification.*;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
-    Button[] docsFilterButtons;
-    FragmentMainBinding binding;
-    MainFragmentModel viewModel;
+    private Button[] docsFilterButtons;
+    private FragmentMainBinding binding;
+    private MainFragmentModel viewModel;
 
-    int filterType;
+    private int currentFilterType = RECORDS_FILTER_CURRENTLY;
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentMainBinding.inflate(getLayoutInflater());
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentMainBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(MainFragmentModel.class);
         viewModel.setContext(getContext());
 
-        setLogoColor();
-        setFilterButtons();
-        setOnClickListeners();
-        setOnRefreshListener(binding.swiperefreshlayoutMain);
-        showPromotions();
-        filterType = RECORDS_FILTER_CURRENTLY;
-        showRecords(filterType);
-        checkNotification();
+        setupUI();
+        observeViewModel();
+        loadInitialData();
 
         return binding.getRoot();
     }
 
+    private void setupUI() {
+        setLogoColor();
+        setFilterButtons();
+        setOnClickListeners();
+        setOnRefreshListener(binding.swiperefreshlayoutMain);
+    }
+
+    /**
+     * ViewModel의 LiveData를 관찰하여 UI를 업데이트하도록 설정합니다.
+     */
+    private void observeViewModel() {
+        // 프로모션 이미지 LiveData 관찰
+        viewModel.getPromotionsLiveData().observe(getViewLifecycleOwner(), this::updatePromotions);
+
+        // 최신 기록 LiveData 관찰
+        viewModel.getCurrentlyRecordsLiveData().observe(getViewLifecycleOwner(), this::updateRecordsList);
+
+        // 많이 본 기록 LiveData 관찰
+        viewModel.getMostViewedRecordsLiveData().observe(getViewLifecycleOwner(), this::updateRecordsList);
+
+        // 공유한 기록 LiveData 관찰
+        viewModel.getSharedRecordsLiveData().observe(getViewLifecycleOwner(), this::updateRecordsList);
+
+        // 공유받은 기록 LiveData 관찰
+        viewModel.getReceivedRecordsLiveData().observe(getViewLifecycleOwner(), this::updateRecordsList);
+
+        // 읽지 않은 알림 LiveData 관찰
+        viewModel.getNotificationCheckLiveData().observe(getViewLifecycleOwner(), checkResponse -> {
+            // 알림 아이콘 상태 변경 등의 UI 로직
+        });
+    }
+
+    /**
+     * 프래그먼트가 처음 생성될 때 필요한 초기 데이터를 불러옵니다.
+     */
+    private void loadInitialData() {
+        viewModel.loadPromotionsImage();
+        viewModel.loadCurrentlyRecords(); // 기본값으로 최신 기록을 불러옵니다.
+        viewModel.loadUnreadNotificationCheck();
+    }
+
+    /**
+     * 외부(e.g., MainActivity)에서 데이터 새로고침을 요청할 때 호출됩니다.
+     * 현재 선택된 필터 타입으로 데이터를 다시 불러옵니다.
+     */
+    public void refreshData() {
+        if (viewModel != null) {
+            loadRecordsByFilter(currentFilterType);
+        }
+    }
+
     public void setFilterButtons() {
         docsFilterButtons = new Button[4];
-
         docsFilterButtons[RECORDS_FILTER_CURRENTLY] = binding.buttonMainDocsType1;
         docsFilterButtons[RECORDS_FILTER_MOST_VIEWED] = binding.buttonMainDocsType2;
         docsFilterButtons[RECORDS_FILTER_SHARED] = binding.buttonMainDocsType3;
@@ -72,12 +115,71 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         for (int i = 0; i < docsFilterButtons.length; i++) {
-            if (docsFilterButtons[i] != v) continue;
-
-            changeButtonDisplay(docsFilterButtons[i]);
-            showRecords(i);
+            if (docsFilterButtons[i] == v) {
+                changeButtonDisplay(docsFilterButtons[i]);
+                loadRecordsByFilter(i);
+                break;
+            }
         }
     }
+
+    /**
+     * 필터 타입에 따라 ViewModel에 데이터 로딩을 요청합니다.
+     * @param filterType 필터 종류 (예: 최신, 많이 본)
+     */
+    private void loadRecordsByFilter(int filterType) {
+        this.currentFilterType = filterType;
+        switch (filterType) {
+            case RECORDS_FILTER_MOST_VIEWED:
+                viewModel.loadMostViewedRecords();
+                break;
+            case RECORDS_FILTER_SHARED:
+                viewModel.loadSharedRecords();
+                break;
+            case RECORDS_FILTER_RECEIVED:
+                viewModel.loadReceivedRecords();
+                break;
+            case RECORDS_FILTER_CURRENTLY:
+            default:
+                viewModel.loadCurrentlyRecords();
+        }
+    }
+
+    /**
+     * LiveData로부터 받은 문서 목록으로 RecyclerView를 업데이트합니다.
+     * @param items 서버로부터 받은 문서 목록
+     */
+    private void updateRecordsList(ArrayList<DocsListItem> items) {
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+
+        // 목록이 비어있을 경우, "항목 없음"을 표시하기 위한 아이템을 추가합니다.
+        if (items.isEmpty()) {
+            items.add(new DocsListItem()); // '항목 없음' 뷰를 위한 빈 아이템
+        }
+
+        DocsListItemAdapter adapter = new DocsListItemAdapter(items, getActivity());
+        int numColumns = calculateNoOfColumns(getContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), numColumns);
+
+        binding.recyclerviewMainDocument.setAdapter(adapter);
+        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
+    }
+
+    /**
+     * LiveData로부터 받은 프로모션 이미지 URL 배열로 ViewPager를 업데이트합니다.
+     * @param images 서버로부터 받은 이미지 URL 배열
+     */
+    private void updatePromotions(String[] images) {
+        if (images == null) return;
+        ViewPager viewPager = binding.viewpagerMainCarousel;
+        NoticeFragmentAdapter noticeAdapter = new NoticeFragmentAdapter(getChildFragmentManager(), images);
+        NoticeAutoScrollHandler autoScrollHandler = new NoticeAutoScrollHandler(viewPager);
+        viewPager.setAdapter(noticeAdapter);
+        autoScrollHandler.startAutoScroll();
+    }
+
 
     public void changeButtonDisplay(Button button) {
         for (Button docsFilterButton : docsFilterButtons) {
@@ -91,12 +193,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void setOnRefreshListener(SwipeRefreshLayout refreshLayout) {
         refreshLayout.setOnRefreshListener(() -> {
-            showRecords(filterType);
-            binding.swiperefreshlayoutMain.setRefreshing(false);
+            loadRecordsByFilter(currentFilterType);
+            binding.swiperefreshlayoutMain.setRefreshing(false); // 로딩이 완료되면 LiveData가 UI를 업데이트할 것이므로, 여기서는 바로 숨깁니다.
         });
     }
 
     public void setLogoColor() {
+        if(getContext() == null) return;
         SpannableStringBuilder spanTitle = new SpannableStringBuilder(binding.textviewMainTitle.getText());
         spanTitle.setSpan(new ForegroundColorSpan(getContext().getColor(R.color.primary)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.textviewMainTitle.setText(spanTitle);
@@ -108,71 +211,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
 
         binding.imageButtonMainNotification.setOnClickListener(v -> {
-            Intent intent = new Intent(this.getActivity(), NotificationActivity.class);
+            Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
         });
 
         binding.imageButtonMainSearch.setOnClickListener(v -> {
-            Intent intent = new Intent(this.getActivity(), SearchActivity.class);
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
         });
     }
 
-    public void showRecords(int buttonFilterType) {
-        DocsListItemAdapter adapter;
-
-        filterType = buttonFilterType;
-
-        switch (buttonFilterType) {
-            case RECORDS_FILTER_MOST_VIEWED:
-                adapter = new DocsListItemAdapter(viewModel.getMostViewedRecords(), getActivity());
-                break;
-            case RECORDS_FILTER_SHARED:
-                adapter = new DocsListItemAdapter(viewModel.getSharedRecords(), getActivity());
-                break;
-            case RECORDS_FILTER_RECEIVED:
-                adapter = new DocsListItemAdapter(viewModel.getReceivedRecords(), getActivity());
-                break;
-            case RECORDS_FILTER_CURRENTLY:
-            default:
-                adapter = new DocsListItemAdapter(viewModel.getCurrentlyRecords(), getActivity());
-        }
-
-        if (adapter.getItemCount() == 0) {
-            ArrayList<DocsListItem> items = new ArrayList<>();
-            items.add(new DocsListItem());
-            adapter = new DocsListItemAdapter(items, getActivity());
-        }
-
-        int numColumns = calculateNoOfColumns(binding.getRoot().getContext());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), numColumns);
-
-        binding.recyclerviewMainDocument.setAdapter(adapter);
-        binding.recyclerviewMainDocument.setLayoutManager(gridLayoutManager);
-    }
-
-    private void showPromotions() {
-        ViewPager viewPager = binding.viewpagerMainCarousel;
-
-        NoticeFragmentAdapter noticeAdapter = new NoticeFragmentAdapter(getChildFragmentManager(), viewModel.getPromotionsImage());
-        NoticeAutoScrollHandler autoScrollHandler = new NoticeAutoScrollHandler(viewPager);
-        viewPager.setAdapter(noticeAdapter);
-        autoScrollHandler.startAutoScroll();
-    }
-
     private int calculateNoOfColumns(Context context) {
+        if (context == null) return 1;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
 
-        if (dpWidth >= DisplayMetrics.DENSITY_600) {
-            return 2;
-        } else {
-            return 1;
-        }
-    }
-
-    private void checkNotification() {
-        viewModel.getUnreadNotificationCheck();
-        viewModel.getNotificationCheckLiveData().observe(getViewLifecycleOwner(), checkResponse -> {});
+        // 태블릿과 같은 넓은 화면에서는 2열로 표시
+        return (dpWidth >= 600) ? 2 : 1;
     }
 }
+
