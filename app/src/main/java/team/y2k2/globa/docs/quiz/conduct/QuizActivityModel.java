@@ -1,5 +1,7 @@
 package team.y2k2.globa.docs.quiz.conduct;
 
+import android.content.Context;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -17,8 +19,8 @@ public class QuizActivityModel extends ViewModel {
     private final MutableLiveData<List<Quiz>> quizLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
-    public QuizActivityModel() {
-        apiClient = new RecordApiClient();
+    public QuizActivityModel(Context context) {
+        apiClient = new RecordApiClient(context);
     }
 
     public MutableLiveData<List<Quiz>> getQuizLiveData() {

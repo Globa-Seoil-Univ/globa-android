@@ -1,13 +1,16 @@
 package team.y2k2.globa.docs;
 
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.MediaController;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.clients.RecordApiClient;
@@ -39,7 +43,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     DocsActivityModel viewModel;
     DocsDetailViewModel docsDetailViewModel;
     DocsMoreActivityModel docsMoreActivityModel;
-    RecordApiClient apiClient;
+    RecordApiClient recordApiClient;
     UserApiClient userApiClient;
     SimpleDateFormat dateFormat;
     private SimpleExoPlayer player;
@@ -55,24 +59,40 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-
-            binding.constraintlayoutDocs.setPadding(
-                    systemBars.left,
-                    systemBars.top,
-                    systemBars.right,
-                    0
-            );
-
+            binding.constraintlayoutDocs.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.constraintlayoutDocs.getLayoutParams();
-            params.bottomMargin = systemBars.bottom;
-            binding.constraintlayoutDocs.setLayoutParams(params);
-
+            if (params != null) {
+                params.bottomMargin = systemBars.bottom;
+                binding.constraintlayoutDocs.setLayoutParams(params);
+            }
             return WindowInsetsCompat.CONSUMED;
         });
 
+        recordApiClient = new RecordApiClient(this);
+        userApiClient = new UserApiClient(this);
 
-        apiClient = new RecordApiClient();
-        userApiClient = new UserApiClient();
+        Intent intent = getIntent();
+        Uri data = intent.getData();
+        String recordId = intent.getStringExtra("recordId");
+        String folderId = intent.getStringExtra("folderId");
+
+        if (data != null) {
+            // URI 형식: globa://folders/{folderId}/docs/{recordId}
+            List<String> pathSegments = data.getPathSegments();
+            if (pathSegments != null && pathSegments.size() == 3 && "docs".equals(pathSegments.get(1))) {
+                folderId = pathSegments.get(0);
+                recordId = pathSegments.get(2);
+                Log.d(getClass().getSimpleName(), "딥링크로부터 ID 파싱 성공: folderId=" + folderId + ", recordId=" + recordId);
+            }
+        }
+
+        if (folderId == null || recordId == null || folderId.isEmpty() || recordId.isEmpty()) {
+            Toast.makeText(this, "문서 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+            Log.e(getClass().getSimpleName(), "folderId 또는 recordId가 유효하지 않아 DocsActivity를 종료합니다.");
+            finish();
+            return;
+        }
+
         UserInfoResponse userInfoResponse = userApiClient.requestUserInfo();
 
         if (userInfoResponse != null) {
@@ -84,8 +104,6 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
             name = "Unknown";
         }
 
-
-        // 파일이 열리는 시간 측정
         startTime = System.currentTimeMillis();
         dateFormat = DateTimeFormatter.getDateFormat(LanguageUtils.getCurrentLocale(this));
 
@@ -95,49 +113,39 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
 
         viewModel.setContext(this);
         viewModel.setActivity(this);
-        viewModel.setIntent(getIntent());
+        viewModel.setIds(folderId, recordId);
         viewModel.setPlayer(player);
         viewModel.setBinding(binding);
         viewModel.getResponse();
 
-        docsDetailViewModel.getIsFirstCommentLiveData().observe(DocsActivity.this, isFirst -> {
-            Log.d(getClass().getSimpleName(), "DocsActivity에서 첫 댓글 옵저버 시작");
+        docsDetailViewModel.getIsFirstCommentLiveData().observe(this, isFirst -> {
             if (isFirst) {
-                Log.d(getClass().getSimpleName(), "첫 댓글 감지 및 화면 다시 로드 시작");
                 viewModel.getResponse();
                 docsDetailViewModel.setIsFirstCommentLiveData(false);
             }
         });
 
-        docsDetailViewModel.getIsAllDeletedLiveData().observe(DocsActivity.this, isAllDeleted -> {
-            Log.d(getClass().getSimpleName(), "DocsActivity에서 모든 댓글 삭제 옵저버 시작");
+        docsDetailViewModel.getIsAllDeletedLiveData().observe(this, isAllDeleted -> {
             if (isAllDeleted) {
-                Log.d(getClass().getSimpleName(), "모든 삭제 감지 및 화면 다시 로드 시작");
                 viewModel.getResponse();
                 docsDetailViewModel.setIsAllDeletedLiveData(false);
             }
         });
 
         binding.textviewDocsTitle.setText(viewModel.getTitle());
-
         binding.imageButtonDocsBack.setOnClickListener(v -> {
-            player.stop();
+            if (player != null) player.stop();
             finish();
         });
-
         binding.imageviewDocsMore.setOnClickListener(v -> startActivity(viewModel.getDocsMoreIntent()));
-
         binding.buttonDocsDescription.setOnClickListener(v -> showDescription());
-
         binding.buttonDocsSummary.setOnClickListener(v -> showSummary());
 
         setContentView(binding.getRoot());
 
-        // 문서 삭제 시
         docsMoreActivityModel = new ViewModelProvider(this).get(DocsMoreActivityModel.class);
         docsMoreActivityModel.setApiClient(this);
-        docsMoreActivityModel.getIsDeleted().observe(DocsActivity.this, isDeleted -> {
-            // 문서 더보기의 삭제여부 변수(LiveData) 관찰
+        docsMoreActivityModel.getIsDeleted().observe(this, isDeleted -> {
             if (isDeleted) {
                 finish();
             }
@@ -165,21 +173,16 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     }
 
     @Override
-    public void start() {
-        player.play();
-    }
+    public void start() { if (player != null) player.play(); }
 
     @Override
-    public void pause() {
-        player.pause();
-    }
+    public void pause() { if (player != null) player.pause(); }
 
     @Override
-    public int getDuration() {
-        return (int) player.getDuration();
-    }
+    public int getDuration() { return player != null ? (int) player.getDuration() : 0; }
 
     public void setDuration(int seconds) {
+        if (player == null) return;
         int positionInMillis = seconds * 1000;
 
         if (player.getDuration() <= positionInMillis) {
@@ -193,44 +196,28 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     }
 
     @Override
-    public int getCurrentPosition() {
-        return (int) player.getCurrentPosition();
-    }
+    public int getCurrentPosition() { return player != null ? (int) player.getCurrentPosition() : 0; }
 
     @Override
-    public void seekTo(int pos) {
-        player.seekTo(pos);
-    }
+    public void seekTo(int pos) { if (player != null) player.seekTo(pos); }
 
     @Override
-    public boolean isPlaying() {
-        return player.isPlaying();
-    }
+    public boolean isPlaying() { return player != null && player.isPlaying(); }
 
     @Override
-    public int getBufferPercentage() {
-        return player.getBufferedPercentage();
-    }
+    public int getBufferPercentage() { return player != null ? player.getBufferedPercentage() : 0; }
 
     @Override
-    public boolean canPause() {
-        return true;
-    }
+    public boolean canPause() { return true; }
 
     @Override
-    public boolean canSeekBackward() {
-        return true;
-    }
+    public boolean canSeekBackward() { return true; }
 
     @Override
-    public boolean canSeekForward() {
-        return true;
-    }
+    public boolean canSeekForward() { return true; }
 
     @Override
-    public int getAudioSessionId() {
-        return player.getAudioSessionId();
-    }
+    public int getAudioSessionId() { return player != null ? player.getAudioSessionId() : 0; }
 
     public void startUpdatingSeekBar() {
         updateSeekbarRunnable = new Runnable() {
@@ -239,71 +226,50 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
                 if (player != null && player.isPlaying()) {
                     int currentPosition = (int) player.getCurrentPosition();
                     binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(currentPosition));
-
                     binding.seekbarAudioProgress.setProgress(currentPosition);
                 }
-                handler.postDelayed(this, 1000); // 1초마다 업데이트
+                handler.postDelayed(this, 1000);
             }
         };
         handler.post(updateSeekbarRunnable);
     }
 
-    public void stopUpdatingSeekBar() {
-        handler.removeCallbacks(updateSeekbarRunnable);
-    }
+    public void stopUpdatingSeekBar() { if(updateSeekbarRunnable != null) handler.removeCallbacks(updateSeekbarRunnable); }
 
     @Override
     protected void onPause() {
         super.onPause();
         stopUpdatingSeekBar();
-        if (Util.SDK_INT <= 23) {
-            player.pause();
-        }
+        if (Util.SDK_INT <= 23 && player != null) player.pause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         stopUpdatingSeekBar();
-        if (Util.SDK_INT > 23) {
-            player.pause();
-        }
+        if (Util.SDK_INT > 23 && player != null) player.pause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         stopUpdatingSeekBar();
-        player.release();
-        player = null;
-
-        // 문서 상세 보기 종료 시
+        if (player != null) {
+            player.release();
+            player = null;
+        }
         long endTime = System.currentTimeMillis();
         long durationMilliSecond = endTime - startTime;
         int durationMinute = (int) (durationMilliSecond / 60000);
-        Log.d("시간", "열려 있던 시간(분): " + durationMinute);
-
-        // durationMinute, dateFormat으로 공부시간 API 수정 필요
-        Log.d(getClass().getSimpleName(), "공부 시간 수정 요청 (folderId: " + viewModel.getFolderId() + ", recordId: " + viewModel.getRecordId() + ", 분: " + durationMinute + ", dateFormat: " + dateFormat.format(new Date()) + ")");
-        apiClient.updateStudyTime(viewModel.getFolderId(), viewModel.getRecordId(), String.valueOf(durationMinute));
-
-        // detailAdapter에 생성된 disposable 메모리 해제
-        viewModel.clearDisposable();
+        if (recordApiClient != null && viewModel != null) {
+            recordApiClient.updateStudyTime(viewModel.getFolderId(), viewModel.getRecordId(), String.valueOf(durationMinute));
+            viewModel.clearDisposable();
+        }
     }
 
-    public String getFolderId() {
-        return viewModel.getFolderId();
-    }
-
-    public String getRecordId() {
-        return viewModel.getRecordId();
-    }
-
-    public String getProfile() {
-        return profile;
-    }
-
-    public String getName() {
-        return name;
-    }
+    public String getFolderId() { return viewModel.getFolderId(); }
+    public String getRecordId() { return viewModel.getRecordId(); }
+    public String getProfile() { return profile; }
+    public String getName() { return name; }
 }
+

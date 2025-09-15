@@ -1,5 +1,7 @@
 package team.y2k2.globa.main.profile.alert;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -19,8 +21,8 @@ public class AlertViewModel extends ViewModel {
     private final MutableLiveData<Boolean> hasChanges = new MutableLiveData<>(false);
     private boolean initialPrimary, initialUpload, initialShare, initialEvent;
 
-    public AlertViewModel() {
-        apiClient = new UserApiClient();
+    public AlertViewModel(Context context) {
+        apiClient = new UserApiClient(context);
     }
 
     public LiveData<AlertResponse> getAlertLiveData() {

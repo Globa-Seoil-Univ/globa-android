@@ -54,7 +54,7 @@ public class DocsUploadViewModel extends ViewModel {
         this.activity = activity;
         this.model = new DocsUploadModel(activity.getIntent());
         this.folderApiClient = new FolderApiClient();
-        this.recordApiClient = new RecordApiClient();
+        this.recordApiClient = new RecordApiClient(this.activity);
         setDocsTitle();
         audioPlayState.setValue(AudioPlayState.STOPPED);
     }

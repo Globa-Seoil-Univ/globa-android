@@ -41,7 +41,7 @@ public class MyInfoViewModel extends ViewModel {
 
     public void initialize(Context appContext) {
         this.applicationContext = appContext.getApplicationContext();
-        this.apiClient = new UserApiClient();
+        this.apiClient = new UserApiClient(appContext);
         if (itemListLiveData.getValue() == null) {
             itemListLiveData.setValue(new ArrayList<>());
         }

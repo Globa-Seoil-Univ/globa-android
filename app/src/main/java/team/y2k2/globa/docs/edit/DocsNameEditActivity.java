@@ -49,7 +49,7 @@ public class DocsNameEditActivity extends AppCompatActivity {
             return;
         }
 
-        RecordApiClient apiClient = new RecordApiClient();
+        RecordApiClient apiClient = new RecordApiClient(this);
         DocsNameEditViewModelFactory factory = new DocsNameEditViewModelFactory(
                 initialTitle, recordId, folderId, apiClient
         );

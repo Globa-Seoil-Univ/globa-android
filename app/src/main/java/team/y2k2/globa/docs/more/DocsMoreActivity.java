@@ -85,12 +85,14 @@ public class DocsMoreActivity extends AppCompatActivity {
     }
 
     private void shareLink() {
-        if (recordId == null || recordId.isEmpty()) {
+        // [수정] folderId와 recordId가 모두 유효한지 확인합니다.
+        if (folderId == null || folderId.isEmpty() || recordId == null || recordId.isEmpty()) {
             Toast.makeText(this, "공유할 수 없는 문서입니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String deepLink = "globa://docs/" + recordId;
+        // [수정] 요청하신 "globa://folders/{folderId}/docs/{docsId}" 형식으로 딥링크를 생성합니다.
+        String deepLink = "globa://folders/" + folderId + "/docs/" + recordId;
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");

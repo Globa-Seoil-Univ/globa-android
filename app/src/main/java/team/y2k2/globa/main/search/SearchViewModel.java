@@ -25,7 +25,7 @@ public class SearchViewModel extends ViewModel {
 
     public void setContext(Context context) {
         recordDB = new RecordDB(context);
-        apiClient = new RecordApiClient();
+        apiClient = new RecordApiClient(context);
     }
 
     public SearchDocsAdapter getAdapter() {

@@ -17,7 +17,7 @@ public class DocsMoreActivityModel extends ViewModel {
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        this.apiClient = new RecordApiClient();
+        this.apiClient = new RecordApiClient(context);
         this.recordDB = new RecordDB(context);
     }
 

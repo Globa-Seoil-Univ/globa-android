@@ -28,8 +28,8 @@ public class FolderInsideFragmentModel extends ViewModel {
     private final MutableLiveData<Boolean> isListEmpty = new MutableLiveData<>(false);
 
     public void setApiClient(Context context) {
-        recordApiClient = new RecordApiClient();
         folderApiClient = new FolderApiClient();
+        recordApiClient = new RecordApiClient(context);
         recordDB = new RecordDB(context);
     }
 

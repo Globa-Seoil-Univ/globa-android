@@ -139,8 +139,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="docs"
-                    android:scheme="globa" />
+                    android:scheme="globa"
+                    android:host="folders"
+                    android:pathPattern="/.*/docs/.*" />
             </intent-filter>
         </activity>
         <activity

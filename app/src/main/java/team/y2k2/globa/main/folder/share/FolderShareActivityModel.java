@@ -21,7 +21,7 @@ public class FolderShareActivityModel extends ViewModel {
 
     public void setApiClient(Context context) {
         folderApiClient = new FolderApiClient();
-        userApiClient = new UserApiClient();
+        userApiClient = new UserApiClient(context);
     }
 
     public LiveData<UserSearchResponse> getUserSearchLiveData() {

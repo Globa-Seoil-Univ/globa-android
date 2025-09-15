@@ -77,7 +77,7 @@ public class StatisticsFragment extends Fragment {
         statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
         statisticsViewModel.setApiClient(getContext());
 
-        UserApiClient apiClient = new UserApiClient();
+        UserApiClient apiClient = new UserApiClient(getContext());
         userId = apiClient.requestUserInfo().getUserId();
         statisticsViewModel.getStatistics(userId);
 

@@ -1,5 +1,6 @@
     package team.y2k2.globa.main.profile.edit;
 
+    import android.content.Context;
     import android.util.Log;
 
     import androidx.lifecycle.LiveData;
@@ -20,8 +21,8 @@
         private String newNickname = "";
         private String userId;
 
-        public NicknameEditViewModel() {
-            apiClient = new UserApiClient();
+        public NicknameEditViewModel(Context context) {
+            apiClient = new UserApiClient(context);
         }
 
         public LiveData<Boolean> getFinishActivity() {

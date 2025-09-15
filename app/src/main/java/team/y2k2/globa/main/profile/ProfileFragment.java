@@ -171,7 +171,7 @@ public class ProfileFragment extends Fragment {
             userInfoDisposable.dispose();
         }
 
-        UserApiClient apiClient = new UserApiClient();
+        UserApiClient apiClient = new UserApiClient(getActivity());
 
         userInfoDisposable = Observable.fromCallable(() -> apiClient.requestUserInfo())
                 .subscribeOn(Schedulers.io())

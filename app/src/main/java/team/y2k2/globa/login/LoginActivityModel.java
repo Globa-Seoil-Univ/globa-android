@@ -29,7 +29,7 @@ public class LoginActivityModel extends ViewModel implements SnsLoginManager.Sns
 
     public void setContext(Activity activity) {
         this.activity = activity;
-        this.userApiClient = new UserApiClient();
+        this.userApiClient = new UserApiClient(activity);
         this.snsLoginManager = new SnsLoginManager(activity, this);
         this.preferencesManager = new UserPreferencesManager(activity);
         Log.d(TAG, "ViewModel이 초기화되고 Context가 설정되었습니다.");

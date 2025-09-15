@@ -18,7 +18,7 @@ public class StatisticsViewModel extends ViewModel {
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
     public void setApiClient(Context context) {
-        this.apiClient = new UserApiClient();
+        this.apiClient = new UserApiClient(context);
     }
 
     public LiveData<StatisticsResponse> getStatisticsLiveData() {

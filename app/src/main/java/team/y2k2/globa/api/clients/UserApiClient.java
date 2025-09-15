@@ -2,6 +2,8 @@ package team.y2k2.globa.api.clients;
 
 import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;
 
+import android.content.Context;
+
 import okhttp3.MultipartBody;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
@@ -22,11 +24,8 @@ import team.y2k2.globa.api.services.UserApiService;
 public class UserApiClient extends ApiClient {
     private final UserApiService apiService;
 
-    public UserApiClient() {
-        super(ApiClient.getInstance(null).getContext());
-        if(ApiClient.getInstance(null).getContext() == null) {
-            throw new IllegalStateException("context 가 없음. Login 프로세스나 Logout 프로세스에서 다시 확인");
-        }
+    public UserApiClient(Context context) {
+        super(ApiClient.getInstance(context).getContext());
         apiService = ApiClient.getRetrofit().create(UserApiService.class);
     }
 

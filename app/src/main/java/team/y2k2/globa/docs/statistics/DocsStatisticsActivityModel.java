@@ -15,7 +15,7 @@ public class DocsStatisticsActivityModel extends ViewModel {
     private RecordApiClient apiClient;
 
     public void setApiClient(Context context) {
-        apiClient = new RecordApiClient();
+        apiClient = new RecordApiClient(context);
     }
 
     public LiveData<StatisticsResponse> getDocsStatisticsLiveData() {

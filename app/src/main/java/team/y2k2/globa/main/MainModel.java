@@ -29,7 +29,7 @@ public class MainModel {
 
     public MainModel(Activity activity) {
         this.activity = activity;
-        this.apiClient = new UserApiClient();
+        this.apiClient = new UserApiClient(activity);
     }
     public MainModel(List<Record> records) {
         this.activity = null; // 이 경우 activity가 필요 없으므로 null로 초기화

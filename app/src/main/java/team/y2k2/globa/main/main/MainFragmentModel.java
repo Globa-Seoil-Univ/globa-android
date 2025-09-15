@@ -47,7 +47,7 @@ public class MainFragmentModel extends ViewModel {
         // 에러 다이얼로그 표시는 ApiClient의 책임이므로 ViewModel에서 재정의할 필요가 없습니다.
         this.noticeApiClient = new NoticeApiClient();
         this.folderApiClient = new FolderApiClient();
-        this.recordApiClient = new RecordApiClient();
+        this.recordApiClient = new RecordApiClient(context);
         this.notificationApiClient = new NotificationApiClient();
     }
 

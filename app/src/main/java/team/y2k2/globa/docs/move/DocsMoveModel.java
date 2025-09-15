@@ -23,7 +23,7 @@ public class DocsMoveModel extends ViewModel {
 
     public void setApiClient(Context context) {
         this.folderApiClient = new FolderApiClient();
-        this.recordApiClient = new RecordApiClient();
+        this.recordApiClient = new RecordApiClient(context);
     }
 
     public LiveData<Boolean> getMoveSuccessLiveData() {

@@ -27,7 +27,7 @@ public class WithdrawActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_withdraw);
 
-        WithdrawViewModelFactory factory = new WithdrawViewModelFactory(); // DI 사용 시 수정
+        WithdrawViewModelFactory factory = new WithdrawViewModelFactory(this); // DI 사용 시 수정
         viewModel = new ViewModelProvider(this, factory).get(WithdrawViewModel.class);
 
         binding.setViewModel(viewModel);
