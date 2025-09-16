@@ -16,7 +16,6 @@ import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.api.clients.NoticeApiClient;
 import team.y2k2.globa.api.clients.NotificationApiClient;
 import team.y2k2.globa.api.clients.RecordApiClient;
-import team.y2k2.globa.api.model.entity.Keyword;
 import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.FolderResponse;
 import team.y2k2.globa.api.model.response.NoticeResponse;

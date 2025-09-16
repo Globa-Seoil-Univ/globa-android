@@ -7,13 +7,16 @@ import java.util.List;
 import team.y2k2.globa.api.model.entity.Quiz;
 
 public class QuizResponse {
-    @SerializedName("quizs")
-    private List<Quiz> quizs;
 
-    public List<Quiz> getQuizs() {
-        return quizs;
+    @SerializedName("quizzes")
+    private List<Quiz> quizzes;
+
+    public List<Quiz> getQuizzes() {
+        return quizzes;
     }
-    public void setQuizs(List<Quiz> quizs) {
-        this.quizs = quizs;
+
+    public void setQuizzes(List<Quiz> quizzes) {
+        this.quizzes = quizzes;
     }
 }
+

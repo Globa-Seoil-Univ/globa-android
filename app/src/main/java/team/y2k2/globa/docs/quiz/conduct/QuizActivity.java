@@ -3,6 +3,7 @@ package team.y2k2.globa.docs.quiz.conduct;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,10 +20,10 @@ import team.y2k2.globa.docs.quiz.result.QuizResultActivity;
 public class QuizActivity extends AppCompatActivity {
     private final List<Boolean> answerList = new ArrayList<>();
     private final List<QuizResult> quizResultList = new ArrayList<>();
-    ActivityQuizBinding binding;
-    int folderId, recordId;
-    QuizActivityModel quizActivityModel;
-    List<Quiz> quizList;
+    private ActivityQuizBinding binding;
+    private int folderId, recordId;
+    private QuizActivityModel quizActivityModel;
+    private List<Quiz> quizList;
     private int currentIndex = 0;
 
     protected static int countTrue(List<Boolean> answerList) {
@@ -41,79 +42,100 @@ public class QuizActivity extends AppCompatActivity {
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        initializeUI();
+        // ViewModel을 한 번만 초기화합니다.
+        quizActivityModel = new ViewModelProvider(this).get(QuizActivityModel.class);
+        quizActivityModel.setContext(this);
+        quizActivityModel.initialize();
 
+        initializeUI();
+        observeViewModel();
+        loadData();
     }
 
     private void initializeUI() {
-
-        // 뒤로가기 버튼
         binding.buttonQuizBack.setOnClickListener(v -> finish());
-
-        loadData();
-
-        // O 버튼 선택
-        binding.layoutQuizCorrect.setOnClickListener(v -> fetchQuiz(1));
-
-        // X 버튼 선택
-        binding.layoutQuizWrong.setOnClickListener(v -> fetchQuiz(0));
+        binding.layoutQuizCorrect.setOnClickListener(v -> fetchQuiz(true));  // O 버튼은 true
+        binding.layoutQuizWrong.setOnClickListener(v -> fetchQuiz(false)); // X 버튼은 false
     }
 
-    private void loadData() {
-        folderId = Integer.parseInt(getIntent().getStringExtra("folderId"));
-        recordId = Integer.parseInt(getIntent().getStringExtra("recordId"));
-
-        quizActivityModel = new ViewModelProvider(this).get(QuizActivityModel.class);
-        quizActivityModel.gatherQuiz(folderId, recordId);
-
-        quizActivityModel.getQuizLiveData().observe(this, quiz -> {
-            if (quiz != null) {
-                quizList = quiz;
-                Log.d("api 수신 여부", "수신 성공");
-                Log.d("퀴즈 시작", "퀴즈 시작");
-                // 1번 문제 설정
-                binding.textviewQuizCount.setText(getString(R.string.quiz) + "1/" + quizList.size());
-                binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
-                Log.d("퀴즈 정답", String.valueOf(quizList.get(currentIndex).getAnswer()));
+    private void observeViewModel() {
+        quizActivityModel.getQuizLiveData().observe(this, quizzes -> {
+            if (quizzes != null && !quizzes.isEmpty()) {
+                this.quizList = quizzes;
+                Log.d("QuizActivity", "퀴즈 데이터 수신 성공. 총 " + quizList.size() + "개의 퀴즈");
+                startQuiz();
             } else {
-                Log.d("api 수신 여부", "수신 실패");
+                Log.e("QuizActivity", "퀴즈 데이터 수신에 실패했거나 퀴즈가 없습니다.");
+                finish();
             }
         });
     }
 
-    protected void fetchQuiz(int answer) {
-        if (quizList.get(currentIndex).getAnswer() == answer) {
-            // 정답일 때
-            answerList.add(true);
-            quizResultList.add(new QuizResult(quizList.get(currentIndex).getQuizId(), true));
-        } else {
-            // 오답일 때
-            answerList.add(false);
-            quizResultList.add(new QuizResult(quizList.get(currentIndex).getQuizId(), false));
-        }
-        currentIndex++;
-        if (currentIndex < quizList.size()) {
-            binding.textviewQuizCount.setText(getString(R.string.quiz) + (currentIndex + 1) + "/" + quizList.size());
-            binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
-            Log.d("퀴즈 정답", String.valueOf(quizList.get(currentIndex).getAnswer()));
-        } else {
-            // 결과화면으로 넘어가기전 퀴즈 결과 api 전송
-            for (int i = 0; i < quizResultList.size(); i++) {
-                Log.d("퀴즈 결과", "퀴즈 결과: " + (quizResultList.get(i).getQuizId()) + ", " + (quizResultList.get(i).isCorrect()));
-            }
-            quizActivityModel.submitQuizResult(folderId, recordId, quizResultList);
-
-            // 결과화면으로 넘어가기전 결과 계산
-            int totalQuestion = quizList.size(); // 총 문제 수
-            int correctAnswer = countTrue(answerList); // 총 정답 수
-            int grade = (int) (((double) correctAnswer / (double) totalQuestion) * 100); // 최종 점수
-
-            // 결과화면으로 이동
-            Intent intent = new Intent(this, QuizResultActivity.class);
-            intent.putExtra("grade", grade); // 최종 점수 전송
-            intent.putExtra("correctAnswer", correctAnswer); // 총 정답 수 전송
-            startActivity(intent);
+    private void loadData() {
+        try {
+            folderId = Integer.parseInt(getIntent().getStringExtra("folderId"));
+            recordId = Integer.parseInt(getIntent().getStringExtra("recordId"));
+            quizActivityModel.gatherQuiz(folderId, recordId);
+        } catch (NumberFormatException e) {
+            Log.e("QuizActivity", "folderId 또는 recordId 파싱 실패", e);
             finish();
         }
+    }
+
+    private void startQuiz() {
+        currentIndex = 0;
+        updateQuestionUI();
+    }
+
+    private void updateQuestionUI() {
+        if (quizList == null || currentIndex >= quizList.size()) return;
+
+        binding.textviewQuizCount.setText(getString(R.string.quiz) + " " + (currentIndex + 1) + "/" + quizList.size());
+        binding.textviewQuizQuestion.setText(quizList.get(currentIndex).getQuestion());
+        Log.d("QuizActivity", "현재 문제: " + (currentIndex + 1) + ", 정답: " + quizList.get(currentIndex).getAnswer());
+    }
+
+
+    protected void fetchQuiz(boolean userAnswer) {
+        if (quizList == null || currentIndex >= quizList.size()) {
+            Log.e("QuizActivity", "퀴즈 목록이 없거나 인덱스를 초과하여 처리할 수 없습니다.");
+            return;
+        }
+
+        boolean correctAnswer = quizList.get(currentIndex).getAnswer();
+        int currentQuizId = quizList.get(currentIndex).getQuizId();
+
+        if (userAnswer == correctAnswer) {
+            answerList.add(true);
+            quizResultList.add(new QuizResult(currentQuizId, true));
+        } else {
+            answerList.add(false);
+            quizResultList.add(new QuizResult(currentQuizId, false));
+        }
+
+        currentIndex++;
+
+        if (currentIndex < quizList.size()) {
+            updateQuestionUI();
+        } else {
+            submitAndShowResult();
+        }
+    }
+
+    private void submitAndShowResult() {
+        // 1. 퀴즈 결과 API 전송
+        quizActivityModel.submitQuizResult(folderId, recordId, quizResultList);
+
+        // 2. 결과 계산
+        int totalQuestion = quizList.size();
+        int correctAnswerCount = countTrue(answerList);
+        int grade = (int) (((double) correctAnswerCount / (double) totalQuestion) * 100);
+
+        // 3. 결과 화면으로 이동
+        Intent intent = new Intent(this, QuizResultActivity.class);
+        intent.putExtra("grade", grade);
+        intent.putExtra("correctAnswer", correctAnswerCount);
+        startActivity(intent);
+        finish();
     }
 }

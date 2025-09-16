@@ -34,6 +34,7 @@ import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.StudyTimeRequest;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
+import team.y2k2.globa.api.model.response.QuizResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
@@ -67,7 +68,7 @@ public interface RecordApiService {
      * 퀴즈 조회
      */
     @GET(GET_RECORD_QUIZ)
-    Call<List<Quiz>> requestGetQuiz(@Path("folderId") int folderId, @Path("recordId") int recordId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<QuizResponse> requestGetQuiz(@Path("folderId") int folderId, @Path("recordId") int recordId, @Header("Content-Type") String contentType);
 
     /**
      * 모든 녹음 파일 조회

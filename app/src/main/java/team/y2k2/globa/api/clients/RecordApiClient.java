@@ -16,6 +16,7 @@ import team.y2k2.globa.api.model.request.RecordCreateRequest;
 import team.y2k2.globa.api.model.request.StudyTimeRequest;
 import team.y2k2.globa.api.model.response.DocsDetailResponse;
 import team.y2k2.globa.api.model.response.FolderInsideRecordResponse;
+import team.y2k2.globa.api.model.response.QuizResponse;
 import team.y2k2.globa.api.model.response.RecordResponse;
 import team.y2k2.globa.api.model.response.SearchResponse;
 import team.y2k2.globa.api.model.response.StatisticsResponse;
@@ -82,8 +83,8 @@ public class RecordApiClient extends ApiClient {
     }
 
     // 퀴즈 불러오기
-    public List<Quiz> requestGetQuiz(int folderId, int recordId) {
-        return executeApiCall(apiService.requestGetQuiz(folderId, recordId, APPLICATION_JSON, getAuthorization()));
+    public QuizResponse requestGetQuiz(int folderId, int recordId) {
+        return executeApiCall(apiService.requestGetQuiz(folderId, recordId, APPLICATION_JSON));
     }
 
     // 퀴즈 결과 전송

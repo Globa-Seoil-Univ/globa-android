@@ -8,7 +8,7 @@ public class Quiz {
     @SerializedName("question")
     private String question;
     @SerializedName("answer")
-    private int answer;
+    private boolean answer;
 
     public int getQuizId() {
         return quizId;
@@ -24,10 +24,11 @@ public class Quiz {
         this.question = question;
     }
 
-    public int getAnswer() {
+    public boolean getAnswer() {
         return answer;
     }
-    public void setAnswer(int answer) {
+    public void setAnswer(boolean answer) {
         this.answer = answer;
     }
 }
+
