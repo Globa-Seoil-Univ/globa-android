@@ -67,6 +67,11 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
         holder.datetime.setText(getDateFormat(currentItem.getDatetime()));
 
         holder.layout.setOnClickListener(v -> {
+            if(holder.processing.getVisibility() == View.VISIBLE) {
+                Toast.makeText(holder.itemView.getContext(), "아직 문서가 준비되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(holder.itemView.getContext(), DocsActivity.class);
             intent.putExtra("title", currentItem.getTitle());
             intent.putExtra("folderId", currentItem.getFolderId());
