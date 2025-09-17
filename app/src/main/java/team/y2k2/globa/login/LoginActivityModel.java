@@ -92,14 +92,12 @@ public class LoginActivityModel extends ViewModel implements SnsLoginManager.Sns
                         Log.e(TAG, "onSuccess: 사용자 정보 조회에 실패했으나 로그인은 계속 진행합니다.");
                     }
 
-                    // 로그인 성공 상태를 UI 스레드로 전달
                     loginSuccess.postValue(true);
                 }
             } catch (Exception e) {
                 Log.e(TAG, "로그인 처리 중 에러 발생", e);
                 errorMessage.postValue("알 수 없는 오류가 발생했습니다.");
             } finally {
-                // 모든 작업이 끝나면 로딩 상태를 UI 스레드로 전달
                 loading.postValue(false);
             }
         });

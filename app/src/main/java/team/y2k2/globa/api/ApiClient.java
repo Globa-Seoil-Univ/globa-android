@@ -85,7 +85,7 @@ public class ApiClient {
         }
 
         clientBuilder.addInterceptor(new AuthInterceptor());
-        clientBuilder.authenticator(new TokenAuthenticator());
+        clientBuilder.addInterceptor(new TokenRefreshInterceptor());
 
         OkHttpClient client = clientBuilder.build();
 
@@ -103,7 +103,6 @@ public class ApiClient {
             Request originalRequest = chain.request();
 
             if (originalRequest.header("Authorization") != null) {
-                Log.d(TAG, "AuthInterceptor: 수동으로 추가된 Authorization 헤더를 발견하여, 자동 추가를 건너뜁니다.");
                 return chain.proceed(originalRequest);
             }
 
@@ -111,7 +110,6 @@ public class ApiClient {
             if (accessToken != null && !accessToken.isEmpty()) {
                 Request.Builder requestBuilder = originalRequest.newBuilder()
                         .header("Authorization", "Bearer " + accessToken);
-                Log.d(TAG, "AuthInterceptor: Authorization 헤더가 없어 자동으로 추가합니다.");
                 return chain.proceed(requestBuilder.build());
             }
 
@@ -119,24 +117,123 @@ public class ApiClient {
         }
     }
 
+    private class TokenRefreshInterceptor implements Interceptor {
+        @NonNull
+        @Override
+        public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+            Request originalRequest = chain.request();
+            okhttp3.Response initialResponse = chain.proceed(originalRequest);
+
+            boolean isTokenExpiredError = false;
+            if (initialResponse.code() == 400) {
+                try {
+                    ResponseBody responseBody = initialResponse.peekBody(Long.MAX_VALUE);
+                    String bodyString = responseBody.string();
+                    if (bodyString.contains("EXPIRED_ACCESS_TOKEN")) {
+                        Log.d(TAG, "TokenRefreshInterceptor: 400 에러지만, Access Token 만료 코드를 확인하여 갱신을 시도합니다.");
+                        isTokenExpiredError = true;
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "TokenRefreshInterceptor: 400 에러 본문 확인 중 오류 발생", e);
+                }
+            }
+
+            if (initialResponse.code() == 401 || isTokenExpiredError) {
+
+                initialResponse.close();
+
+                synchronized (this) {
+                    String currentTokenInPrefs = preferences.getString("accessToken", "");
+                    String failedToken = originalRequest.header("Authorization") != null ? originalRequest.header("Authorization").replace("Bearer ", "") : "";
+
+                    if (currentTokenInPrefs != null && !currentTokenInPrefs.equals(failedToken)) {
+                        Request newRequest = originalRequest.newBuilder()
+                                .header("Authorization", "Bearer " + currentTokenInPrefs)
+                                .build();
+                        return chain.proceed(newRequest);
+                    }
+
+                    String refreshToken = preferences.getString("refreshToken", "");
+                    if (refreshToken == null || refreshToken.isEmpty()) {
+                        navigateToLoginScreen();
+                        return initialResponse;
+                    }
+
+                    Retrofit refreshRetrofit = new Retrofit.Builder()
+                            .baseUrl(BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    UserApiService refreshService = refreshRetrofit.create(UserApiService.class);
+                    Call<TokenResponse> call = refreshService.getRequestToken("application/json", new TokenRequest(refreshToken));
+
+                    try {
+                        retrofit2.Response<TokenResponse> tokenResponse = call.execute();
+                        if (tokenResponse.isSuccessful() && tokenResponse.body() != null) {
+                            TokenResponse newTokens = tokenResponse.body();
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("accessToken", newTokens.getAccessToken());
+                            editor.putString("refreshToken", newTokens.getRefreshToken());
+                            editor.commit();
+
+                            Log.i(TAG, "토큰 갱신 성공. 새 토큰으로 원래 요청을 재시도합니다.");
+                            Request newRequest = originalRequest.newBuilder()
+                                    .header("Authorization", "Bearer " + newTokens.getAccessToken())
+                                    .build();
+                            return chain.proceed(newRequest);
+                        } else {
+                            navigateToLoginScreen();
+                            return initialResponse;
+                        }
+                    } catch (IOException e) {
+                        return initialResponse;
+                    }
+                }
+            }
+
+            return initialResponse;
+        }
+    }
+
     private class TokenAuthenticator implements Authenticator {
         @Nullable
         @Override
         public Request authenticate(@Nullable Route route, @NonNull okhttp3.Response response) {
-            if (response.code() != 401) {
+            Log.d(TAG, "TokenAuthenticator: Authenticator 동작. 응답 코드: " + response.code() + ", URL: " + response.request().url());
+
+            boolean shouldAttemptRefresh = false;
+            if (response.code() == 401) {
+                Log.d(TAG, "TokenAuthenticator: 401 코드를 감지하여 토큰 갱신을 시작합니다.");
+                shouldAttemptRefresh = true;
+            } else if (response.code() == 400) {
+                Log.d(TAG, "TokenAuthenticator: 400 코드를 감지. 응답 본문을 확인하여 토큰 만료 여부를 검사합니다.");
+                try {
+                    ResponseBody responseBody = response.peekBody(Long.MAX_VALUE);
+                    String bodyString = responseBody.string();
+                    Log.d(TAG, "TokenAuthenticator: 400 에러 본문 내용: " + bodyString);
+                    if (bodyString.contains("EXPIRED_ACCESS_TOKEN")) {
+                        Log.d(TAG, "TokenAuthenticator: 400 에러지만, Access Token 만료 코드를 확인하여 갱신을 시도합니다.");
+                        shouldAttemptRefresh = true;
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "TokenAuthenticator: 400 에러 본문 확인 중 오류 발생", e);
+                }
+            }
+
+            if (!shouldAttemptRefresh) {
+                Log.d(TAG, "TokenAuthenticator: 토큰 갱신이 필요한 에러가 아니므로 Authenticator를 종료합니다.");
                 return null;
             }
-            Log.d(TAG, "TokenAuthenticator: 401 에러 감지. 토큰 갱신을 시도합니다.");
 
+            Log.d(TAG, "TokenAuthenticator: 토큰 갱신을 위해 동기화 블록으로 진입합니다.");
             synchronized (this) {
-                String currentToken = preferences.getString("accessToken", "");
+                String currentTokenInPrefs = preferences.getString("accessToken", "");
                 String failedTokenHeader = response.request().header("Authorization");
                 String failedToken = (failedTokenHeader != null) ? failedTokenHeader.replace("Bearer ", "") : "";
 
-                if (currentToken != null && !currentToken.equals(failedToken)) {
+                if (currentTokenInPrefs != null && !currentTokenInPrefs.equals(failedToken)) {
                     Log.d(TAG, "TokenAuthenticator: 다른 스레드에서 이미 토큰이 갱신되었습니다. 새 토큰으로 재시도합니다.");
                     return response.request().newBuilder()
-                            .header("Authorization", "Bearer " + currentToken)
+                            .header("Authorization", "Bearer " + currentTokenInPrefs)
                             .build();
                 }
 
@@ -154,11 +251,7 @@ public class ApiClient {
                 UserApiService refreshService = refreshRetrofit.create(UserApiService.class);
 
                 Log.d(TAG, "TokenAuthenticator: 서버에 새 토큰을 요청합니다...");
-
-                Call<TokenResponse> call = refreshService.getRequestToken(
-                        "application/json",
-                        new TokenRequest(refreshToken)
-                );
+                Call<TokenResponse> call = refreshService.getRequestToken("application/json", new TokenRequest(refreshToken));
 
                 try {
                     retrofit2.Response<TokenResponse> tokenResponse = call.execute();
@@ -186,6 +279,7 @@ public class ApiClient {
             }
         }
     }
+
     private void navigateToLoginScreen() {
         new android.os.Handler(Looper.getMainLooper()).post(() -> {
             Log.d(TAG, "세션 만료. 로그인 화면으로 이동합니다.");
@@ -221,25 +315,19 @@ public class ApiClient {
         try {
             return CompletableFuture.supplyAsync(() -> {
                 try {
-                    Log.d(TAG, "executeApiCall: 서버와 통신을 시도합니다. URL: " + call.request().url());
                     Response<T> response = call.execute();
                     if (response.isSuccessful()) {
-                        Log.i(TAG, "executeApiCall: 통신 성공. Code: " + response.code() + ", URL: " + call.request().url());
                         return response.body();
-                    } else {
-                        Log.w(TAG, "executeApiCall: 통신 실패. Code: " + response.code() + ", URL: " + call.request().url());
-                        if (response.code() != 401) {
-                            handleErrorCode(response.code());
-                        }
-                        return null;
                     }
+                    if(response.code() != 400 && response.code() != 401) {
+                         handleErrorCode(response.code()); // 필요에 따라 활성화
+                    }
+                    return null;
                 } catch (IOException e) {
-                    Log.e(TAG, "API 호출 중 IOException 발생", e);
                     return null;
                 }
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            Log.e(TAG, "API 호출 Future 실행 중 에러 발생", e);
             return null;
         }
     }
