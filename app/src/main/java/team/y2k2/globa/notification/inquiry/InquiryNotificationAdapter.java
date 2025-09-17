@@ -13,10 +13,10 @@ import java.util.ArrayList;
 
 import team.y2k2.globa.R;
 
-public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.AdapterViewHolder> {
+public class InquiryNotificationAdapter extends RecyclerView.Adapter<InquiryNotificationAdapter.AdapterViewHolder> {
     private final ArrayList<InquiryItem> items;
 
-    public InquiryAdapter(ArrayList<InquiryItem> items) {
+    public InquiryNotificationAdapter(ArrayList<InquiryItem> items) {
         this.items = items;
     }
 
@@ -54,5 +54,11 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.AdapterV
             title = itemView.findViewById(R.id.textview_item_notification_inquiry_title);
             description = itemView.findViewById(R.id.textview_item_notification_inquiry_content);
         }
+    }
+
+    public void updateData(ArrayList<InquiryItem> newItems) {
+        items.clear();
+        items.addAll(newItems);
+        notifyDataSetChanged();
     }
 }

@@ -6,6 +6,7 @@ import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
 import team.y2k2.globa.api.model.request.InquiryRequest;
 import team.y2k2.globa.api.model.response.InquiryDetailResponse;
+import team.y2k2.globa.api.model.response.InquiryResponse;
 import team.y2k2.globa.api.services.InquiryApiService;
 
 public class InquiryApiClient extends ApiClient {
@@ -17,6 +18,11 @@ public class InquiryApiClient extends ApiClient {
             throw new IllegalStateException("context 가 없음. Login 프로세스나 Logout 프로세스에서 다시 확인");
         }
         apiService = ApiClient.getRetrofit().create(InquiryApiService.class);
+    }
+
+    // 문의 조회
+    public InquiryResponse requestGetInquiries() {
+        return executeApiCall(apiService.requestGetInquiries(APPLICATION_JSON, getAuthorization(), 1, 100, "r"));
     }
 
     // 문의 상세

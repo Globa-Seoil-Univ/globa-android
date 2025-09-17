@@ -12,7 +12,6 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra; // hasExtra 추가
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled; // isEnabled 추가
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
@@ -29,7 +28,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.NoMatchingViewException; // NoMatchingViewException import
 import androidx.test.espresso.intent.Intents;
@@ -50,7 +48,7 @@ import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.main.MainActivity;
 import team.y2k2.globa.main.profile.alert.AlertActivity;
 import team.y2k2.globa.main.profile.edit.NicknameEditActivity;
-import team.y2k2.globa.main.profile.inquiry.InquiryActivity;
+import team.y2k2.globa.main.profile.inquiry.add.InquiryAddActivity;
 import team.y2k2.globa.main.profile.info.MyInfoActivity;
 import team.y2k2.globa.main.profile.service_info.ServiceInfoActivity;
 
@@ -246,16 +244,16 @@ public class ProfileFragmentTest {
         onView(withId(profileSettingsRecyclerViewId)).check(matches(isDisplayed()));
         Log.d(TAG, "  5단계: 설정 항목('알림 설정') 클릭 테스트 완료");
 
-        Log.d(TAG, "  6단계: 설정 항목('문의하기') 클릭 테스트 시작");
+        Log.d(TAG, "  6단계: 설정 항목('문의') 클릭 테스트 시작");
         String inquiryText = InstrumentationRegistry.getInstrumentation().getTargetContext().getString(R.string.profile_inquiry);
         onView(withId(profileSettingsRecyclerViewId)).perform(scrollTo(hasDescendant(withText(inquiryText))));
         onView(allOf(withId(itemSettingTitleId), withText(inquiryText))).perform(click());
-        intended(allOf(hasComponent(InquiryActivity.class.getName()), hasExtra("userId", currentUserId)));
+        intended(allOf(hasComponent(InquiryAddActivity.class.getName()), hasExtra("userId", currentUserId)));
         Log.d(TAG, "    InquiryActivity로 userId와 함께 정상 이동 확인");
         pressBack();
         try { Thread.sleep(500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
         onView(withId(profileSettingsRecyclerViewId)).check(matches(isDisplayed()));
-        Log.d(TAG, "  6단계: 설정 항목('문의하기') 클릭 테스트 완료");
+        Log.d(TAG, "  6단계: 설정 항목('문의') 클릭 테스트 완료");
 
         Log.d(TAG, "  7단계: 설정 항목('서비스 정보') 클릭 테스트 시작");
         String serviceInfoText = InstrumentationRegistry.getInstrumentation().getTargetContext().getString(R.string.profile_service_info);

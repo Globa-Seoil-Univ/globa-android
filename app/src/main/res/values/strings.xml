@@ -73,7 +73,7 @@
     <string name="profile_account_username">성빈클론(꼭 지우기)</string>
     <string name="profile_account_code">유저 코드</string>
     <string name="profile_alert_setting">알림 설정</string>
-    <string name="profile_inquiry">문의하기</string>
+    <string name="profile_inquiry">문의</string>
     <string name="profile_clean_data">임시 공간 삭제</string>
     <string name="profile_service_info">서비스 정보</string>
     <string name="profile_confirm">접수</string>

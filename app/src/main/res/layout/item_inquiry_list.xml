@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
+
+    <TextView
+        android:id="@+id/textview_inquiry_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/textview_inquiry_status"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="계정 관련 문의입니다" />
+
+    <TextView
+        android:id="@+id/textview_inquiry_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview_inquiry_title"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/darkGray"
+        android:textSize="12sp"
+        tools:text="2025-09-17" />
+
+    <TextView
+        android:id="@+id/textview_inquiry_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        tools:text="답변 완료" />
+
+</RelativeLayout>
