@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -42,10 +44,17 @@ public class QuizActivity extends AppCompatActivity {
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // ViewModel을 한 번만 초기화합니다.
         quizActivityModel = new ViewModelProvider(this).get(QuizActivityModel.class);
         quizActivityModel.setContext(this);
         quizActivityModel.initialize();
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                showExitConfirmationDialog();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         initializeUI();
         observeViewModel();
@@ -53,7 +62,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        binding.buttonQuizBack.setOnClickListener(v -> finish());
+        binding.buttonQuizBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         binding.layoutQuizCorrect.setOnClickListener(v -> fetchQuiz(true));  // O 버튼은 true
         binding.layoutQuizWrong.setOnClickListener(v -> fetchQuiz(false)); // X 버튼은 false
     }
@@ -137,5 +146,16 @@ public class QuizActivity extends AppCompatActivity {
         intent.putExtra("correctAnswer", correctAnswerCount);
         startActivity(intent);
         finish();
+    }
+
+    private void showExitConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("퀴즈 중단")
+                .setMessage("퀴즈를 중단하고 나가시겠습니까? 진행 상황은 저장되지 않습니다.")
+                .setPositiveButton("나가기", (dialog, which) -> {
+                    finish();
+                })
+                .setNegativeButton("취소", null) // "취소"를 누르면 다이얼로그만 닫힙니다.
+                .show();
     }
 }
