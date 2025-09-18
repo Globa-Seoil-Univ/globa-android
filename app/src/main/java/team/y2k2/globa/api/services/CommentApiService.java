@@ -28,42 +28,42 @@ public interface CommentApiService {
      * 댓글 삭제
      */
     @DELETE(DELETE_COMMENT)
-    Call<Void> deleteComment(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Path("section_id") String sectionId, @Path("highlight_id") String highlightId, @Path("comment_id") String commentId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<Void> deleteComment(@Path("folderId") String folderId, @Path("recordId") String recordId, @Path("sectionId") String sectionId, @Path("highlightId") String highlightId, @Path("commentId") String commentId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
 
     /**
      * 댓글 목록 조회
      */
     @GET(GET_COMMENT)
-    Call<CommentResponse> getComments(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Path("section_id") String sectionId, @Path("highlight_id") String highlightId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Query("page") int page, @Query("count") int count);
+    Call<CommentResponse> getComments(@Path("folderId") String folderId, @Path("recordId") String recordId, @Path("sectionId") String sectionId, @Path("highlightId") String highlightId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Query("page") int page, @Query("count") int count);
 
     /**
      * 대댓글 목록 조회
      */
     @GET(GET_SUB_COMMENT)
-    Call<SubCommentResponse> getSubComments(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Path("section_id") String sectionId, @Path("highlight_id") String highlightId, @Path("parent_id") String parentId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Query("page") int page, @Query("count") int count);
+    Call<SubCommentResponse> getSubComments(@Path("folderId") String folderId, @Path("recordId") String recordId, @Path("sectionId") String sectionId, @Path("highlightId") String highlightId, @Path("parentId") String parentId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Query("page") int page, @Query("count") int count);
 
     /**
      * 댓글 수정
      */
     @PATCH(PATCH_COMMENT_SHARE_USER)
-    Call<Void> updateComment(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Path("section_id") String sectionId, @Path("highlight_id") String highlightId, @Path("comment_id") String commentId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body CommentRequest request);
+    Call<Void> updateComment(@Path("folderId") String folderId, @Path("recordId") String recordId, @Path("sectionId") String sectionId, @Path("highlightId") String highlightId, @Path("commentId") String commentId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body CommentRequest request);
 
     /**
      * 첫 댓글 추가
      */
     @POST(POST_COMMENT_SHARE)
-    Call<Void> requestInsertFirstComment(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Path("section_id") String sectionId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body FirstCommentRequest request);
+    Call<Void> requestInsertFirstComment(@Path("folderId") String folderId, @Path("recordId") String recordId, @Path("sectionId") String sectionId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body FirstCommentRequest request);
 
     /**
      * 댓글 추가
      */
     @POST(POST_COMMENT_SHARE_USER)
-    Call<Void> requestInsertComment(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Path("section_id") String sectionId, @Path("highlight_id") String highlightId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body CommentRequest request);
+    Call<Void> requestInsertComment(@Path("folderId") String folderId, @Path("recordId") String recordId, @Path("sectionId") String sectionId, @Path("highlightId") String highlightId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body CommentRequest request);
 
     /**
      * 대댓글 추가
      */
     @POST(POST_COMMENT_SUB_COMMENT)
-    Call<Void> requestInsertSubComment(@Path("folder_id") String folderId, @Path("record_id") String recordId, @Path("section_id") String sectionId, @Path("highlight_id") String highlightId, @Path("parent_id") String parentId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body SubCommentRequest request);
+    Call<Void> requestInsertSubComment(@Path("folderId") String folderId, @Path("recordId") String recordId, @Path("sectionId") String sectionId, @Path("highlightId") String highlightId, @Path("parentId") String parentId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body SubCommentRequest request);
 
 }

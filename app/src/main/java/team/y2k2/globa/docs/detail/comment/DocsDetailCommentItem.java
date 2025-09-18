@@ -5,7 +5,7 @@ public class DocsDetailCommentItem {
 
     private final String commentId;
     private final boolean hasReply;
-    private final boolean deleted;
+    private boolean deleted;
     private String profile;
     private String name;
     private String createdTime;
@@ -64,5 +64,13 @@ public class DocsDetailCommentItem {
     public boolean isDeleted() {
         return deleted;
     }
+    public boolean hasReply() {
+        return hasReply;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
 
 }
