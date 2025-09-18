@@ -18,6 +18,7 @@ public class NotificationViewModel extends ViewModel {
     private final MutableLiveData<NotificationResponse> notificationLiveData = new MutableLiveData<>();
     private final MutableLiveData<UnreadNotificationCountResponse> unreadCount = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isListEmpty = new MutableLiveData<>(false);
 
     public NotificationViewModel() {
         this.apiClient = new FolderShareApiClient();
@@ -36,8 +37,17 @@ public class NotificationViewModel extends ViewModel {
         return errorLiveData;
     }
 
+    public MutableLiveData<Boolean> getIsListEmpty() { return isListEmpty; }
+
     public void getNotification(String type) {
         NotificationResponse response = notificationApiClient.requestGetNotification(type, 1, 100);
+
+        if (response != null && response.getNotifications() != null) {
+            isListEmpty.postValue(response.getNotifications().isEmpty());
+        } else {
+            isListEmpty.postValue(true);
+        }
+
         notificationLiveData.postValue(response);
     }
 

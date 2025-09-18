@@ -1,7 +1,6 @@
 package team.y2k2.globa;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack; // pressBack() 사용 시 필요
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -23,13 +22,9 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast; // Toast import 추가 (테스트 코드에서는 직접 사용하지 않음)
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.NoMatchingViewException; // NoMatchingViewException import
 import androidx.test.espresso.intent.Intents;
@@ -49,10 +44,10 @@ import org.junit.runner.RunWith;
 import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.main.MainActivity;
 import team.y2k2.globa.main.profile.SettingItemAdapter;
-import team.y2k2.globa.main.profile.inquiry.InquiryActivity;
+import team.y2k2.globa.main.profile.inquiry.add.InquiryAddActivity;
 
 @RunWith(AndroidJUnit4.class)
-public class InquiryActivityTest {
+public class InquiryAddActivityTest {
 
     private static final String TAG = "InquiryActivityTest";
 
@@ -241,7 +236,7 @@ public class InquiryActivityTest {
                 .perform(click());
 
         intended(allOf(
-                hasComponent(InquiryActivity.class.getName()),
+                hasComponent(InquiryAddActivity.class.getName()),
                 hasExtra("userId", not(emptyOrNullString()))
         ), Intents.times(inquiryActivityLaunchAttempt)); // 수정된 카운터 사용
         Log.d(TAG, "    InquiryActivity로 이동 및 Intent " + inquiryActivityLaunchAttempt + "회 발생 확인 완료.");

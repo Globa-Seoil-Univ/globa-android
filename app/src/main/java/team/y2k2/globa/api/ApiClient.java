@@ -8,7 +8,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Looper;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.firebase.ui.storage.BuildConfig;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -16,7 +22,13 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import okhttp3.Authenticator;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
+import okhttp3.Route;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -24,6 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.api.model.request.TokenRequest;
 import team.y2k2.globa.api.model.response.TokenResponse;
+import team.y2k2.globa.api.services.UserApiService;
 import team.y2k2.globa.intro.IntroActivity;
 import team.y2k2.globa.login.LoginActivity;
 
@@ -35,9 +48,11 @@ public class ApiClient {
     public static String BASE_URL = "https://globa.duckdns.org";
 
     protected final Context context;
+    private final SharedPreferences preferences;
 
-    protected ApiClient(Context context) {
+    public ApiClient(Context context) {
         this.context = context.getApplicationContext();
+        this.preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         initializeRetrofit();
     }
 
@@ -48,22 +63,233 @@ public class ApiClient {
         return apiClient;
     }
 
-    public Context getContext() {
-        return context;
-    }
-
     public static Retrofit getRetrofit() {
         return retrofit;
     }
 
-    private void initializeRetrofit() {
-        retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+    public Context getContext() {
+        return context;
     }
 
     public String getAuthorization() {
         SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         return preferences.getString("accessToken", "");
     }
+    private void initializeRetrofit() {
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            clientBuilder.addInterceptor(loggingInterceptor);
+        }
+
+        clientBuilder.addInterceptor(new AuthInterceptor());
+        clientBuilder.addInterceptor(new TokenRefreshInterceptor());
+
+        OkHttpClient client = clientBuilder.build();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    private class AuthInterceptor implements Interceptor {
+        @NonNull
+        @Override
+        public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+            Request originalRequest = chain.request();
+
+            if (originalRequest.header("Authorization") != null) {
+                return chain.proceed(originalRequest);
+            }
+
+            String accessToken = preferences.getString("accessToken", null);
+            if (accessToken != null && !accessToken.isEmpty()) {
+                Request.Builder requestBuilder = originalRequest.newBuilder()
+                        .header("Authorization", "Bearer " + accessToken);
+                return chain.proceed(requestBuilder.build());
+            }
+
+            return chain.proceed(originalRequest);
+        }
+    }
+
+    private class TokenRefreshInterceptor implements Interceptor {
+        @NonNull
+        @Override
+        public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+            Request originalRequest = chain.request();
+            okhttp3.Response initialResponse = chain.proceed(originalRequest);
+
+            boolean isTokenExpiredError = false;
+            if (initialResponse.code() == 400) {
+                try {
+                    ResponseBody responseBody = initialResponse.peekBody(Long.MAX_VALUE);
+                    String bodyString = responseBody.string();
+                    if (bodyString.contains("EXPIRED_ACCESS_TOKEN")) {
+                        Log.d(TAG, "TokenRefreshInterceptor: 400 에러지만, Access Token 만료 코드를 확인하여 갱신을 시도합니다.");
+                        isTokenExpiredError = true;
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "TokenRefreshInterceptor: 400 에러 본문 확인 중 오류 발생", e);
+                }
+            }
+
+            if (initialResponse.code() == 401 || isTokenExpiredError) {
+
+                initialResponse.close();
+
+                synchronized (this) {
+                    String currentTokenInPrefs = preferences.getString("accessToken", "");
+                    String failedToken = originalRequest.header("Authorization") != null ? originalRequest.header("Authorization").replace("Bearer ", "") : "";
+
+                    if (currentTokenInPrefs != null && !currentTokenInPrefs.equals(failedToken)) {
+                        Request newRequest = originalRequest.newBuilder()
+                                .header("Authorization", "Bearer " + currentTokenInPrefs)
+                                .build();
+                        return chain.proceed(newRequest);
+                    }
+
+                    String refreshToken = preferences.getString("refreshToken", "");
+                    if (refreshToken == null || refreshToken.isEmpty()) {
+                        navigateToLoginScreen();
+                        return initialResponse;
+                    }
+
+                    Retrofit refreshRetrofit = new Retrofit.Builder()
+                            .baseUrl(BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    UserApiService refreshService = refreshRetrofit.create(UserApiService.class);
+                    Call<TokenResponse> call = refreshService.getRequestToken("application/json", new TokenRequest(refreshToken));
+
+                    try {
+                        retrofit2.Response<TokenResponse> tokenResponse = call.execute();
+                        if (tokenResponse.isSuccessful() && tokenResponse.body() != null) {
+                            TokenResponse newTokens = tokenResponse.body();
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("accessToken", newTokens.getAccessToken());
+                            editor.putString("refreshToken", newTokens.getRefreshToken());
+                            editor.commit();
+
+                            Log.i(TAG, "토큰 갱신 성공. 새 토큰으로 원래 요청을 재시도합니다.");
+                            Request newRequest = originalRequest.newBuilder()
+                                    .header("Authorization", "Bearer " + newTokens.getAccessToken())
+                                    .build();
+                            return chain.proceed(newRequest);
+                        } else {
+                            navigateToLoginScreen();
+                            return initialResponse;
+                        }
+                    } catch (IOException e) {
+                        return initialResponse;
+                    }
+                }
+            }
+
+            return initialResponse;
+        }
+    }
+
+    private class TokenAuthenticator implements Authenticator {
+        @Nullable
+        @Override
+        public Request authenticate(@Nullable Route route, @NonNull okhttp3.Response response) {
+            Log.d(TAG, "TokenAuthenticator: Authenticator 동작. 응답 코드: " + response.code() + ", URL: " + response.request().url());
+
+            boolean shouldAttemptRefresh = false;
+            if (response.code() == 401) {
+                Log.d(TAG, "TokenAuthenticator: 401 코드를 감지하여 토큰 갱신을 시작합니다.");
+                shouldAttemptRefresh = true;
+            } else if (response.code() == 400) {
+                Log.d(TAG, "TokenAuthenticator: 400 코드를 감지. 응답 본문을 확인하여 토큰 만료 여부를 검사합니다.");
+                try {
+                    ResponseBody responseBody = response.peekBody(Long.MAX_VALUE);
+                    String bodyString = responseBody.string();
+                    Log.d(TAG, "TokenAuthenticator: 400 에러 본문 내용: " + bodyString);
+                    if (bodyString.contains("EXPIRED_ACCESS_TOKEN")) {
+                        Log.d(TAG, "TokenAuthenticator: 400 에러지만, Access Token 만료 코드를 확인하여 갱신을 시도합니다.");
+                        shouldAttemptRefresh = true;
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "TokenAuthenticator: 400 에러 본문 확인 중 오류 발생", e);
+                }
+            }
+
+            if (!shouldAttemptRefresh) {
+                Log.d(TAG, "TokenAuthenticator: 토큰 갱신이 필요한 에러가 아니므로 Authenticator를 종료합니다.");
+                return null;
+            }
+
+            Log.d(TAG, "TokenAuthenticator: 토큰 갱신을 위해 동기화 블록으로 진입합니다.");
+            synchronized (this) {
+                String currentTokenInPrefs = preferences.getString("accessToken", "");
+                String failedTokenHeader = response.request().header("Authorization");
+                String failedToken = (failedTokenHeader != null) ? failedTokenHeader.replace("Bearer ", "") : "";
+
+                if (currentTokenInPrefs != null && !currentTokenInPrefs.equals(failedToken)) {
+                    Log.d(TAG, "TokenAuthenticator: 다른 스레드에서 이미 토큰이 갱신되었습니다. 새 토큰으로 재시도합니다.");
+                    return response.request().newBuilder()
+                            .header("Authorization", "Bearer " + currentTokenInPrefs)
+                            .build();
+                }
+
+                String refreshToken = preferences.getString("refreshToken", "");
+                if (refreshToken == null || refreshToken.isEmpty()) {
+                    Log.e(TAG, "TokenAuthenticator: Refresh Token이 없어 갱신을 중단하고 로그인 화면으로 이동합니다.");
+                    navigateToLoginScreen();
+                    return null;
+                }
+
+                Retrofit refreshRetrofit = new Retrofit.Builder()
+                        .baseUrl(BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                UserApiService refreshService = refreshRetrofit.create(UserApiService.class);
+
+                Log.d(TAG, "TokenAuthenticator: 서버에 새 토큰을 요청합니다...");
+                Call<TokenResponse> call = refreshService.getRequestToken("application/json", new TokenRequest(refreshToken));
+
+                try {
+                    retrofit2.Response<TokenResponse> tokenResponse = call.execute();
+                    if (tokenResponse.isSuccessful() && tokenResponse.body() != null) {
+                        TokenResponse newTokens = tokenResponse.body();
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("accessToken", newTokens.getAccessToken());
+                        editor.putString("refreshToken", newTokens.getRefreshToken());
+                        editor.commit();
+
+                        Log.i(TAG, "토큰 갱신 성공. 새 토큰으로 원래 요청을 재시도합니다.");
+                        return response.request().newBuilder()
+                                .header("Authorization", "Bearer " + newTokens.getAccessToken())
+                                .build();
+                    } else {
+                        String errorBody = tokenResponse.errorBody() != null ? tokenResponse.errorBody().string() : "No error body";
+                        Log.e(TAG, "리프레시 토큰으로 갱신 실패. Status: " + tokenResponse.code() + ", Body: " + errorBody);
+                        navigateToLoginScreen();
+                        return null;
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "토큰 갱신 중 IOException 발생", e);
+                    return null;
+                }
+            }
+        }
+    }
+
+    private void navigateToLoginScreen() {
+        new android.os.Handler(Looper.getMainLooper()).post(() -> {
+            Log.d(TAG, "세션 만료. 로그인 화면으로 이동합니다.");
+            Intent intent = new Intent(context, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("expired", true);
+            context.startActivity(intent);
+        });
+    }
+
 
     public CompletableFuture<Boolean> isServerOpened() {
         return CompletableFuture.supplyAsync(() -> {
@@ -92,10 +318,11 @@ public class ApiClient {
                     Response<T> response = call.execute();
                     if (response.isSuccessful()) {
                         return response.body();
-                    } else {
-                        handleErrorCode(response.code());
-                        return null;
                     }
+                    if(response.code() != 400 && response.code() != 401) {
+                         handleErrorCode(response.code()); // 필요에 따라 활성화
+                    }
+                    return null;
                 } catch (IOException e) {
                     return null;
                 }
@@ -104,7 +331,6 @@ public class ApiClient {
             return null;
         }
     }
-
     // 공통 Void API 호출 처리 메서드
     public Response<Void> executeVoidApiCall(Call<Void> call) {
         try {
@@ -125,43 +351,16 @@ public class ApiClient {
     }
 
     public void handleErrorCode(int code) {
-        Intent intent;
-        userApiClient = new UserApiClient();
-
         switch (code) {
-            // 400 Bad Request 관련 에러: 잘못된 요청, 필요한 인자 누락 등
-            case ERR_BAD_REQUEST: {
-                intent = new Intent(context, IntroActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-                return; // IntroActivity로 이동했으므로 true 반환
-            }
-            case ERR_EXPIRED_ACCESS_TOKEN: {
-                SharedPreferences preferences = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
-                String refreshToken = preferences.getString("refreshToken", "");
-                String accessToken = preferences.getString("accessToken", "");
+            case ERR_UNAUTHORIZED:
+            case ERR_INVALID_TOKEN:
+            case ERR_SIGNATURE:
+            case ERR_EXPIRED_REFRESH_TOKEN:
+                Log.e(TAG, "handleErrorCode: 리프레시 토큰 만료(Code: " + code + "). 강제 로그아웃 처리합니다.");
+                navigateToLoginScreen();
+                return;
 
-                if (!refreshToken.equalsIgnoreCase("") && !accessToken.equalsIgnoreCase("")) {
-                    // TokenRequest, TokenResponse, requestToken()은 기존 코드에서 정의된 대로 사용
-                    TokenRequest request = new TokenRequest(refreshToken);
-                    TokenResponse response = userApiClient.requestToken(request);
-
-                    // 토큰 갱신 실패
-                    if (response != null) { // response가 null이 아닌지 확인
-                        String newAccessToken = response.getAccessToken();
-                        String newRefreshToken = response.getRefreshToken();
-
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("accessToken", newAccessToken);
-                        editor.putString("refreshToken", newRefreshToken);
-                        editor.apply(); // commit() 대신 apply() 사용
-                    } else {
-                        displayErrorDialog(code, "토큰 갱신에 실패했습니다.");
-                    }
-                    return; // 토큰 갱신 성공
-                }
-                return; // refreshToken이나 accessToken이 없는 경우
-            }
+            case ERR_BAD_REQUEST:
             case ERR_ACTIVE_REFRESH_TOKEN:
             case ERR_NOT_MATCH_REFRESH_TOKEN:
             case ERR_REQUIRED_ACCESS_TOKEN:
@@ -174,9 +373,6 @@ public class ApiClient {
             case ERR_REQUIRED_FOLDER_ID:
             case ERR_REQUIRED_QUIZ_ID:
             case ERR_REQUIRED_RECORD_ID:
-                displayErrorDialog(code, "잘못된 요청 또는 필요한 정보가 누락되었습니다.");
-                return;
-            // 400 Bad Request 관련 에러 (추가): 잘못된 요청, 필요한 정보 누락 등 (post 관련)
             case ERR_REQUIRED_QUIZ:
             case ERR_RECORD_POST_BAD_REQUEST:
             case ERR_REQUIRED_RECORD_TITLE:
@@ -189,46 +385,20 @@ public class ApiClient {
             case ERR_NOFI_TYPE_BAD_REQUEST:
             case ERR_REQUIRED_NOTIFICATION_ID:
             case ERR_NOT_PARENT_COMMENT:
-                displayErrorDialog(code, "잘못된 요청 또는 필요한 정보가 누락되었습니다. (post 관련)");
+                displayErrorDialog(code, "잘못된 요청 또는 필요한 정보가 누락되었습니다.");
                 return;
 
-            // 401 Unauthorized 관련 에러: 인증 실패, 잘못된 토큰
-            case ERR_UNAUTHORIZED:
-            case ERR_INVALID_TOKEN:
-            case ERR_SIGNATURE:
-            case ERR_EXPIRED_REFRESH_TOKEN:
-                // LoginActivity를 시작하고 현재 액티비티 스택을 모두 제거
-                intent = new Intent(context, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("expired", true);
-                context.startActivity(intent);
-                return;
-
-            // 403 Forbidden 관련 에러: 권한 없음, 잘못된 접근
             case ERR_FORBIDDEN:
             case ERR_NOT_NULL_ROLE:
             case ERR_NOT_DESERVE_MODIFY_INVITATION:
             case ERR_NOT_DESERVE_DICTIONARY:
             case ERR_MISMATCH_INQUIRY_OWNER:
             case ERR_MISMATCH_FOLDER_OWNER:
-                displayErrorDialog(code, "권한이 없습니다.");
-                return;
             case ERR_NOT_DESERVE_ADD_NOTICE:
-                displayErrorDialog(code, "공지사항 작성 권한이 없습니다.");
-                return;
             case ERR_NOT_DESERVE_ACCESS_FOLDER:
-                displayErrorDialog(code, "폴더 접근 권한이 없습니다.");
-                return;
-
             case ERR_NOT_DESERVE_POST_COMMENT:
-                displayErrorDialog(code, "댓글 작성 권한이 없습니다.");
-                return;
             case ERR_NOT_DESERVE_FCM:
-                displayErrorDialog(code, "알림을 보낼 수 없습니다.");
-                return;
             case ERR_INVALID_TOKEN_USER:
-                displayErrorDialog(code, "토큰이 일치하지 않습니다.");
-                return;
             case ERR_MISMATCH_COMMENT_OWNER:
             case ERR_MISMATCH_NOFI_OWNER:
             case ERR_MISMATCH_ANALYSIS_OWNER:
@@ -240,69 +410,31 @@ public class ApiClient {
                 displayErrorDialog(code, "권한이 없습니다.");
                 return;
 
-            // 404 Not Found 관련 에러: 자원을 찾을 수 없음
             case ERR_NOT_FOUND:
-                displayErrorDialog(code, "서버가 응답하지 않습니다.");
-                return;
             case ERR_NOT_FOUND_USER:
-                displayErrorDialog(code, "찾을 수 없는 유저입니다.");
-                return;
             case ERR_NOT_FOUND_DEFAULT_FOLDER:
-                displayErrorDialog(code, "기본 폴더를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_TARGET_USER:
-                displayErrorDialog(code, "유저를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_INQUIRY:
-                displayErrorDialog(code, "문의를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_NOTICE:
-                displayErrorDialog(code, "공지를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_NOTIFICATION:
-                displayErrorDialog(code, "알림을 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_ANSWER:
-                displayErrorDialog(code, "답변을 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_FOLDER:
             case ERR_NOT_FOUND_ORIGIN_FOLDER:
             case ERR_NOT_FOUND_TARGET_FOLDER:
             case ERR_NOT_FOUND_FOLDER_FIREBASE:
-                displayErrorDialog(code, "폴더를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_ACCESSIBLE_FOLDER:
-                displayErrorDialog(code, "접근 가능한 폴더를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_SHARE:
-                displayErrorDialog(code, "공유 정보를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_HIGHLIGHT:
-                displayErrorDialog(code, "하이라이트를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_PARENT_COMMENT:
-                displayErrorDialog(code, "댓글을 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_RECORD:
-                displayErrorDialog(code, "문서를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_ANALYSIS:
-                displayErrorDialog(code, "통계를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_QUIZ:
-                displayErrorDialog(code, "퀴즈를 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_RECORD_FIREBASE:
-                displayErrorDialog(code, "음성 파일을 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_SECTION:
-                displayErrorDialog(code, "섹션을 찾을 수 없습니다.");
-                return;
             case ERR_NOT_FOUND_COMMENT:
-                displayErrorDialog(code, "해당 자원을 찾을 수 없습니다.");
+                displayErrorDialog(code, "요청한 대상을 찾을 수 없습니다.");
                 return;
 
-            // 409 Conflict 관련 에러: 중복된 데이터 등의 충돌 발생
             case ERR_DUPLICATED:
             case ERR_HIGHLIGHT_DUPLICATED:
             case ERR_FOLDER_NAME_DUPLICATED:
@@ -312,7 +444,6 @@ public class ApiClient {
                 displayErrorDialog(code, "중복된 데이터 또는 충돌이 발생했습니다.");
                 return;
 
-            // 500 Internal Server Error 관련 에러: 서버 내부 오류
             case ERR_INTERNAL_SERVER_ERROR:
             case ERR_FAILED_FILE_UPLOAD:
             case ERR_INTERNAL_SERVER_ERROR_50020:
@@ -324,25 +455,20 @@ public class ApiClient {
             case ERR_NOT_FOUND_KEYWORD_EXCEL:
                 displayErrorDialog(code, "서버 내부 오류가 발생했습니다.");
                 return;
-            case 200:
-            case 201:
-            case 202:
-            case 203:
-            case 204:
-                return;
 
             default:
-                displayErrorDialog(code, "알 수 없는 에러가 발생했습니다.");
+                if (!(code >= 200 && code < 300)) {
+                    displayErrorDialog(code, "알 수 없는 에러가 발생했습니다.");
+                }
         }
     }
 
-    // 에러 다이얼로그(모달) 처리 프로세스.
-    // 각 기능에 맞게 다른 에러 화면을 호출하고자 하면 오버라이딩하여 사용
+// 에러 다이얼로그(모달) 처리 프로세스.
+// 각 기능에 맞게 다른 에러 화면을 호출하고자 하면 오버라이딩하여 사용
     public void displayErrorDialog(int errorCode, String errorMessage) {
         if (context == null || !(context instanceof Activity)) {
             return;
         }
-
         if (!((Activity) context).isFinishing()) {
             ((Activity) context).runOnUiThread(() -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);

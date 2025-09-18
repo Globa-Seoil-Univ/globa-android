@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="team.y2k2.globa.main.folder.inside.FolderInsideFragmentModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_folder_inside"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_folder_inside">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/relativelayout_folder_inside_tab"
@@ -65,13 +65,42 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_folder_inside_docs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
             android:scrollbarFadeDuration="0"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/relativelayout_folder_inside_folder" />
+            android:visibility="@{!viewModel.isLoading &amp;&amp; !viewModel.isListEmpty ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@+id/relativelayout_folder_inside_folder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/textview_no_records"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="폴더에 문서가 없습니다."
+            android:textColor="@color/darkGray"
+            android:textSize="16sp"
+            android:visibility="@{!viewModel.isLoading &amp;&amp; viewModel.isListEmpty ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relativelayout_folder_inside_folder"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_folder_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relativelayout_folder_inside_folder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

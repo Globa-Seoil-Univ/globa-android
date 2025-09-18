@@ -107,6 +107,7 @@
     <string name="profile_alert_3_title">Event Alert</string>
     <string name="profile_alert_3_description">Notifications will be sent for various events, benefits, and marketing related information.</string>
 
+    <string name="profile_alert_4_description">서비스의 중요 업데이트나 공지를 받습니다.</string>
     <string name="folder_current">Recently Used Folders</string>
     <string name="folder_permission_title">Change Permissions</string>
 
@@ -140,7 +141,7 @@
     <string name="item_notification_share_cancel">Reject</string>
     <string name="item_notification_share_confirm">Accept</string>
 
-    <string name="activity_docs_statistics_title_word">Visualization Data</string>
+    <string name="activity_docs_statistics_title_word">Keyword Importance</string>
     <string name="activity_docs_statistics_title_time">Learning Time</string>
     <string name="activity_docs_statistics_title_score">Learning Score</string>
     <string name="fragment_statistics_title_word">Keyword Importance</string>
@@ -214,9 +215,9 @@
     <string name="fragment_share_notification_5_2"> Added a comment.</string>
 
     <string name="activity_inquiry_detail_title">Inquiry detail</string>
-    <string name="activity_keyword_detail_tools_title">promotion</string>
-    <string name="activity_keyword_detail_tools_pronunciation">[ promotion ]</string>
-    <string name="activity_keyword_detail_tools_source">source :</string>
+    <string name="activity_keyword_detail_tools_title">has no keyword.</string>
+    <string name="activity_keyword_detail_tools_pronunciation"></string>
+    <string name="activity_keyword_detail_tools_source">source : opendict.korean.go.kr</string>
     <string name="activity_withdraw_reason_1">"Please let me know why you are leaving. "</string>
     <string name="activity_withdraw_reason_2">reflecting the corresponding feedback It is used to make better apps.</string>
     <string name="edit_comment">edit comment</string>
@@ -227,5 +228,6 @@
     <string name="folder_add_success">"Folder added. "</string>
     <string name="dialog_server_unavailable_title">Server unavailable</string>
     <string name="confirm">confirm</string>
+    <string name="profile_alert_4_title">기본 알림</string>
 
 </resources>

@@ -104,7 +104,9 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
 
         binding.textviewItemDocsDetailTitle.setText(item.getTitle());
         binding.textviewItemDocsDetailTitle.setOnClickListener(v -> activity.setDuration(Integer.parseInt(item.getTime())));
-        String time = DateTimeFormatter.getTimeFormat(Integer.parseInt(item.getTime()));
+
+        int timeInSeconds = Integer.parseInt(item.getTime());
+        String time = DateTimeFormatter.getTimeFormat(timeInSeconds * 1000);
         binding.textviewItemDocsDetailTime.setText(time);
 
         SpannableString descriptionSpannable = setSpannableStringHighlight(new SpannableString(item.getDescription()), item.getHighlights(), holder, item.getSectionId());

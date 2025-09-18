@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="team.y2k2.globa.docs.upload.DocsUploadViewModel" />
@@ -40,13 +39,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
                 android:layout_toEndOf="@id/image_button_docs_upload_back"
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:text="@string/activity_docs_upload_tab"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal"
-                android:textStyle="bold"
-                tools:text="@string/activity_docs_upload_tab" />
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <LinearLayout
@@ -198,29 +195,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spinner_docs_upload" />
 
-        <TextView
-            android:id="@+id/textview_docs_upload_language_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/language"
-            android:textColor="@color/black"
-            android:textSize="@dimen/small"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_4" />
+<!--        <TextView-->
+<!--            android:id="@+id/textview_docs_upload_language_title"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:text="@string/language"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/small"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/linearlayout_docs_upload_border_4" />-->
 
-        <Spinner
-            android:id="@+id/spinner_docs_upload_language"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            android:padding="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_language_title" />
+<!--        <Spinner-->
+<!--            android:id="@+id/spinner_docs_upload_language"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:padding="0dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/textview_docs_upload_language_title" />-->
 
         <LinearLayout
             android:id="@+id/linearlayout_docs_upload_confirm"
@@ -229,20 +226,20 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/main_button_selected"
+            android:background="@drawable/selector_upload_button"
             android:gravity="center"
             android:onClick="@{() -> viewModel.docsUploadConfirm()}"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            android:enabled="@{!viewModel.isUploading}">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/twitter"
                 android:text="@string/activity_docs_upload_share_confirm"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                app:cornerRadius="8dp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

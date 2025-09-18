@@ -86,7 +86,9 @@
             android:name=".main.profile.edit.NicknameEditActivity"
             android:exported="false" />
         <activity android:name=".main.profile.info.MyInfoActivity" />
-        <activity android:name=".main.search.SearchActivity" />
+        <activity android:name=".main.search.SearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Globa" />
         <activity
             android:name=".login.LoginActivity"
             android:exported="true"
@@ -120,10 +122,13 @@
             android:name=".main.MainActivity"
             android:enableOnBackInvokedCallback="true" />
         <activity android:name=".main.profile.service_info.ServiceInfoActivity" />
-        <activity android:name=".main.profile.inquiry.InquiryActivity" />
+        <activity android:name=".main.profile.inquiry.add.InquiryAddActivity" />
         <activity android:name=".main.profile.alert.AlertActivity" />
+        <activity android:name=".main.profile.inquiry.InquiryActivity" />
         <activity android:name=".main.profile.theme.ThemeActivity" />
-        <activity android:name=".keyword.detail.KeywordDetailActivity" />
+        <activity
+            android:name=".keyword.detail.KeywordDetailActivity"
+            android:theme="@style/Theme.Globa.KeywordDetail" />
         <activity android:name=".main.folder.permission.FolderPermissionActivity" />
         <activity
             android:name=".docs.DocsActivity"
@@ -135,8 +140,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="docs"
-                    android:scheme="globa" />
+                    android:scheme="globa"
+                    android:host="folders"
+                    android:pathPattern="/.*/docs/.*" />
             </intent-filter>
         </activity>
         <activity

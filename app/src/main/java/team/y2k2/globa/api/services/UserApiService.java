@@ -82,7 +82,7 @@ public interface UserApiService {
      */
     @Multipart
     @PATCH(PATCH_USER_PROFILE)
-    Call<Void> requestUpdateProfileImage(@Path("user_id") String userId, @Header("Authorization") String authorization, @Part MultipartBody.Part profile);
+    Call<Void> requestUpdateProfileImage(@Header("Authorization") String authorization, @Part MultipartBody.Part profile);
 
     /**
      * FCM 알림 토큰 등록 (Todo - 작업 필요)
@@ -100,7 +100,7 @@ public interface UserApiService {
      * Access Token 갱신
      */
     @POST(POST_USER_AUTH)
-    Call<TokenResponse> getRequestToken(@Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Body TokenRequest refreshToken);
+    Call<TokenResponse> getRequestToken(@Header("Content-Type") String contentType, @Body TokenRequest refreshToken);
 
     /**
      * 알림 정보 수정

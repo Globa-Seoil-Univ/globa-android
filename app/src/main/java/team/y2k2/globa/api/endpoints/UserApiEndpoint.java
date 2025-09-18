@@ -14,13 +14,14 @@ public class UserApiEndpoint {
 //    이름 수정
     public static final String PATCH_USER_NAME = "/user/name";
 //    프로필 사진 수정
-    public static final String PATCH_USER_PROFILE = "/user/{user_id}/profile";
+    public static final String PATCH_USER_PROFILE = "/user/profile";
 //    FCM 알림 토큰 등록
     public static final String POST_USER_NOTIFICATION_TOKEN = "/user/{user_id}/notification/token";
 //    회원 가입과 로그인
     public static final String POST_USER = "/user";
 //    Access Token 갱신
-    public static final String POST_USER_AUTH = "/user/auth";
+    public static final String POST_USER_AUTH = "/user/refresh";
+
 //    알림 정보 수정
     public static final String PUT_USER_NOTIFICATION = "/user/notification";
 //    FCM 알림 토큰

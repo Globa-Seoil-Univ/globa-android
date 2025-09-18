@@ -13,20 +13,20 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import team.y2k2.globa.api.model.request.InquiryRequest;
 import team.y2k2.globa.api.model.response.InquiryDetailResponse;
-import team.y2k2.globa.api.model.response.NotificationInquiryResponse;
+import team.y2k2.globa.api.model.response.InquiryResponse;
 
 public interface InquiryApiService {
     /**
      * 문의 조회 TODO - 작업 필요
      */
     @GET(GET_INQUIRY)
-    Call<NotificationInquiryResponse> requestGetInquires(@Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Query("page") int page, @Query("count") int count, @Query("sort") String sort);
+    Call<InquiryResponse> requestGetInquiries(@Header("Content-Type") String contentType, @Header("Authorization") String authorization, @Query("page") int page, @Query("count") int count, @Query("sort") String sort);
 
     /**
      * 문의 상세 조회
      */
     @GET(GET_INQUIRY_DETAIL)
-    Call<InquiryDetailResponse> requestGetInquiryDetail(@Path("inquiry_id") String inquiryId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<InquiryDetailResponse> requestGetInquiryDetail(@Path("inquiryId") String inquiryId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
 
     /**
      * 문의 등록

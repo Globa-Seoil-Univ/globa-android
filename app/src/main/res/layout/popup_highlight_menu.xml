@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/popup_background"
+    android:elevation="8dp">
+
+    <TextView
+        android:id="@+id/menu_action_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_comment_hint"
+        android:textColor="@android:color/black"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0" />
+
+    <TextView
+        android:id="@+id/menu_action_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/keyword_title"
+        android:textColor="@android:color/black"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="?attr/selectableItemBackground" />
+
+</LinearLayout>

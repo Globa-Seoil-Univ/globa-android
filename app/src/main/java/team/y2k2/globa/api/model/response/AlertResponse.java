@@ -9,6 +9,8 @@ public class AlertResponse {
     private boolean shareNofi;
     @SerializedName("eventNofi")
     private boolean eventNofi;
+    @SerializedName("primaryNofi")
+    private boolean primaryNofi;
 
     public boolean isUploadNofi() {
         return uploadNofi;
@@ -19,5 +21,7 @@ public class AlertResponse {
     public boolean isEventNofi() {
         return eventNofi;
     }
+
+    public boolean isPrimaryNofi() { return primaryNofi; }
 
 }

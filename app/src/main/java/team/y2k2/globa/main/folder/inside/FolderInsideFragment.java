@@ -17,17 +17,16 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-
-import java.util.List;
+import java.util.ArrayList;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.model.entity.FolderInsideRecord;
 import team.y2k2.globa.databinding.FragmentFolderInsideBinding;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.edit.FolderNameEditActivity;
@@ -37,6 +36,7 @@ import team.y2k2.globa.main.folder.share.FolderShareActivity;
 public class FolderInsideFragment extends Fragment {
     private FragmentFolderInsideBinding binding;
     private FolderInsideFragmentModel viewModel;
+    private FolderInsideDocsAdapter adapter;
 
     private int folderId;
     private String folderTitle;
@@ -47,23 +47,39 @@ public class FolderInsideFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentFolderInsideBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(getViewLifecycleOwner());
         setBundleParams();
-        viewModel = new ViewModelProvider(this).get(FolderInsideFragmentModel.class);
-        viewModel.setFolderTitle(folderTitle);
-        binding.setViewModel(viewModel);
-        viewModel.setApiClient(this.getContext());
-        setupRecyclerView();
-        observeViewModel();
-        setupListeners();
-        loadFolderInside();
-        setPreferences();
-
         return binding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        viewModel = new ViewModelProvider(this).get(FolderInsideFragmentModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+        viewModel.setFolderTitle(folderTitle);
+        viewModel.setApiClient(requireContext());
+
+        setupRecyclerView();
+        setupListeners();
+        observeViewModel();
+
+        setPreferences();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadFolderInside();
+    }
+
     private void observeViewModel() {
-        viewModel.getFolderInsideRecords().observe(getViewLifecycleOwner(), this::updateRecyclerView);
+        viewModel.getFolderInsideRecords().observe(getViewLifecycleOwner(), records -> {
+            if (records != null) {
+                adapter.setItems(records);
+            }
+        });
         viewModel.getDeleteResponseCode().observe(getViewLifecycleOwner(), this::handleDeleteResponse);
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), this::handleErrorMessage);
     }
@@ -78,7 +94,9 @@ public class FolderInsideFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
+        adapter = new FolderInsideDocsAdapter(new ArrayList<>(), this);
         binding.recyclerviewFolderInsideDocs.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerviewFolderInsideDocs.setAdapter(adapter);
     }
 
     private void setupListeners() {
@@ -162,11 +180,6 @@ public class FolderInsideFragment extends Fragment {
         bottomSheetDialog.show();
     }
 
-    private void updateRecyclerView(List<FolderInsideRecord> records) {
-        FolderInsideDocsAdapter adapter = new FolderInsideDocsAdapter(records, this);
-        binding.recyclerviewFolderInsideDocs.setAdapter(adapter);
-    }
-
     private void handleDeleteResponse(Integer responseCode) {
         if (responseCode != null && responseCode == 200) {
             navigateBack();
@@ -189,5 +202,11 @@ public class FolderInsideFragment extends Fragment {
 
     public FolderInsideFragmentModel getViewModel() {
         return viewModel;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

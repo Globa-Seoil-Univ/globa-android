@@ -2,13 +2,14 @@ package team.y2k2.globa.main.profile.alert;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.firebase.messaging.FirebaseMessaging;
-
+import java.util.ArrayList;
 import team.y2k2.globa.databinding.ActivityAlertBinding;
 
 public class AlertActivity extends AppCompatActivity {
@@ -27,15 +28,17 @@ public class AlertActivity extends AppCompatActivity {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 
-        viewModel.setUserId(getIntent().getStringExtra("userId"));
-        initAdapter();
+        setupRecyclerView();
         observeViewModel();
 
-        deleteFCMToken();
+        viewModel.setUserId(getIntent().getStringExtra("userId"));
     }
 
-    private void initAdapter() {
-        adapter = new AlertItemAdapter(viewModel.getAlertItems(), this);
+    private void setupRecyclerView() {
+        adapter = new AlertItemAdapter(new ArrayList<>(), () -> {
+            viewModel.checkForChanges();
+        });
+        binding.recyclerviewAlert.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerviewAlert.setAdapter(adapter);
     }
 
@@ -43,23 +46,14 @@ public class AlertActivity extends AppCompatActivity {
         viewModel.getAlertLiveData().observe(this, alertResponse -> {
             if (alertResponse != null) {
                 viewModel.setAlertStatus(alertResponse);
-                adapter.notifyDataSetChanged();
+                adapter.setItems(viewModel.getAlertItems());
             }
         });
 
         viewModel.getFinishActivity().observe(this, shouldFinish -> {
-            if (shouldFinish) {
+            if (shouldFinish != null && shouldFinish) {
                 finish();
-            }
-        });
-    }
-
-    private void deleteFCMToken() {
-        FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d("FCM 토큰", "FCM 토큰 삭제 완료");
-            } else {
-                Log.d("FCM 토큰", "FCM 토큰 삭제 실패");
+                Toast.makeText(this, "알림 설정이 변경되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }

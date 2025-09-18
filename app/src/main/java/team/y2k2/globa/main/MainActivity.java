@@ -2,6 +2,7 @@ package team.y2k2.globa.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -21,13 +22,13 @@ import static team.y2k2.globa.main.MainActivityModel.*;
 
 public class MainActivity extends AppCompatActivity {
     private MainActivityModel viewModel;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(MainActivityModel.class);
         viewModel.setContext(this);
         viewModel.handleUserFcmToken();
@@ -38,7 +39,18 @@ public class MainActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom);
+
+            binding.fragmentContainerViewMain.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.bottomNavigationMainBottom.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.bottomNavigationMainBottom.setLayoutParams(params);
+
             return WindowInsetsCompat.CONSUMED;
         });
     }

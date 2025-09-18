@@ -136,7 +136,7 @@ public class DocsDetailCommentAdapter extends RecyclerView.Adapter<DocsDetailCom
 
             // 대댓글 호출
             apiClient = new CommentApiClient();
-            userApiClient = new UserApiClient();
+            userApiClient = new UserApiClient(holder.binding.getRoot().getContext());
             myProfile = userApiClient.requestUserInfo().getProfile();
             myName = userApiClient.requestUserInfo().getName();
 

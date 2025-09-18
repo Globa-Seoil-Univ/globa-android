@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="team.y2k2.globa.main.profile.inquiry.InquiryViewModel" />
+            type="team.y2k2.globa.main.profile.inquiry.add.InquiryAddViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

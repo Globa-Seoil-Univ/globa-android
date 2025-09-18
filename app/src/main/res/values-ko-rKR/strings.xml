@@ -62,7 +62,7 @@
     <string name="profile_account_username">성빈클론(꼭 지우기)</string>
     <string name="profile_account_code">계정 코드</string>
     <string name="profile_alert_setting">알림 설정</string>
-    <string name="profile_inquiry">문의하기</string>
+    <string name="profile_inquiry">문의</string>
     <string name="profile_clean_data">임시 공간 삭제</string>
     <string name="profile_service_info">서비스 정보</string>
     <string name="profile_confirm">접수</string>
@@ -96,6 +96,7 @@
     <string name="profile_alert_3_title">이벤트 알림</string>
     <string name="profile_alert_3_description">각종 이벤트, 혜택 등 마케팅 관련 알림이 발생합니다.</string>
 
+    <string name="profile_alert_4_description">서비스의 중요 업데이트나 공지를 받습니다.</string>
     <string name="folder_current">최근에 사용한 폴더</string>
     <string name="folder_permission_title">권한 변경</string>
 
@@ -129,11 +130,11 @@
     <string name="item_notification_share_cancel">거절</string>
     <string name="item_notification_share_confirm">수락</string>
 
-    <string name="activity_docs_statistics_title_word">시각화 자료</string>
+    <string name="activity_docs_statistics_title_word">단어 중요도</string>
     <string name="activity_docs_statistics_title_time">학습 시간</string>
     <string name="activity_docs_statistics_title_score">학습 성적</string>
 
-    <string name="fragment_statistics_title_word">단어 중요도</string>
+    <string name="fragment_statistics_title_word">시각화 자료</string>
     <!-- 개인정보 처리 약관 -->
     <string name="conditions_title">개인정보처리방침</string>
     <string name="conditions_title_no1">제 1조 (목적)</string>
@@ -208,8 +209,8 @@
     <string name="fragment_share_notification_5_1">님이</string>
     <string name="fragment_share_notification_5_2">에 댓글을 추가하였습니디.</string>
     <string name="activity_inquiry_detail_title">문의 상세</string>
-    <string name="activity_keyword_detail_tools_title">증진</string>
-    <string name="activity_keyword_detail_tools_pronunciation">[ 증진 ]</string>
+    <string name="activity_keyword_detail_tools_title">단어</string>
+    <string name="activity_keyword_detail_tools_pronunciation"></string>
     <string name="activity_keyword_detail_tools_source">출처 : 우리말샘</string>
     <string name="activity_withdraw_reason_1">탈퇴하시는 이유를 알려주세요.</string>
     <string name="activity_withdraw_reason_2">해당 피드백을 반영하여 \\n더 나은 앱을 만들기 위해 사용됩니다.</string>
@@ -221,4 +222,5 @@
     <string name="folder_add_success">폴더가 추가되었습니다.</string>
     <string name="dialog_server_unavailable_title">서버 연결 실패</string>
     <string name="confirm">confirm</string>
+    <string name="profile_alert_4_title">기본 알림</string>
 </resources>

@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RelativeLayout
@@ -31,11 +31,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/normal"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -54,6 +50,15 @@
                     android:textSize="@dimen/large"
                     android:textStyle="bold" />
 
+                <ProgressBar
+                    android:id="@+id/progressbar_profile_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_alignTop="@id/relativelayout_profile_account_user"
+                    android:layout_alignBottom="@id/relativelayout_profile_account_user"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
                 <RelativeLayout
                     android:id="@+id/relativelayout_profile_account_user"
                     android:layout_width="match_parent"
@@ -68,10 +73,7 @@
                         android:layout_width="54dp"
                         android:layout_height="54dp"
                         android:background="@drawable/profile_icon_background"
-                        android:gravity="center"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:gravity="center">
 
                         <ImageView
                             android:id="@+id/imageview_profile_account_image"
@@ -98,9 +100,9 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_toEndOf="@+id/linearlayout_profile_background"
-                        android:text="@string/profile_account_code"
                         android:textColor="@color/darkGray"
-                        android:textSize="@dimen/small" />
+                        android:textSize="@dimen/small"
+                        tools:text="#RnP255" />
 
                     <ImageView
                         android:layout_width="18dp"
@@ -146,6 +148,7 @@
                         android:layout_height="500dp"
                         android:layout_below="@+id/textview_profile_setting_title"
                         android:layout_marginLeft="20dp"
+
                         android:layout_marginRight="20dp"
                         android:scrollbarFadeDuration="0"
                         android:scrollbars="vertical" />

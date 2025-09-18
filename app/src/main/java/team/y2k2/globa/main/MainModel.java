@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -14,17 +15,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.List;
 
 import retrofit2.Response;
 import team.y2k2.globa.api.clients.UserApiClient;
+import team.y2k2.globa.api.model.entity.Record;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
 
 public class MainModel {
     private final Activity activity;
     private UserApiClient apiClient;
+    public List<Record> records;
 
     public MainModel(Activity activity) {
         this.activity = activity;
+        this.apiClient = new UserApiClient(activity);
+    }
+    public MainModel(List<Record> records) {
+        this.activity = null; // 이 경우 activity가 필요 없으므로 null로 초기화
+        this.records = records;
     }
 
     public void handleUserFcmToken(MainModelCallback callback) {
@@ -35,24 +44,33 @@ public class MainModel {
             }
             String fcmToken = task.getResult();
             String userId = getUserInfo();
-            updateToken(fcmToken, callback);
+            if (userId != null) {
+                updateToken(fcmToken, callback);
+            } else {
+                Log.e(getClass().getName(), "사용자 ID가 없어 FCM 토큰을 업데이트할 수 없습니다.");
+            }
         });
     }
 
     public String getUserInfo() {
-        apiClient = new UserApiClient();
         UserInfoResponse userInfoResponse = apiClient.requestUserInfo();
+        if (userInfoResponse == null) {
+            Log.e(getClass().getName(), "사용자 정보 조회 API가 null을 반환했습니다.");
+            return null;
+        }
         return userInfoResponse.getUserId();
     }
 
     public void updateToken(String token, MainModelCallback callback) {
         Response<Void> response = apiClient.updateToken(token);
 
-        if (response.isSuccessful()) {
+        if (response != null && response.isSuccessful()) {
             callback.onTokenUpdateSuccess();
         }
         else {
-            callback.onTokenUpdateFailure(response.code(), response.message());
+            int code = response != null ? response.code() : -1;
+            String message = response != null ? response.message() : "Response is null";
+            callback.onTokenUpdateFailure(code, message);
         }
     }
 

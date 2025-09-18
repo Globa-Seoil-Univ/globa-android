@@ -31,6 +31,7 @@ public class UserPreferencesManager {
         String refreshToken = response.getRefreshToken();
 
         Log.d("엑세스 토큰", "AT : " + accessToken);
+        Log.d("리프레시 토큰", "RT : " + refreshToken);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(KEY_ACCESS_TOKEN, accessToken);

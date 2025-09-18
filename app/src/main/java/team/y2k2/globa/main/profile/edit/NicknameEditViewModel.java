@@ -1,5 +1,6 @@
     package team.y2k2.globa.main.profile.edit;
 
+    import android.content.Context;
     import android.util.Log;
 
     import androidx.lifecycle.LiveData;
@@ -10,7 +11,7 @@
     import team.y2k2.globa.api.clients.UserApiClient;
 
     public class NicknameEditViewModel extends ViewModel {
-        private final UserApiClient apiClient;
+        private UserApiClient apiClient;
         private final MutableLiveData<Boolean> finishActivity = new MutableLiveData<>();
         private final MutableLiveData<String> showToast = new MutableLiveData<>();
         private final MutableLiveData<String> nickname = new MutableLiveData<>();
@@ -19,9 +20,10 @@
         private final MutableLiveData<String> nicknameLength = new MutableLiveData<>();
         private String newNickname = "";
         private String userId;
+        private Context context;
 
-        public NicknameEditViewModel() {
-            apiClient = new UserApiClient();
+        public void setContext(Context context) {
+            this.context = context;
         }
 
         public LiveData<Boolean> getFinishActivity() {
@@ -59,6 +61,7 @@
             isChangeButtonEnabled.setValue(!currentName.isEmpty());
             isNicknameEmpty.setValue(currentName.isEmpty());
             nicknameLength.setValue(currentName.length() + "/32");
+            apiClient = new UserApiClient(context);
         }
 
         public String getNewNickname() {

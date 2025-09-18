@@ -1,101 +1,66 @@
-package team.y2k2.globa.main.profile.inquiry;
+ package team.y2k2.globa.main.profile.inquiry;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.widget.Toast;
-
+import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import team.y2k2.globa.R;
-import team.y2k2.globa.api.clients.InquiryApiClient;
-import team.y2k2.globa.databinding.ActivityInquiryBinding;
+import java.util.ArrayList;
+
+import team.y2k2.globa.databinding.ActivityInquiryListBinding;
+import team.y2k2.globa.main.profile.inquiry.add.InquiryAddActivity;
 
 public class InquiryActivity extends AppCompatActivity {
 
-    private ActivityInquiryBinding binding;
+    private ActivityInquiryListBinding binding;
     private InquiryViewModel viewModel;
+    private InquiryAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityInquiryBinding.inflate(getLayoutInflater());
+        binding = ActivityInquiryListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         viewModel = new ViewModelProvider(this).get(InquiryViewModel.class);
-        binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
 
-        viewModel.setInquiryApiClient(new InquiryApiClient()); // API 클라이언트 설정
-
+        setupRecyclerView();
         observeViewModel();
-        initTextChangeListeners();
+
+        binding.fabAddInquiry.setOnClickListener(v -> {
+            Intent intent = new Intent(InquiryActivity.this, InquiryAddActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void setupRecyclerView() {
+        adapter = new InquiryAdapter(new ArrayList<>());
+        binding.recyclerviewInquiries.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerviewInquiries.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.loadInquiries();
     }
 
     private void observeViewModel() {
-        viewModel.getFinishActivity().observe(this, shouldFinish -> {
-            if (shouldFinish) {
-                finish();
-            }
+        viewModel.getIsLoading().observe(this, isLoading -> {
+            binding.progressbarLoading.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
 
-        viewModel.getShowToast().observe(this, message -> {
-            if (message != null) {
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-                viewModel.doneShowToast();
-            }
-        });
-    }
-
-    private void initTextChangeListeners() {
-        binding.edittextInquiryTitle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.onTitleTextChanged(s.toString()); // 뷰 모델에 알림
-                binding.textviewInquiryTopConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                viewModel.onTitleAfterTextChanged(s.toString()); // 뷰 모델에 알림
-                if (s.length() > 32) {
-                    binding.edittextInquiryTitle.removeTextChangedListener(this);
-                    String text = s.toString().substring(0, 32);
-                    binding.edittextInquiryTitle.setText(text);
-                    binding.edittextInquiryTitle.setSelection(text.length());
-                    binding.edittextInquiryTitle.addTextChangedListener(this);
-                }
-
-                if (s.length() <= 32) {
-                    binding.textviewFolderNameCount.setText(s.length() + "/32");
-                    binding.textviewInquiryTopConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary));
-                }
-
-                if (s.length() == 0) {
-                    binding.textviewInquiryTopConfirm.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-                }
-            }
+        viewModel.getIsEmpty().observe(this, isEmpty -> {
+            binding.textviewEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+            binding.recyclerviewInquiries.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         });
 
-        binding.edittextInquiryDescription.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.onDescriptionTextChanged(s.toString()); // 뷰 모델에 알림
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+        viewModel.getInquiries().observe(this, inquiryItems -> {
+            if (inquiryItems != null) {
+                adapter.updateData(inquiryItems);
             }
         });
     }

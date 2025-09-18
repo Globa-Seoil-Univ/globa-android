@@ -32,6 +32,12 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
         this.context = fragment.getContext();
     }
 
+    public void setItems(List<FolderInsideRecord> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -128,10 +134,6 @@ public class FolderInsideDocsAdapter extends RecyclerView.Adapter<FolderInsideDo
     @Override
     public int getItemCount() {
         return items != null ? items.size() : 0;
-    }
-
-    public void setItems(List<FolderInsideRecord> items) {
-        this.items = items;
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {

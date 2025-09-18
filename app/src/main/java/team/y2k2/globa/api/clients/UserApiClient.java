@@ -2,6 +2,8 @@ package team.y2k2.globa.api.clients;
 
 import static team.y2k2.globa.api.ApiModel.APPLICATION_JSON;
 
+import android.content.Context;
+
 import okhttp3.MultipartBody;
 import retrofit2.Response;
 import team.y2k2.globa.api.ApiClient;
@@ -22,11 +24,8 @@ import team.y2k2.globa.api.services.UserApiService;
 public class UserApiClient extends ApiClient {
     private final UserApiService apiService;
 
-    public UserApiClient() {
-        super(ApiClient.getInstance(null).getContext());
-        if(ApiClient.getInstance(null).getContext() == null) {
-            throw new IllegalStateException("context 가 없음. Login 프로세스나 Logout 프로세스에서 다시 확인");
-        }
+    public UserApiClient(Context context) {
+        super(ApiClient.getInstance(context).getContext());
         apiService = ApiClient.getRetrofit().create(UserApiService.class);
     }
 
@@ -60,17 +59,16 @@ public class UserApiClient extends ApiClient {
     }
 
     // 프로필 사진 변경
-    public Response<Void> requestUpdateProfileImage(MultipartBody.Part multipartBody, String userId) {
-        return executeVoidApiCall(apiService.requestUpdateProfileImage(userId, getAuthorization(), multipartBody));
+    public Response<Void> requestUpdateProfileImage(MultipartBody.Part multipartBody) {
+        return executeVoidApiCall(apiService.requestUpdateProfileImage(getAuthorization(), multipartBody));
     }
-
 
     public LoginResponse requestSignIn(LoginRequest request) {
         return executeApiCall(apiService.requestSignIn(request));
     }
 
     public TokenResponse requestToken(TokenRequest request) {
-        return executeApiCall(apiService.getRequestToken(APPLICATION_JSON, getAuthorization(), request));
+        return executeApiCall(apiService.getRequestToken(APPLICATION_JSON, request));
     }
 
     // 알림 상태 수정

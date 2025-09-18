@@ -1,10 +1,10 @@
-package team.y2k2.globa.main.profile.inquiry;
+package team.y2k2.globa.main.profile.inquiry.add;
 
-public class InquiryModel {
+public class InquiryAddModel {
     private String title;
     private String description;
 
-    public InquiryModel(String title, String description) {
+    public InquiryAddModel(String title, String description) {
         this.title = title;
         this.description = description;
     }

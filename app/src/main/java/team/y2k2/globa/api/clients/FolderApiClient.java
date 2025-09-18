@@ -29,8 +29,8 @@ public class FolderApiClient extends ApiClient {
     }
 
     // 폴더 삭제
-    public void requestDeleteFolder(int folderId) {
-        executeVoidApiCall(apiService.requestDeleteFolder(folderId, APPLICATION_JSON, getAuthorization()));
+    public Response<Void> requestDeleteFolder(int folderId) {
+        return executeVoidApiCall(apiService.requestDeleteFolder(folderId, APPLICATION_JSON, getAuthorization()));
     }
 
     // 폴더 목록 조회
