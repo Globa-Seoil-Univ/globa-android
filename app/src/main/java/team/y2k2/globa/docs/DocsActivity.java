@@ -1,6 +1,7 @@
 package team.y2k2.globa.docs;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -52,6 +55,9 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
     private String profile;
     private String name;
 
+    private ActivityResultLauncher<Intent> moreActivityLauncher;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +73,20 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
             }
             return WindowInsetsCompat.CONSUMED;
         });
+
+        moreActivityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null && data.hasExtra("updatedTitle")) {
+                            String updatedTitle = data.getStringExtra("updatedTitle");
+                            binding.textviewDocsTitle.setText(updatedTitle);
+                            viewModel.setTitle(updatedTitle);
+                        }
+                    }
+                }
+        );
 
         recordApiClient = new RecordApiClient(this);
         userApiClient = new UserApiClient(this);
@@ -137,7 +157,9 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
             if (player != null) player.stop();
             finish();
         });
-        binding.imageviewDocsMore.setOnClickListener(v -> startActivity(viewModel.getDocsMoreIntent()));
+        binding.imageviewDocsMore.setOnClickListener(v -> {
+            moreActivityLauncher.launch(viewModel.getDocsMoreIntent());
+        });
         binding.buttonDocsDescription.setOnClickListener(v -> showDescription());
         binding.buttonDocsSummary.setOnClickListener(v -> showSummary());
 

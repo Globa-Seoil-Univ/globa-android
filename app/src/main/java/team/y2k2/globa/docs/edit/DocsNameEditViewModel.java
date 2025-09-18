@@ -30,15 +30,15 @@ public class DocsNameEditViewModel extends ViewModel {
     public final LiveData<Boolean> isConfirmEnabled; // 변경 버튼 활성화 여부 (입력값 비어있는지)
     public final LiveData<Boolean> hasTextChanged; // 초기값 대비 변경 여부
     public final LiveData<Boolean> isCancelVisible; // 취소 버튼 표시 여부
+    private final MutableLiveData<Event<String>> _editSuccessEvent = new MutableLiveData<>();
+    public final LiveData<Event<String>> editSuccessEvent = _editSuccessEvent;
 
-    // 이벤트 전달용 LiveData
     private final MutableLiveData<Event<Void>> _navigateBackEvent = new MutableLiveData<>();
     public final LiveData<Event<Void>> navigateBackEvent = _navigateBackEvent;
 
     private final MutableLiveData<Event<String>> _showToastEvent = new MutableLiveData<>();
     public final LiveData<Event<String>> showToastEvent = _showToastEvent;
 
-    // 백그라운드 작업을 위한 Executor (실제 앱에서는 Hilt/Dagger와 Coroutine/RxJava 사용 권장)
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public DocsNameEditViewModel(String initialTitle, String recordId, String folderId, RecordApiClient recordApiClient) {
@@ -72,8 +72,6 @@ public class DocsNameEditViewModel extends ViewModel {
         // 2. 변경 사항이 있는지 확인
         Boolean hasChanged = hasTextChanged.getValue();
         if (hasChanged == null || !hasChanged) {
-            // 변경 사항이 없을 때 토스트 메시지 표시
-            // 예: "변경 사항이 없습니다." (strings.xml 사용 권장)
             _showToastEvent.setValue(new Event<>("변경 사항이 없습니다."));
             return; // 변경 사항 없으면 API 호출 등 다음 단계로 진행하지 않음
         }
@@ -92,8 +90,6 @@ public class DocsNameEditViewModel extends ViewModel {
         _navigateBackEvent.setValue(new Event<>(null));
     }
 
-    // --- Private Helper Methods ---
-
     private void updateDocsName(final String title) {
         executorService.execute(() -> {
             try {
@@ -101,7 +97,7 @@ public class DocsNameEditViewModel extends ViewModel {
 
                 if (response != null && response.isSuccessful()) {
                     Log.d(getClass().getSimpleName(), "Update successful: folderId = " + folderId + ", recordId = " + recordId + ", title =" + title);
-                    _navigateBackEvent.postValue(new Event<>(null));
+                    _editSuccessEvent.postValue(new Event<>(title));
                 } else {
                     String errorMsg = "이름 변경 실패";
                     if (response != null) {
@@ -118,6 +114,11 @@ public class DocsNameEditViewModel extends ViewModel {
             }
         });
     }
+
+    public LiveData<Event<String>> getEditSuccessEvent() {
+        return editSuccessEvent;
+    }
+
 
     @Override
     protected void onCleared() {

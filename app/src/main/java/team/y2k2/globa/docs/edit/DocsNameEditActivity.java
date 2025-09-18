@@ -1,14 +1,19 @@
 package team.y2k2.globa.docs.edit;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,6 +32,23 @@ public class DocsNameEditActivity extends AppCompatActivity {
 
         // 데이터 바인딩 설정
         binding = DataBindingUtil.setContentView(this, R.layout.activity_docs_name_edit);
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.main.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.main.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.main.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         // Intent에서 데이터 가져오기 및 유효성 검사
         Intent intent = getIntent();
@@ -82,6 +104,19 @@ public class DocsNameEditActivity extends AppCompatActivity {
             }
         });
 
+        viewModel.getEditSuccessEvent().observe(this, event -> {
+            String newTitle = event.getContentIfNotHandled();
+            if (newTitle != null) {
+                // 결과를 담을 Intent를 생성하고
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("newTitle", newTitle);
+                // 결과 코드(성공)와 데이터를 설정한 후
+                setResult(Activity.RESULT_OK, resultIntent);
+                // 액티비티를 종료합니다.
+                finish();
+            }
+        });
+
         // 취소 버튼 표시 여부 관찰
         viewModel.isCancelVisible.observe(this, isVisible -> {
             if (isVisible != null) {
@@ -92,8 +127,8 @@ public class DocsNameEditActivity extends AppCompatActivity {
         // 뒤로가기 이벤트 관찰
         viewModel.navigateBackEvent.observe(this, event -> {
             if (event != null) {
-                finish();
-            }
+                setResult(Activity.RESULT_CANCELED);
+                finish();            }
         });
 
         // 토스트 메시지 이벤트 관찰

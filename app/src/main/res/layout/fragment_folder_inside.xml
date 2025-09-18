@@ -72,7 +72,7 @@
             android:layout_marginEnd="20dp"
             android:scrollbarFadeDuration="0"
             android:scrollbars="vertical"
-            android:visibility="@{viewModel.isListEmpty ? View.GONE : View.VISIBLE}"
+            android:visibility="@{!viewModel.isLoading &amp;&amp; !viewModel.isListEmpty ? View.VISIBLE : View.GONE}"
             app:layout_constraintTop_toBottomOf="@+id/relativelayout_folder_inside_folder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,11 +85,22 @@
             android:text="폴더에 문서가 없습니다."
             android:textColor="@color/darkGray"
             android:textSize="16sp"
-            android:visibility="@{viewModel.isListEmpty ? View.VISIBLE : View.GONE}"
+            android:visibility="@{!viewModel.isLoading &amp;&amp; viewModel.isListEmpty ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/relativelayout_folder_inside_folder"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_folder_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relativelayout_folder_inside_folder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -32,6 +32,7 @@ public class MainFragmentModel extends ViewModel {
     private final MutableLiveData<ArrayList<DocsListItem>> mostViewedRecordsLiveData = new MutableLiveData<>();
     private final MutableLiveData<ArrayList<DocsListItem>> sharedRecordsLiveData = new MutableLiveData<>();
     private final MutableLiveData<ArrayList<DocsListItem>> receivedRecordsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isRecordsLoading = new MutableLiveData<>(false);
 
     private FolderApiClient folderApiClient;
     private RecordApiClient recordApiClient;
@@ -88,6 +89,8 @@ public class MainFragmentModel extends ViewModel {
     }
 
     public void loadCurrentlyRecords() {
+        isRecordsLoading.postValue(true);
+
         CompletableFuture.runAsync(() -> {
             RecordResponse recordResponse = recordApiClient.requestGetRecords(100);
             FolderResponse folderResponse = folderApiClient.requestGetFolders(1, 100);
@@ -117,10 +120,13 @@ public class MainFragmentModel extends ViewModel {
             model = new MainModel(records);
             listItems.addItems(model.records);
             currentlyRecordsLiveData.postValue(listItems.getItems());
+            isRecordsLoading.postValue(false);
         });
     }
 
     public void loadMostViewedRecords() {
+        isRecordsLoading.postValue(true);
+
         CompletableFuture.runAsync(() -> {
             RecordResponse recordResponse = recordApiClient.requestGetRecords(100);
 
@@ -148,10 +154,13 @@ public class MainFragmentModel extends ViewModel {
             DocsListItemModel listItems = new DocsListItemModel();
             listItems.addItems(records);
             mostViewedRecordsLiveData.postValue(listItems.getItems());
+            isRecordsLoading.postValue(false);
         });
     }
 
     public void loadSharedRecords() {
+        isRecordsLoading.postValue(true);
+
         CompletableFuture.runAsync(() -> {
             RecordResponse recordResponse = recordApiClient.requestGetRecordsOfSharing(20);
 
@@ -164,10 +173,13 @@ public class MainFragmentModel extends ViewModel {
             DocsListItemModel listItems = new DocsListItemModel();
             listItems.addItems(recordResponse.getRecords());
             sharedRecordsLiveData.postValue(listItems.getItems());
+            isRecordsLoading.postValue(false);
         });
     }
 
     public void loadReceivedRecords() {
+        isRecordsLoading.postValue(true);
+
         CompletableFuture.runAsync(() -> {
             RecordResponse recordResponse = recordApiClient.requestGetRecordsOfReceiving(20);
 
@@ -180,10 +192,13 @@ public class MainFragmentModel extends ViewModel {
             DocsListItemModel listItems = new DocsListItemModel();
             listItems.addItems(recordResponse.getRecords());
             receivedRecordsLiveData.postValue(listItems.getItems());
+            isRecordsLoading.postValue(false);
         });
     }
 
     public void loadUnreadNotificationCheck() {
+        isRecordsLoading.postValue(true);
+
         CompletableFuture.runAsync(() -> {
             UnreadNotificationCheckResponse response = notificationApiClient.getUnreadNotificationCheck();
             if (response != null) {
@@ -191,7 +206,12 @@ public class MainFragmentModel extends ViewModel {
             } else {
                 Log.e(getClass().getName(), "읽지 않은 알림 확인 API가 null을 반환했습니다.");
             }
+            isRecordsLoading.postValue(false);
         });
     }
+    public MutableLiveData<Boolean> getIsRecordsLoading() {
+        return isRecordsLoading;
+    }
+
 }
 

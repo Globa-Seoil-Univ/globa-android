@@ -2,10 +2,10 @@ package team.y2k2.globa.docs;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -152,24 +152,24 @@ public class DocsActivityModel extends ViewModel {
             });
 
             binding.imageviewDocumentForward.setOnClickListener(v -> {
-                int currentPosition = (int) player.getCurrentPosition();
-                int forwardPosition = currentPosition + 5000;
+                long currentPosition = player.getCurrentPosition();
+                long forwardPosition = currentPosition + 5000;
                 if (player.getDuration() <= forwardPosition) {
-                    forwardPosition = (int) player.getDuration();
+                    forwardPosition = player.getDuration();
                 }
-                binding.seekbarAudioProgress.setProgress(forwardPosition);
-                binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(forwardPosition));
+                binding.seekbarAudioProgress.setProgress((int)forwardPosition);
+                binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat((int)forwardPosition));
                 player.seekTo(forwardPosition);
             });
 
             binding.imageviewDocumentReplay.setOnClickListener(v -> {
-                int currentPosition = (int) player.getCurrentPosition();
-                int replayPosition = currentPosition - 5000;
+                long currentPosition = player.getCurrentPosition();
+                long replayPosition = currentPosition - 5000;
                 if (replayPosition < 0) {
                     replayPosition = 0;
                 }
-                binding.seekbarAudioProgress.setProgress(replayPosition);
-                binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(replayPosition));
+                binding.seekbarAudioProgress.setProgress((int)replayPosition);
+                binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat((int)replayPosition));
                 player.seekTo(replayPosition);
             });
 
@@ -187,12 +187,26 @@ public class DocsActivityModel extends ViewModel {
                 public void onStopTrackingTouch(SeekBar seekBar) { }
             });
         }).addOnFailureListener(e -> {
+            Log.e(getClass().getName(), "Firebase Storage에서 오디오 URL 다운로드 실패", e);
+
+            Toast.makeText(context, "음성 파일을 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show();
+
+            binding.lottieAudioDownload.setVisibility(View.INVISIBLE);
+            binding.imageButtonDocumentAudioPlay.setVisibility(View.INVISIBLE);
+            binding.imageviewDocumentReplay.setVisibility(View.INVISIBLE);
+            binding.imageviewDocumentForward.setVisibility(View.INVISIBLE);
+            binding.textviewDocumentAudioEndTime.setText("다운로드 실패");
+            binding.seekbarAudioProgress.setEnabled(false);
+
             isDownloadFailed = true;
         });
     }
 
     public String getTitle() {
         return title;
+    }
+    public void setTitle(String newTitle) {
+        this.title = newTitle;
     }
     public String getFolderId() {
         return folderId;
@@ -215,4 +229,3 @@ public class DocsActivityModel extends ViewModel {
         }
     }
 }
-

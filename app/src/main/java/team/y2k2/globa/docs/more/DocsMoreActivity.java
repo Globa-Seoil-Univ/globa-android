@@ -1,5 +1,6 @@
 package team.y2k2.globa.docs.more;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +8,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,6 +30,9 @@ public class DocsMoreActivity extends AppCompatActivity {
     String folderTitle;
     DocsMoreActivityModel docsMoreActivityModel;
 
+    private ActivityResultLauncher<Intent> nameEditLauncher;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +42,32 @@ public class DocsMoreActivity extends AppCompatActivity {
         docsMoreActivityModel = new ViewModelProvider(this).get(DocsMoreActivityModel.class);
         docsMoreActivityModel.setApiClient(this);
 
+        nameEditLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    // DocsNameEditActivity에서 RESULT_OK 응답을 받았는지 확인
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        // "newTitle" 이라는 키로 데이터가 넘어왔는지 확인
+                        if (data != null && data.hasExtra("newTitle")) {
+                            String newTitle = data.getStringExtra("newTitle");
+                            // UI의 텍스트를 새로운 이름으로 업데이트
+                            binding.textviewDocsMoreDocsTitle.setText(newTitle);
+                            // 내부 변수도 업데이트 (다시 이름 변경을 누를 때를 대비)
+                            this.title = newTitle;
+                        }
+                    }
+                }
+        );
         initializeUI();
+    }
+
+    @Override
+    public void finish() {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("updatedTitle", this.title);
+        setResult(Activity.RESULT_OK, resultIntent);
+        super.finish();
     }
 
     private void initializeUI() {
@@ -59,7 +90,7 @@ public class DocsMoreActivity extends AppCompatActivity {
             docsRename.putExtra("title", title);
             docsRename.putExtra("folderId", folderId);
             docsRename.putExtra("recordId", recordId);
-            startActivity(docsRename);
+            nameEditLauncher.launch(docsRename);
         });
 
         // 문서 삭제 버튼

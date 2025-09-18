@@ -51,6 +51,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshData();
+    }
+
     private void setupUI() {
         setLogoColor();
         setFilterButtons();
@@ -62,25 +68,21 @@ public class MainFragment extends Fragment implements View.OnClickListener {
      * ViewModel의 LiveData를 관찰하여 UI를 업데이트하도록 설정합니다.
      */
     private void observeViewModel() {
-        // 프로모션 이미지 LiveData 관찰
-        viewModel.getPromotionsLiveData().observe(getViewLifecycleOwner(), this::updatePromotions);
+        viewModel.getIsRecordsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if(isLoading) {
+                binding.progressbarMainRecordsLoading.setVisibility(View.VISIBLE);
+                binding.recyclerviewMainDocument.setVisibility(View.GONE);
+            } else {
+                binding.progressbarMainRecordsLoading.setVisibility(View.GONE);
+                binding.recyclerviewMainDocument.setVisibility(View.VISIBLE);
+            }
+        });
 
-        // 최신 기록 LiveData 관찰
         viewModel.getCurrentlyRecordsLiveData().observe(getViewLifecycleOwner(), this::updateRecordsList);
-
-        // 많이 본 기록 LiveData 관찰
         viewModel.getMostViewedRecordsLiveData().observe(getViewLifecycleOwner(), this::updateRecordsList);
-
-        // 공유한 기록 LiveData 관찰
         viewModel.getSharedRecordsLiveData().observe(getViewLifecycleOwner(), this::updateRecordsList);
-
-        // 공유받은 기록 LiveData 관찰
         viewModel.getReceivedRecordsLiveData().observe(getViewLifecycleOwner(), this::updateRecordsList);
 
-        // 읽지 않은 알림 LiveData 관찰
-        viewModel.getNotificationCheckLiveData().observe(getViewLifecycleOwner(), checkResponse -> {
-            // 알림 아이콘 상태 변경 등의 UI 로직
-        });
     }
 
     /**

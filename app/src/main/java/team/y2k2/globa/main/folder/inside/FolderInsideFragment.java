@@ -25,10 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.api.model.entity.FolderInsideRecord;
 import team.y2k2.globa.databinding.FragmentFolderInsideBinding;
 import team.y2k2.globa.main.folder.FolderFragment;
 import team.y2k2.globa.main.folder.edit.FolderNameEditActivity;
@@ -67,8 +65,13 @@ public class FolderInsideFragment extends Fragment {
         setupListeners();
         observeViewModel();
 
-        loadFolderInside();
         setPreferences();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadFolderInside();
     }
 
     private void observeViewModel() {

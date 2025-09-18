@@ -1,6 +1,8 @@
 package team.y2k2.globa.main.folder.inside;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -8,6 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Response;
 import team.y2k2.globa.api.clients.FolderApiClient;
@@ -26,6 +30,12 @@ public class FolderInsideFragmentModel extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<String> folderTitle = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isListEmpty = new MutableLiveData<>(false);
+
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
 
     public void setApiClient(Context context) {
         folderApiClient = new FolderApiClient();
@@ -57,35 +67,52 @@ public class FolderInsideFragmentModel extends ViewModel {
     }
 
     public void fetchFolderInsideRecords(int folderId) {
-        FolderInsideRecordResponse response = recordApiClient.requestGetFolderInside(folderId, 1, 100);
+        isLoading.setValue(true);
 
-        if (response == null || response.getRecords() == null || response.getRecords().isEmpty()) {
-            isListEmpty.setValue(true);
-            folderInsideRecords.setValue(new java.util.ArrayList<>());
-        } else {
-            isListEmpty.setValue(false);
-            folderInsideRecords.setValue(response.getRecords());
-        }
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            FolderInsideRecordResponse response = recordApiClient.requestGetFolderInside(folderId, 1, 100);
+
+            handler.post(() -> {
+                isLoading.setValue(false);
+                if (response == null || response.getRecords() == null || response.getRecords().isEmpty()) {
+                    isListEmpty.setValue(true);
+                    folderInsideRecords.setValue(new java.util.ArrayList<>());
+                } else {
+                    isListEmpty.setValue(false);
+                    folderInsideRecords.setValue(response.getRecords());
+                }
+            });
+        });
     }
-
     public void deleteFolder(int folderId) {
-        folderApiClient.requestDeleteFolder(folderId);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+
+            Response<Void> response = folderApiClient.requestDeleteFolder(folderId);
+            deleteResponseCode.postValue(response.code());
+        });
     }
 
     public void deleteDocs(String folderId, String recordId) {
-        Response<Void> response = recordApiClient.deleteRecord(folderId, recordId);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            Response<Void> response = recordApiClient.deleteRecord(folderId, recordId);
 
-        if (response.isSuccessful()) {
-            Log.d(getClass().getName(), "문서 삭제 성공 (API) : " + response.code());
+            if (response.isSuccessful()) {
+                Log.d(getClass().getName(), "문서 삭제 성공 (API) : " + response.code());
 
-            if (recordDB != null) {
-                recordDB.deleteRecordById(recordId);
-                Log.d(getClass().getName(), "문서 삭제 성공 (Local DB)");
+                if (recordDB != null) {
+                    recordDB.deleteRecordById(recordId);
+                    Log.d(getClass().getName(), "문서 삭제 성공 (Local DB)");
+                }
+
+                fetchFolderInsideRecords(Integer.parseInt(folderId));
+            } else {
+                Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
             }
-
-            fetchFolderInsideRecords(Integer.parseInt(folderId));
-        } else {
-            Log.d(getClass().getName(), "문서 삭제 실패 : " + response.code() + ", " + response.message());
-        }
+        });
     }
 }
