@@ -8,20 +8,20 @@ import team.y2k2.globa.api.model.entity.QuizResult;
 
 public class QuizResultRequest {
 
-    @SerializedName("quizs")
-    private List<QuizResult> quizs;
+    @SerializedName("quizzes")
+    private List<QuizResult> quizzes;
 
-    public QuizResultRequest(List<QuizResult> quizs) {
-        this.quizs = quizs;
+    public QuizResultRequest(List<QuizResult> quizzes) {
+        this.quizzes = quizzes;
     }
 
     // Getters and Setters
-    public List<QuizResult> getQuizs() {
-        return quizs;
+    public List<QuizResult> getQuizzes() {
+        return quizzes;
     }
 
-    public void setQuizs(List<QuizResult> quizs) {
-        this.quizs = quizs;
+    public void setQuizzes(List<QuizResult> quizzes) {
+        this.quizzes = quizzes;
     }
 
 }
