@@ -26,7 +26,7 @@ public class RecordApiEndpoint {
 //    문서 이름 수정
     public static final String PATCH_RECORD_NAME = "/folder/{folderId}/record/{recordId}/name";
 //    문서 폴더 이동
-    public static final String PATCH_RECORD_MOVE_FOLDER = "/folder/{folderId}/record/{recordId}/folder";
+    public static final String PATCH_RECORD_MOVE_FOLDER = "/folder/{folderId}/record/{recordId}/move";
 //    문서 추가
     public static final String POST_RECORD = "/folder/{folderId}/record";
 //    퀴즈 결과 추가

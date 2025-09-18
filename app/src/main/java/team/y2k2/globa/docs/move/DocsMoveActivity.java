@@ -2,6 +2,7 @@ package team.y2k2.globa.docs.move;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +52,18 @@ public class DocsMoveActivity extends AppCompatActivity {
                 finish();
             } else {
                 Toast.makeText(this, "폴더 이동 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewModel.getIsMoving().observe(this, isMoving -> {
+            if (isMoving) {
+                binding.progressbarMoveLoading.setVisibility(View.VISIBLE);
+                binding.linearlayoutDocsMoveConfirm.setEnabled(false); // 버튼 비활성화
+                binding.linearlayoutDocsMoveConfirm.setAlpha(0.5f); // 버튼을 반투명하게 처리
+            } else {
+                binding.progressbarMoveLoading.setVisibility(View.GONE);
+                binding.linearlayoutDocsMoveConfirm.setEnabled(true); // 버튼 다시 활성화
+                binding.linearlayoutDocsMoveConfirm.setAlpha(1.0f); // 버튼 투명도 복원
             }
         });
     }
