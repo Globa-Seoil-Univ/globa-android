@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -101,6 +105,24 @@ public class MyInfoActivity extends AppCompatActivity {
 
         binding.setViewModel(myInfoViewModel);
         binding.setLifecycleOwner(this);
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.layoutMyInfo.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.layoutMyInfo.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.layoutMyInfo.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
+
 
         initRecyclerView();
         observeViewModel();

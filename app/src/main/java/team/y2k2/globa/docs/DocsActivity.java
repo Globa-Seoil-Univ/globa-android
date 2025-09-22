@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
@@ -191,6 +190,18 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
             if (isAllDeleted) {
                 viewModel.fetchData(this, folderId, recordId);
                 docsDetailViewModel.setIsAllDeletedLiveData(false);
+            }
+        });
+
+        viewModel.getIsLoading().observe(this, isLoading -> {
+            if (isLoading) {
+                binding.progressbarDocsLoading.setVisibility(View.VISIBLE);
+                binding.linearlayoutDocsFragmentSwitch.setVisibility(View.GONE);
+                binding.recyclerviewDocsDetail.setVisibility(View.GONE);
+            } else {
+                binding.progressbarDocsLoading.setVisibility(View.GONE);
+                binding.linearlayoutDocsFragmentSwitch.setVisibility(View.VISIBLE);
+                binding.recyclerviewDocsDetail.setVisibility(View.VISIBLE);
             }
         });
     }

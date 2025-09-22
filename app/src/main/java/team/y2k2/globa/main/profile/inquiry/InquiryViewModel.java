@@ -20,11 +20,17 @@ public class InquiryViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<InquiryItem>> inquiries = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> isEmpty = new MutableLiveData<>(true);
+    private final MutableLiveData<Boolean> finishActivity = new MutableLiveData<>(false);
+
 
     private final InquiryApiClient apiClient = new InquiryApiClient();
 
     public LiveData<ArrayList<InquiryItem>> getInquiries() {
         return inquiries;
+    }
+
+    public MutableLiveData<Boolean> getFinishActivity() {
+        return finishActivity;
     }
 
     public LiveData<Boolean> getIsLoading() {
@@ -33,6 +39,11 @@ public class InquiryViewModel extends ViewModel {
 
     public LiveData<Boolean> getIsEmpty() {
         return isEmpty;
+    }
+
+
+    public void onBackButtonClick() {
+        finishActivity.setValue(true);
     }
 
     public void loadInquiries() {

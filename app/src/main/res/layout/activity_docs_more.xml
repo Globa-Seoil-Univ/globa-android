@@ -137,7 +137,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relativelayout_docs_more_move"
+        android:id="@+id/relativelayout_docs_move"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -169,8 +169,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_more_move"
-        app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_move">
+        app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_move"
+        app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_move">
 
         <ImageButton
             android:id="@+id/image_button_docs_more_delete"

@@ -19,6 +19,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -41,7 +44,6 @@ public class ProfileFragment extends Fragment {
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private ProfileModel model;
 
-    // 프래그먼트의 현재 상태를 저장할 멤버 변수
     private String currentName;
     private String currentUserId;
     private String currentProfileImageUrl;
@@ -93,6 +95,22 @@ public class ProfileFragment extends Fragment {
         binding.imageviewProfileAccountImage.setBackground(new ShapeDrawable(new OvalShape()));
         binding.imageviewProfileAccountImage.setClipToOutline(true);
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.fragmentProfile.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.fragmentProfile.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.fragmentProfile.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
         return binding.getRoot();
     }
 
@@ -157,15 +175,12 @@ public class ProfileFragment extends Fragment {
         pendingNewProfileImageUrl = null;
     }
 
-// ProfileFragment.java
-
     private void fetchUserDataFromServer() {
         if (!isAdded() || binding == null) return;
         Log.d(TAG, "서버에서 사용자 정보 로드 시작 (RxJava)");
 
         binding.progressbarProfileLoading.setVisibility(View.VISIBLE);
         binding.relativelayoutProfileAccountUser.setVisibility(View.INVISIBLE); // GONE 대신 INVISIBLE을 사용해 레이아웃이 깨지지 않게 합니다.
-        // ▲▲▲▲▲ 수정된 부분 ▲▲▲▲▲
 
         if (userInfoDisposable != null && !userInfoDisposable.isDisposed()) {
             userInfoDisposable.dispose();
@@ -177,14 +192,11 @@ public class ProfileFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        response -> { // 성공 시
+                        response -> {
                             if (!isAdded() || binding == null) return;
 
-                            // ▼▼▼▼▼ 수정된 부분 ▼▼▼▼▼
-                            // 2. 요청 완료 후: 로딩바를 숨기고 정보 영역을 다시 보여줍니다.
                             binding.progressbarProfileLoading.setVisibility(View.GONE);
                             binding.relativelayoutProfileAccountUser.setVisibility(View.VISIBLE);
-                            // ▲▲▲▲▲ 수정된 부분 ▲▲▲▲▲
 
                             if (response != null) {
                                 currentUserId = response.getUserId();

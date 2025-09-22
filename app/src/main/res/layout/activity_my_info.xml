@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/layout_my_info"
         tools:context=".main.profile.info.MyInfoActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,6 +42,7 @@
                 android:fontFamily="@font/notosans_regular"
                 android:text="@string/account"
                 android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="@dimen/large"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

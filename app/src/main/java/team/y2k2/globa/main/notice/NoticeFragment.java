@@ -17,15 +17,12 @@ import team.y2k2.globa.R;
 
 public class NoticeFragment extends Fragment {
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
-    // 'images/image.jpg' 파일에 대한 참조 생성
     StorageReference storageRef;
     private String imageURL;
-    private boolean isDownloadFailed = false; // 다운로드 실패 여부를 추적하는 플래그
+    private boolean isDownloadFailed = false;
 
 
-    public NoticeFragment() {
-        // Required empty public constructor
-    }
+    public NoticeFragment() {}
 
     public static NoticeFragment newInstance(String imageURL) {
         NoticeFragment fragment = new NoticeFragment();

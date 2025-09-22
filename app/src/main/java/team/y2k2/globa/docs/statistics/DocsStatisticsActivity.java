@@ -4,8 +4,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -52,6 +56,23 @@ public class DocsStatisticsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         initializeUI();
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.layoutDocsStatistics.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.layoutDocsStatistics.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.layoutDocsStatistics.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
 
     }
 

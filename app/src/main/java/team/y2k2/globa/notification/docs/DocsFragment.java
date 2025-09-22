@@ -43,7 +43,6 @@ public class DocsFragment extends Fragment {
         setupRecyclerView();
         observeViewModel();
 
-        // API Type "r"이 문서 알림을 의미하는 것으로 추정하여 호출
         viewModel.getNotification("r");
     }
 

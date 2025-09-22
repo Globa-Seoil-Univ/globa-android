@@ -29,15 +29,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/image_button_docs_move_back"
+            android:layout_centerHorizontal="true"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/normal"
             android:textStyle="bold"
-            tools:text="폴더 이동" />
+            android:text="@string/docs_more_move_docs" />
 
     </RelativeLayout>
 

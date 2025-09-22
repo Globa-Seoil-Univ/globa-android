@@ -61,7 +61,7 @@ public class InquiryAddActivityTest {
     private static final int profileSettingItemTitleId = R.id.textview_item_setting_title;
 
     // InquiryActivity UI 요소 ID
-    private static final int inquiryActivityLayoutId = R.id.constraintlayout_inquiry;
+    private static final int inquiryActivityLayoutId = R.id.layout_add_inquiry;
     private static final int inquiryBackButtonId = R.id.imageview_inquiry_top_back;
     private static final int inquiryTitleTextViewId = R.id.textview_inquiry_top_title;
     private static final int inquiryConfirmButtonId = R.id.textview_inquiry_top_confirm;

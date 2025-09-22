@@ -39,6 +39,8 @@ public class FolderFragment extends Fragment {
             startActivityForResult(intent, FOLDER_ADD);
         });
 
+
+
         loadFolder();
         return binding.getRoot();
     }
