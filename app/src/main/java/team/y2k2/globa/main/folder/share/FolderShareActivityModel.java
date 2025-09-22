@@ -42,7 +42,7 @@ public class FolderShareActivityModel extends ViewModel {
     }
 
     public void addSharedUser(int folderId, int userId, String role) {
-        Response<Void> response = folderApiClient.requestInsertFolderShareUser(folderId, userId, role);
+        Response<?> response = folderApiClient.requestInsertFolderShareUser(folderId, userId, role);
         isSucceedLiveData.setValue(String.valueOf(response.code()));
     }
 

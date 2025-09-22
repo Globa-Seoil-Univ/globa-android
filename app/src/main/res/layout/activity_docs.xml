@@ -20,8 +20,11 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@null"
-            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
             android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:src="@drawable/header_back" />
 
         <TextView
@@ -45,7 +48,10 @@
             android:id="@+id/imageview_docs_more"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:src="@drawable/more" />
@@ -71,6 +77,9 @@
             android:layout_margin="4dp"
             android:textColor="@color/white"
             android:background="@drawable/main_button_selected"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:layout_weight="1"
             style="@style/GlobaSelectedButton"/>
 
@@ -81,6 +90,9 @@
             android:layout_margin="4dp"
             android:textColor="@color/black"
             android:background="@drawable/main_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:text="정리"
             android:layout_weight="1"
             style="@style/GlobaButton"/>
@@ -115,7 +127,7 @@
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="@id/linearlayout_document_audio"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
-        app:layout_constraintBottom_toTopOf="@id/imageview_document_replay"
+        app:layout_constraintBottom_toTopOf="@id/image_button_document_audio_play"
         tools:text="00:00" />
 
     <TextView
@@ -127,7 +139,7 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="@id/linearlayout_document_audio"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
-        app:layout_constraintBottom_toTopOf="@id/imageview_document_replay" />
+        app:layout_constraintBottom_toTopOf="@id/image_button_document_audio_play" />
 
     <ImageButton
         android:id="@+id/imageview_document_replay"
@@ -135,11 +147,16 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:visibility="invisible"
-        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:src="@drawable/docs_replay_5"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
-        app:layout_constraintEnd_toStartOf="@id/image_button_document_audio_play"/>
+        app:layout_constraintEnd_toStartOf="@id/image_button_document_audio_play"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/image_button_document_audio_play"
@@ -147,11 +164,33 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:visibility="invisible"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:src="@drawable/docs_play"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
         app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/imageview_document_replay"
+        app:layout_constraintEnd_toStartOf="@id/imageview_document_forward"
+        tools:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/imageview_document_forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/docs_forward_5"
+        app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
+        app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
+        app:layout_constraintStart_toEndOf="@id/image_button_document_audio_play"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_audio_download"
@@ -164,20 +203,7 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_speed="1"
-        app:lottie_rawRes="@raw/loading"
-        app:lottie_repeatCount="100" />
-
-    <ImageButton
-        android:id="@+id/imageview_document_forward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:visibility="invisible"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/docs_forward_5"
-        app:layout_constraintTop_toTopOf="@id/linearlayout_document_audio"
-        app:layout_constraintBottom_toBottomOf="@id/linearlayout_document_audio"
-        app:layout_constraintStart_toEndOf="@id/image_button_document_audio_play"/>
+        app:lottie_rawRes="@raw/loading" />
 
     <SeekBar
         android:id="@+id/seekbar_audio_progress"
@@ -193,5 +219,16 @@
         app:layout_constraintBottom_toTopOf="@id/linearlayout_document_audio"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressbar_docs_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

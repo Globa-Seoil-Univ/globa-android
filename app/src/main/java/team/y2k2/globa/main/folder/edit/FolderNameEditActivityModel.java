@@ -44,7 +44,7 @@ public class FolderNameEditActivityModel extends ViewModel {
     }
 
     public void folderRename(int folderId, FolderNameEditRequest folderNameEditRequest) {
-        Response<Void> response = apiClient.requestUpdateFolderName(folderId, folderNameEditRequest);
+        Response<?> response = apiClient.requestUpdateFolderName(folderId, folderNameEditRequest);
 
         if (response.isSuccessful()) {
             Log.d("API 수신 완료", "폴더 이름 변경 성공: " + response.code());

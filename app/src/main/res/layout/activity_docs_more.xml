@@ -18,6 +18,9 @@
             android:id="@+id/image_button_docs_more_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
             android:background="@null"
@@ -53,8 +56,8 @@
 
         <ImageView
             android:id="@+id/imageview_docs_more_folder"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -102,7 +105,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/docs"
         android:textColor="@color/black"
-        android:textSize="@dimen/normal"
+        android:textSize="@dimen/large"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_docs_datetime" />
@@ -112,14 +115,17 @@
         android:id="@+id/relativelayout_docs_more_rename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/textview_docs_more_docs"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_docs">
 
         <ImageButton
             android:id="@+id/image_button_docs_more_rename"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -130,6 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textSize="@dimen/normal"
             android:layout_toEndOf="@+id/image_button_docs_more_rename"
             android:text="@string/rename"
             android:textColor="@color/black" />
@@ -137,17 +144,20 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relativelayout_docs_more_move"
+        android:id="@+id/relativelayout_docs_move"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_more_rename"
         app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_rename">
 
         <ImageButton
             android:id="@+id/image_button_docs_more_move"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -157,6 +167,7 @@
             android:id="@+id/textview_docs_more_move"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/normal"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/image_button_docs_more_move"
             android:text="@string/docs_more_move_docs"
@@ -168,14 +179,17 @@
         android:id="@+id/relativelayout_docs_more_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_more_move"
-        app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_move">
+        app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_move"
+        app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_move">
 
         <ImageButton
             android:id="@+id/image_button_docs_more_delete"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -186,6 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textSize="@dimen/normal"
             android:layout_toEndOf="@+id/image_button_docs_more_delete"
             android:text="@string/docs_more_delete_docs"
             android:textColor="@color/red" />
@@ -198,7 +213,7 @@
         android:layout_marginTop="30dp"
         android:text="@string/share"
         android:textColor="@color/black"
-        android:textSize="@dimen/normal"
+        android:textSize="@dimen/large"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textview_docs_more_docs"
         app:layout_constraintTop_toBottomOf="@+id/relativelayout_docs_more_delete" />
@@ -207,14 +222,17 @@
         android:id="@+id/relativelayout_docs_more_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@id/textview_docs_more_share_title"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_share_title">
 
         <ImageButton
             android:id="@+id/image_button_docs_more_share"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -225,6 +243,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textSize="@dimen/normal"
             android:layout_toEndOf="@+id/image_button_docs_more_share"
             android:text="@string/share_link"
             android:textColor="@color/black" />
@@ -237,7 +256,7 @@
         android:layout_marginTop="30dp"
         android:text="@string/etc"
         android:textColor="@color/black"
-        android:textSize="@dimen/normal"
+        android:textSize="@dimen/large"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textview_docs_more_share_title"
         app:layout_constraintTop_toBottomOf="@+id/relativelayout_docs_more_share" />
@@ -246,14 +265,17 @@
         android:id="@+id/relativelayout_docs_more_statistics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/textview_docs_more_etc_title"
         app:layout_constraintTop_toBottomOf="@id/textview_docs_more_etc_title">
 
         <ImageButton
             android:id="@+id/image_button_docs_more_statistics"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -264,6 +286,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textSize="@dimen/normal"
             android:layout_toEndOf="@+id/image_button_docs_more_statistics"
             android:text="@string/activity_docs_more_statistics"
             android:textColor="@color/black" />
@@ -273,14 +296,17 @@
         android:id="@+id/relativelayout_docs_more_quiz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="@+id/relativelayout_docs_more_statistics"
         app:layout_constraintTop_toBottomOf="@id/relativelayout_docs_more_statistics">
 
         <ImageButton
             android:id="@+id/image_button_docs_more_quiz"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -290,6 +316,7 @@
             android:id="@+id/textview_docs_more_quiz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/normal"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/image_button_docs_more_quiz"
             android:text="@string/activity_docs_more_quiz"

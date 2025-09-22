@@ -91,7 +91,7 @@ public class FolderInsideFragmentModel extends ViewModel {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
 
-            Response<Void> response = folderApiClient.requestDeleteFolder(folderId);
+            Response<?> response = folderApiClient.requestDeleteFolder(folderId);
             deleteResponseCode.postValue(response.code());
         });
     }
@@ -99,7 +99,7 @@ public class FolderInsideFragmentModel extends ViewModel {
     public void deleteDocs(String folderId, String recordId) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
-            Response<Void> response = recordApiClient.deleteRecord(folderId, recordId);
+            Response<?> response = recordApiClient.deleteRecord(folderId, recordId);
 
             if (response.isSuccessful()) {
                 Log.d(getClass().getName(), "문서 삭제 성공 (API) : " + response.code());

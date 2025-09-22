@@ -1,6 +1,5 @@
 package team.y2k2.globa.docs;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,9 +7,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,46 +23,78 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.util.Util;
+import com.google.firebase.storage.FirebaseStorage;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.clients.RecordApiClient;
 import team.y2k2.globa.api.clients.UserApiClient;
-import team.y2k2.globa.databinding.ActivityDocsBinding;
 import team.y2k2.globa.api.model.response.UserInfoResponse;
+import team.y2k2.globa.databinding.ActivityDocsBinding;
+import team.y2k2.globa.docs.detail.DocsDetailAdapter;
 import team.y2k2.globa.docs.detail.DocsDetailViewModel;
-import team.y2k2.globa.docs.more.DocsMoreActivityModel;
+import team.y2k2.globa.docs.more.DocsMoreActivity;
+import team.y2k2.globa.docs.summary.DocsSummaryAdapter;
 import team.y2k2.globa.util.i18n.DateTimeFormatter;
-import team.y2k2.globa.util.i18n.LanguageUtils;
 
 public class DocsActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
     private final Handler handler = new Handler(Looper.getMainLooper());
-    public ActivityDocsBinding binding;
-    DocsActivityModel viewModel;
-    DocsDetailViewModel docsDetailViewModel;
-    DocsMoreActivityModel docsMoreActivityModel;
-    RecordApiClient recordApiClient;
-    UserApiClient userApiClient;
-    SimpleDateFormat dateFormat;
+    private ActivityDocsBinding binding;
+    private DocsActivityModel viewModel;
+    private DocsDetailViewModel docsDetailViewModel; // 댓글 추가/삭제 후 새로고침을 위함
+
     private SimpleExoPlayer player;
     private Runnable updateSeekbarRunnable;
+
+    private String folderId, recordId;
+    private String profile, name; // Adapter에 전달할 사용자 정보
     private long startTime;
-    private String profile;
-    private String name;
 
-    private ActivityResultLauncher<Intent> moreActivityLauncher;
-
+    private final ActivityResultLauncher<Intent> moreActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null && data.hasExtra("updatedTitle")) {
+                        String updatedTitle = data.getStringExtra("updatedTitle");
+                        viewModel.setTitle(updatedTitle);
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDocsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        viewModel = new ViewModelProvider(this).get(DocsActivityModel.class);
+        docsDetailViewModel = new ViewModelProvider(this).get(DocsDetailViewModel.class);
+        player = new SimpleExoPlayer.Builder(this).build();
+
+        setupWindowInsets();
+
+        if (!getIntentData()) {
+            return; // 필수 데이터 없으면 액티비티 종료
+        }
+
+        loadUserInfo();
+
+        setupUI();
+        observeViewModel();
+
+        startTime = System.currentTimeMillis();
+
+        viewModel.fetchData(this, folderId, recordId);
+    }
+
+    private void setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             binding.constraintlayoutDocs.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
@@ -73,104 +105,167 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
             }
             return WindowInsetsCompat.CONSUMED;
         });
+    }
 
-        moreActivityLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        if (data != null && data.hasExtra("updatedTitle")) {
-                            String updatedTitle = data.getStringExtra("updatedTitle");
-                            binding.textviewDocsTitle.setText(updatedTitle);
-                            viewModel.setTitle(updatedTitle);
-                        }
-                    }
-                }
-        );
-
-        recordApiClient = new RecordApiClient(this);
-        userApiClient = new UserApiClient(this);
-
+    private boolean getIntentData() {
         Intent intent = getIntent();
         Uri data = intent.getData();
-        String recordId = intent.getStringExtra("recordId");
-        String folderId = intent.getStringExtra("folderId");
+        recordId = intent.getStringExtra("recordId");
+        folderId = intent.getStringExtra("folderId");
 
         if (data != null) {
-            // URI 형식: globa://folders/{folderId}/docs/{recordId}
             List<String> pathSegments = data.getPathSegments();
             if (pathSegments != null && pathSegments.size() == 3 && "docs".equals(pathSegments.get(1))) {
                 folderId = pathSegments.get(0);
                 recordId = pathSegments.get(2);
-                Log.d(getClass().getSimpleName(), "딥링크로부터 ID 파싱 성공: folderId=" + folderId + ", recordId=" + recordId);
             }
         }
 
         if (folderId == null || recordId == null || folderId.isEmpty() || recordId.isEmpty()) {
             Toast.makeText(this, "문서 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
-            Log.e(getClass().getSimpleName(), "folderId 또는 recordId가 유효하지 않아 DocsActivity를 종료합니다.");
             finish();
-            return;
+            return false;
         }
+        return true;
+    }
 
+    private void loadUserInfo() {
+        UserApiClient userApiClient = new UserApiClient(this);
         UserInfoResponse userInfoResponse = userApiClient.requestUserInfo();
-
         if (userInfoResponse != null) {
             profile = userInfoResponse.getProfile();
             name = userInfoResponse.getName();
         } else {
-            Log.e(getClass().getSimpleName(), "사용자 정보 조회에 실패했습니다.");
             profile = "";
             name = "Unknown";
         }
+    }
 
-        startTime = System.currentTimeMillis();
-        dateFormat = DateTimeFormatter.getDateFormat(LanguageUtils.getCurrentLocale(this));
+    private void setupUI() {
+        binding.imageButtonDocsBack.setOnClickListener(v -> finish());
+        binding.imageviewDocsMore.setOnClickListener(v -> {
+            Intent intent = new Intent(this, DocsMoreActivity.class);
+            intent.putExtra("title", viewModel.getTitle().getValue());
+            intent.putExtra("recordId", recordId);
+            intent.putExtra("folderId", folderId);
+            intent.putExtra("folderTitle", viewModel.getFolderTitle().getValue());
+            moreActivityLauncher.launch(intent);
+        });
 
-        viewModel = new ViewModelProvider(this).get(DocsActivityModel.class);
-        docsDetailViewModel = new ViewModelProvider(this).get(DocsDetailViewModel.class);
-        player = new SimpleExoPlayer.Builder(this).build();
+        binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(this));
+        showDescription(); // 기본으로 상세 내용 표시
 
-        viewModel.setContext(this);
-        viewModel.setActivity(this);
-        viewModel.setIds(folderId, recordId);
-        viewModel.setPlayer(player);
-        viewModel.setBinding(binding);
-        viewModel.getResponse();
+        binding.buttonDocsDescription.setOnClickListener(v -> showDescription());
+        binding.buttonDocsSummary.setOnClickListener(v -> showSummary());
+    }
 
-        docsDetailViewModel.getIsFirstCommentLiveData().observe(this, isFirst -> {
-            if (isFirst) {
-                viewModel.getResponse();
-                docsDetailViewModel.setIsFirstCommentLiveData(false);
+    private void observeViewModel() {
+        viewModel.getTitle().observe(this, title -> binding.textviewDocsTitle.setText(title));
+
+        viewModel.getDetailItems().observe(this, items -> {
+            DocsDetailAdapter detailAdapter = new DocsDetailAdapter(items, this);
+            if (binding.buttonDocsDescription.getCurrentTextColor() == Color.WHITE) {
+                binding.recyclerviewDocsDetail.setAdapter(detailAdapter);
             }
         });
 
+        viewModel.getSummaryItems().observe(this, items -> {
+            DocsSummaryAdapter summaryAdapter = new DocsSummaryAdapter(items);
+            if (binding.buttonDocsSummary.getCurrentTextColor() == Color.WHITE) {
+                binding.recyclerviewDocsDetail.setAdapter(summaryAdapter);
+            }
+        });
+
+        viewModel.getAudioUrl().observe(this, this::loadAudio);
+        viewModel.getErrorMessage().observe(this, error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show());
+        viewModel.getIsLoading().observe(this, isLoading -> { });
+
+        docsDetailViewModel.getIsFirstCommentLiveData().observe(this, isFirst -> {
+            if (isFirst) {
+                viewModel.fetchData(this, folderId, recordId);
+                docsDetailViewModel.setIsFirstCommentLiveData(false);
+            }
+        });
         docsDetailViewModel.getIsAllDeletedLiveData().observe(this, isAllDeleted -> {
             if (isAllDeleted) {
-                viewModel.getResponse();
+                viewModel.fetchData(this, folderId, recordId);
                 docsDetailViewModel.setIsAllDeletedLiveData(false);
             }
         });
 
-        binding.textviewDocsTitle.setText(viewModel.getTitle());
-        binding.imageButtonDocsBack.setOnClickListener(v -> {
-            if (player != null) player.stop();
-            finish();
-        });
-        binding.imageviewDocsMore.setOnClickListener(v -> {
-            moreActivityLauncher.launch(viewModel.getDocsMoreIntent());
-        });
-        binding.buttonDocsDescription.setOnClickListener(v -> showDescription());
-        binding.buttonDocsSummary.setOnClickListener(v -> showSummary());
-
-        setContentView(binding.getRoot());
-
-        docsMoreActivityModel = new ViewModelProvider(this).get(DocsMoreActivityModel.class);
-        docsMoreActivityModel.setApiClient(this);
-        docsMoreActivityModel.getIsDeleted().observe(this, isDeleted -> {
-            if (isDeleted) {
-                finish();
+        viewModel.getIsLoading().observe(this, isLoading -> {
+            if (isLoading) {
+                binding.progressbarDocsLoading.setVisibility(View.VISIBLE);
+                binding.linearlayoutDocsFragmentSwitch.setVisibility(View.GONE);
+                binding.recyclerviewDocsDetail.setVisibility(View.GONE);
+            } else {
+                binding.progressbarDocsLoading.setVisibility(View.GONE);
+                binding.linearlayoutDocsFragmentSwitch.setVisibility(View.VISIBLE);
+                binding.recyclerviewDocsDetail.setVisibility(View.VISIBLE);
             }
+        });
+    }
+
+    private void loadAudio(String audioUrl) {
+        if (audioUrl == null || audioUrl.isEmpty()) {
+            binding.lottieAudioDownload.setVisibility(View.GONE);
+            return;
+        }
+
+        binding.lottieAudioDownload.setVisibility(View.VISIBLE);
+        FirebaseStorage.getInstance().getReference().child(audioUrl).getDownloadUrl()
+                .addOnSuccessListener(this::setupPlayer)
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "음성 파일을 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    binding.lottieAudioDownload.setVisibility(View.GONE);
+                });
+    }
+
+    private void setupPlayer(Uri uri) {
+        player.setMediaItem(MediaItem.fromUri(uri));
+        player.prepare();
+        player.addListener(new Player.Listener() {
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                if (playbackState == Player.STATE_READY) {
+                    binding.lottieAudioDownload.setVisibility(View.GONE);
+
+                    binding.imageButtonDocumentAudioPlay.setVisibility(View.VISIBLE);
+                    binding.imageviewDocumentReplay.setVisibility(View.VISIBLE);
+                    binding.imageviewDocumentForward.setVisibility(View.VISIBLE);
+
+                    binding.seekbarAudioProgress.setMax((int) player.getDuration());
+                    binding.textviewDocumentAudioEndTime.setText(DateTimeFormatter.getTimeFormat((int) player.getDuration()));
+                }
+            }
+        });
+
+        binding.imageButtonDocumentAudioPlay.setOnClickListener(v -> {
+            if (player.isPlaying()) {
+                player.pause();
+                binding.imageButtonDocumentAudioPlay.setImageResource(R.drawable.docs_play);
+                stopUpdatingSeekBar();
+            } else {
+                player.play();
+                binding.imageButtonDocumentAudioPlay.setImageResource(R.drawable.docs_pause);
+                startUpdatingSeekBar();
+            }
+        });
+
+        binding.imageviewDocumentForward.setOnClickListener(v -> seekTo(getCurrentPosition() + 5000));
+        binding.imageviewDocumentReplay.setOnClickListener(v -> seekTo(getCurrentPosition() - 5000));
+
+        binding.seekbarAudioProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser) {
+                    player.seekTo(progress);
+                }
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
     }
 
@@ -179,9 +274,7 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         binding.buttonDocsSummary.setBackgroundResource(R.drawable.main_button_selected);
         binding.buttonDocsDescription.setTextColor(Color.BLACK);
         binding.buttonDocsDescription.setBackgroundResource(R.drawable.main_button);
-
-        binding.recyclerviewDocsDetail.setAdapter(viewModel.getSummaryAdapter());
-        binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+        binding.recyclerviewDocsDetail.setAdapter(new DocsSummaryAdapter(viewModel.getSummaryItems().getValue()));
     }
 
     public void showDescription() {
@@ -189,58 +282,10 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         binding.buttonDocsDescription.setBackgroundResource(R.drawable.main_button_selected);
         binding.buttonDocsSummary.setTextColor(Color.BLACK);
         binding.buttonDocsSummary.setBackgroundResource(R.drawable.main_button);
-
-        binding.recyclerviewDocsDetail.setAdapter(viewModel.getDetailAdapter());
-        binding.recyclerviewDocsDetail.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+        binding.recyclerviewDocsDetail.setAdapter(new DocsDetailAdapter(viewModel.getDetailItems().getValue(), this));
     }
 
-    @Override
-    public void start() { if (player != null) player.play(); }
-
-    @Override
-    public void pause() { if (player != null) player.pause(); }
-
-    @Override
-    public int getDuration() { return player != null ? (int) player.getDuration() : 0; }
-
-    public void setDuration(int seconds) {
-        if (player == null) return;
-        int positionInMillis = seconds * 1000;
-
-        if (player.getDuration() <= positionInMillis) {
-            positionInMillis = (int) player.getDuration();
-        }
-
-        binding.seekbarAudioProgress.setProgress(positionInMillis);
-        binding.textviewDocumentAudioNowTime.setText(DateTimeFormatter.getTimeFormat(positionInMillis));
-
-        player.seekTo(positionInMillis);
-    }
-
-    @Override
-    public int getCurrentPosition() { return player != null ? (int) player.getCurrentPosition() : 0; }
-
-    @Override
-    public void seekTo(int pos) { if (player != null) player.seekTo(pos); }
-
-    @Override
-    public boolean isPlaying() { return player != null && player.isPlaying(); }
-
-    @Override
-    public int getBufferPercentage() { return player != null ? player.getBufferedPercentage() : 0; }
-
-    @Override
-    public boolean canPause() { return true; }
-
-    @Override
-    public boolean canSeekBackward() { return true; }
-
-    @Override
-    public boolean canSeekForward() { return true; }
-
-    @Override
-    public int getAudioSessionId() { return player != null ? player.getAudioSessionId() : 0; }
-
+    // --- ExoPlayer & SeekBar Control ---
     public void startUpdatingSeekBar() {
         updateSeekbarRunnable = new Runnable() {
             @Override
@@ -255,21 +300,26 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         };
         handler.post(updateSeekbarRunnable);
     }
-
     public void stopUpdatingSeekBar() { if(updateSeekbarRunnable != null) handler.removeCallbacks(updateSeekbarRunnable); }
+    public void setDuration(int seconds) { seekTo(seconds * 1000); }
+    @Override public void start() { if (player != null) player.play(); }
+    @Override public void pause() { if (player != null) player.pause(); }
+    @Override public int getDuration() { return player != null ? (int) player.getDuration() : 0; }
+    @Override public int getCurrentPosition() { return player != null ? (int) player.getCurrentPosition() : 0; }
+    @Override public void seekTo(int pos) { if (player != null) player.seekTo(Math.max(0, Math.min(pos, getDuration()))); }
+    @Override public boolean isPlaying() { return player != null && player.isPlaying(); }
+    @Override public int getBufferPercentage() { return player != null ? player.getBufferedPercentage() : 0; }
+    @Override public boolean canPause() { return true; }
+    @Override public boolean canSeekBackward() { return true; }
+    @Override public boolean canSeekForward() { return true; }
+    @Override public int getAudioSessionId() { return player != null ? player.getAudioSessionId() : 0; }
 
+    // --- Lifecycle Methods ---
     @Override
     protected void onPause() {
         super.onPause();
+        if (player != null && player.isPlaying()) player.pause();
         stopUpdatingSeekBar();
-        if (Util.SDK_INT <= 23 && player != null) player.pause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        stopUpdatingSeekBar();
-        if (Util.SDK_INT > 23 && player != null) player.pause();
     }
 
     @Override
@@ -283,15 +333,11 @@ public class DocsActivity extends AppCompatActivity implements MediaController.M
         long endTime = System.currentTimeMillis();
         long durationMilliSecond = endTime - startTime;
         int durationMinute = (int) (durationMilliSecond / 60000);
-        if (recordApiClient != null && viewModel != null) {
-            recordApiClient.updateStudyTime(viewModel.getFolderId(), viewModel.getRecordId(), String.valueOf(durationMinute));
-            viewModel.clearDisposable();
-        }
+        new RecordApiClient(this).updateStudyTime(folderId, recordId, String.valueOf(durationMinute));
     }
 
-    public String getFolderId() { return viewModel.getFolderId(); }
-    public String getRecordId() { return viewModel.getRecordId(); }
+    public String getFolderId() { return folderId; }
+    public String getRecordId() { return recordId; }
     public String getProfile() { return profile; }
     public String getName() { return name; }
 }
-

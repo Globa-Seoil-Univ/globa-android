@@ -44,7 +44,7 @@ public class TotalFragment extends Fragment {
         setupRecyclerView();
         observeViewModel();
 
-        viewModel.getNotification("all");
+        viewModel.getNotification("a");
     }
 
     private void setupRecyclerView() {
@@ -54,6 +54,15 @@ public class TotalFragment extends Fragment {
     }
 
     private void observeViewModel() {
+        // 로딩 상태 관찰
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading != null) {
+                binding.progressbarTotalLoading.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+                // 로딩 중에는 리스트를 숨겨서 사용자 상호작용을 방지
+                binding.recyclerviewNotificationTotalContent.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+            }
+        });
+
         viewModel.getNotificationLiveData().observe(getViewLifecycleOwner(), notificationResponse -> {
             if (notificationResponse != null && notificationResponse.getNotifications() != null) {
                 List<TotalFragmentItem> items = processNotifications(notificationResponse.getNotifications());
@@ -61,6 +70,12 @@ public class TotalFragment extends Fragment {
             } else {
                 adapter.setItems(new ArrayList<>());
                 Log.d("Error", "TotalFragment: notificationResponse is null");
+            }
+        });
+
+        viewModel.getIsListEmpty().observe(getViewLifecycleOwner(), isEmpty -> {
+            if (isEmpty != null && binding.textviewTotalEmpty != null) {
+                binding.textviewTotalEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
             }
         });
     }
@@ -78,6 +93,7 @@ public class TotalFragment extends Fragment {
             String folderId = "";
             String shareId = "";
             String inquiryId = "";
+            String recordId = "";
 
             switch (notificationType) {
                 case "1":
@@ -108,11 +124,13 @@ public class TotalFragment extends Fragment {
                 case "6":
                     title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
                     content = "";
-                    createdTime = notification.getCreatedTime();
+                    folderId = (notification.getFolder() != null) ? notification.getFolder().getFolderId() : "";
+                    recordId = (notification.getRecord() != null) ? notification.getRecord().getRecordId() : "";
                     break;
                 case "7":
                     title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
                     content = "";
+                    folderId = (notification.getFolder() != null) ? notification.getFolder().getFolderId() : "";
                     break;
                 case "8":
                     title = "문의 답변이 도착하였습니다.";
@@ -120,7 +138,7 @@ public class TotalFragment extends Fragment {
                     inquiryId = notification.getInquiry().getInquiryId();
                     break;
             }
-            items.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, folderId, shareId, inquiryId, notificationType, isRead));
+            items.add(new TotalFragmentItem(notificationId, profile, title, content, createdTime, folderId, shareId, inquiryId, recordId, notificationType, isRead));
         }
         return items;
     }
@@ -131,3 +149,4 @@ public class TotalFragment extends Fragment {
         binding = null;
     }
 }
+

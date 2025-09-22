@@ -3,11 +3,15 @@ package team.y2k2.globa.main.profile.inquiry.add;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
@@ -30,6 +34,23 @@ public class InquiryAddActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
 
         viewModel.setInquiryApiClient(new InquiryApiClient()); // API 클라이언트 설정
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.layoutAddInquiry.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.layoutAddInquiry.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.layoutAddInquiry.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         observeViewModel();
         initTextChangeListeners();

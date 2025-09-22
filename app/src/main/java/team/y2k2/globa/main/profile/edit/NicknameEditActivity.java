@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
@@ -34,6 +38,25 @@ public class NicknameEditActivity extends AppCompatActivity {
         String userId = getIntent().getStringExtra("userId");
         String currentName = getIntent().getStringExtra("current_name");
         viewModel.initialize(userId, currentName);
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.layoutNicknameEdit.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.layoutNicknameEdit.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.layoutNicknameEdit.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
+
 
         initViews(currentName);
         observeViewModel();

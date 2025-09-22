@@ -1,9 +1,13 @@
 package team.y2k2.globa.main.profile.service_info;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.databinding.ActivityServiceInfoBinding;
@@ -21,6 +25,23 @@ public class ServiceInfoActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(ServiceInfoViewModel.class);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.layoutServiceInfo.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.layoutServiceInfo.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.layoutServiceInfo.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         initAdapter();
         observeViewModel();

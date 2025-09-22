@@ -2,14 +2,20 @@ package team.y2k2.globa.main.profile.alert;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
+
+import team.y2k2.globa.api.clients.UserApiClient;
 import team.y2k2.globa.databinding.ActivityAlertBinding;
 
 public class AlertActivity extends AppCompatActivity {
@@ -31,6 +37,24 @@ public class AlertActivity extends AppCompatActivity {
         setupRecyclerView();
         observeViewModel();
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.constraintlayoutAlert.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.constraintlayoutAlert.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.constraintlayoutAlert.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
+
+        viewModel.setApiClient(new UserApiClient(this));
         viewModel.setUserId(getIntent().getStringExtra("userId"));
     }
 

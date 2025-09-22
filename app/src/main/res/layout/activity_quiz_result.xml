@@ -24,6 +24,9 @@
             android:layout_marginStart="20dp"
             android:background="@drawable/header_back"
             android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,6 +38,7 @@
             android:fontFamily="@font/notosans_regular"
             android:text="@string/quiz"
             android:textColor="@color/white"
+            android:textStyle="bold"
             android:textSize="@dimen/large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -2,9 +2,14 @@ package team.y2k2.globa.docs.move;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import team.y2k2.globa.R;
@@ -31,7 +36,33 @@ public class DocsMoveActivity extends AppCompatActivity {
         viewModel.loadFolders();
         setOnClickListeners();
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.constraintlayoutDocsMove.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.constraintlayoutDocsMove.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.constraintlayoutDocsMove.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
+
+
+
         setContentView(binding.getRoot());
+    }
+
+    private void setBundleParams() {
+        Intent intent = getIntent();
+        recordId = intent.getStringExtra("recordId");
+        title = intent.getStringExtra("title");
+        folderId = intent.getStringExtra("folderId");
     }
 
     private void observeViewModel() {
@@ -53,6 +84,18 @@ public class DocsMoveActivity extends AppCompatActivity {
                 Toast.makeText(this, "폴더 이동 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        viewModel.getIsMoving().observe(this, isMoving -> {
+            if (isMoving) {
+                binding.progressbarMoveLoading.setVisibility(View.VISIBLE);
+                binding.linearlayoutDocsMoveConfirm.setEnabled(false); // 버튼 비활성화
+                binding.linearlayoutDocsMoveConfirm.setAlpha(0.5f); // 버튼을 반투명하게 처리
+            } else {
+                binding.progressbarMoveLoading.setVisibility(View.GONE);
+                binding.linearlayoutDocsMoveConfirm.setEnabled(true); // 버튼 다시 활성화
+                binding.linearlayoutDocsMoveConfirm.setAlpha(1.0f); // 버튼 투명도 복원
+            }
+        });
     }
 
     private void setOnClickListeners() {
@@ -63,10 +106,5 @@ public class DocsMoveActivity extends AppCompatActivity {
         });
     }
 
-    private void setBundleParams() {
-        Intent intent = getIntent();
-        recordId = intent.getStringExtra("recordId");
-        title = intent.getStringExtra("title");
-        folderId = intent.getStringExtra("folderId");
-    }
+
 }

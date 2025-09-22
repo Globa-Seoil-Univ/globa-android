@@ -77,9 +77,7 @@ public class StatisticsFragment extends Fragment {
         statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
         statisticsViewModel.setApiClient(getContext());
 
-        UserApiClient apiClient = new UserApiClient(getContext());
-        userId = apiClient.requestUserInfo().getUserId();
-        statisticsViewModel.getStatistics(userId);
+        statisticsViewModel.loadAllStatistics();
 
         barChart = binding.wordBarChart;
         timeLineChart = binding.timeLineChart;
@@ -87,7 +85,19 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void receiveLiveData() {
-        // 단어, 퀴즈 점수는 데이터베이스에서 데이터를 받아와 차트 그림 (공부 시간은 일단 주석 처리)
+
+        // (★추가★) 로딩 상태 관찰
+        statisticsViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                binding.progressbarStatisticsLoading.setVisibility(View.VISIBLE);
+                binding.scrollviewStatisticsScroll.setVisibility(View.GONE); // 메인 콘텐츠 숨기기
+            } else {
+                binding.progressbarStatisticsLoading.setVisibility(View.GONE);
+                binding.scrollviewStatisticsScroll.setVisibility(View.VISIBLE); // 메인 콘텐츠 보이기
+            }
+        });
+
+        // 기존 통계 데이터 관찰
         statisticsViewModel.getStatisticsLiveData().observe(getViewLifecycleOwner(), statistics -> {
             if (statistics != null) {
                 keywords = statistics.getKeywords();
@@ -96,10 +106,8 @@ public class StatisticsFragment extends Fragment {
 
                 // 단어 중요도 차트 그리기
                 drawKeywordsChart();
-
                 // 공부 시간 차트 그리기
                 drawStudyTimeChart();
-
                 // 퀴즈 점수 차트 그리기
                 drawQuizGradeChart();
 
@@ -108,7 +116,6 @@ public class StatisticsFragment extends Fragment {
             }
         });
     }
-
     private void drawKeywordsChart() {
         wordX = keywords.stream().map(Keyword::getWord).toArray(String[]::new);
         doubleWordValues = keywords.stream().mapToDouble(Keyword::getImportance).toArray();

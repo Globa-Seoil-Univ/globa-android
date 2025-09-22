@@ -31,7 +31,7 @@ public class RecordApiClient extends ApiClient {
     }
 
     // 댓글 삭제
-    public Response<Void> deleteRecord(String folderId, String recordId) {
+    public Response<?> deleteRecord(String folderId, String recordId) {
         return executeVoidApiCall(apiService.requestDeleteRecord(folderId, recordId, APPLICATION_JSON, getAuthorization()));
     }
 
@@ -74,11 +74,11 @@ public class RecordApiClient extends ApiClient {
     }
 
     // 문서 이름 업데이트
-    public Response<Void> requestUpdateRecordName(String folderId, String recordId, String title) {
+    public Response<?> requestUpdateRecordName(String folderId, String recordId, String title) {
         return executeVoidApiCall(apiService.requestUpdateRecordName(folderId, recordId, APPLICATION_JSON, getAuthorization(), new DocsNameEditRequest(title)));
     }
 
-    public Response<Void> requestUpdateDocsMove(String folderId, String recordId, String targetFolderId) {
+    public Response<?> requestUpdateDocsMove(String folderId, String recordId, String targetFolderId) {
         return executeVoidApiCall(apiService.requestUpdateDocsMove(folderId, recordId, APPLICATION_JSON, getAuthorization(), new DocsMoveRequest(String.valueOf(targetFolderId))));
     }
 

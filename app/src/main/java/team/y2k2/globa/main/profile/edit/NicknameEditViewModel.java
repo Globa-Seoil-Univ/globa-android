@@ -97,7 +97,7 @@
         }
 
         private void updateNickname() {
-            Response<Void> response = apiClient.requestUpdateProfileName(nickname.getValue());
+            Response<?> response = apiClient.requestUpdateProfileName(nickname.getValue());
 
             if (response.isSuccessful()) {
                 Log.d(getClass().getName(), "닉네임 업데이트 성공");

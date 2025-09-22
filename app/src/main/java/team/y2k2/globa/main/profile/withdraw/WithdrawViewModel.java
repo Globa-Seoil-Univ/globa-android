@@ -87,7 +87,7 @@ public class WithdrawViewModel extends ViewModel {
         executorService.execute(() -> {
             try {
                 // API 호출
-                Response<Void> response = userApiClient.requestWithdrawUser(surveyType, content);
+                Response<?> response = userApiClient.requestWithdrawUser(surveyType, content);
 
                 // UI 스레드에서 LiveData 업데이트
                 if (response != null && response.isSuccessful()) {

@@ -1,39 +1,34 @@
 package team.y2k2.globa.docs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import team.y2k2.globa.api.model.entity.Highlight;
-import team.y2k2.globa.api.model.entity.Section;
 import team.y2k2.globa.docs.detail.DocsDetailItem;
+import team.y2k2.globa.api.model.entity.Section;
 
 public class DocsModel {
     private final ArrayList<DocsDetailItem> detailItems;
 
     public DocsModel(List<Section> sections) {
         detailItems = new ArrayList<>();
-        ArrayList<Highlight> highlightItems = new ArrayList<>();
 
-        for (int i = 0; i < sections.size(); i++) {
-            Section section = sections.get(i);
+        if (sections == null) return;
+
+        for (Section section : sections) {
+            if (section == null || section.getAnalyses() == null) continue;
 
             String title = section.getTitle();
             String sectionId = String.valueOf(section.getSectionId());
             int time = section.getStartTime();
             String content = section.getAnalyses().getContent();
 
-            for (int j = 0; j < section.getAnalyses().getHighlights().size(); j++) {
-                List<Highlight> highlights = section.getAnalyses().getHighlights();
+            List<Highlight> highlights = (section.getAnalyses().getHighlights() != null)
+                    ? section.getAnalyses().getHighlights()
+                    : Collections.emptyList();
 
-                int highlightId = highlights.get(j).getHighlightId();
-                String type = highlights.get(j).getType();
-                int startIdx = highlights.get(j).getStartIndex();
-                int endIdx = highlights.get(j).getEndIndex();
-
-                highlightItems.add(new Highlight(highlightId, type, startIdx, endIdx));
-            }
-            detailItems.add(new DocsDetailItem(title, sectionId, String.valueOf(time), content, highlightItems));
-            highlightItems.clear();
+            detailItems.add(new DocsDetailItem(title, sectionId, String.valueOf(time), content, highlights));
         }
     }
 

@@ -8,7 +8,7 @@ public class UserApiEndpoint {
 //    내 정보 가져오기
     public static final String GET_USER = "/user";
 //    내 분석 정보 가져오기
-    public static final String GET_USER_ANALYSIS = "/user/{user_id}/analysis";
+    public static final String GET_USER_ANALYSIS = "/user/analysis";
 //    상대 정보 가져오기
     public static final String GET_USER_SEARCH = "/user/search";
 //    이름 수정

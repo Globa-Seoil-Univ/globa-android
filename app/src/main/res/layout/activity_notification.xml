@@ -20,6 +20,9 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:background="@null"
             android:importantForAccessibility="no"
             android:src="@drawable/header_back" />
@@ -55,6 +58,10 @@
                 android:id="@+id/constraintlayout_notification_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+
                 android:layout_marginEnd="12dp"> <TextView
                 android:id="@+id/textview_notification_total"
                 android:layout_width="wrap_content"
@@ -108,6 +115,9 @@
                 android:id="@+id/constraintlayout_notification_notice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_marginEnd="12dp">
                 <TextView
                     android:id="@+id/textview_notification_notice"
@@ -162,6 +172,9 @@
                 android:id="@+id/constraintlayout_notification_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_marginEnd="12dp">
                 <TextView
                     android:id="@+id/textview_notification_share"
@@ -216,6 +229,9 @@
                 android:id="@+id/constraintlayout_notification_docs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_marginEnd="12dp">
                 <TextView
                     android:id="@+id/textview_notification_docs"
@@ -269,6 +285,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintlayout_notification_inquiry"
                 android:layout_width="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/textview_notification_inquiry"

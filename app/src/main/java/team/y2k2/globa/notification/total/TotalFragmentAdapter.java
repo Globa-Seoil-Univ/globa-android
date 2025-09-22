@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -22,6 +23,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.List;
 
 import team.y2k2.globa.R;
+import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.main.ProfileImage;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
@@ -82,10 +84,25 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
                 notificationViewModel.readNotification(item.getNotificationId());
             }
 
-            if ("8".equals(item.getType())) {
-                Intent intent = new Intent(activity, InquiryDetailActivity.class);
-                intent.putExtra("inquiryId", item.getInquiryId());
-                activity.startActivity(intent);
+            switch (item.getType()) {
+                case "6": // 문서 추가 성공
+                    if (item.getFolderId() != null && !item.getFolderId().isEmpty() && item.getRecordId() != null && !item.getRecordId().isEmpty()) {
+                        Intent docsIntent = new Intent(activity, DocsActivity.class);
+                        docsIntent.putExtra("folderId", item.getFolderId());
+                        docsIntent.putExtra("recordId", item.getRecordId());
+                        activity.startActivity(docsIntent);
+                    } else {
+                        Toast.makeText(activity, "문서 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case "7": // 문서 추가 실패
+                    Toast.makeText(activity, "문서 추가에 실패한 기록입니다.", Toast.LENGTH_SHORT).show();
+                    break;
+                case "8": // 문의 답변
+                    Intent inquiryIntent = new Intent(activity, InquiryDetailActivity.class);
+                    inquiryIntent.putExtra("inquiryId", item.getInquiryId());
+                    activity.startActivity(inquiryIntent);
+                    break;
             }
         });
 
@@ -140,3 +157,4 @@ public class TotalFragmentAdapter extends RecyclerView.Adapter<TotalFragmentAdap
         }
     }
 }
+

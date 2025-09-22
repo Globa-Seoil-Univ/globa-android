@@ -21,10 +21,6 @@ public class AlertViewModel extends ViewModel {
     private final MutableLiveData<Boolean> hasChanges = new MutableLiveData<>(false);
     private boolean initialPrimary, initialUpload, initialShare, initialEvent;
 
-    public AlertViewModel(Context context) {
-        apiClient = new UserApiClient(context);
-    }
-
     public LiveData<AlertResponse> getAlertLiveData() {
         return alertLiveData;
     }
@@ -39,6 +35,10 @@ public class AlertViewModel extends ViewModel {
 
     public ArrayList<AlertItem> getAlertItems() {
         return alertItems;
+    }
+
+    public void setApiClient(UserApiClient apiClient) {
+        this.apiClient = apiClient;
     }
 
     public void setUserId(String userId) {

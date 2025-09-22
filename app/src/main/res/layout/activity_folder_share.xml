@@ -21,6 +21,9 @@
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/header_back"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,6 +37,9 @@
             android:text="@string/activity_folder_share_confirm"
             android:textColor="@color/primary"
             android:textSize="@dimen/large"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

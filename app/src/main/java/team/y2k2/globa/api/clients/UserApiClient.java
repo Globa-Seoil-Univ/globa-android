@@ -30,7 +30,7 @@ public class UserApiClient extends ApiClient {
     }
 
     // 회원 탈퇴
-    public Response<Void> requestWithdrawUser(int surveyType, String content) {
+    public Response<?> requestWithdrawUser(int surveyType, String content) {
         return executeVoidApiCall(apiService.requestWithdrawUser(APPLICATION_JSON, getAuthorization(), new WithdrawRequest(surveyType, content)));
     }
 
@@ -44,8 +44,8 @@ public class UserApiClient extends ApiClient {
     }
 
     // 유저 전체 통계
-    public StatisticsResponse requestStatistics(String userId) {
-        return executeApiCall(apiService.requestStatistics(userId, APPLICATION_JSON, getAuthorization()));
+    public StatisticsResponse requestStatistics() {
+        return executeApiCall(apiService.requestStatistics(APPLICATION_JSON, getAuthorization()));
     }
 
     // 유저 찾기
@@ -54,12 +54,12 @@ public class UserApiClient extends ApiClient {
     }
 
     // 사용자 이름 변경
-    public Response<Void> requestUpdateProfileName(String newNickname) {
+    public Response<?> requestUpdateProfileName(String newNickname) {
         return executeVoidApiCall(apiService.requestUpdateProfileName(APPLICATION_JSON, getAuthorization(), new NicknameEditRequest(newNickname)));
     }
 
     // 프로필 사진 변경
-    public Response<Void> requestUpdateProfileImage(MultipartBody.Part multipartBody) {
+    public Response<?> requestUpdateProfileImage(MultipartBody.Part multipartBody) {
         return executeVoidApiCall(apiService.requestUpdateProfileImage(getAuthorization(), multipartBody));
     }
 
@@ -77,7 +77,7 @@ public class UserApiClient extends ApiClient {
     }
 
     // FCM 토큰 업데이트
-    public Response<Void> updateToken(String token) {
+    public Response<?> updateToken(String token) {
         return executeVoidApiCall(apiService.updateToken(APPLICATION_JSON, getAuthorization(), new NotificationTokenRequest(token)));
     }
 }

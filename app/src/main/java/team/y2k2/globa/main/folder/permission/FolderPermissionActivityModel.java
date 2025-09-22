@@ -33,7 +33,7 @@ public class FolderPermissionActivityModel extends ViewModel {
     }
 
     public void changeSharedUsers(int folderId, int userId, String userRole) {
-        Response<Void> response = apiClient.requestUpdateSharePermission(folderId, userId, userRole);
+        Response<?> response = apiClient.requestUpdateSharePermission(folderId, userId, userRole);
 
         if (response.isSuccessful()) {
             Log.d("API 수신 완료", "응답 코드 : " + response.code());
@@ -44,7 +44,7 @@ public class FolderPermissionActivityModel extends ViewModel {
     }
 
     public void deleteSharedUsers(int folderId, int userId) {
-        Response<Void> response = apiClient.requestDeleteSharePermission(folderId, userId);
+        Response<?> response = apiClient.requestDeleteSharePermission(folderId, userId);
 
         if (response.isSuccessful()) {
             Log.d(getClass().getName(), "공유 삭제 성공");

@@ -61,9 +61,10 @@
             android:id="@+id/relativelayout_more_rename"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp">
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="20dp">
 
             <ImageButton
                 android:id="@+id/image_button_more_rename"
@@ -89,9 +90,7 @@
             android:id="@+id/relativelayout_more_share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="20dp">
+            android:padding="20dp">
 
             <ImageButton
                 android:id="@+id/image_button_more_move"
@@ -116,9 +115,10 @@
             android:id="@+id/relativelayout_more_authority"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="20dp">
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="20dp">
 
             <ImageButton
                 android:id="@+id/image_button_more_authority"
@@ -143,10 +143,10 @@
             android:id="@+id/relativelayout_more_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="30dp">
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="20dp">
 
             <ImageButton
                 android:id="@+id/image_button_more_delete"

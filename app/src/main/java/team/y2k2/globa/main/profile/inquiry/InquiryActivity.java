@@ -3,8 +3,13 @@
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -23,12 +28,31 @@ public class InquiryActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityInquiryListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
 
         viewModel = new ViewModelProvider(this).get(InquiryViewModel.class);
 
+        binding.setViewModel(viewModel);
         setupRecyclerView();
         observeViewModel();
+
+        setContentView(binding.getRoot());
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.layoutInquiryList.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.layoutInquiryList.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.layoutInquiryList.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         binding.fabAddInquiry.setOnClickListener(v -> {
             Intent intent = new Intent(InquiryActivity.this, InquiryAddActivity.class);
@@ -61,6 +85,12 @@ public class InquiryActivity extends AppCompatActivity {
         viewModel.getInquiries().observe(this, inquiryItems -> {
             if (inquiryItems != null) {
                 adapter.updateData(inquiryItems);
+            }
+        });
+
+        viewModel.getFinishActivity().observe(this, shouldFinish -> {
+            if (shouldFinish != null && shouldFinish) {
+                finish();
             }
         });
     }

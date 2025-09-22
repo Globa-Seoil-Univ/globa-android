@@ -4,6 +4,9 @@
     android:id="@+id/constraintlayout_item_notification_inquiry"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     android:background="@drawable/document_background"
     android:padding="16dp">
 

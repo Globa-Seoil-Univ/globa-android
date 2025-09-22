@@ -10,10 +10,11 @@ public class TotalFragmentItem {
     private final String folderId;
     private final String shareId;
     private final String inquiryId;
+    private final String recordId;
     private final String type;
     private final boolean isRead;
 
-    public TotalFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String inquiryId, String type, boolean isRead) {
+    public TotalFragmentItem(String notificationId, String profile, String title, String content, String createdTime, String folderId, String shareId, String inquiryId, String recordId, String type, boolean isRead) {
         this.notificationId = notificationId;
         this.profile = profile;
         this.title = title;
@@ -22,6 +23,7 @@ public class TotalFragmentItem {
         this.folderId = folderId;
         this.shareId = shareId;
         this.inquiryId = inquiryId;
+        this.recordId = recordId;
         this.type = type;
         this.isRead = isRead;
     }
@@ -57,6 +59,9 @@ public class TotalFragmentItem {
     public String getInquiryId() {
         return inquiryId;
     }
+    public String getRecordId() {
+        return recordId;
+    }
 
     public String getType() {
         return type;
@@ -67,3 +72,4 @@ public class TotalFragmentItem {
     }
 
 }
+

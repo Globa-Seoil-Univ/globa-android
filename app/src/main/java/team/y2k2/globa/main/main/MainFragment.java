@@ -48,6 +48,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         observeViewModel();
         loadInitialData();
 
+
         return binding.getRoot();
     }
 

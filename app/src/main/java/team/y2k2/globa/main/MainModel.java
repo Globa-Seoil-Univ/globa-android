@@ -62,7 +62,7 @@ public class MainModel {
     }
 
     public void updateToken(String token, MainModelCallback callback) {
-        Response<Void> response = apiClient.updateToken(token);
+        Response<?> response = apiClient.updateToken(token);
 
         if (response != null && response.isSuccessful()) {
             callback.onTokenUpdateSuccess();

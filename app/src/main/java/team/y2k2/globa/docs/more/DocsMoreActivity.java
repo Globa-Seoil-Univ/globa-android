@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -18,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import team.y2k2.globa.R;
 import team.y2k2.globa.databinding.ActivityDocsMoreBinding;
 import team.y2k2.globa.docs.edit.DocsNameEditActivity;
+import team.y2k2.globa.docs.move.DocsMoveActivity;
 import team.y2k2.globa.docs.quiz.conduct.QuizActivity;
 import team.y2k2.globa.docs.statistics.DocsStatisticsActivity;
 import team.y2k2.globa.main.MainActivity;
@@ -41,6 +46,23 @@ public class DocsMoreActivity extends AppCompatActivity {
 
         docsMoreActivityModel = new ViewModelProvider(this).get(DocsMoreActivityModel.class);
         docsMoreActivityModel.setApiClient(this);
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.activityDocsMore.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.activityDocsMore.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.activityDocsMore.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         nameEditLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -91,6 +113,15 @@ public class DocsMoreActivity extends AppCompatActivity {
             docsRename.putExtra("folderId", folderId);
             docsRename.putExtra("recordId", recordId);
             nameEditLauncher.launch(docsRename);
+        });
+
+        // 폴더 이동 버튼
+        binding.relativelayoutDocsMove.setOnClickListener(v -> {
+            Intent docsMove = new Intent(DocsMoreActivity.this, DocsMoveActivity.class);
+            docsMove.putExtra("title", title);
+            docsMove.putExtra("folderId", folderId);
+            docsMove.putExtra("recordId", recordId);
+            startActivity(docsMove);
         });
 
         // 문서 삭제 버튼

@@ -2,13 +2,20 @@ package team.y2k2.globa.docs.detail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
+import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +37,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import retrofit2.Response;
 import team.y2k2.globa.R;
 import team.y2k2.globa.api.clients.CommentApiClient;
 import team.y2k2.globa.api.model.entity.Comment;
@@ -53,8 +63,6 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private static final int BUTTON_COMMENT_CONFIRM = 0;
     private static final int BUTTON_COMMENT_UPDATE = 1;
 
-    ItemDocsDetailBinding binding;
-
     private final CommentApiClient apiClient;
     private final ArrayList<DocsDetailItem> detailItems;
     private final DocsActivity activity;
@@ -62,14 +70,13 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     private final String recordId;
     private final String myProfile;
     private final String myName;
-    private final ArrayList<DocsDetailCommentItem> commentItems = new ArrayList<>();
     private final FocusViewModel focusViewModel;
     private final DocsDetailViewModel docsDetailViewModel;
+
     private int selectedPosition;
     private int buttonStatus = BUTTON_COMMENT_CONFIRM;
     private String selectedId;
     private EditText commentEt;
-    private ImageButton commentBtn;
     private Disposable disposable;
     private DocsDetailCommentAdapter commentAdapter;
     private String selectedText;
@@ -80,90 +87,54 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         this.folderId = activity.getFolderId();
         this.recordId = activity.getRecordId();
         this.apiClient = new CommentApiClient();
-        this.myProfile = activity.getProfile().startsWith("http") ? activity.getProfile() : ProfileImage.convertGsToHttps(FirebaseStorage.getInstance().getReference().child(activity.getProfile()).toString());
+
+        String profileUrl = activity.getProfile();
+        if (profileUrl == null || profileUrl.isEmpty()) {
+            this.myProfile = "";
+        } else if (profileUrl.startsWith("http")) {
+            this.myProfile = profileUrl;
+        } else {
+            this.myProfile = ProfileImage.convertGsToHttps(FirebaseStorage.getInstance().getReference().child(profileUrl).toString());
+        }
+
         this.myName = activity.getName();
         this.focusViewModel = new ViewModelProvider(activity).get(FocusViewModel.class);
         this.docsDetailViewModel = new ViewModelProvider(activity).get(DocsDetailViewModel.class);
     }
 
-    @Override
-    public int getItemCount() {
-        return (null != detailItems ? detailItems.size() : 0);
-    }
-
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        binding = ItemDocsDetailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new AdapterViewHolder(binding.getRoot());
+        ItemDocsDetailBinding binding = ItemDocsDetailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new AdapterViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         DocsDetailItem item = detailItems.get(position);
-
-        binding.textviewItemDocsDetailTitle.setText(item.getTitle());
-        binding.textviewItemDocsDetailTitle.setOnClickListener(v -> activity.setDuration(Integer.parseInt(item.getTime())));
-
-        int timeInSeconds = Integer.parseInt(item.getTime());
-        String time = DateTimeFormatter.getTimeFormat(timeInSeconds * 1000);
-        binding.textviewItemDocsDetailTime.setText(time);
-
-        SpannableString descriptionSpannable = setSpannableStringHighlight(new SpannableString(item.getDescription()), item.getHighlights(), holder, item.getSectionId());
-        binding.textviewItemDocsDetailDescription.setText(descriptionSpannable);
-        binding.textviewItemDocsDetailDescription.setMovementMethod(LinkMovementMethod.getInstance());
-        binding.textviewItemDocsDetailDescription.setOnTouchListener(createTouchListener(holder, item.getHighlights(), position, item.getSectionId()));
+        holder.bind(item);
     }
 
-    private View.OnTouchListener createTouchListener(AdapterViewHolder holder, List<Highlight> highlights, int position, String sectionId) {
-        return (v, event) -> {
-            int startIdx = holder.description.getSelectionStart();
-            int endIdx = holder.description.getSelectionEnd();
-            if (startIdx == -1 || endIdx == -1) return false;
-
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_UP:
-                    if (System.currentTimeMillis() - holder.downTime < 900) {
-                        handleHighlightOrPopupMenu(holder, highlights, position, sectionId, startIdx, endIdx);
-                    }
-                    break;
-                case MotionEvent.ACTION_DOWN:
-                    holder.downTime = System.currentTimeMillis();
-                    break;
-            }
-            return false;
-        };
+    @Override
+    public int getItemCount() {
+        return (detailItems != null ? detailItems.size() : 0);
     }
 
-    private void handleHighlightOrPopupMenu(AdapterViewHolder holder, List<Highlight> highlights, int position, String sectionId, int startIdx, int endIdx) {
-        for (Highlight highlight : highlights) {
-            if (startIdx >= highlight.getStartIndex() && startIdx <= highlight.getEndIndex() || endIdx >= highlight.getStartIndex() && endIdx <= highlight.getEndIndex()) {
-                selectedPosition = position;
-                selectedId = String.valueOf(highlight.getHighlightId());
-                docsDetailViewModel.getCommentLiveData().observe(activity, isReceived -> {
-                    if (isReceived) {
-                        buttonStatus = BUTTON_COMMENT_CONFIRM;
-                        showCommentSheetDialog(commentItems, sectionId, selectedId, holder.description.getText().subSequence(highlight.getStartIndex(), highlight.getEndIndex()).toString(), String.valueOf(highlight.getStartIndex()), String.valueOf(highlight.getEndIndex()));
-                        docsDetailViewModel.setCommentLiveData(false);
-                    }
-                });
-                return;
-            }
-        }
-        showPopupMenu(holder.description, holder, folderId, recordId, sectionId);
-    }
-
-
-    private void showPopupMenu(View v, AdapterViewHolder holder, String folderId, String recordId, String sectionId) {
-        PopupMenu popupMenu = new PopupMenu(activity, v);
+    private void showPopupMenu(View v, String sectionId) {
+        PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.TOP);
         popupMenu.getMenuInflater().inflate(R.menu.highlight_menu, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
-            int startIdx = holder.description.getSelectionStart();
-            int endIdx = holder.description.getSelectionEnd();
-            String selectedText = holder.description.getText().subSequence(startIdx, endIdx).toString();
+            TextView textView = (TextView) v;
+            int startIdx = textView.getSelectionStart();
+            int endIdx = textView.getSelectionEnd();
+            if (startIdx == -1 || endIdx == -1 || startIdx == endIdx) {
+                Toast.makeText(activity, "텍스트를 선택해주세요", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            String selectedText = textView.getText().subSequence(startIdx, endIdx).toString();
 
             if (item.getItemId() == R.id.action_comment) {
-                showCommentSheetDialog(null, sectionId, null, selectedText, String.valueOf(startIdx), String.valueOf(endIdx));
+                showCommentSheetDialog(new ArrayList<>(), sectionId, null, selectedText, String.valueOf(startIdx), String.valueOf(endIdx));
             } else if (item.getItemId() == R.id.action_search) {
                 Intent searchIntent = new Intent(activity, KeywordDetailActivity.class);
                 searchIntent.putExtra("keyword", selectedText);
@@ -174,51 +145,25 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         popupMenu.show();
     }
 
-    private SpannableString setSpannableStringHighlight(SpannableString selection, List<Highlight> highlights, AdapterViewHolder holder, String sectionId) {
-        for (Highlight highlight : highlights) {
-            int startIdx = highlight.getStartIndex();
-            int endIdx = highlight.getEndIndex();
-            String highlightId = String.valueOf(highlight.getHighlightId());
+    private void loadCommentsAndShowDialog(String sectionId, String highlightId, String highlightedText) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
 
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(@NonNull View widget) {
-                    loadAndShowComments(sectionId, highlightId);
+        executor.execute(() -> {
+            CommentResponse response = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 100);
+            ArrayList<DocsDetailCommentItem> commentItems = new ArrayList<>();
+            if (response != null && response.getComments() != null) {
+                for (Comment comment : response.getComments()) {
+                    commentItems.add(new DocsDetailCommentItem(
+                            comment.getUser().getProfile(), comment.getUser().getName(), comment.getCreatedTime(),
+                            comment.getContent(), comment.getCommentId(), comment.isHasReply(), comment.isDeleted()));
                 }
-
-                @Override
-                public void updateDrawState(@NonNull TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setColor(Color.WHITE);
-                    ds.setUnderlineText(false);
-                }
-            };
-
-            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(ContextCompat.getColor(holder.itemView.getContext(), R.color.primary_3));
-            selection.setSpan(backgroundColorSpan, startIdx, endIdx, 0);
-            selection.setSpan(clickableSpan, startIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        return selection;
-    }
-
-    private void loadAndShowComments(String sectionId, String highlightId) {
-        CommentResponse response = apiClient.getComments(folderId, recordId, sectionId, highlightId, 1, 100);
-        List<Comment> comments = response.getComments();
-
-        commentItems.clear();
-        if (comments != null) {
-            for (Comment comment : comments) {
-                String profile = comment.getUser().getProfile();
-                String name = comment.getUser().getName();
-                String createdTime = comment.getCreatedTime();
-                String content = comment.getContent();
-                String commentId = comment.getCommentId();
-                boolean hasReply = comment.isHasReply();
-                boolean isDeleted = comment.isDeleted();
-                commentItems.add(new DocsDetailCommentItem(profile, name, createdTime, content, commentId, hasReply, isDeleted));
             }
-        }
-        docsDetailViewModel.setCommentLiveData(true);
+            handler.post(() -> {
+                buttonStatus = BUTTON_COMMENT_CONFIRM;
+                showCommentSheetDialog(commentItems, sectionId, highlightId, highlightedText, null, null);
+            });
+        });
     }
 
     private void showCommentSheetDialog(ArrayList<DocsDetailCommentItem> commentItems, String sectionId, String highlightId, String name, String startIdx, String endIdx) {
@@ -229,26 +174,24 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         TextView commentTv = bottomSheetView.findViewById(R.id.textview_comment_name);
         RecyclerView commentRv = bottomSheetView.findViewById(R.id.recyclerview_comment);
         commentEt = bottomSheetView.findViewById(R.id.edittext_comment);
-        commentBtn = bottomSheetView.findViewById(R.id.image_button_comment_confirm);
+        ImageButton commentBtn = bottomSheetView.findViewById(R.id.image_button_comment_confirm);
         commentTv.setText(name);
 
         commentAdapter = new DocsDetailCommentAdapter(commentItems, activity, sectionId, highlightId, this);
         commentRv.setLayoutManager(new LinearLayoutManager(activity));
         commentRv.setAdapter(commentAdapter);
 
-        setupCommentButton(bottomSheetDialog, sectionId, highlightId, startIdx, endIdx);
-
+        setupCommentButton(bottomSheetDialog, commentBtn, sectionId, highlightId, startIdx, endIdx);
         commentEt.setOnFocusChangeListener((v, hasFocus) -> focusViewModel.setCommentFocusLiveData(hasFocus));
-
         bottomSheetDialog.show();
     }
 
-    private void setupCommentButton(BottomSheetDialog bottomSheetDialog, String sectionId, String highlightId, String startIdx, String endIdx) {
+    private void setupCommentButton(BottomSheetDialog bottomSheetDialog, ImageButton commentBtn, String sectionId, String highlightId, String startIdx, String endIdx) {
         Observable<Object> commentBtnClickStream = Observable.create(emitter -> commentBtn.setOnClickListener(v -> emitter.onNext(new Object())));
         disposable = commentBtnClickStream.throttleFirst(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(event -> {
             String text = commentEt.getText().toString();
-            if (!text.isEmpty()) {
-                handleCommentAction(bottomSheetDialog, sectionId, highlightId, startIdx, endIdx, text);
+            if (!text.trim().isEmpty()) {
+                handleCommentAction(bottomSheetDialog, sectionId, highlightId, startIdx, endIdx, text.trim());
             } else {
                 Toast.makeText(activity, "댓글을 입력해주세요", Toast.LENGTH_SHORT).show();
             }
@@ -256,14 +199,45 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     }
 
     private void handleCommentAction(BottomSheetDialog bottomSheetDialog, String sectionId, String highlightId, String startIdx, String endIdx, String text) {
-        if (buttonStatus == BUTTON_COMMENT_CONFIRM) {
-            commentAdapter.addNewItem(new DocsDetailCommentItem(myProfile, myName, "방금전", text, "commentId", false, false));
-            apiClient.requestInsertComment(folderId, recordId, sectionId, highlightId, text);
-        } else if (buttonStatus == BUTTON_COMMENT_UPDATE) {
-            commentAdapter.updateItem(text, selectedPosition);
-            apiClient.updateComment(folderId, recordId, sectionId, highlightId, selectedId, text);
-        }
-        commentEt.setText("");
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executor.execute(() -> {
+            Response<?> response;
+            boolean isFirstComment = (highlightId == null || highlightId.isEmpty());
+
+            if (buttonStatus == BUTTON_COMMENT_CONFIRM) {
+                if (isFirstComment) {
+                    response = apiClient.requestInsertFirstComment(folderId, recordId, sectionId, startIdx, endIdx, text);
+                } else {
+                    response = apiClient.requestInsertComment(folderId, recordId, sectionId, highlightId, text);
+                }
+                handler.post(() -> {
+                    if (response != null && response.isSuccessful()) {
+                        Toast.makeText(activity, "댓글이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                        if (isFirstComment) {
+                            docsDetailViewModel.setIsFirstCommentLiveData(true);
+                            bottomSheetDialog.dismiss();
+                        } else {
+                            commentAdapter.addNewItem(new DocsDetailCommentItem(myProfile, myName, "방금 전", text, "tempId", false, false));
+                            commentEt.setText("");
+                        }
+                    } else {
+                        Toast.makeText(activity, "댓글 추가에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else if (buttonStatus == BUTTON_COMMENT_UPDATE) {
+                response = apiClient.updateComment(folderId, recordId, sectionId, highlightId, selectedId, text);
+                handler.post(() -> {
+                    if (response != null && response.isSuccessful()) {
+                        commentAdapter.updateItem(text, selectedPosition);
+                        commentEt.setText("");
+                        Toast.makeText(activity, "댓글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(activity, "댓글 수정에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     public void clearDisposable() {
@@ -276,43 +250,144 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
     }
 
     public void focusOnCommentEt() {
-        commentEt.requestFocus();
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(commentEt, InputMethodManager.SHOW_IMPLICIT);
-        commentEt.setText(selectedText);
+        if (commentEt != null) {
+            commentEt.requestFocus();
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(commentEt, InputMethodManager.SHOW_IMPLICIT);
+            commentEt.setText(selectedText);
+        }
     }
 
-    public int getButtonStatus() {
-        return buttonStatus;
-    }
+    public int getButtonStatus() { return buttonStatus; }
+    public void setButtonStatus(int status) { this.buttonStatus = status; }
+    public void setSelectedPosition(int position) { this.selectedPosition = position; }
+    public void setSelectedId(String selectedId) { this.selectedId = selectedId; }
+    public void setSelectedText(String selectedText) { this.selectedText = selectedText; }
 
-    public void setButtonStatus(int status) {
-        this.buttonStatus = status;
-    }
+    public class AdapterViewHolder extends RecyclerView.ViewHolder {
+        final ItemDocsDetailBinding binding;
 
-    public void setSelectedPosition(int position) {
-        this.selectedPosition = position;
-    }
+        public AdapterViewHolder(ItemDocsDetailBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
 
-    public void setSelectedId(String selectedId) {
-        this.selectedId = selectedId;
-    }
+        void bind(DocsDetailItem item) {
+            binding.textviewItemDocsDetailTitle.setText(item.getTitle());
+            binding.textviewItemDocsDetailTitle.setOnClickListener(v -> activity.setDuration(Integer.parseInt(item.getTime())));
 
-    public void setSelectedText(String selectedText) {
-        this.selectedText = selectedText;
-    }
+            int timeInSeconds = Integer.parseInt(item.getTime());
+            String time = DateTimeFormatter.getTimeFormat(timeInSeconds * 1000);
+            binding.textviewItemDocsDetailTime.setText(time);
 
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        final TextView title;
-        final TextView time;
-        final TextView description;
-        long downTime;
+            SpannableString spannable = new SpannableString(item.getDescription());
+            for (Highlight highlight : item.getHighlights()) {
+                int startIdx = highlight.getStartIndex();
+                int endIdx = highlight.getEndIndex();
+                if (startIdx < 0 || endIdx > spannable.length() || startIdx >= endIdx) continue;
 
-        public AdapterViewHolder(@NonNull View itemView) {
-            super(itemView);
-            title = itemView.findViewById(R.id.textview_item_docs_detail_title);
-            time = itemView.findViewById(R.id.textview_item_docs_detail_time);
-            description = itemView.findViewById(R.id.textview_item_docs_detail_description);
+                String highlightId = String.valueOf(highlight.getHighlightId());
+                ClickableSpan clickableSpan = new ClickableSpan() {
+                    @Override
+                    public void onClick(@NonNull View widget) {
+                        String highlightedText = ((TextView) widget).getText().subSequence(startIdx, endIdx).toString();
+                        loadCommentsAndShowDialog(item.getSectionId(), highlightId, highlightedText);
+                    }
+                    @Override
+                    public void updateDrawState(@NonNull TextPaint ds) {
+                        ds.setUnderlineText(false);
+                        ds.setColor(binding.textviewItemDocsDetailDescription.getCurrentTextColor());
+                    }
+                };
+                BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(ContextCompat.getColor(itemView.getContext(), R.color.primary_3));
+                spannable.setSpan(backgroundColorSpan, startIdx, endIdx, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(clickableSpan, startIdx, endIdx, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            binding.textviewItemDocsDetailDescription.setText(spannable);
+            binding.textviewItemDocsDetailDescription.setMovementMethod(LinkMovementMethod.getInstance());
+
+            binding.textviewItemDocsDetailDescription.setOnTouchListener((v, event) -> {
+                TextView textView = (TextView) v;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    int startSelection = textView.getSelectionStart();
+                    int endSelection = textView.getSelectionEnd();
+
+                    if (startSelection != -1 && endSelection != -1 && startSelection != endSelection) {
+                        Spannable spannableText = (Spannable) textView.getText();
+                        ClickableSpan[] clickedSpans = spannableText.getSpans(startSelection, endSelection, ClickableSpan.class);
+
+                        if (clickedSpans.length == 0) {
+                            // 💡 showPopupMenu 대신 새로운 showCustomPopupWindow 호출
+                            showCustomPopupWindow(v, item.getSectionId(), event);
+                        }
+                    }
+                }
+                return false;
+            });
+            binding.textviewItemDocsDetailDescription.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    menu.clear();
+                    return true;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    // 액션 모드가 끝날 때의 동작
+                }
+            });
+
+        }
+        private void showCustomPopupWindow(View anchorView, String sectionId, MotionEvent event) {
+            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.popup_highlight_menu, null);
+
+            int width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
+
+            TextView commentMenu = popupView.findViewById(R.id.popup_menu_comment);
+            TextView searchMenu = popupView.findViewById(R.id.popup_menu_search);
+
+            TextView textView = (TextView) anchorView;
+
+            commentMenu.setOnClickListener(v -> {
+                int finalStartIdx = textView.getSelectionStart();
+                int finalEndIdx = textView.getSelectionEnd();
+                String finalSelectedText = textView.getText().subSequence(finalStartIdx, finalEndIdx).toString();
+
+                showCommentSheetDialog(new ArrayList<>(), sectionId, null, finalSelectedText, String.valueOf(finalStartIdx), String.valueOf(finalEndIdx));
+                popupWindow.dismiss();
+            });
+
+            searchMenu.setOnClickListener(v -> {
+                int finalStartIdx = textView.getSelectionStart();
+                int finalEndIdx = textView.getSelectionEnd();
+                String finalSelectedText = textView.getText().subSequence(finalStartIdx, finalEndIdx).toString();
+
+                Intent searchIntent = new Intent(activity, KeywordDetailActivity.class);
+                searchIntent.putExtra("keyword", finalSelectedText);
+                activity.startActivity(searchIntent);
+                popupWindow.dismiss();
+            });
+
+            popupWindow.setBackgroundDrawable(new ColorDrawable());
+            popupWindow.setOutsideTouchable(true);
+
+            // 터치한 좌표에 팝업 윈도우를 표시
+            int x = (int) event.getRawX();
+            int y = (int) event.getRawY();
+            popupWindow.showAtLocation(activity.getWindow().getDecorView(), Gravity.NO_GRAVITY, x, y);
         }
     }
 }

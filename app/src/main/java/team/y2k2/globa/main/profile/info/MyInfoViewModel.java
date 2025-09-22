@@ -147,7 +147,7 @@ public class MyInfoViewModel extends ViewModel {
             errorLiveData.setValue("이미지 업로드 준비 중 오류가 발생했습니다.");
             return;
         }
-        Response<Void> response = apiClient.requestUpdateProfileImage(multipartBody);
+        Response<?> response = apiClient.requestUpdateProfileImage(multipartBody);
 
         if (response.isSuccessful()) {
             Log.d(TAG, "이미지 업로드 API 성공: " + response.code());

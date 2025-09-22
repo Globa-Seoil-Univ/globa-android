@@ -57,6 +57,9 @@
                 android:layout_above="@+id/button_sign_in_naver"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/login_button_kakao"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{(v) -> viewModel.startSignIn(1001)}"
                 android:orientation="horizontal">
@@ -140,6 +143,9 @@
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/login_button_google"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{(v) -> viewModel.startSignIn(1004)}">
 

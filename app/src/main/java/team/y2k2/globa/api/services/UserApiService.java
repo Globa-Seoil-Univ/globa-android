@@ -63,7 +63,7 @@ public interface UserApiService {
      * 내 분석 정보 가져오기
      */
     @GET(GET_USER_ANALYSIS)
-    Call<StatisticsResponse> requestStatistics(@Path("user_id") String userId, @Header("Content-Type") String contentType, @Header("Authorization") String authorization);
+    Call<StatisticsResponse> requestStatistics(@Header("Content-Type") String contentType, @Header("Authorization") String authorization);
 
     /**
      * 상대 정보 가져오기
