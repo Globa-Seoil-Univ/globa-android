@@ -29,7 +29,7 @@ public class FolderApiClient extends ApiClient {
     }
 
     // 폴더 삭제
-    public Response<Void> requestDeleteFolder(int folderId) {
+    public Response<?> requestDeleteFolder(int folderId) {
         return executeVoidApiCall(apiService.requestDeleteFolder(folderId, APPLICATION_JSON, getAuthorization()));
     }
 
@@ -39,17 +39,17 @@ public class FolderApiClient extends ApiClient {
     }
 
     // 폴더 이름 변경
-    public Response<Void> requestUpdateFolderName(int folderId, FolderNameEditRequest request) {
+    public Response<?> requestUpdateFolderName(int folderId, FolderNameEditRequest request) {
         return executeVoidApiCall(apiService.requestUpdateFolderName(folderId, APPLICATION_JSON, getAuthorization(), request));
     }
 
     // 유저 폴더 공유
-    public Response<Void> requestInsertFolderShareUser(int folderId, int userId, String role) {
+    public Response<?> requestInsertFolderShareUser(int folderId, int userId, String role) {
         return executeVoidApiCall(folderShareApiService.requestInsertFolderShareUser(folderId, userId, APPLICATION_JSON, getAuthorization(), new FolderShareAddRequest(role)));
     }
 
     // 폴더 추가
-    public Response<Void> requestInsertFolder(String title, List<ShareTarget> shareTargets) {
+    public Response<?> requestInsertFolder(String title, List<ShareTarget> shareTargets) {
         return executeVoidApiCall(apiService.requestInsertFolder(APPLICATION_JSON, getAuthorization(), new FolderAddRequest(title, shareTargets)));
     }
 }

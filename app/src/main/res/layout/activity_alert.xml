@@ -30,6 +30,9 @@
                 android:layout_marginStart="20dp"
                 android:background="@null"
                 android:importantForAccessibility="no"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:src="@drawable/header_back"
                 android:onClick="@{() -> viewModel.onBackButtonClick()}"/>
 
@@ -76,6 +79,9 @@
             android:textStyle="bold"
             android:enabled="@{viewModel.hasChanges}"
             android:onClick="@{() -> viewModel.onSaveButtonClick()}"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

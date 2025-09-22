@@ -49,6 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_weight="9"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center">
 
             <RelativeLayout
@@ -85,6 +88,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_weight="9"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center">
 
             <RelativeLayout

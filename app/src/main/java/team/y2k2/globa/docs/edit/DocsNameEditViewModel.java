@@ -93,7 +93,7 @@ public class DocsNameEditViewModel extends ViewModel {
     private void updateDocsName(final String title) {
         executorService.execute(() -> {
             try {
-                Response<Void> response = recordApiClient.requestUpdateRecordName(folderId, recordId, title);
+                Response<?> response = recordApiClient.requestUpdateRecordName(folderId, recordId, title);
 
                 if (response != null && response.isSuccessful()) {
                     Log.d(getClass().getSimpleName(), "Update successful: folderId = " + folderId + ", recordId = " + recordId + ", title =" + title);

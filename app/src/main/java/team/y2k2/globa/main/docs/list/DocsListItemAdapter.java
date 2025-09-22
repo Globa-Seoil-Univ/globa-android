@@ -159,7 +159,7 @@ public class DocsListItemAdapter extends RecyclerView.Adapter<DocsListItemAdapte
 
     public void deleteDocs(String folderId, String recordId, int position) {
         RecordApiClient apiClient = new RecordApiClient(activity);
-        Response<Void> response = apiClient.deleteRecord(folderId, recordId);
+        Response<?> response = apiClient.deleteRecord(folderId, recordId);
 
         if (response.isSuccessful()) {
             Log.d(getClass().getName(), "문서 삭제 성공 (API): " + response.code());

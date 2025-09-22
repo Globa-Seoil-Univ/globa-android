@@ -23,22 +23,17 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
 
     public static final String PRF_RECORD_NAME = "recordName";
     public static final String PRF_RECORD_PATH = "recordPath";
-    private final MainFragment mainFragment;
-    private final StatisticsFragment statisticsFragment;
-    private final ProfileFragment profileFragment;
-    private final FolderFragment folderFragment;
+
+    private MainFragment mainFragment;
+    private StatisticsFragment statisticsFragment;
+    private ProfileFragment profileFragment;
+    private FolderFragment folderFragment;
+
     private final MutableLiveData<Fragment> selectedFragment = new MutableLiveData<>();
     private final MutableLiveData<Boolean> showBottomSheetDialog = new MutableLiveData<>();
     private final MutableLiveData<Intent> uploadRecordIntent = new MutableLiveData<>();
     private Context context;
     private MainModel model;
-
-    public MainActivityModel() {
-        mainFragment = new MainFragment();
-        statisticsFragment = new StatisticsFragment();
-        profileFragment = new ProfileFragment();
-        folderFragment = new FolderFragment();
-    }
 
     public MutableLiveData<Fragment> getSelectedFragment() {
         return selectedFragment;
@@ -64,11 +59,29 @@ public class MainActivityModel extends ViewModel implements MainModel.MainModelC
     }
 
     public void viewFragment(int index) {
-        if (index == R.id.item_main_main) selectedFragment.setValue(mainFragment);
-        else if (index == R.id.item_main_statistics) selectedFragment.setValue(statisticsFragment);
-        else if (index == R.id.item_main_upload) showBottomSheetDialog.setValue(true);
-        else if (index == R.id.item_main_profile) selectedFragment.setValue(profileFragment);
-        else if (index == R.id.item_main_folder) selectedFragment.setValue(folderFragment);
+        if (index == R.id.item_main_main) {
+            if (mainFragment == null) {
+                mainFragment = new MainFragment();
+            }
+            selectedFragment.setValue(mainFragment);
+        } else if (index == R.id.item_main_statistics) {
+            if (statisticsFragment == null) {
+                statisticsFragment = new StatisticsFragment();
+            }
+            selectedFragment.setValue(statisticsFragment);
+        } else if (index == R.id.item_main_upload) {
+            showBottomSheetDialog.setValue(true);
+        } else if (index == R.id.item_main_profile) {
+            if (profileFragment == null) {
+                profileFragment = new ProfileFragment();
+            }
+            selectedFragment.setValue(profileFragment);
+        } else if (index == R.id.item_main_folder) {
+            if (folderFragment == null) {
+                folderFragment = new FolderFragment();
+            }
+            selectedFragment.setValue(folderFragment);
+        }
     }
 
     public void handleUserFcmToken() {

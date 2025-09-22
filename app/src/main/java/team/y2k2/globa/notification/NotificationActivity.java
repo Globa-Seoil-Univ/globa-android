@@ -5,9 +5,13 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,6 +37,24 @@ public class NotificationActivity extends AppCompatActivity {
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
         notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
         initializeUI();
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            binding.constraintlayoutNotification.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.constraintlayoutNotification.getLayoutParams();
+            params.bottomMargin = systemBars.bottom;
+            binding.constraintlayoutNotification.setLayoutParams(params);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
+
         setContentView(binding.getRoot());
     }
 

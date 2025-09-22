@@ -31,7 +31,7 @@ public class InquiryApiClient extends ApiClient {
     }
 
     // 문의 추가
-    public Response<Void> requestInsertInquiry(String title, String content) {
+    public Response<?> requestInsertInquiry(String title, String content) {
         return executeVoidApiCall(apiService.requestInsertInquiry(APPLICATION_JSON, getAuthorization(), new InquiryRequest(title, content)));
     }
 }

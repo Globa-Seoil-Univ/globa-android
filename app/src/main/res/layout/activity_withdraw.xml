@@ -40,6 +40,7 @@
             android:fontFamily="@font/notosans_regular"
             android:text="@string/withdraw"
             android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="@dimen/normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -30,7 +30,7 @@ public class DocsMoreActivityModel extends ViewModel {
     }
 
     public void deleteDocs(String folderId, String recordId) {
-        Response<Void> response = apiClient.deleteRecord(folderId, recordId);
+        Response<?> response = apiClient.deleteRecord(folderId, recordId);
 
         if (response.isSuccessful()) {
             Log.d(getClass().getName(), "문서 삭제 성공 (API) : " + response.code());

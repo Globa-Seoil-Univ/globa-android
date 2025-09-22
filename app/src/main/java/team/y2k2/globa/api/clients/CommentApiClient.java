@@ -38,17 +38,17 @@ public class CommentApiClient extends ApiClient {
     }
 
     // 댓글 수정
-    public Response<Void> updateComment(String folderId, String recordId, String sectionId, String highlightId, String commentId, String text) {
+    public Response<?> updateComment(String folderId, String recordId, String sectionId, String highlightId, String commentId, String text) {
         return executeVoidApiCall(apiService.updateComment(folderId, recordId, sectionId, highlightId, commentId, APPLICATION_JSON, getAuthorization(), new CommentRequest(text)));
     }
 
     // 댓글 최초 추가
-    public Response<Void> requestInsertFirstComment(String folderId, String recordId, String sectionId, String startIdx, String endIdx, String content) {
+    public Response<?> requestInsertFirstComment(String folderId, String recordId, String sectionId, String startIdx, String endIdx, String content) {
         return executeVoidApiCall(apiService.requestInsertFirstComment(folderId, recordId, sectionId, APPLICATION_JSON, getAuthorization(), new FirstCommentRequest(startIdx, endIdx, content)));
     }
 
     // 댓글 추가 (최초X)
-    public Response<Void> requestInsertComment(String folderId, String recordId, String sectionId, String highlightId, String content) {
+    public Response<?> requestInsertComment(String folderId, String recordId, String sectionId, String highlightId, String content) {
         return executeVoidApiCall(apiService.requestInsertComment(folderId, recordId, sectionId, highlightId, APPLICATION_JSON, getAuthorization(), new CommentRequest(content)));
     }
 

@@ -48,6 +48,9 @@
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_below="@+id/textview_share_description"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -72,6 +75,9 @@
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_below="@+id/linearlayout_share_type_select_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:orientation="horizontal">
 
             <ImageView

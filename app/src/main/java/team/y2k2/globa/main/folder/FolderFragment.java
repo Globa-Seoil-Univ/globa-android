@@ -2,6 +2,8 @@ package team.y2k2.globa.main.folder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import team.y2k2.globa.api.clients.FolderApiClient;
 import team.y2k2.globa.api.model.entity.Folder;
@@ -24,8 +29,6 @@ import team.y2k2.globa.main.folder.currently.FolderCurrentlyModel;
 public class FolderFragment extends Fragment {
     private final int FOLDER_ADD = 200;
     private FragmentFolderBinding binding;
-    private FolderCurrentlyModel currentlyModel;
-    private FolderModel model;
 
     public FolderFragment() {
     }
@@ -39,8 +42,6 @@ public class FolderFragment extends Fragment {
             startActivityForResult(intent, FOLDER_ADD);
         });
 
-
-
         loadFolder();
         return binding.getRoot();
     }
@@ -48,42 +49,53 @@ public class FolderFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        loadFolder();
+        if (requestCode == FOLDER_ADD) {
+            loadFolder();
+        }
     }
 
     public void loadFolder() {
-        FolderApiClient folderApiClient = new FolderApiClient();
-        FolderResponse response = folderApiClient.requestGetFolders(1, 100);
+        binding.progressbarFolderLoading.setVisibility(View.VISIBLE);
+        binding.recyclerviewFolder.setVisibility(View.GONE);
+        binding.recyclerviewFolderCurrently.setVisibility(View.GONE);
+        binding.textviewFolderCurrentlyTitle.setVisibility(View.INVISIBLE);
+        binding.textviewFolderTitle.setVisibility(View.INVISIBLE);
 
-        model = new FolderModel();
-        currentlyModel = new FolderCurrentlyModel();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
 
-        if (response == null) {
-            Log.d(getClass().getSimpleName(), "response = null");
-        }
+        executor.execute(() -> {
+            FolderApiClient folderApiClient = new FolderApiClient();
+            FolderResponse response = folderApiClient.requestGetFolders(1, 100);
 
-        if (response != null) {
-            for (int i = 0; i < response.getFolders().size(); i++) {
-                Folder folder = response.getFolders().get(i);
+            FolderModel model = new FolderModel();
+            FolderCurrentlyModel currentlyModel = new FolderCurrentlyModel();
 
-                model.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
-                currentlyModel.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
-
-                // 각 폴더에 대한 처리 작업 수행
-                Log.d("FOLDER_TEST", folder.getTitle() + " | " + folder.getCreatedTime() + " | " + folder.getFolderId());
+            if (response != null && response.getFolders() != null) {
+                for (Folder folder : response.getFolders()) {
+                    model.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
+                    currentlyModel.addItem(folder.getTitle(), folder.getCreatedTime(), Integer.parseInt(folder.getFolderId()));
+                }
             }
-        }
 
-        FolderAdapter adapter = new FolderAdapter(model.getItems(), requireActivity());
-        FolderCurrentlyAdapter currentlyAdapter = new FolderCurrentlyAdapter(currentlyModel.getItems());
+            handler.post(() -> {
+                binding.progressbarFolderLoading.setVisibility(View.GONE);
+                binding.recyclerviewFolder.setVisibility(View.VISIBLE);
+                binding.recyclerviewFolderCurrently.setVisibility(View.VISIBLE);
+                binding.textviewFolderCurrentlyTitle.setVisibility(View.VISIBLE);
+                binding.textviewFolderTitle.setVisibility(View.VISIBLE);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                FolderAdapter adapter = new FolderAdapter(model.getItems(), requireActivity());
+                FolderCurrentlyAdapter currentlyAdapter = new FolderCurrentlyAdapter(currentlyModel.getItems());
 
-        binding.recyclerviewFolder.setAdapter(adapter);
-        binding.recyclerviewFolder.setLayoutManager(new LinearLayoutManager(requireContext()));
+                LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        binding.recyclerviewFolderCurrently.setAdapter(currentlyAdapter);
-        binding.recyclerviewFolderCurrently.setLayoutManager(layoutManager);
+                binding.recyclerviewFolder.setAdapter(adapter);
+                binding.recyclerviewFolder.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+                binding.recyclerviewFolderCurrently.setAdapter(currentlyAdapter);
+                binding.recyclerviewFolderCurrently.setLayoutManager(layoutManager);
+            });
+        });
     }
 }

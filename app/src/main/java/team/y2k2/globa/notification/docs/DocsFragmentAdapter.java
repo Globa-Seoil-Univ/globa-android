@@ -1,11 +1,13 @@
 package team.y2k2.globa.notification.docs;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,12 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 import team.y2k2.globa.R;
-import team.y2k2.globa.main.ProfileImage;
+import team.y2k2.globa.docs.DocsActivity;
 import team.y2k2.globa.notification.NotificationActivity;
 import team.y2k2.globa.notification.NotificationViewModel;
 
@@ -73,6 +74,18 @@ public class DocsFragmentAdapter extends RecyclerView.Adapter<DocsFragmentAdapte
                 Log.d("알림 읽음", "문서 알림 읽음 표시 및 API 전송");
                 holder.layout.setBackgroundColor(whiteColor);
                 notificationViewModel.readNotification(item.getNotificationId());
+            }
+            if ("6".equals(item.getType())) {
+                if (item.getFolderId() != null && !item.getFolderId().isEmpty() && item.getRecordId() != null && !item.getRecordId().isEmpty()) {
+                    Intent intent = new Intent(activity, DocsActivity.class);
+                    intent.putExtra("folderId", item.getFolderId());
+                    intent.putExtra("recordId", item.getRecordId());
+                    activity.startActivity(intent);
+                } else {
+                    Toast.makeText(activity, "문서 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            } else if ("7".equals(item.getType())) {
+                Toast.makeText(activity, "문서 추가에 실패한 기록입니다.", Toast.LENGTH_SHORT).show();
             }
         });
 

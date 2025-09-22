@@ -1,10 +1,11 @@
 package team.y2k2.globa.notification;
 
-import android.content.Context;
-import android.util.Log;
-
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import team.y2k2.globa.api.clients.FolderShareApiClient;
 import team.y2k2.globa.api.clients.NotificationApiClient;
@@ -19,52 +20,71 @@ public class NotificationViewModel extends ViewModel {
     private final MutableLiveData<UnreadNotificationCountResponse> unreadCount = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isListEmpty = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     public NotificationViewModel() {
         this.apiClient = new FolderShareApiClient();
         this.notificationApiClient = new NotificationApiClient();
     }
 
-    public MutableLiveData<NotificationResponse> getNotificationLiveData() {
+    public LiveData<NotificationResponse> getNotificationLiveData() {
         return notificationLiveData;
     }
 
-    public MutableLiveData<UnreadNotificationCountResponse> getUnreadCount() {
+    public LiveData<UnreadNotificationCountResponse> getUnreadCount() {
         return unreadCount;
     }
 
-    public MutableLiveData<String> getErrorLiveData() {
+    public LiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
 
-    public MutableLiveData<Boolean> getIsListEmpty() { return isListEmpty; }
+    public LiveData<Boolean> getIsListEmpty() { return isListEmpty; }
+
+    public LiveData<Boolean> getIsLoading() { return isLoading; }
+
 
     public void getNotification(String type) {
-        NotificationResponse response = notificationApiClient.requestGetNotification(type, 1, 100);
+        isLoading.setValue(true);
 
-        if (response != null && response.getNotifications() != null) {
-            isListEmpty.postValue(response.getNotifications().isEmpty());
-        } else {
-            isListEmpty.postValue(true);
-        }
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            try {
+                NotificationResponse response = notificationApiClient.requestGetNotification(type, 1, 100);
 
-        notificationLiveData.postValue(response);
+                if (response != null && response.getNotifications() != null) {
+                    isListEmpty.postValue(response.getNotifications().isEmpty());
+                } else {
+                    isListEmpty.postValue(true);
+                }
+                notificationLiveData.postValue(response);
+            } finally {
+                isLoading.postValue(false);
+            }
+        });
     }
 
     public void acceptInvite(String folderId, String shareId) {
-        apiClient.requestAcceptShareInvite(folderId, shareId);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> apiClient.requestAcceptShareInvite(folderId, shareId));
     }
 
     public void denyInvite(String folderId, String shareId, String notificationId) {
-        apiClient.requestDeniedShareInvite(folderId, shareId, notificationId);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> apiClient.requestDeniedShareInvite(folderId, shareId, notificationId));
     }
 
     public void getUnreadNotificationCount() {
-        UnreadNotificationCountResponse response = notificationApiClient.getUnreadNotificationCount();
-        unreadCount.postValue(response);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            UnreadNotificationCountResponse response = notificationApiClient.getUnreadNotificationCount();
+            unreadCount.postValue(response);
+        });
     }
 
     public void readNotification(String notificationId) {
-        notificationApiClient.updateReadNotification(notificationId);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> notificationApiClient.updateReadNotification(notificationId));
     }
 }
+

@@ -22,6 +22,9 @@
             android:layout_marginStart="20dp"
             android:background="@null"
             android:importantForAccessibility="no"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:src="@drawable/header_back" />
 
         <TextView
@@ -131,6 +134,9 @@
         android:background="@drawable/main_button_selected"
         android:gravity="center"
         android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView

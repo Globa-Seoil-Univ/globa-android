@@ -202,7 +202,7 @@ public class DocsDetailAdapter extends RecyclerView.Adapter<DocsDetailAdapter.Ad
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
-            Response<Void> response;
+            Response<?> response;
             boolean isFirstComment = (highlightId == null || highlightId.isEmpty());
 
             if (buttonStatus == BUTTON_COMMENT_CONFIRM) {

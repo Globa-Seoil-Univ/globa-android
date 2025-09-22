@@ -94,7 +94,7 @@ public class InquiryAddViewModel extends ViewModel {
             showToast.setValue("문의 전송 중 오류가 발생했습니다.");
             return;
         }
-        Response<Void> response = inquiryApiClient.requestInsertInquiry(inquiryTitle, inquiryContent);
+        Response<?> response = inquiryApiClient.requestInsertInquiry(inquiryTitle, inquiryContent);
 
         if (response.isSuccessful()) {
             showToast.setValue("문의를 보냈습니다.");

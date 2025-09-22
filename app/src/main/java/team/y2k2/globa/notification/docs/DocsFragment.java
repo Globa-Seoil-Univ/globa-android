@@ -76,6 +76,9 @@ public class DocsFragment extends Fragment {
                 String profile = ""; // 문서 알림은 프로필이 없을 수 있음
                 String title = "";
                 String content = "";
+                String folderId = (notification.getFolder() != null) ? notification.getFolder().getFolderId() : "";
+                String recordId = (notification.getRecord() != null) ? notification.getRecord().getRecordId() : "";
+
 
                 if ("6".equals(notificationType)) {
                     title = notification.getFolder().getTitle() + "폴더에 " + notification.getRecord().getTitle() + "문서가 추가되었습니다.";
@@ -84,7 +87,7 @@ public class DocsFragment extends Fragment {
                     title = notification.getFolder().getTitle() + "폴더에 문서 추가를 실패하였습니다.";
                     content = "";
                 }
-                items.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, notificationType, isRead));
+                items.add(new DocsFragmentItem(notificationId, profile, title, content, createdTime, notificationType, isRead, folderId, recordId));
             }
         }
         return items;

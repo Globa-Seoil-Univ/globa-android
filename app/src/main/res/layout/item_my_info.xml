@@ -5,6 +5,9 @@
     android:id="@+id/constraintlayout_my_info_item_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
     <TextView

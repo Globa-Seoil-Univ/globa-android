@@ -21,12 +21,12 @@ public class FolderShareApiClient extends ApiClient {
     }
 
     // 초대 거절
-    public void requestDeniedShareInvite(String folderId, String shareId, String notificationId) {
-        executeVoidApiCall(apiService.requestDeniedShareInvite(folderId, shareId, APPLICATION_JSON, getAuthorization(), new NotificationRequest(notificationId)));
+    public Response<?> requestDeniedShareInvite(String folderId, String shareId, String notificationId) {
+        return executeVoidApiCall(apiService.requestDeniedShareInvite(folderId, shareId, APPLICATION_JSON, getAuthorization(), new NotificationRequest(notificationId)));
     }
 
     // 유저 권한 삭제
-    public Response<Void> requestDeleteSharePermission(int folderId, int userId) {
+    public Response<?> requestDeleteSharePermission(int folderId, int userId) {
         return executeVoidApiCall(apiService.requestDeleteSharePermission(folderId, userId, APPLICATION_JSON, getAuthorization()));
     }
 
@@ -36,12 +36,12 @@ public class FolderShareApiClient extends ApiClient {
     }
 
     // 유저 권한 변경
-    public Response<Void> requestUpdateSharePermission(int folderId, int userId, String userRole) {
+    public Response<?> requestUpdateSharePermission(int folderId, int userId, String userRole) {
         return executeVoidApiCall(apiService.requestUpdateSharePermission(folderId, userId, APPLICATION_JSON, getAuthorization(), new FolderPermissionChangeRequest(userRole)));
     }
 
     // 공유 초대 수락
-    public void requestAcceptShareInvite(String folderId, String shareId) {
-        executeVoidApiCall(apiService.requestAcceptShareInvite(folderId, shareId, APPLICATION_JSON, getAuthorization()));
+    public Response<?> requestAcceptShareInvite(String folderId, String shareId) {
+        return executeVoidApiCall(apiService.requestAcceptShareInvite(folderId, shareId, APPLICATION_JSON, getAuthorization()));
     }
 }

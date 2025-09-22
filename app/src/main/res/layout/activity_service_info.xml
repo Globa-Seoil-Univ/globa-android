@@ -30,6 +30,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:importantForAccessibility="no"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:src="@drawable/header_back"
                 android:onClick="@{() -> viewModel.onBackClick()}"/>
 
